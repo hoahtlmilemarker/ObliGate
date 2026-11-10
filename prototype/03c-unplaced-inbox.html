@@ -737,6 +737,7 @@ function fix(t){if(t.dataset.fx)return;t.dataset.fx=1;var first=t.firstElementCh
  var x=t.querySelector('.x');if(x&&x.textContent.trim()==='✕')x.innerHTML=X;}
 new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNodes,function(n){if(n.nodeType===1&&n.classList.contains('og-toast'))fix(n);});});}).observe(document.documentElement,{childList:true,subtree:true});})();
 </script>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.sg-back');if(!a)return;try{if(document.referrer&&new URL(document.referrer).origin===location.origin&&history.length>1){e.preventDefault();history.back();}}catch(x){}});</script>
 
 <div class="og gn" data-theme="light" style="min-height: 1300px">
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
