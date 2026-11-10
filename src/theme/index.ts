@@ -84,7 +84,7 @@ export function createOgTheme(mode: OgMode): Theme {
         styleOverrides: {
           body: { backgroundColor: t.bg, WebkitFontSmoothing: 'antialiased' },
           a: { color: t.blue, textDecoration: 'none' },
-          'a:hover': { color: t.blueHover },
+          'a:not(.MuiButtonBase-root):not(.MuiButton-root):hover': { color: t.blueHover },
         },
       },
       MuiTypography: {
@@ -115,7 +115,7 @@ export function createOgTheme(mode: OgMode): Theme {
             backgroundColor: t.buttonBlue,
             color: '#FFFFFF',
             border: `1px solid ${t.buttonBlue}`,
-            '&:hover': { backgroundColor: mode === 'dark' ? '#2F7CC0' : t.blueHover, borderColor: 'transparent' },
+            '&:hover': { backgroundColor: mode === 'dark' ? '#2F7CC0' : t.blueHover, borderColor: 'transparent', color: '#FFFFFF' },
           },
           outlined: {
             backgroundColor: t.card,
@@ -133,7 +133,7 @@ export function createOgTheme(mode: OgMode): Theme {
               backgroundImage: brand.brassGradient,
               border: `1px solid ${brand.brassBorder}`,
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,.35), 0 2px 6px -2px rgba(140,100,30,.45)',
-              '&:hover': { filter: 'brightness(1.04)', backgroundImage: brand.brassGradient },
+              '&:hover': { filter: 'brightness(1.04)', backgroundImage: brand.brassGradient, color: brand.brassInk },
             },
           },
           {
@@ -142,7 +142,7 @@ export function createOgTheme(mode: OgMode): Theme {
               color: brand.navy,
               backgroundColor: '#FFFFFF',
               border: '1px solid #FFFFFF',
-              '&:hover': { backgroundColor: '#E9F1F8', borderColor: '#E9F1F8' },
+              '&:hover': { backgroundColor: '#E9F1F8', borderColor: '#E9F1F8', color: brand.navy },
             },
           },
           {
@@ -151,7 +151,7 @@ export function createOgTheme(mode: OgMode): Theme {
               color: '#FFFFFF',
               backgroundColor: 'transparent',
               border: `1px solid rgba(255,255,255,.32)`,
-              '&:hover': { borderColor: 'rgba(255,255,255,.7)', backgroundColor: 'rgba(255,255,255,.04)' },
+              '&:hover': { borderColor: 'rgba(255,255,255,.7)', backgroundColor: 'rgba(255,255,255,.04)', color: '#FFFFFF' },
             },
           },
         ],
