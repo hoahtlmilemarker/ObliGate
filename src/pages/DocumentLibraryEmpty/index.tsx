@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Tooltip, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { useToast } from '@/components';
@@ -50,13 +50,15 @@ export default function DocumentLibraryEmpty() {
   };
 
   const importBtn = (variant: 'onDark' | 'outlined') => (
-    <Button variant={variant} component={RouterLink} to={routes.importWizard}>
-      Import Payroll (Excel)
-    </Button>
+    <Tooltip describeChild title="Creates labor records from a payroll export. The spreadsheet is not stored as a document.">
+      <Button variant={variant} component={RouterLink} to={routes.importWizard}>
+        Import Payroll Records (Excel)
+      </Button>
+    </Tooltip>
   );
 
   return (
-    <AppShell active="library" sidebarLabel="Queues & filing cabinet" sidebar={<LibrarySidebar key={`${projectId}/${folder}`} activeQueue="review" activeFolder={{ project: projectId, folder }} />}>
+    <AppShell active="library" sidebarLabel="Queues & filing cabinet" sidebar={<LibrarySidebar key={`${projectId}/${folder}`} activeFolder={{ project: projectId, folder }} />}>
       <FolderBanner
         prefix="Folder View:"
         crumbs={[

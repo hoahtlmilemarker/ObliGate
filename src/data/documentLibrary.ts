@@ -48,14 +48,14 @@ export const forceAccountDocs: LibraryDoc[] = [
   { id: 'doc-ecaps-f706', type: 'XLSX', name: 'eCAPS_Labor_Export_F7060865.xlsx', link: 'importWizard', kind: 'DeRS Baseline Export', meta: 'Ingested via Import Wizard · 48 KB', period: 'PP 01 – PP 04', year: '2023', initials: 'CP', outline: true, who: 'Countywide Payroll', value: '$482,450.00', tone: 'good', status: 'Ingested (167 rows)', action: 'reconcile' },
   { id: 'doc-supervisorlog', type: 'PDF', name: 'SupervisorLog_Jan14-16_Unsigned.pdf', link: 'signature', kind: 'Supervisor Field Log', meta: 'Uploaded Jan 17 by H. Liu · 640 KB', period: 'Jan 14 – Jan 16', year: '2023', initials: 'HL', who: 'Liu, Heidi', whoSub: 'Resident Engineer', value: '24.0 hrs', tone: 'risk', status: 'Missing Signature', action: 'requestSignature' },
   { id: 'doc-delgado-02', type: 'PDF', name: 'Timesheet_Delgado_PayPeriod_02.pdf', link: 'review', kind: 'Force-Account Timesheet', meta: 'Uploaded Jan 16 by R. Keith · 1.2 MB', period: 'Jan 01 – Jan 14', year: '2023', initials: 'DM', who: 'Delgado, Marco', whoSub: 'Laborer', value: '$1,940.00', tone: 'warn', status: 'Review Needed (81%)', action: 'review' },
-  { id: 'doc-equiplog-cat320', type: 'LOG', name: 'EquipLog_CAT320_EQ-PW-109_Jan.pdf', link: 'review', kind: 'Equipment Usage Log', meta: 'Uploaded Jan 18 by R. Keith · 2.1 MB', period: 'Jan 09 – Jan 13', year: '2023', initials: 'CAT', outline: true, who: 'CAT 320 Excavator', whoSub: '#EQ-PW-109', value: '40.0 hrs', tone: 'good', status: 'Verified (97%)', action: 'inspect' },
+  { id: 'doc-equiplog-cat320', type: 'LOG', name: 'EquipLog_CAT320_EQ-PW-109_Jan.pdf', link: 'review', kind: 'Equipment Usage Log', meta: 'Linked from 2. Equipment Records · used for operator matching', period: 'Jan 09 – Jan 13', year: '2023', initials: 'CAT', outline: true, who: 'CAT 320 Excavator', whoSub: '#EQ-PW-109', value: '40.0 hrs', tone: 'good', status: 'Verified (97%)', action: 'inspect' },
   { id: 'doc-chen-02', type: 'PDF', name: 'Timesheet_Chen_PayPeriod_02.pdf', link: 'review', kind: 'Force-Account Timesheet', meta: 'Uploaded Jan 16 by R. Keith · 1.1 MB', period: 'Jan 01 – Jan 14', year: '2023', initials: 'CL', who: 'Chen, Lawrence', whoSub: 'Equipment Op', value: '$2,168.00', tone: 'good', status: 'Verified (98%)', action: 'inspect' },
   { id: 'doc-photo-pm51', type: 'IMG', name: 'FieldPhoto_MalibuCyn_PM5.1_Jan12.jpg', link: 'review', kind: 'Site Photo Evidence', meta: 'Uploaded Jan 12 by H. Liu · 3.4 MB', period: 'Jan 12', year: '2023', initials: 'HL', who: 'Liu, Heidi', whoSub: 'Resident Engineer', value: '—', tone: 'proc', status: 'Extracting…', action: 'inspect' },
   { id: 'doc-santos-02', type: 'PDF', name: 'Timesheet_Santos_PayPeriod_02.pdf', link: 'review', kind: 'Force-Account Timesheet', meta: 'Uploaded Jan 16 by R. Keith · 1.1 MB', period: 'Jan 01 – Jan 14', year: '2023', initials: 'SM', who: 'Santos, Maria', whoSub: 'Laborer', value: '$2,168.00', tone: 'good', status: 'Verified (99%)', action: 'inspect' },
   { id: 'doc-activity-jan10', type: 'LOG', name: 'ActivityLog_PW00428_Jan10_Crew3.pdf', link: 'review', kind: 'Daily Activity Log', meta: 'Uploaded Jan 11 by R. Keith · 760 KB', period: 'Jan 10', year: '2023', initials: 'CC', outline: true, who: 'Culvert Clearing Crew', whoSub: '4 members', value: '32.0 hrs', tone: 'good', status: 'Verified (98%)', action: 'inspect' },
   { id: 'doc-activity-jan13', type: 'LOG', name: 'ActivityLog_PW00428_Jan13_Crew3.pdf', link: 'review', kind: 'Daily Activity Log', meta: 'Uploaded Jan 14 by R. Keith · 790 KB', period: 'Jan 13', year: '2023', initials: 'CC', outline: true, who: 'Culvert Clearing Crew', whoSub: '4 members', value: '32.0 hrs', tone: 'warn', status: 'Review Needed (83%)', action: 'review' },
   { id: 'doc-aguayo-01', type: 'PDF', name: 'Timesheet_Aguayo_PayPeriod_01.pdf', link: 'review', kind: 'Force-Account Timesheet', meta: 'Uploaded Jan 03 by H. Liu · 1.3 MB', period: 'Dec 18 – Dec 31', year: '2022', initials: 'HA', who: 'Aguayo, Hector', whoSub: 'Heavy Equip Op', value: '$4,336.00', tone: 'good', status: 'Verified (97%)', action: 'inspect' },
-  { id: 'doc-ecaps-pp01', type: 'XLSX', name: 'eCAPS_Labor_Export_PP01.xlsx', link: 'crossCheck', kind: 'DeRS Baseline Export', meta: 'Ingested via Import Wizard · 41 KB', period: 'PP 01', year: '2023', initials: 'CP', outline: true, who: 'Countywide Payroll', value: '$118,920.00', tone: 'good', status: 'Ingested (42 rows)', action: 'reconcile' },
+  { id: 'doc-ecaps-pp01', type: 'XLSX', name: 'eCAPS_Labor_Export_PP01.xlsx', link: 'crossCheck', kind: 'DeRS Baseline Export', meta: 'Superseded by F7060865 (PP 01 – PP 04) · 41 KB', period: 'PP 01', year: '2023', initials: 'CP', outline: true, who: 'Countywide Payroll', value: '$118,920.00', tone: 'good', status: 'Ingested (42 rows)', action: 'reconcile' },
   { id: 'doc-photo-jan09', type: 'IMG', name: 'FieldPhoto_MalibuCyn_Jan09.jpg', link: 'review', kind: 'Site Photo Evidence', meta: 'Uploaded Jan 09 by H. Liu · 2.9 MB', period: 'Jan 09', year: '2023', initials: 'HL', who: 'Liu, Heidi', whoSub: 'Resident Engineer', value: '—', tone: 'good', status: 'Verified (96%)', action: 'inspect' },
 ];
 
@@ -152,11 +152,11 @@ export interface ChecklistItem {
 
 export const laborChecklist = {
   title: 'FEMA Category C Labor Requirements Checklist',
-  progress: '3 of 4 Complete',
+  progress: '2 of 4 Complete',
   reference: 'PAPPG Chapter 2 § II.B.1',
   items: [
     { n: 1, title: 'DeRS Claimed Baseline', detail: 'eCAPS Payroll Export verified (167 records).', done: true },
-    { n: 2, title: 'Employee Daily Timesheets', detail: 'Signed timesheets received for all 12 crew members.', note: '2 pending data review', done: true },
+    { n: 2, title: 'Employee Daily Timesheets', detail: '5 signed timesheets received for 4 crew members.', note: '2 pending data review', done: false },
     { n: 3, title: 'Equipment Logs Correlation', detail: 'Operator matching confirmed against CAT-320.', done: true },
     { n: 4, title: 'Supervisor Field Log Attestation', detail: 'Jan 14-16 shift logs awaiting signature.', done: false },
   ] as ChecklistItem[],

@@ -20,18 +20,6 @@ export function ChecklistCard({ onViewFile, loading }: { onViewFile: () => void;
             {c.reference}
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', gap: 2, flex: 'none', width: { xs: '100%', sm: 'auto' }, '& > *': { flex: { xs: 1, sm: 'none' } } }}>
-          <Button size="small" variant="outlined" onClick={(e) => {
-              e.preventDefault();
-              onViewFile();
-            }}
-            href="#doc-supervisorlog">
-            View File
-          </Button>
-          <Button size="small" variant="contained" component={RouterLink} to={routes.signature} endIcon={<ArrowIcon size={13} />}>
-            Request Signature
-          </Button>
-        </Box>
       </Box>
       <Box
         sx={{
@@ -79,6 +67,24 @@ export function ChecklistCard({ onViewFile, loading }: { onViewFile: () => void;
                 </Box>
               )}
             </Box>
+            {it.n === 4 && (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mt: 1.5, '& .MuiButton-root': { px: '10px' } }}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  href="#doc-supervisorlog"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onViewFile();
+                  }}
+                >
+                  View File
+                </Button>
+                <Button size="small" variant="contained" component={RouterLink} to={routes.signature} endIcon={<ArrowIcon size={13} />}>
+                  Request Signature
+                </Button>
+              </Box>
+            )}
           </Box>
         ))}
       </Box>

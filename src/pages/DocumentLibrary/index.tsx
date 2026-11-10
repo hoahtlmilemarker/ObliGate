@@ -1,6 +1,6 @@
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link as RouterLink, useLocation, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useToast } from '@/components';
 import { AppShell, PageBody, routes } from '@/layout';
 import { FORCE_ACCOUNT, folderFromSlug, folderSamples, forceAccountBanner, forceAccountDocs, queueCounts, type LibraryDoc } from '@/data/documentLibrary';
@@ -111,7 +111,24 @@ export default function DocumentLibrary() {
     if (id) window.setTimeout(() => reveal(id), 300);
   }, [location.hash]);
 
-  const reviewFlagged = useMemo(() => docs.filter((d) => d.tone === 'warn' && !d.isNew).length, [docs]);
+  const navigate = useNavigate();
+  const settled = useMemo(() => docs.filter((d) => !d.isNew), [docs]);
+  const toReview = useMemo(() => settled.filter((d) => /review needed/i.test(d.status)), [settled]);
+  /** Opens the first Needs Review document of this folder in the review screen. */
+  const openFirstReview = () => {
+    try {
+      sessionStorage.setItem('og-doc', String(settled.indexOf(toReview[0])));
+    } catch {
+      /* storage unavailable */
+    }
+    navigate(routes.review);
+  };
+
+  const deleteDocs = (ids: string[]) => {
+    const gone = new Set(ids);
+    setRowsByFolder((m) => ({ ...m, [folder]: (m[folder] ?? []).filter((r) => !gone.has(r.id)) }));
+    toast({ title: `${ids.length} document${ids.length > 1 ? 's' : ''} deleted`, message: 'recorded in audit log', duration: 5000 });
+  };
   const sample = folderSamples[folder];
   const total = docs.length;
 
@@ -119,7 +136,7 @@ export default function DocumentLibrary() {
     <AppShell
       active="library"
       sidebarLabel="Queues & filing cabinet"
-      sidebar={<LibrarySidebar key={folder} activeQueue="review" activeFolder={{ project: PROJECT, folder }} reviewCount={reviewCount} showDropzone onFiles={openUpload} />}
+      sidebar={<LibrarySidebar key={folder} activeFolder={{ project: PROJECT, folder }} reviewCount={reviewCount} showDropzone onFiles={openUpload} />}
     >
       <FolderBanner
         prefix="Folder View:"
@@ -135,15 +152,17 @@ export default function DocumentLibrary() {
         overlap={isLabor}
         actions={
           <>
-            {(isLabor || reviewFlagged > 0) && (
-              <Button variant="inverse" component={RouterLink} to={routes.review}>
-                Review {isLabor ? 3 : reviewFlagged} Flagged Document{(isLabor ? 3 : reviewFlagged) > 1 ? 's' : ''}
+            {toReview.length > 0 && (
+              <Button variant="inverse" onClick={openFirstReview}>
+                Review {toReview.length} Document{toReview.length > 1 ? 's' : ''}
               </Button>
             )}
             {isLabor && (
-              <Button variant="onDark" component={RouterLink} to={routes.importWizard}>
-                Import Payroll (Excel)
-              </Button>
+              <Tooltip describeChild title="Creates labor records from a payroll export. The spreadsheet is not stored as a document.">
+                <Button variant="onDark" component={RouterLink} to={routes.importWizard}>
+                  Import Payroll Records (Excel)
+                </Button>
+              </Tooltip>
             )}
           </>
         }
@@ -155,6 +174,8 @@ export default function DocumentLibrary() {
           docs={docs}
           loading={loading}
           destination={destination}
+          folderPath={`${PROJECT} › ${folder}`}
+          onDelete={deleteDocs}
           onUploadClick={() => openUpload()}
           onDropFiles={openUpload}
           focusRequest={focusRequest}

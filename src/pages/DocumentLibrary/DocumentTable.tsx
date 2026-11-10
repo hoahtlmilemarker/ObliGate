@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, keyframes, useMediaQuery, type Theme } from '@mui/material';
+import { Box, Button, Checkbox, keyframes, Tooltip, useMediaQuery, type Theme } from '@mui/material';
 import { Fragment, type ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { StatusTag } from '@/components';
@@ -184,7 +184,7 @@ function ActionCell({ d }: { d: LibraryDoc }) {
       </Box>
     );
   const map = {
-    reviewTwoPane: { label: 'Review (Two-Pane)', variant: 'brass', to: routes.review },
+    reviewTwoPane: { label: 'Review', variant: 'brass', to: routes.review },
     review: { label: 'Review', variant: 'brass', to: routes.review },
     reviewPlain: { label: 'Review', variant: 'contained', to: routes.review },
     inspect: { label: 'Inspect', variant: 'outlined', to: routes.review },
@@ -192,6 +192,16 @@ function ActionCell({ d }: { d: LibraryDoc }) {
     requestSignature: { label: 'Request Signature', variant: 'contained', to: routes.signature },
   } as const;
   const a = map[d.action];
+  if (d.action === 'inspect' && /^extracting/i.test(d.status))
+    return (
+      <Tooltip describeChild title="Available when extraction finishes">
+        <Box component="span" tabIndex={0} aria-label={`Inspect ${d.name}: available when extraction finishes`} sx={{ display: 'inline-flex', borderRadius: '4px', '&:focus-visible': { outline: '2px solid', outlineColor: 'og.blue', outlineOffset: 2 } }}>
+          <Button size="small" variant="outlined" disabled endIcon={<ArrowIcon />} sx={{ minWidth: 84, px: '12px', fontWeight: 700, width: '100%', '&.Mui-disabled': { opacity: 0.5, color: 'og.gray', borderColor: 'og.line', bgcolor: 'og.card' } }}>
+            Inspect
+          </Button>
+        </Box>
+      </Tooltip>
+    );
   return (
     <Button
       size="small"

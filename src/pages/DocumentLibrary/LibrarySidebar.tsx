@@ -1,4 +1,4 @@
-import { Box, ButtonBase } from '@mui/material';
+import { Box, ButtonBase, Tooltip } from '@mui/material';
 import { useRef, useState, type DragEvent, type ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { QueueItem, SidebarSection, routes } from '@/layout';
@@ -11,7 +11,7 @@ export interface ActiveFolder {
 }
 
 export interface LibrarySidebarProps {
-  /** Highlighted processing queue. */
+  /** Highlighted processing queue — only on the queue's own page (never while viewing a folder). */
   activeQueue?: 'review' | 'inbox';
   /** Highlighted filing-cabinet leaf. */
   activeFolder?: ActiveFolder;
@@ -28,6 +28,8 @@ export function leafHref(project: string, folder: string) {
   if (project === 'PW-00428') return folder === LEAF_FOLDERS[0] ? routes.library : `${routes.library}?folder=${folderSlug(folder)}`;
   return `/library/${project}/${folderSlug(folder)}`;
 }
+
+const GAP_TIP = '1 checklist requirement missing: Supervisor Field Log Attestation';
 
 const dashed = (stroke: string, opacity: number) =>
   `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect x='.5' y='.5' width='calc(100%25 - 1px)' height='calc(100%25 - 1px)' rx='4' fill='none' stroke='%23${stroke}' stroke-opacity='${opacity}' stroke-width='1' stroke-dasharray='6 5'/%3E%3C/svg%3E")`;
@@ -154,12 +156,16 @@ function Leaf({ n, label, to, on, count, gap }: { n: number; label: string; to: 
         {label}
       </Box>
       {gap ? (
+        <Tooltip title={GAP_TIP}>
         <Box
           component="span"
+          role="img"
+          aria-label={GAP_TIP}
           sx={{ flex: 'none', ml: 2, height: 20, px: '7px', display: 'inline-flex', alignItems: 'center', gap: '5px', borderRadius: '4px', bgcolor: 'og.warnTint', color: 'og.warn', fontSize: 10, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', '&::before': { content: '""', width: 5, height: 5, borderRadius: '50%', bgcolor: 'currentColor' } }}
         >
           Gap
         </Box>
+        </Tooltip>
       ) : count != null ? (
         <Count n={count} leaf />
       ) : null}
@@ -169,7 +175,7 @@ function Leaf({ n, label, to, on, count, gap }: { n: number; label: string; to: 
 
 /* ---------- drop zone ---------- */
 
-function SideDropzone({ onFiles }: { onFiles?: (files: File[]) => void }) {
+function SideDropzone({ onFiles, target }: { onFiles?: (files: File[]) => void; target: string }) {
   const input = useRef<HTMLInputElement>(null);
   const [over, setOver] = useState(false);
   const stop = (e: DragEvent) => {
@@ -189,7 +195,7 @@ function SideDropzone({ onFiles }: { onFiles?: (files: File[]) => void }) {
         setOver(false);
         if (e.dataTransfer.files.length) onFiles?.(Array.from(e.dataTransfer.files));
       }}
-      aria-label="Drag & drop documents here, or choose files to upload"
+      aria-label={`Drag & drop documents here, or choose files to upload. Adds to ${target}; AI reads each file.`}
       sx={(t) => {
         const dark = t.palette.mode === 'dark';
         const hover = { backgroundImage: dashed(dark ? '5AA7E6' : '005A9C', 0.6), backgroundColor: dark ? '#142231' : '#F3F8FE' };
@@ -219,8 +225,8 @@ function SideDropzone({ onFiles }: { onFiles?: (files: File[]) => void }) {
       <Box component="strong" sx={{ fontSize: 15, fontWeight: 700, color: 'og.ink', lineHeight: 1.3 }}>
         Drag &amp; drop documents here
       </Box>
-      <Box component="span" sx={{ fontSize: 12.5, color: 'og.gray', whiteSpace: 'nowrap' }}>
-        Auto-classified by AI placement engine
+      <Box component="span" sx={{ fontSize: 12.5, lineHeight: 1.45, color: 'og.gray', maxWidth: 250 }}>
+        Adds to {target} · AI reads each file
       </Box>
       <input
         ref={input}
@@ -276,6 +282,7 @@ export function LibrarySidebar({ activeQueue, activeFolder, reviewCount = queueC
       return next;
     });
 
+  const dropTarget = activeFolder ? `${LEAF_FOLDERS.indexOf(activeFolder.folder as (typeof LEAF_FOLDERS)[number]) + 1}. ${activeFolder.folder}` : 'this folder';
   const deptIds = filingCabinet.departments.map((d) => d.id);
 
   const projectNode = (p: TreeProject, siblings: string[]) => (
@@ -289,7 +296,7 @@ export function LibrarySidebar({ activeQueue, activeFolder, reviewCount = queueC
   return (
     <>
       <SidebarSection label="Processing Queues" scope="All of DR-4673-CA">
-        <QueueItem icon={<ReviewQueueGlyph />} label="To Review (Extraction)" count={reviewCount} to={routes.review} active={activeQueue === 'review'} />
+        <QueueItem icon={<ReviewQueueGlyph />} label="To Review · all projects" count={reviewCount} to={routes.review} active={activeQueue === 'review'} />
         <QueueItem icon={<InboxGlyph />} label="To File (Unplaced Inbox)" count={inboxCount} to={routes.inbox} active={activeQueue === 'inbox'} />
       </SidebarSection>
       <SidebarSection label="Filing Cabinet">
@@ -303,7 +310,7 @@ export function LibrarySidebar({ activeQueue, activeFolder, reviewCount = queueC
           </Branch>
         </Box>
       </SidebarSection>
-      {showDropzone && <SideDropzone onFiles={onFiles} />}
+      {showDropzone && <SideDropzone onFiles={onFiles} target={dropTarget} />}
     </>
   );
 }

@@ -1,23 +1,26 @@
 import { Box, Button, ButtonBase, IconButton, InputAdornment, Menu, MenuItem, Typography, useMediaQuery } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Panel, SearchField, useToast } from '@/components';
+import { OgDialog, Panel, SearchField, useToast } from '@/components';
 import type { LibraryDoc } from '@/data/documentLibrary';
 import { BatchIcons, CaretIcon, DocUpload, NextIcon, UploadCloud } from './icons';
 import { DocumentTable, NoResults } from './DocumentTable';
 
-type Tab = 'all' | 'review' | 'verified' | 'ingested';
+type Tab = 'all' | 'review' | 'action' | 'verified' | 'ingested';
 const PER = 10;
+const bulkLink = { border: 0, p: 0, bgcolor: 'transparent', font: 'inherit', fontWeight: 700, color: 'og.blue', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: '2px', '&:hover': { color: 'og.blueHover' }, '&:focus-visible': { outline: '2px solid', outlineColor: 'og.blue', outlineOffset: 2, borderRadius: '2px' } } as const;
 
 const isReview = (d: LibraryDoc) => /review needed|queued for review/i.test(d.status);
+const isAction = (d: LibraryDoc) => /missing signature|extracting/i.test(d.status);
 const isVerified = (d: LibraryDoc) => /verified/i.test(d.status);
 const isIngested = (d: LibraryDoc) => /ingested/i.test(d.status);
 const rowText = (d: LibraryDoc) => [d.name, d.kind, d.meta, d.period, d.year, d.initials, d.who, d.whoSub, d.value, d.status].join(' ').toLowerCase();
 
+/** Batch actions and the selected documents each one applies to. */
 const BATCH = [
-  { label: 'Send to Review Queue', icon: BatchIcons.review },
-  { label: 'Request Signatures', icon: BatchIcons.signature },
-  { label: 'Move to Folder…', icon: BatchIcons.move },
-  { label: 'Export to Excel', icon: BatchIcons.export },
+  { label: 'Send to Review Queue', icon: BatchIcons.review, applies: (d: LibraryDoc) => !isVerified(d) && !isIngested(d) },
+  { label: 'Request Signatures', icon: BatchIcons.signature, applies: (d: LibraryDoc) => /missing signature/i.test(d.status) },
+  { label: 'Move to Folder…', icon: BatchIcons.move, applies: () => true },
+  { label: 'Export to Excel', icon: BatchIcons.export, applies: () => true },
 ] as const;
 
 export interface DocumentsPanelProps {
@@ -25,6 +28,10 @@ export interface DocumentsPanelProps {
   loading?: boolean;
   /** Upload destination, e.g. "PW-00428 › 1. Force-Account Labor". */
   destination: string;
+  /** Folder named in the delete confirmation, e.g. "PW-00428 › Force-Account Labor". */
+  folderPath: string;
+  /** Remove documents (after the danger confirmation). */
+  onDelete: (ids: string[]) => void;
   onUploadClick: () => void;
   onDropFiles: (files: File[]) => void;
   /** Request to reveal and flash a row (View File, #hash). `n` makes repeat requests distinct. */
@@ -36,9 +43,10 @@ export interface DocumentsPanelProps {
 }
 
 /** Documents panel: status tabs, filter, batch actions, upload, table, pagination and the drag-over overlay. */
-export function DocumentsPanel({ docs, loading, destination, onUploadClick, onDropFiles, focusRequest, addedNonce, enterKey }: DocumentsPanelProps) {
+export function DocumentsPanel({ docs, loading, destination, folderPath, onDelete, onUploadClick, onDropFiles, focusRequest, addedNonce, enterKey }: DocumentsPanelProps) {
   const toast = useToast();
-  const wide = useMediaQuery('(min-width:1341px)');
+  // tabs + tools share one row only when there is room for all five tabs
+  const wide = useMediaQuery('(min-width:1521px)');
   const [tab, setTab] = useState<Tab>('all');
   const [input, setInput] = useState('');
   const [q, setQ] = useState('');
@@ -47,6 +55,9 @@ export function DocumentsPanel({ docs, loading, destination, onUploadClick, onDr
   const [menuEl, setMenuEl] = useState<HTMLElement | null>(null);
   const [dragging, setDragging] = useState(false);
   const [focusId, setFocusId] = useState<string | null>(null);
+  /** Header select-all scope: the visible page, or every document matching the current tab/filter. */
+  const [bulk, setBulk] = useState<'none' | 'page' | 'all'>('none');
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const headRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -59,13 +70,14 @@ export function DocumentsPanel({ docs, loading, destination, onUploadClick, onDr
     return () => window.clearTimeout(t);
   }, [input]);
 
-  const counts = useMemo(() => ({ all: docs.length, review: docs.filter(isReview).length, verified: docs.filter(isVerified).length, ingested: docs.filter(isIngested).length }), [docs]);
+  const counts = useMemo(() => ({ all: docs.length, review: docs.filter(isReview).length, action: docs.filter(isAction).length, verified: docs.filter(isVerified).length, ingested: docs.filter(isIngested).length }), [docs]);
 
   const filtered = useMemo(
     () =>
       docs.filter((d) => {
         if (q && !rowText(d).includes(q)) return false;
         if (tab === 'review') return isReview(d);
+        if (tab === 'action') return isAction(d);
         if (tab === 'verified') return isVerified(d);
         if (tab === 'ingested') return isIngested(d);
         return true;
@@ -155,32 +167,56 @@ export function DocumentsPanel({ docs, loading, destination, onUploadClick, onDr
     inputRef.current?.focus();
   };
 
-  const toggle = (id: string) =>
+  const toggle = (id: string) => {
+    setBulk('none');
     setSelected((s) => {
       const n = new Set(s);
       if (n.has(id)) n.delete(id);
       else n.add(id);
       return n;
     });
-  const toggleAll = () =>
+  };
+  const toggleAll = () => {
+    const on = !visible.every((d) => selected.has(d.id));
+    setBulk(on ? 'page' : 'none');
     setSelected((s) => {
       const n = new Set(s);
-      const on = !visible.every((d) => n.has(d.id));
       visible.forEach((d) => (on ? n.add(d.id) : n.delete(d.id)));
       return n;
     });
-
-  const selCount = selected.size;
-  const runBatch = (label: string) => {
-    setMenuEl(null);
-    toast({ title: label, message: `${selCount} document${selCount > 1 ? 's' : ''}`, duration: 4000 });
   };
+  const selectAllMatching = () => {
+    setBulk('all');
+    setSelected(new Set(filtered.map((d) => d.id)));
+  };
+  const clearSelection = () => {
+    setBulk('none');
+    setSelected(new Set());
+  };
+
+  const selectedDocs = docs.filter((d) => selected.has(d.id));
+  const selCount = selectedDocs.length;
+  const plural = (n: number) => `${n} document${n === 1 ? '' : 's'}`;
+  const runBatch = (label: string, n: number) => {
+    setMenuEl(null);
+    toast({ title: label, message: plural(n), duration: 4000 });
+  };
+  const doDelete = () => {
+    const ids = selectedDocs.map((d) => d.id);
+    setConfirmDelete(false);
+    clearSelection();
+    onDelete(ids);
+  };
+
+  const pageAllOn = visible.length > 0 && visible.every((d) => selected.has(d.id));
+  const showBulkBar = !loading && ((bulk === 'page' && pageAllOn && filtered.length > visible.length) || (bulk === 'all' && selCount > 0));
 
   const fade = loading ? { opacity: 0.35, filter: 'blur(.4px)', transition: 'opacity .2s' } : { transition: 'opacity .2s' };
 
-  const tabs: { key: Tab; label: string; warn?: boolean }[] = [
+  const tabs: { key: Tab; label: string; warn?: boolean; risk?: boolean }[] = [
     { key: 'all', label: 'All' },
     { key: 'review', label: 'Needs Review', warn: true },
+    { key: 'action', label: 'Action Required', risk: true },
     { key: 'verified', label: 'Verified' },
     { key: 'ingested', label: 'Ingested' },
   ];
@@ -226,7 +262,7 @@ export function DocumentsPanel({ docs, loading, destination, onUploadClick, onDr
                 fontSize: 11,
                 fontWeight: 700,
                 ...fade,
-                ...(on ? { bgcolor: th.palette.og.buttonBlue, color: '#fff' } : t.warn ? { bgcolor: th.palette.og.warnTint, color: th.palette.og.warn } : { bgcolor: th.palette.og.pale, color: th.palette.og.gray }),
+                ...(on ? { bgcolor: th.palette.og.buttonBlue, color: '#fff' } : t.warn ? { bgcolor: th.palette.og.warnTint, color: th.palette.og.warn } : t.risk ? { bgcolor: th.palette.og.riskTint, color: th.palette.og.risk } : { bgcolor: th.palette.og.pale, color: th.palette.og.gray }),
               })}
             >
               {counts[t.key]}
@@ -352,6 +388,26 @@ export function DocumentsPanel({ docs, loading, destination, onUploadClick, onDr
         {tools}
       </Box>
 
+      {showBulkBar && (
+        <Box role="status" sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '4px 8px', px: '20px', py: '9px', bgcolor: 'og.blueTint', borderBottom: 1, borderColor: 'og.lineSoft', fontSize: 12.5, color: 'og.ink', textAlign: 'center' }}>
+          {bulk === 'all' ? (
+            <>
+              <span>All {selCount} documents in this folder are selected.</span>
+              <Box component="button" type="button" onClick={clearSelection} sx={bulkLink}>
+                Clear selection
+              </Box>
+            </>
+          ) : (
+            <>
+              <span>All {visible.length} documents on this page are selected.</span>
+              <Box component="button" type="button" onClick={selectAllMatching} sx={bulkLink}>
+                Select all {filtered.length} in this folder
+              </Box>
+            </>
+          )}
+        </Box>
+      )}
+
       <DocumentTable
         rows={visible}
         indexOf={(d) => docs.filter((x) => !x.isNew).indexOf(d)}
@@ -425,18 +481,57 @@ export function DocumentsPanel({ docs, loading, destination, onUploadClick, onDr
             </Box>
           )}
         </Box>
-        {BATCH.map((b) => (
-          <MenuItem key={b.label} disabled={!selCount} onClick={() => runBatch(b.label)} sx={{ minHeight: 34, gap: '11px', color: 'og.ink', '& svg': { color: 'og.gray', flex: 'none' }, '&:hover svg': { color: 'og.blue' } }}>
-            <b.icon />
-            {b.label}
-          </MenuItem>
-        ))}
+        {BATCH.map((b) => {
+          const n = selectedDocs.filter(b.applies).length;
+          return (
+            <MenuItem key={b.label} disabled={!n} onClick={() => runBatch(b.label, n)} sx={{ minHeight: 34, gap: '11px', color: 'og.ink', '& svg': { color: 'og.gray', flex: 'none' }, '&:hover svg': { color: 'og.blue' } }}>
+              <b.icon />
+              {b.label}
+              {selCount > 0 && (
+                <Box component="span" sx={{ color: 'og.gray', fontWeight: 600, ml: -1 }}>
+                  ({n})
+                </Box>
+              )}
+            </MenuItem>
+          );
+        })}
         <Box sx={{ height: '1px', my: 1, bgcolor: 'og.lineSoft' }} />
-        <MenuItem disabled={!selCount} onClick={() => runBatch('Delete')} sx={{ minHeight: 34, gap: '11px', color: 'og.risk', '& svg': { color: 'og.risk', flex: 'none' }, '&:hover': { bgcolor: 'rgba(180,71,58,.08)', color: 'og.risk' } }}>
+        <MenuItem
+          disabled={!selCount}
+          onClick={() => {
+            setMenuEl(null);
+            setConfirmDelete(true);
+          }} sx={{ minHeight: 34, gap: '11px', color: 'og.risk', '& svg': { color: 'og.risk', flex: 'none' }, '&:hover': { bgcolor: 'rgba(180,71,58,.08)', color: 'og.risk' } }}>
           <BatchIcons.delete />
           Delete
+          {selCount > 0 && (
+            <Box component="span" sx={{ fontWeight: 600, ml: -1 }}>
+              ({selCount})
+            </Box>
+          )}
         </MenuItem>
       </Menu>
+
+      <OgDialog
+        danger
+        open={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        eyebrow="Delete documents"
+        title={`Delete ${plural(selCount)}?`}
+        actions={
+          <>
+            <Button variant="outlined" onClick={() => setConfirmDelete(false)}>
+              Cancel
+            </Button>
+            {/* fixed dark red keeps white text at AA contrast in both themes */}
+            <Button variant="contained" onClick={doDelete} sx={(t) => ({ bgcolor: t.palette.mode === 'dark' ? '#B23A2E' : t.palette.og.risk, borderColor: 'transparent', '&:hover': { bgcolor: t.palette.mode === 'dark' ? '#9E3328' : '#8E261D', borderColor: 'transparent' } })}>
+              Delete
+            </Button>
+          </>
+        }
+      >
+        They will be removed from {folderPath} and from the FEMA package. This can&apos;t be undone. The deletion is recorded in the audit log.
+      </OgDialog>
     </Panel>
   );
 }
