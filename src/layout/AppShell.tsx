@@ -56,7 +56,7 @@ export function AppShell({ sidebar, sidebarLabel = 'Filters', children, ...heade
                   maxHeight: 'calc(100vh - 56px)',
                   overflowY: 'auto',
                   overscrollBehavior: 'contain',
-                  p: '20px 16px 24px',
+                  p: '16px 16px 20px',
                   scrollbarWidth: 'thin',
                   scrollbarColor: (t) => `${t.palette.og.line} transparent`,
                 }}

@@ -77,8 +77,8 @@ function Branch({ open, onToggle, nested, root, id, sub, label, count, children 
           alignItems: 'center',
           justifyContent: 'flex-start',
           textAlign: 'left',
-          minHeight: 34,
-          p: '6px 6px 6px 2px',
+          minHeight: 30,
+          p: '4px 6px 4px 2px',
           borderRadius: '4px',
           '&:hover': { bgcolor: 'rgba(0,90,156,.045)' },
           '&.Mui-focusVisible': { bgcolor: 'og.blueTint' },
@@ -137,14 +137,14 @@ function Leaf({ n, label, to, on, count, gap }: { n: number; label: string; to: 
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
-        minHeight: 32,
-        p: '5px 6px 5px 7px',
+        minHeight: 28,
+        p: '3px 6px 3px 7px',
         borderRadius: '4px',
         textDecoration: 'none',
         bgcolor: on ? 'og.blueTint' : 'transparent',
         '&:hover': { bgcolor: on ? 'og.blueTint' : 'rgba(0,90,156,.045)', textDecoration: 'none' },
         '&:focus-visible': { outline: 'none', bgcolor: 'rgba(0,90,156,.08)' },
-        ...(on && { '&::before': { content: '""', position: 'absolute', left: -6, top: 6, bottom: 6, width: 3, borderRadius: '2px', bgcolor: 'og.blue' } }),
+        ...(on && { '&::before': { content: '""', position: 'absolute', left: -6, top: 5, bottom: 5, width: 3, borderRadius: '2px', bgcolor: 'og.blue' } }),
       }}
     >
       <Box component="span" sx={{ flex: 'none', width: 11, mr: '7px', fontSize: 12, fontWeight: 600, color: on ? 'og.blue' : 'og.dim', fontVariantNumeric: 'tabular-nums', textAlign: 'right' }}>
@@ -201,7 +201,7 @@ function SideDropzone({ onFiles }: { onFiles?: (files: File[]) => void }) {
           alignItems: 'center',
           justifyContent: 'center',
           gap: 1.5,
-          p: '18px 10px 16px',
+          p: '12px 10px 12px',
           textAlign: 'center',
           borderRadius: '4px',
           backgroundImage: dashed(dark ? '5A7896' : '8FA9C6', 0.9),
@@ -213,7 +213,7 @@ function SideDropzone({ onFiles }: { onFiles?: (files: File[]) => void }) {
         };
       }}
     >
-      <Box component="span" sx={{ color: 'og.blue', display: 'flex', mb: '10px' }}>
+      <Box component="span" sx={{ color: 'og.blue', display: 'flex', mb: '6px' }}>
         <DocUpload size={34} />
       </Box>
       <Box component="strong" sx={{ fontSize: 15, fontWeight: 700, color: 'og.ink', lineHeight: 1.3 }}>

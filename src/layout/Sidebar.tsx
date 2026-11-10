@@ -8,7 +8,7 @@ import { CountBadge } from '@/components';
 export function SidebarSection({ label, scope, children, defaultOpen = true, collapsible = true }: { label: string; scope?: string; children: ReactNode; defaultOpen?: boolean; collapsible?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
   const head = (
-    <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%', mb: 2.5 }}>
+    <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%', mb: 2 }}>
       <Box sx={{ textAlign: 'left' }}>
         <Typography variant="label">{label}</Typography>
         {scope && <Typography sx={{ fontSize: 11, color: 'og.gray', mt: 0.5 }}>{scope}</Typography>}
@@ -21,7 +21,7 @@ export function SidebarSection({ label, scope, children, defaultOpen = true, col
     </Box>
   );
   return (
-    <Box component="section" sx={{ mb: 5 }}>
+    <Box component="section" sx={{ mb: 4 }}>
       {collapsible ? (
         <ButtonBase onClick={() => setOpen((o) => !o)} aria-expanded={open} sx={{ width: '100%', display: 'block', borderRadius: '4px' }}>
           {head}
@@ -45,9 +45,9 @@ export function QueueItem({ icon, label, count, to, active }: { icon?: ReactNode
         display: 'flex',
         alignItems: 'center',
         gap: 2.5,
-        height: 40,
+        height: 36,
         px: '9px',
-        mb: 2,
+        mb: 1.5,
         borderRadius: '4px',
         fontSize: 13,
         fontWeight: 600,
