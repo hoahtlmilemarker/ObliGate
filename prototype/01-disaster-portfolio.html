@@ -672,6 +672,18 @@ function sealDone(){var app=document.querySelector('.og');if(!app)return;
   '<div class="sg-act"><a class="btn btn-p sg-back" href="03-document-library.html">Done</a></div>';
  var pad=app.querySelector('[role=img][aria-label^="Signature pad"]');if(pad&&!pad.querySelector('.sg-stamp')){var s=document.createElement('span');s.className='sg-stamp';s.textContent='Sealed';pad.appendChild(s);pad.classList.add('is-sealed');}
  row.replaceWith(box);box.scrollIntoView({behavior:'smooth',block:'center'});}
+function cxResult(){var k=document.querySelector('section.kpis');if(!k)return;var old=document.querySelector('.cx-run');if(old)old.remove();
+ var d=new Date(),p=function(n){return (n<10?'0':'')+n;},tm=p(d.getHours())+':'+p(d.getMinutes());
+ var ar='<svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M9 4.5 12.5 8 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+ var s=document.createElement('section');s.className='cx-run';s.setAttribute('aria-label','Cross-check results');
+ s.innerHTML='<div class="cx-h"><div><span class="cx-eb">Cross-check results · Pay Period 02 · run at '+tm+'</span><h2 class="cx-t">2 findings need resolution</h2><p class="cx-p">10 of 12 crew members match between the eCAPS payroll claim and the field logs. Resolve the two findings below, then continue to Pre-Submission.</p></div>'+
+  '<a class="btn btn-o btn-sm cx-next" href="07-presubmission.html">Continue to Pre-Submission'+ar+'</a></div>'+
+  '<ol class="cx-list">'+
+  '<li><span class="cx-n">1</span><div class="cx-w"><b>Aguayo, Hector</b><span class="tag t-risk cx-tag">OT Mismatch</span><small>Claimed 48h · Documented 44h · 4.0 OT hrs ($325.20)</small></div><button class="btn btn-p btn-sm cx-go" type="button" data-cx="resolve">Resolve'+ar+'</button></li>'+
+  '<li><span class="cx-n">2</span><div class="cx-w"><b>Delgado, Marco</b><span class="tag t-warn cx-tag">Missing Log</span><small>Claimed 40h · Documented 0h · eligible for supervisor attestation</small></div><a class="btn btn-o btn-sm" href="08-supervisor-signature.html">Request Attestation'+ar+'</a></li>'+
+  '</ol>';
+ k.insertAdjacentElement('afterend',s);s.scrollIntoView({behavior:'smooth',block:'start'});
+ s.querySelector('[data-cx=resolve]').addEventListener('click',function(){var r=document.querySelector('[aria-label="Resolution options"]');if(r){r.scrollIntoView({behavior:'smooth',block:'center'});r.classList.add('cx-flash');setTimeout(function(){r.classList.remove('cx-flash');},1600);}});}
 var A=[
  /* 01 */
  [/^(Active Declarations|Closeout Stage|FEMA Appeals|Archived Disasters)/,function(b){var K={'Active Declarations':'active','Closeout Stage':'closeout','FEMA Appeals':'appeals','Archived Disasters':'archived'};window.ogLc=K[txt(b.querySelector('span'))]||'active';lcApply();}],
@@ -699,7 +711,7 @@ var A=[
   onOk:function(){var s=document.querySelector('.rv-st');if(s){s.className='tag rv-st t-risk';s.textContent='Rejected';}toast('<b>Document rejected</b> · reason saved to audit history');setTimeout(function(){var n=document.querySelector('.rv-next');if(n&&!n.disabled)n.click();},900);}});}],
  /* 05 */
  [/^(Prev Period|Next Period)/,function(b){toast('<b>'+txt(b)+'</b> · only Pay Period 02 is included in this prototype',false);}],
- [/^Run Cross-Check Engine/,function(b){busy(b,'Running…',1600,function(){toast('<b>Cross-check complete</b> · results refreshed for Pay Period 02');});}],
+ [/^(Run Cross-Check Engine|Run Again)/,function(b){busy(b,'Running…',1600,function(){cxResult();toast('<b>Cross-check complete</b> · 2 findings need resolution');});}],
  [/^Accept Documented/,function(b){dlg({eyebrow:'Resolve Finding',title:'Accept documented hours?',ok:'Reduce Claim',body:'<p>The claim for Aguayo, Hector is reduced by <b>$325.20</b> to match the 4.0 OT hours in the field log. This is recorded in the audit trail.</p>',
   onOk:function(){var box=b.parentNode;box.innerHTML='<span class="resolved-note">✓ Resolved · claim reduced by $325.20</span>';toast('<b>Finding resolved</b> · claim reduced by $325.20');}});}],
  [/^Dismiss Finding/,function(b){dlg({eyebrow:'Dismiss Finding',title:'Dismiss with an audit note',ok:'Dismiss Finding',body:'<p>Dismissing keeps the claimed hours. An auditor will see your note.</p><label>Audit note (required)<textarea data-req placeholder="Explain why the claimed hours are correct"></textarea></label>',
@@ -768,6 +780,24 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
 .og .sg-stamp{position:absolute;top:16px;right:18px;padding:4px 10px;border:1.5px solid var(--sgb);border-radius:4px;color:var(--sgb);font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;transform:rotate(-4deg)}
 @media (max-width:900px){.og .sg-done{grid-template-columns:auto minmax(0,1fr)}.og .sg-act{grid-column:1 / -1}.og .sg-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.og .sg-meta dd{white-space:normal}}
 @media (max-width:520px){.og .sg-done{grid-template-columns:1fr;padding:22px 18px}.og .sg-seal svg{width:48px;height:48px}.og .sg-t{font-size:26px}.og .sg-act .sg-back{width:100%;justify-content:center}}
+</style>
+<style>
+.og .cx-run{display:flex;flex-direction:column;gap:16px;margin:24px 0 0;padding:22px 24px;background:var(--card);border:1px solid var(--line);border-top:2px solid #B08A4E;border-radius:4px;box-shadow:0 24px 48px -36px rgba(6,36,63,.35);animation:sgIn .35s ease-out;scroll-margin-top:80px}
+.og .cx-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:12px 24px}
+.og .cx-h > div{min-width:0;flex:1 1 420px}
+.og .cx-eb{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gray)}
+.og .cx-t{margin:6px 0 4px;font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:28px;line-height:1.1;color:var(--head)}
+.og .cx-p{margin:0;font-size:14px;line-height:1.6;color:var(--gray);max-width:640px}
+.og .cx-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-soft)}
+.og .cx-list li{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-soft)}
+.og .cx-n{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);font-size:12px;font-weight:700;color:var(--gray)}
+.og .cx-w{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+.og .cx-w b{font-size:15px;color:var(--head)}
+.og .cx-w small{flex-basis:100%;font-size:13px;color:var(--gray)}
+.og .cx-tag{font-size:11.5px}
+.og .cx-list .btn{flex:none}
+.og .cx-flash{box-shadow:0 0 0 3px #C9A266!important;transition:box-shadow .3s}
+@media (max-width:640px){.og .cx-list li{flex-wrap:wrap;align-items:flex-start}.og .cx-w{flex:1 1 calc(100% - 48px)}.og .cx-list .btn{margin-left:40px}}
 </style>
 
 <div class="og" data-theme="light" style="min-height: 1100px">
