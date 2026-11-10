@@ -84,7 +84,8 @@ export function createOgTheme(mode: OgMode): Theme {
         styleOverrides: {
           body: { backgroundColor: t.bg, WebkitFontSmoothing: 'antialiased' },
           a: { color: t.blue, textDecoration: 'none' },
-          'a:not(.MuiButtonBase-root):not(.MuiButton-root):hover': { color: t.blueHover },
+          // :where() keeps this at plain `a:hover` specificity so component styles (nav, buttons) always win.
+          'a:where(:not(.MuiButtonBase-root)):hover': { color: t.blueHover },
         },
       },
       MuiTypography: {
