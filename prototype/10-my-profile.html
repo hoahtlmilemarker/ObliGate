@@ -297,7 +297,11 @@ if(zb){zb.setAttribute('title','Click to change zoom (or press + / −)');zb.add
 if(rb)rb.addEventListener('click',function(){rot=(rot+90)%360;view();});
 document.addEventListener('keydown',function(e){var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'))return;if(e.key==='+'||e.key==='='){var o=[75,100,125,150],c=Z[zi],n=o[Math.min(3,o.indexOf(c)+1)];zi=Z.indexOf(n);view();}else if(e.key==='-'||e.key==='_'){var o2=[75,100,125,150],c2=Z[zi],n2=o2[Math.max(0,o2.indexOf(c2)-1)];zi=Z.indexOf(n2);view();}else if(e.key==='r'){rot=(rot+90)%360;view();}});
 prev.addEventListener('click',function(){go(cur-1);});next.addEventListener('click',function(){go(cur+1);});
-if(conf)conf.addEventListener('click',function(){if(cur<N-1)go(cur+1);});
+if(conf)conf.addEventListener('click',function(){if(cur<N-1){go(cur+1);return;}
+ if(stEl){stEl.className='tag rv-st t-good';stEl.textContent='Confirmed';}
+ if(window.ogDialog)window.ogDialog({eyebrow:'Review queue complete',title:'All '+N+' documents reviewed',ok:'Continue to Cross-Check',cancel:'Back to Document Library',
+  body:'<p>Your confirmed documents are filed in <b>PW-00428 › 1. Force-Account Labor</b>. Next step: check claimed hours against field evidence in Cross-Check.</p>',
+  onCancel:function(){location.href='03-document-library.html';},onOk:function(){location.href='05-cross-check.html';}});});
 document.addEventListener('keydown',function(e){var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;if(e.metaKey||e.ctrlKey||e.altKey)return;
  if(e.key==='j'){e.preventDefault();go(cur+1);}else if(e.key==='k'){e.preventDefault();go(cur-1);}else if(e.key==='Enter'){e.preventDefault();if(cur<N-1)go(cur+1);}});
 if(cur)go(cur);}
@@ -641,9 +645,9 @@ function toast(h,ok){var o=document.querySelector('.og-toast');if(o)o.remove();v
  document.body.appendChild(d);d.querySelector('.x').onclick=function(){d.remove();};setTimeout(function(){d.remove();},4500);}
 window.ogToast2=toast;
 function dlg(o){var d=document.createElement('div');d.className='dlg';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
- d.innerHTML='<div class="dlg-b'+(o.danger?' danger':'')+'"><div class="dlg-h"><div><small>'+(o.eyebrow||'Action')+'</small><h3>'+o.title+'</h3></div><button type="button" class="dlg-x" aria-label="Close">✕</button></div><div class="dlg-c">'+o.body+'</div><div class="dlg-f">'+(o.noCancel?'':'<button type="button" class="btn btn-o btn-sm dlg-cancel">Cancel</button>')+'<button type="button" class="btn btn-sm '+(o.danger?'btn-danger':'btn-p')+' dlg-ok">'+(o.ok||'Confirm')+'</button></div></div>';
+ d.innerHTML='<div class="dlg-b'+(o.danger?' danger':'')+'"><div class="dlg-h"><div><small>'+(o.eyebrow||'Action')+'</small><h3>'+o.title+'</h3></div><button type="button" class="dlg-x" aria-label="Close">✕</button></div><div class="dlg-c">'+o.body+'</div><div class="dlg-f">'+(o.noCancel?'':'<button type="button" class="btn btn-o btn-sm dlg-cancel">'+(o.cancel||'Cancel')+'</button>')+'<button type="button" class="btn btn-sm '+(o.danger?'btn-danger':'btn-p')+' dlg-ok">'+(o.ok||'Confirm')+'</button></div></div>';
  host().appendChild(d);var close=function(){d.remove();document.removeEventListener('keydown',k);};var k=function(e){if(e.key==='Escape')close();};document.addEventListener('keydown',k);
- d.querySelector('.dlg-x').onclick=close;var c=d.querySelector('.dlg-cancel');if(c)c.onclick=close;d.addEventListener('click',function(e){if(e.target===d)close();});
+ d.querySelector('.dlg-x').onclick=close;var c=d.querySelector('.dlg-cancel');if(c)c.onclick=function(){close();if(o.onCancel)o.onCancel();};d.addEventListener('click',function(e){if(e.target===d)close();});
  var okb=d.querySelector('.dlg-ok');var req=d.querySelector('[data-req]');function chk(){if(req)okb.disabled=!(req.type==='checkbox'?req.checked:req.value.trim());}
  if(req){req.addEventListener('input',chk);req.addEventListener('change',chk);chk();}
  okb.onclick=function(){var r=o.onOk?o.onOk(d):true;if(r!==false)close();};var f=d.querySelector('textarea,input,select');if(f)setTimeout(function(){f.focus();},30);return d;}
