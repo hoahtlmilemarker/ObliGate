@@ -3,6 +3,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ColorModeProvider } from '@/theme/ColorModeProvider';
 import { PageLoader, ToastProvider } from '@/components';
 import { routes } from '@/layout/nav';
+import { RouteLoadingProvider } from '@/layout/RouteLoading';
+import { BootLoaderDone } from '@/layout/BootLoader';
 
 const SignIn = lazy(() => import('@/pages/SignIn'));
 const DisasterPortfolio = lazy(() => import('@/pages/DisasterPortfolio'));
@@ -23,6 +25,8 @@ export function App() {
     <ColorModeProvider>
       <ToastProvider>
         <BrowserRouter>
+          <RouteLoadingProvider>
+          <BootLoaderDone />
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Navigate to={routes.signIn} replace />} />
@@ -42,6 +46,7 @@ export function App() {
               <Route path="*" element={<Navigate to={routes.signIn} replace />} />
             </Routes>
           </Suspense>
+          </RouteLoadingProvider>
         </BrowserRouter>
       </ToastProvider>
     </ColorModeProvider>

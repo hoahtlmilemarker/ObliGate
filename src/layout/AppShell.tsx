@@ -2,6 +2,7 @@ import { Box, ButtonBase, Collapse, useMediaQuery, type Theme } from '@mui/mater
 import { useState, type ReactNode } from 'react';
 import { ChevronDownIcon, MenuIcon } from '@/icons';
 import { AppHeader, type AppHeaderProps } from './AppHeader';
+import { PageSkeleton, pageIn, useRouteLoading } from './RouteLoading';
 
 export interface AppShellProps extends AppHeaderProps {
   /** Left rail content (queues, filters, tree). Omit for full-width pages. */
@@ -18,6 +19,7 @@ export interface AppShellProps extends AppHeaderProps {
 export function AppShell({ sidebar, sidebarLabel = 'Filters', children, ...header }: AppShellProps) {
   const compact = useMediaQuery((t: Theme) => t.breakpoints.down('lg'));
   const [open, setOpen] = useState(false);
+  const loading = useRouteLoading();
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', bgcolor: 'og.bg' }}>
@@ -48,8 +50,9 @@ export function AppShell({ sidebar, sidebarLabel = 'Filters', children, ...heade
               <Box sx={{ position: 'sticky', top: 76 }}>{sidebar}</Box>
             </Box>
           ))}
-        <Box component="main" sx={{ minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-          {children}
+        <Box component="main" aria-busy={loading || undefined} sx={{ position: 'relative', minWidth: 0, display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 56px)' }}>
+          {loading && <PageSkeleton />}
+          <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, animation: loading ? 'none' : `${pageIn} .38s cubic-bezier(.2,.7,.2,1) both`, '@media (prefers-reduced-motion: reduce)': { animation: 'none' } }}>{children}</Box>
         </Box>
       </Box>
     </Box>
