@@ -46,8 +46,23 @@ export function AppShell({ sidebar, sidebarLabel = 'Filters', children, ...heade
               </Collapse>
             </Box>
           ) : (
-            <Box component="aside" sx={{ bgcolor: 'og.card', borderRight: 1, borderColor: 'og.line', p: '20px 16px' }}>
-              <Box sx={{ position: 'sticky', top: 76 }}>{sidebar}</Box>
+            <Box sx={{ bgcolor: 'og.card', borderRight: 1, borderColor: 'og.line' }}>
+              {/* Rail sticks under the header and scrolls on its own when taller than the window, so nothing is cut off. */}
+              <Box
+                component="aside"
+                sx={{
+                  position: 'sticky',
+                  top: 56,
+                  maxHeight: 'calc(100vh - 56px)',
+                  overflowY: 'auto',
+                  overscrollBehavior: 'contain',
+                  p: '20px 16px 24px',
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: (t) => `${t.palette.og.line} transparent`,
+                }}
+              >
+                {sidebar}
+              </Box>
             </Box>
           ))}
         <Box component="main" aria-busy={loading || undefined} sx={{ position: 'relative', minWidth: 0, display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 56px)' }}>
