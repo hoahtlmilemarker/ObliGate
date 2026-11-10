@@ -9,6 +9,8 @@ interface ToastOptions {
   tone?: ToastTone;
   action?: { label: string; onClick: () => void };
   duration?: number;
+  /** Render `title message` without the ' · ' separator (copy that reads as one sentence). */
+  inline?: boolean;
 }
 
 const Ctx = createContext<(o: ToastOptions) => void>(() => {});
@@ -56,7 +58,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <Box sx={{ color: iconColor, display: 'flex', flex: 'none' }}>{icon}</Box>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <b>{state?.title}</b>
-            {state?.message && <> · {state.message}</>}
+            {state?.message && <>{state.inline ? ' ' : ' · '}{state.inline ? <Box component="span" sx={{ fontWeight: 500 }}>{state.message}</Box> : state.message}</>}
           </Box>
           {state?.action && (
             <Box

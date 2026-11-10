@@ -14,16 +14,18 @@ export interface OgDialogProps {
   onConfirm?: () => void;
   confirmDisabled?: boolean;
   maxWidth?: number;
+  /** Destructive / blocking variant: red top rule, red eyebrow and red confirm button. */
+  danger?: boolean;
 }
 
 /** Standard ObliGate dialog: gold eyebrow, title, body, footer actions. */
-export function OgDialog({ open, onClose, eyebrow, title, children, actions, confirmLabel, onConfirm, confirmDisabled, maxWidth = 480 }: OgDialogProps) {
+export function OgDialog({ open, onClose, eyebrow, title, children, actions, confirmLabel, onConfirm, confirmDisabled, maxWidth = 480, danger }: OgDialogProps) {
   return (
-    <Dialog open={open} onClose={onClose} aria-labelledby="og-dialog-title" slotProps={{ paper: { sx: { width: `min(${maxWidth}px, calc(100vw - 32px))`, m: 2 } } }}>
+    <Dialog open={open} onClose={onClose} aria-labelledby="og-dialog-title" slotProps={{ paper: { sx: { width: `min(${maxWidth}px, calc(100vw - 32px))`, m: 2, ...(danger && { borderTopColor: 'og.risk' }) } } }}>
       <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 3, p: '20px 24px 4px' }}>
         <Box>
           {eyebrow && (
-            <Typography variant="eyebrow" sx={{ color: '#A57F3C', fontSize: 10.5, mb: 2 }}>
+            <Typography variant="eyebrow" sx={{ color: danger ? 'og.risk' : '#A57F3C', fontSize: 10.5, mb: 2 }}>
               {eyebrow}
             </Typography>
           )}
@@ -43,7 +45,7 @@ export function OgDialog({ open, onClose, eyebrow, title, children, actions, con
               Cancel
             </Button>
             {confirmLabel && (
-              <Button variant="contained" onClick={onConfirm} disabled={confirmDisabled}>
+              <Button variant="contained" onClick={onConfirm} disabled={confirmDisabled} sx={danger ? { bgcolor: 'og.risk', borderColor: 'og.risk', '&:hover': { bgcolor: 'og.risk', filter: 'brightness(.92)' } } : undefined}>
                 {confirmLabel}
               </Button>
             )}
