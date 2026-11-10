@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>ObliGate</title>
     <style>
-      /* First-visit brand loader (removed by <BootLoaderDone/> once React has mounted). */
+      /* Brand loader on app load (removed by <BootLoaderDone/> once React has mounted). */
       #og-boot{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;background:#FFFFFF;transition:opacity .45s ease,visibility .45s}
       #og-boot.dk{background:#0E151D}
       #og-boot.out{opacity:0;visibility:hidden}
@@ -45,10 +45,8 @@
       (function () {
         var el = document.getElementById('og-boot');
         el.dataset.t = String(performance.now());
-        var first = true;
-        try { first = !sessionStorage.getItem('og-ld'); sessionStorage.setItem('og-ld', '1'); } catch (e) {}
+        // Shown on every full load / reload of the app; in-app navigation uses the page skeleton instead.
         try { if (localStorage.getItem('og-theme') === 'dark') el.className = 'dk'; } catch (e) {}
-        if (!first) el.remove();
       })();
     </script>
     <div id="root"></div>
