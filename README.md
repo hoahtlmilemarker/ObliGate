@@ -1,5 +1,7 @@
 # ObliGate — Web UI (React + MUI)
 
+> **Deployment:** Vercel serves the static HTML design prototype in `/prototype` (see `vercel.json`). The React app in `/src` is the dev handoff source; run it locally with `npm run dev`.
+
 React 19 + TypeScript + Vite + MUI 7 implementation of the approved ObliGate UI (13 screens, Light/Dark, responsive 1440 / 768 / 390).
 All names, amounts and IDs on screen are **sample data** from the approved prototype (`src/data/*`) — replace with the typed API.
 
