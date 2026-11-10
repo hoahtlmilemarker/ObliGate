@@ -1077,8 +1077,31 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   if(cnt){var m=cnt.textContent.match(/\d+/);if(m)cnt.textContent=(+m[0]+files.length)+' Documents';}var q=document.querySelector('.q-item[data-q=review] .cnt-chip');if(q){q.textContent=+q.textContent+files.length;q.classList.remove('cnt-bump');void q.offsetWidth;q.classList.add('cnt-bump');}
   var first=tb.querySelector('tr.just');first&&first.scrollIntoView({behavior:'smooth',block:'center'});
   toast(files.length);
-  setTimeout(function(){tb.querySelectorAll('tr.just').forEach(function(r){var s=r.querySelector('.st2');s.className='st2 st2-warn';s.innerHTML='<i></i>Queued for Review';
-   r.querySelector('.lb-kind').innerHTML='<span class="new-pill">New</span>Awaiting classification';r.lastElementChild.innerHTML='<a class="lb-btn lb-btn-p" href="04-document-review.html">Review<svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M9 4.5 12.5 8 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>';});if(window.ogTabCounts)window.ogTabCounts();},2600);}
+  var rows=[].slice.call(tb.querySelectorAll('tr.just'));analyze(rows,files);}
+ var AR='<svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M9 4.5 12.5 8 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+ function rules(name){var e=(name.split('.').pop()||'').toLowerCase();
+  if(/timesheet/i.test(name))return {kind:'Force-Account Timesheet',f:[{sev:'risk',t:'No supervisor signature',r:'PAPPG v4.0 Ch. 2 § II.B',d:'FEMA requires a supervisor signature or attestation for force-account hours.',fix:'Request Attestation',href:'08-supervisor-signature.html'}]};
+  if(['jpg','jpeg','png','heic','tif','tiff'].indexOf(e)>-1)return {kind:'Site photo',f:[]};
+  if(['xlsx','xls','csv'].indexOf(e)>-1)return {kind:'Payroll export',f:[{sev:'warn',t:'Hours not yet matched to field logs',r:'PAPPG v4.0 Ch. 2 § II.B.1',d:'Claimed hours must match daily activity logs before submission.',fix:'Open Cross-Check',href:'05-cross-check.html'}]};
+  return {kind:'Supporting document',f:[{sev:'warn',t:'Low-confidence read',r:'Data review',d:'Some values were hard to read. Confirm them before they are used in the claim.',fix:'Review',href:'04-document-review.html'}]};}
+ var last=[];
+ function findingsDlg(list){if(!window.ogDialog)return;var n=0;list.forEach(function(x){n+=x.f.length;});
+  var body=list.map(function(x){return '<div class="fd-file"><div class="fd-fh"><b>'+esc(x.name)+'</b><span>'+x.kind+'</span></div>'+(x.f.length?x.f.map(function(f){return '<div class="fd-f"><span class="fd-sev '+f.sev+'">'+(f.sev==='risk'?'Critical':'Review')+'</span><div class="fd-ft"><b>'+f.t+'</b><small>'+f.d+' · '+f.r+'</small></div><a class="btn btn-o btn-sm" href="'+f.href+'">'+f.fix+AR+'</a></div>';}).join(''):'<div class="fd-ok">No issues found against FEMA rules</div>')+'</div>';}).join('');
+  window.ogDialog({eyebrow:'AI check · FEMA Public Assistance rules',title:n?(n+' finding'+(n>1?'s':'')+' in '+list.length+' file'+(list.length>1?'s':'')):'No findings',ok:'Done',noCancel:1,body:'<div class="fd">'+body+'</div>'});}
+ window.ogFindingsDlg=findingsDlg;
+ function analyze(rows,files){var res=[];
+  rows.forEach(function(r,k){var f=files[k]||{name:''};var R=rules(f.name);var x={name:f.name,kind:R.kind,f:R.f};res.push(x);
+   var s=r.querySelector('.st2'),kd=r.querySelector('.lb-kind'),act=r.lastElementChild;
+   s.className='st2 st2-proc';s.innerHTML='<i></i>Reading…';
+   setTimeout(function(){kd.innerHTML='<span class="new-pill">New</span>'+R.kind;s.innerHTML='<i></i>Checking FEMA rules…';act.innerHTML='<span style="font-size:12px;color:var(--gray)">AI checking</span>';},1200+k*250);
+   setTimeout(function(){var who=r.querySelector('.lb-who span');if(who&&/Detecting/.test(who.textContent))who.textContent='Not detected';if(!R.f.length){s.className='st2 st2-good';s.innerHTML='<i></i>Verified · no findings';act.innerHTML='<a class="lb-btn" href="#">View'+AR+'</a>';}
+    else{var risk=R.f.some(function(z){return z.sev==='risk';});s.className='st2 '+(risk?'st2-risk':'st2-warn');s.innerHTML='<i></i>'+R.f.length+' finding'+(R.f.length>1?'s':'');
+     act.innerHTML='<button type="button" class="lb-btn lb-btn-p fd-open">View Findings'+AR+'</button>';act.querySelector('.fd-open').onclick=function(e){e.preventDefault();e.stopPropagation();findingsDlg([x]);};}
+    if(k===rows.length-1){if(window.ogTabCounts)window.ogTabCounts();last=res;var n=0;res.forEach(function(z){n+=z.f.length;});
+     var o=document.querySelector('.og-toast');if(o)o.remove();var t=document.createElement('div');t.className='og-toast';t.setAttribute('role','status');
+     t.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.6 2.6L16 9.7"/></svg><span><b>'+res.length+' file'+(res.length>1?'s':'')+' checked against FEMA rules</b> · '+(n?n+' finding'+(n>1?'s':''):'no findings')+'</span>'+(n?'<button type="button" class="v">View Findings</button>':'')+'<button type="button" class="x" aria-label="Dismiss">✕</button>';
+     document.body.appendChild(t);var v=t.querySelector('.v');if(v)v.onclick=function(){t.remove();findingsDlg(res);};t.querySelector('.x').onclick=function(){t.remove();};setTimeout(function(){if(t.parentNode)t.remove();},12000);}
+   },3000+k*450);});}
  h.querySelectorAll('.lb-tab').forEach(function(t){t.addEventListener('click',function(){h.querySelectorAll('.lb-tab').forEach(function(x){x.classList.remove('on');x.setAttribute('aria-selected','false');});t.classList.add('on');t.setAttribute('aria-selected','true');});});
  function has(e){return e.dataTransfer&&Array.prototype.indexOf.call(e.dataTransfer.types||[],'Files')>-1;}
  document.addEventListener('dragenter',function(e){if(!has(e))return;n++;h.classList.add('dragging');});
@@ -1209,6 +1232,23 @@ m.addEventListener('click',function(e){var i=e.target.closest('.bm-i');if(!i||i.
  note('<b>'+lab+'</b> · '+docs(n));});
 })();
 </script>
+
+<style>
+.og .fd{display:flex;flex-direction:column;gap:12px;max-height:min(60vh,520px);overflow:auto}
+.og .fd-file{border:1px solid var(--line);border-radius:4px}
+.og .fd-fh{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;background:var(--pale);border-bottom:1px solid var(--line-soft);font-size:13px}
+.og .fd-fh b{color:var(--head);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.og .fd-fh span{flex:none;color:var(--gray);font-size:12px}
+.og .fd-f{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:6px 14px;padding:12px}
+.og .dlg-b:has(.fd){width:min(640px,calc(100vw - 32px))!important;max-width:none!important}
+.og .fd-ft{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;text-transform:none;letter-spacing:0}
+.og .fd-ft b{font-size:14px;color:var(--head)}
+.og .fd-ft small{font-size:12.5px;color:var(--gray);line-height:1.5}
+.og .fd-sev{flex:none;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px;border-radius:4px}
+.og .fd-sev.risk{background:var(--risk-t);color:var(--risk)}.og .fd-sev.warn{background:var(--warn-t);color:var(--warn)}
+.og .fd-ok{padding:12px;font-size:13px;color:var(--good);font-weight:600}
+@media (max-width:560px){.og .fd-f{grid-template-columns:minmax(0,1fr)}.og .fd-sev{justify-self:start}.og .fd-f .btn{justify-self:start}}
+</style>
 
 </body>
 </html>
