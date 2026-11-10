@@ -846,20 +846,22 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
  var tags=[].slice.call(document.querySelectorAll('.an-feed .an-tag'));var done=['Filed · PW-00428','Filed · PW-00428','Matched 167 rows','Missing signature','Filed · PW-00428','Filed · PW-00428'];var cls=['ok','ok','ok','risk','ok','ok'];
  var steps=[].slice.call(document.querySelectorAll('.an-steps li'));
  var v=0,t0=performance.now(),D=5200;
- function tick(now){v=Math.min(100,Math.round((now-t0)/D*100));pct.textContent=v+'%';if(bar)bar.style.width=v+'%';if(pb)pb.setAttribute('aria-valuenow',v);
+ function tick(now){v=Math.min(100,Math.round((now-t0)/D*100));pct.textContent=v+'%';var ck=document.querySelector('.an-card-h > span');if(ck&&/checked/.test(ck.textContent))ck.textContent=Math.round(v/100*44)+' of 44 checked';if(bar)bar.style.width=v+'%';if(pb)pb.setAttribute('aria-valuenow',v);
   if(eta)eta.textContent=v<100?'About '+Math.max(1,Math.ceil((100-v)/40))+' minute'+((100-v)>40?'s':'')+' left':'Building your report…';
   tags.forEach(function(g,i){if(v>=(i+1)*15&&!g.dataset.d){g.dataset.d=1;g.className='an-tag '+cls[i];g.textContent=done[i];}});
   if(v>=70&&steps[2]&&!steps[2].dataset.d){steps[2].dataset.d=1;steps[2].classList.remove('is-run');var n=steps[2].querySelector('.an-n');n.className='an-n done';n.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';steps[2].querySelector('p').textContent='38 of 38 files checked.';if(steps[3]){steps[3].classList.add('is-run');steps[3].querySelector('.an-n').className='an-n run';steps[3].querySelector('p').textContent='Adding up costs FEMA could question…';}}
-  if(v<100)requestAnimationFrame(tick);else setTimeout(function(){location.href='14-analysis-report.html';},700);}
+  if(window.__anStop){t0+=16;requestAnimationFrame(tick);return;}if(v<100)requestAnimationFrame(tick);else setTimeout(function(){if(!window.__anStop)location.href='14-analysis-report.html';},700);}
  pct.textContent='0%';if(bar)bar.style.width='0%';
  tags.forEach(function(g,i){if(i>0){g.className='an-tag idle';g.textContent='Waiting';}else{g.className='an-tag run';g.textContent='Reading…';}});
  if(steps[2]){steps[2].classList.add('is-run');}
  requestAnimationFrame(tick);}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
- document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b||!document.querySelector('.an-drop'))return;if(b.textContent.trim()==='Clear'){var l=document.querySelector('.an-files');if(l)l.remove();var m=document.querySelector('.an-more');if(m)m.remove();var s=document.querySelector('.an-foot span');if(s)s.innerHTML='No files added yet';var go=document.querySelector('.an-foot .btn-p');if(go){go.setAttribute('aria-disabled','true');go.style.pointerEvents='none';go.style.opacity='.5';}}});
+ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b||!document.querySelector('.an-drop'))return;if(b.textContent.trim()==='Clear all'){var l=document.querySelector('.an-files');if(l)l.remove();var m=document.querySelector('.an-more');if(m)m.remove();var s=document.querySelector('.an-foot span');if(s)s.innerHTML='No files added yet';var go=document.querySelector('.an-foot .btn-p');if(go){go.setAttribute('aria-disabled','true');go.style.pointerEvents='none';go.style.opacity='.5';}}});
 })();
 </script>
 <script>document.addEventListener('click',function(e){document.querySelectorAll('details.addm[open]').forEach(function(d){if(!d.contains(e.target))d.open=false;});});</script>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.an-cancel');if(!a||!window.ogDialog)return;e.preventDefault();window.__anStop=true;
+ window.ogDialog({eyebrow:'Cancel analysis',title:'Stop analyzing these files?',ok:'Stop Analysis',cancel:'Keep Analyzing',danger:1,body:'<p>Files read so far are kept. Nothing is checked against FEMA rules until you start the analysis again.</p>',onOk:function(){location.href='12-upload-start.html';},onCancel:function(){window.__anStop=false;}});},true);</script>
 
 <div class="og gn" data-theme="light" style="min-height: 1400px">
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
