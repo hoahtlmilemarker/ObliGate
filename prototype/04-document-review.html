@@ -670,7 +670,7 @@ function sealDone(){var app=document.querySelector('.og');if(!app)return;try{ses
  var tag=[].find.call(app.querySelectorAll('.tag'),function(x){return /Action Required/.test(x.textContent);});if(tag){tag.className='tag t-good';tag.innerHTML='<span class="dot"></span>Sealed';}
  var ck=app.querySelector('.att-ck input');if(ck){ck.disabled=true;ck.closest('.att-ck').style.cursor='default';}
  [].forEach.call(app.querySelectorAll('button'),function(b){if(/^(Clear Pad)$/.test(txt(b)))b.style.display='none';});
- var seal=[].find.call(app.querySelectorAll('button'),function(b){return /^Confirm & Digitally Seal/.test(txt(b));});if(!seal)return;var row=seal.parentNode;
+ var seal=[].find.call(app.querySelectorAll('button'),function(b){return /^Confirm & Digitally Seal/.test(txt(b));});if(!seal)return;var row=seal.closest('.sga-bar')||seal.parentNode;
  var d=new Date(),p=function(n){return (n<10?'0':'')+n;},ts=d.getUTCFullYear()+'-'+p(d.getUTCMonth()+1)+'-'+p(d.getUTCDate())+' '+p(d.getUTCHours())+':'+p(d.getUTCMinutes())+' UTC';
  var box=document.createElement('section');box.className='sg-done';box.setAttribute('role','status');box.setAttribute('aria-label','Attestation sealed');
  var I=function(d){return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';};
@@ -688,7 +688,7 @@ function sealDone(){var app=document.querySelector('.og');if(!app)return;try{ses
   '<div class="sg2-f"><div class="sg2-n"><span class="sg2-av">RK</span><span><b>Rosa Keith</b> · Grants Management was notified <span class="sg2-dot"></span><em>just now</em></span></div>'+
   '<div class="sg2-acts"><button type="button" class="btn btn-o sg2-dl">'+I('<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>')+'Download Certificate</button><a class="btn btn-p sg-done-btn" href="03-document-library.html">Back to Documents'+AR+'</a></div></div>';
  box.addEventListener('click',function(e){var c=e.target.closest('.sg2-copy');if(c){try{var pr=navigator.clipboard&&navigator.clipboard.writeText('SEAL-SIG-2026-PW428-09');if(pr&&pr.catch)pr.catch(function(){});}catch(x){}c.classList.add('is-ok');setTimeout(function(){c.classList.remove('is-ok');},1400);toast('Seal ID copied');}
-  if(e.target.closest('.sg2-dl'))toast('Certificate download is not part of this prototype yet');});
+  if(e.target.closest('.sg2-dl')&&window.ogCert)window.ogCert();});
  var pad=app.querySelector('[role=img][aria-label^="Signature pad"]');if(pad&&!pad.querySelector('.sg-stamp')){var s=document.createElement('span');s.className='sg-stamp';s.textContent='Sealed';pad.appendChild(s);pad.classList.add('is-sealed');}
  row.replaceWith(box);box.scrollIntoView({behavior:'smooth',block:'center'});}
 function cxResult(){var k=document.querySelector('section.kpis');if(!k)return;var old=document.querySelector('.cx-run');if(old)old.remove();
@@ -757,7 +757,7 @@ var A=[
  /* 08 */
  [/^Clear Pad/,function(){var pad=document.querySelector('[aria-label^="Signature pad"]');if(pad&&window.ogSignPad)window.ogSignPad(pad);}],
  [/^Confirm & Digitally Seal/,function(){var pad=document.querySelector('[aria-label^="Signature pad"]');var ck=document.querySelector('.att-ck input[type=checkbox]');
-  if(pad&&pad.dataset.empty){toast('Sign the pad before sealing',false);return;}if(ck&&!ck.checked){toast('Confirm the attestation statement first',false);return;}
+  if(ck&&!ck.checked){toast('Confirm the attestation statement in step 2 first',false);var s2=document.getElementById('sga2');if(s2)s2.scrollIntoView({behavior:'smooth',block:'center'});return;}if(pad&&pad.dataset.empty){toast('Sign in step 3 before sealing',false);return;}if(pad&&pad.classList.contains('is-edit')&&pad._commit)pad._commit();
   dlg({eyebrow:'Digital Seal',title:'Seal this attestation?',ok:'Confirm & Seal',body:'<p>Your signature is applied to this attestation and it is locked. This cannot be edited afterwards.</p>',onOk:function(){sealDone();toast('<b>Attestation sealed</b> · Rosa Keith has been notified');}});}],
  [/^Dispute Hours/,function(){dlg({danger:1,eyebrow:'Dispute',title:'Dispute the recorded hours',ok:'Submit Dispute',body:'<label>Hours you can confirm<input class="inp" placeholder="e.g. 4.0"></label><label>Explanation (required)<textarea data-req placeholder="Describe what differs from your field records"></textarea></label>',onOk:function(){toast('<b>Dispute submitted</b> · grants manager notified');}});}],
  /* 10 */
@@ -915,13 +915,13 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
    if(window.ogUxSync)window.ogUxSync();
    var hm=(location.hash||'').match(/^#f=(.+)$/);if(hm){var nm=decodeURIComponent(hm[1]);var tr=[].slice.call(ut.querySelectorAll('tr')).filter(function(r){return r.getAttribute('data-up')===nm;})[0];if(tr){setTimeout(function(){tr.scrollIntoView({block:'center'});tr.classList.add('ux-focus');var c=tr.querySelector('.ux-ok')||tr.querySelector('select');if(c)c.focus({preventScroll:true});},350);}}}
   /* 03 · library: show filed uploads on top */
-  var lt=q('.lb-tbl tbody');if(lt&&!q('.lb-new')){var mine2=up.filter(function(x){return x.place;});var ft0=lt.querySelector('.lb-ft');
+  var lt=q('.lb-tbl tbody');if(lt&&!q('.lb-new')){var mine2=up.filter(function(x){return x.place&&(!x.folder||x.folder===F1);}),oth=up.filter(function(x){return x.place&&x.folder&&x.folder!==F1;}),og={};oth.forEach(function(x){og[x.folder]=(og[x.folder]||0)+1;});var ft0=lt.querySelector('.lb-ft');
    var FTC={pdf:'#B4473A',xls:'#2E7D4F',img:'#1F5D97',doc:'#5B6B7A'};
    lt.insertAdjacentHTML('afterbegin',mine2.map(function(x){var t2=ft(x.name);var ic=ft0?ft0.innerHTML.replace(/<b>[^<]*<\/b>/,'<b>'+t2[1]+'</b>'):'<b>'+t2[1]+'</b>';
     var st=x.f?(x.f.sev==='c'?'<span class="st2 st2-risk"><i></i>Critical finding</span>':'<span class="st2 st2-warn"><i></i>Advisory</span>'):x.tier==='check'?'<span class="st2 st2-warn"><i></i>Check placement ('+x.conf+'%)</span>':'<span class="st2 st2-good"><i></i>'+(x.tier==='manual'?'Filed by you':'Filed automatically')+'</span>';
     var act=x.f?'<a class="lb-btn lb-btn-p lb-btn-r" href="'+x.f.href+'">Fix'+AR+'</a>':x.tier==='check'?'<button type="button" class="lb-btn lb-btn-p lb-conf" data-n="'+esc(x.name)+'">Confirm Folder</button>':'<a class="lb-btn" href="04-document-review.html">View'+AR+'</a>';
-    return '<tr class="lb-new" data-up="'+esc(x.name)+'"><td class="lb-ck"><input type="checkbox" aria-label="Select document"></td><td><div class="lb-doc"><span class="lb-ft" style="--ft:'+FTC[t2[0]]+'">'+ic+'</span><div class="lb-dt"><a href="04-document-review.html">'+esc(x.name)+'</a><span class="lb-meta"><span class="lb-kind"><span class="new-pill">New</span>'+esc(x.kind)+'</span>'+esc((x.folder||'').replace('PW-00428 › ','').replace(/^\d+\.\s*/,''))+' · uploaded just now</span></div></div></td><td class="lb-per"><span class="per-d lb-na">No date found</span><span class="per-y lb-na">Add in review</span></td><td><span class="lb-na">Not detected</span></td><td class="lb-val"><span class="lb-na">—</span></td><td>'+st+'</td><td class="lb-act">'+act+'</td></tr>';}).join(''));
-   if(mine2.length){var wrap2=q('.lb-wrap');if(wrap2&&!q('.lb-from')){wrap2.insertAdjacentHTML('beforebegin','<div class="ux-from lb-from"><span class="an-done" style="height:22px">'+CHECK+'From your upload</span><span><b>'+pl(mine2.length,'file')+'</b> from your upload '+(mine2.length===1?'is':'are')+' filed in PW-00428. '+(CK?'<b>'+CK+'</b> need'+(CK===1?'s':'')+' you to confirm the folder. ':'')+'They are at the top, marked <span class="ux-newpill">New</span>.</span></div>');}}
+    return '<tr class="lb-new" data-up="'+esc(x.name)+'"><td class="lb-ck"><input type="checkbox" aria-label="Select document"></td><td><div class="lb-doc"><span class="lb-ft" style="--ft:'+FTC[t2[0]]+'">'+ic+'</span><div class="lb-dt"><a href="04-document-review.html">'+esc(x.name)+'</a><span class="lb-meta"><span class="lb-kind"><span class="new-pill">New</span>'+esc(x.kind)+'</span>'+esc((x.folder||'').replace('PW-00428 › ','').replace(/(^|› )\d+\.\s*/,'$1'))+' · uploaded just now</span></div></div></td><td class="lb-per"><span class="per-d lb-na">No date found</span><span class="per-y lb-na">Add in review</span></td><td><span class="lb-na">Not detected</span></td><td class="lb-val"><span class="lb-na">—</span></td><td>'+st+'</td><td class="lb-act">'+act+'</td></tr>';}).join(''));
+   if(mine2.length||oth.length){var wrap2=q('.lb-wrap');if(wrap2&&!q('.lb-from')){wrap2.insertAdjacentHTML('beforebegin','<div class="ux-from lb-from"><span class="an-done" style="height:22px">'+CHECK+'From your upload</span><span><b>'+pl(mine2.length,'file')+'</b> from your upload '+(mine2.length===1?'is':'are')+' in this folder. '+(oth.length?'<b>'+oth.length+'</b> more '+(oth.length===1?'is':'are')+' in other folders: '+Object.keys(og).map(function(k){return esc(k)+' ('+og[k]+')';}).join(', ')+'. ':'')+(CK?'<b>'+CK+'</b> need'+(CK===1?'s':'')+' you to confirm the folder. ':'')+'They are at the top, marked <span class="ux-newpill">New</span>.</span></div>');}}
    lt.addEventListener('click',function(e){var b=e.target.closest('.lb-conf');if(!b)return;var n=b.getAttribute('data-n');try{var c2=JSON.parse(sessionStorage.getItem('og-up-conf')||'{}');c2[n]=1;sessionStorage.setItem('og-up-conf',JSON.stringify(c2));}catch(x){}var tr=b.closest('tr');tr.querySelector('.st2').outerHTML='<span class="st2 st2-good"><i></i>Filed by you</span>';b.outerHTML='<a class="lb-btn" href="04-document-review.html">View'+AR+'</a>';var o=document.querySelector('.og-toast');if(o)o.remove();var ts=document.createElement('div');ts.className='og-toast';ts.setAttribute('role','status');ts.innerHTML='<span><b>'+esc(n)+'</b> confirmed in its folder.</span><button type="button" class="x" aria-label="Dismiss">\u2715</button>';document.body.appendChild(ts);ts.querySelector('.x').onclick=function(){ts.remove();};setTimeout(function(){ts.remove();},3500);});
    var hm2=(location.hash||'').match(/^#f=(.+)$/);if(hm2){var nm2=decodeURIComponent(hm2[1]);var tr2=[].slice.call(lt.querySelectorAll('tr.lb-new')).filter(function(r){return r.getAttribute('data-up')===nm2;})[0];if(tr2)setTimeout(function(){tr2.scrollIntoView({block:'center'});tr2.classList.add('ux-focus');},400);}}
   /* 14 · report */
@@ -1265,9 +1265,9 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   pad.dataset.empty='1';pad.setAttribute('role','group');pad.setAttribute('aria-label','Signature pad (empty)');pad.classList.add('is-edit');
   pad.innerHTML='<div class="sgx-top"><div class="sgx-tabs" role="tablist" aria-label="How to sign"><button type="button" role="tab" data-m="draw" aria-selected="true">Draw</button><button type="button" role="tab" data-m="type" aria-selected="false">Type</button><button type="button" role="tab" data-m="upload" aria-selected="false">Upload</button></div><span class="sgx-id">Signing as <b>Heidi Liu, PE</b></span></div>'+
    '<div class="sgx-field sgx-in"></div>'+
-   '<div class="sgx-foot"><span class="sgx-note">Your signature is bound to this attestation with the time and your IP address.</span><div class="sgx-acts"><button type="button" class="btn btn-o btn-sm" data-c>Clear</button><button type="button" class="btn btn-p btn-sm" data-a disabled>Apply Signature</button></div></div>';
-  var field=pad.querySelector('.sgx-in'),apply=pad.querySelector('[data-a]');
-  function ok(v){apply.disabled=!v;}
+   '<div class="sgx-foot"><span class="sgx-note">Your signature is bound to this attestation with the time and your IP address.</span><div class="sgx-acts"><button type="button" class="btn btn-o btn-sm" data-c>Clear</button></div></div>';
+  var field=pad.querySelector('.sgx-in'),apply={};
+  function ok(v){pad.dataset.empty=v?'':'1';document.dispatchEvent(new Event('og-sig'));}
   function setMode(m){mode=m;drawn=false;ok(false);pad.querySelectorAll('.sgx-tabs button').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.m===m));});
    if(m==='draw'){field.innerHTML='<canvas aria-label="Draw your signature"></canvas><span class="sgx-hint">Sign here with your mouse, trackpad or finger</span>';cv=field.querySelector('canvas');var r=field.getBoundingClientRect(),dp=window.devicePixelRatio||1;cv.width=r.width*dp;cv.height=r.height*dp;cv.style.width=r.width+'px';cv.style.height=r.height+'px';ctx=cv.getContext('2d');ctx.scale(dp,dp);ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle=getComputedStyle(pad).getPropertyValue('--ink-sig')||'#14325A';ctx.lineWidth=2.4;
     var dn=false,lx=0,ly=0;function pt(e){var b=cv.getBoundingClientRect();return [e.clientX-b.left,e.clientY-b.top];}
@@ -1278,11 +1278,11 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
    else{field.innerHTML='<input class="sgx-type" type="text" value="Heidi Liu" aria-label="Type your signature" maxlength="40">';var inp=field.querySelector('input');inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length);ok(!!inp.value.trim());inp.addEventListener('input',function(){ok(!!inp.value.trim());});}}
   pad.querySelector('.sgx-tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setMode(b.dataset.m);});
   pad.querySelector('[data-c]').onclick=function(){setMode(mode);};
-  apply.onclick=function(){var sig;if(mode==='draw'){sig='<img class="sgx-img" alt="Signature of Heidi Liu" src="'+cv.toDataURL('image/png')+'">';}else if(mode==='upload'){sig='<img class="sgx-img" alt="Signature of Heidi Liu" src="'+field.querySelector('img').src+'">';}else{sig='<span class="sgx-sig">'+esc(field.querySelector('input').value.trim())+'</span>';}
-   var d=new Date(),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()],z=function(n){return (n<10?'0':'')+n;},ts=mo+' '+d.getUTCDate()+', '+d.getUTCFullYear()+' · '+z(d.getUTCHours())+':'+z(d.getUTCMinutes())+':'+z(d.getUTCSeconds())+' UTC',id='OG-'+Math.random().toString(16).slice(2,6).toUpperCase()+'-'+Math.random().toString(16).slice(2,6).toUpperCase();
-   pad.classList.remove('is-edit');pad.setAttribute('role','img');pad.dataset.empty='';pad.setAttribute('aria-label','Signature pad with signature: Heidi Liu, PE');
+  pad._commit=function(){var sig;if(mode==='draw'){pad._img=cv.toDataURL('image/png');sig='<img class="sgx-img" alt="Signature of Heidi Liu" src="'+pad._img+'">';}else if(mode==='upload'){pad._img=field.querySelector('img').src;sig='<img class="sgx-img" alt="Signature of Heidi Liu" src="'+pad._img+'">';}else{var tv=field.querySelector('input').value.trim();pad._img=null;pad._typed=tv;sig='<span class="sgx-sig">'+esc(tv)+'</span>';}
+   var d=new Date(),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()],z=function(n){return (n<10?'0':'')+n;},ts=mo+' '+d.getUTCDate()+', '+d.getUTCFullYear()+' · '+z(d.getUTCHours())+':'+z(d.getUTCMinutes())+':'+z(d.getUTCSeconds())+' UTC',id=pad._sid='OG-'+Math.random().toString(16).slice(2,6).toUpperCase()+'-'+Math.random().toString(16).slice(2,6).toUpperCase();
+   pad.classList.remove('is-edit');pad.setAttribute('role','img');pad.dataset.empty='';pad.setAttribute('aria-label','Signature pad with signature: Heidi Liu, PE');pad._ts=ts;
    pad.innerHTML='<div class="sgx-top"><span class="sgx-chip">'+SH+'Signed electronically</span><span class="sgx-id">Signature ID <b>'+id+'</b></span></div><div class="sgx-field">'+sig+'</div><div class="sgx-foot"><div class="sgx-who"><b>Heidi Liu, PE</b><span>Resident Engineer · LA County Public Works</span></div><div class="sgx-meta"><span>'+CK+ts+'</span><span>'+GL+'IP 198.147.24.12</span></div></div>';
-   toast('<b>Signature applied.</b> Review the attestation, then seal it.');var sb=[].slice.call(document.querySelectorAll('button')).filter(function(b){return /^Confirm & Digitally Seal/.test(b.textContent.trim());})[0];if(sb){sb.classList.remove('is-pulse');void sb.offsetWidth;sb.classList.add('is-pulse');}};
+   document.dispatchEvent(new Event('og-sig'));};
   setMode('draw');};
 })();
 </script>
@@ -1352,6 +1352,71 @@ button.is-pulse{animation:anPulse 1.2s ease-out 2}
 @media (max-width:560px){.og .sg2-h{padding:18px 16px}.og .sg2-grid{grid-template-columns:1fr}.og .sg2-c{padding:14px 16px}.og .sg2-c + .sg2-c{border-left:0;border-top:1px solid var(--line-soft)}.og .sg2-f{padding:14px 16px}.og .sg2-acts{width:100%;flex-direction:column-reverse}.og .sg2-acts .btn{width:100%;justify-content:center}}
 </style>
 <style>.og .lb-na{color:var(--gray)!important;font-weight:500!important;font-size:12px}.og .lb-new .lb-dt{min-width:0}</style>
+<script>
+/* 08 · step state, sign again, certificate */
+(function(){
+ function q(s){return document.querySelector(s);}
+ function upd(){var bar=q('.sga-bar');if(!bar)return;var ck=q('.sga-ck input'),pad=q('.sga .sgx');var c=ck&&ck.checked,sgn=pad&&!pad.dataset.empty;
+  var n=document.querySelectorAll('.sga-n');if(n[0])n[0].classList.add('is-done');if(n[1])n[1].classList.toggle('is-done',!!c);if(n[2])n[2].classList.toggle('is-done',!!sgn);
+  var st=q('.sga-st'),go=q('.sga-go');if(!st)return;var left=[];if(!c)left.push('2');if(!sgn)left.push('3');
+  st.classList.toggle('is-ready',!left.length);st.textContent=left.length?'Complete step'+(left.length>1?'s '+left.join(' and '):' '+left[0])+' to seal':'Ready to seal';if(go)go.classList.toggle('is-off',!!left.length);}
+ function init(){var pad=q('.sga .sgx');if(!pad)return;if(pad.dataset.empty&&window.ogSignPad)window.ogSignPad(pad);
+  document.addEventListener('change',function(e){if(e.target.closest&&e.target.closest('.sga-ck'))upd();});document.addEventListener('og-sig',function(){upd();var p=q('.sga .sgx');if(p&&!p.classList.contains('is-edit')&&!p.classList.contains('is-sealed')&&!p.querySelector('.sgx-again')){var top=p.querySelector('.sgx-top');if(top)top.insertAdjacentHTML('beforeend','<button type="button" class="sgx-again">Sign again</button>');}});
+  document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.sgx-again')){var p=q('.sga .sgx');if(p&&window.ogSignPad)window.ogSignPad(p);upd();}});upd();}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+
+ /* certificate */
+ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+ function sigImg(){var pad=q('.sgx');if(pad&&pad._img)return Promise.resolve(pad._img);var txt=(pad&&pad._typed)||'Heidi Liu';
+  return (document.fonts&&document.fonts.load?document.fonts.load('80px "Mrs Saint Delafield"'):Promise.resolve()).then(function(){var c=document.createElement('canvas');c.width=900;c.height=220;var x=c.getContext('2d');x.fillStyle='#14325A';x.font='110px "Mrs Saint Delafield", cursive';x.textBaseline='alphabetic';x.fillText(txt,20,150);return c.toDataURL('image/png');});}
+ function data(){var pad=q('.sgx');var d=new Date(),z=function(n){return (n<10?'0':'')+n;};
+  return {seal:'SEAL-SIG-2026-PW428-09',req:'SIG-2026-PW428-09',sid:(pad&&pad._sid)||'OG-7F3A-29C1',ts:(pad&&pad._ts)||'',sealed:d.getUTCFullYear()+'-'+z(d.getUTCMonth()+1)+'-'+z(d.getUTCDate())+' '+z(d.getUTCHours())+':'+z(d.getUTCMinutes())+' UTC',hash:'7f3a29c1e04b8d5a6c21f9e0b3d47a18c5e6f02d9b8a7c3e1f4d6b2a0c9e8d7f'};}
+ window.ogCert=function(){if(!window.ogDialog)return;var D=data();
+  sigImg().then(function(img){
+   window.ogDialog({eyebrow:'Attestation certificate',title:'Certificate of sealed attestation',ok:'Download PDF',cancel:'Close',
+    body:'<div class="cert"><div class="cert-h"><span>ObliGate</span><span>Certificate of Sealed Attestation</span></div><dl class="cert-g"><div><dt>Seal ID</dt><dd>'+D.seal+'</dd></div><div><dt>Request</dt><dd>'+D.req+'</dd></div><div><dt>Sealed</dt><dd>'+D.sealed+'</dd></div><div><dt>Filed to</dt><dd>PW-00428 › 1. Force-Account Labor</dd></div><div><dt>Shift</dt><dd>Hector Aguayo · Jan 12, 2023 · 07:00–23:30 (8.0 reg + 8.0 OT)</dd></div><div><dt>Equipment</dt><dd>CAT 320 Excavator #EQ-PW-109</dd></div></dl><div class="cert-sig"><img alt="Signature" src="'+img+'"><span>Heidi Liu, PE · Resident Engineer · Signature ID '+esc(D.sid)+'</span></div><p class="cert-f">Includes the attestation text under 18 U.S.C. § 1001 and a SHA-256 fingerprint for verification. Sample data.</p></div>',
+    onOk:function(){download(D,img);}});});};
+ function loadPdf(){return new Promise(function(res,rej){if(window.jspdf)return res(window.jspdf);var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';s.onload=function(){res(window.jspdf);};s.onerror=rej;document.head.appendChild(s);});}
+ function note(h){var o=q('.og-toast');if(o)o.remove();var t=document.createElement('div');t.className='og-toast';t.setAttribute('role','status');t.innerHTML='<span>'+h+'</span><button type="button" class="x" aria-label="Dismiss">✕</button>';document.body.appendChild(t);t.querySelector('.x').onclick=function(){t.remove();};setTimeout(function(){t.remove();},4000);}
+ function download(D,img){note('Preparing PDF…');loadPdf().then(function(J){var doc=new J.jsPDF({unit:'pt',format:'letter'}),W=612,M=56,y=0;
+   doc.setFillColor(6,36,63);doc.rect(0,0,W,96,'F');doc.setFillColor(176,138,78);doc.rect(0,96,W,3,'F');
+   doc.setTextColor(255,255,255);doc.setFont('times','bold');doc.setFontSize(22);doc.text('ObliGate',M,52);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(201,165,106);doc.text('CERTIFICATE OF SEALED ATTESTATION',M,72);
+   doc.setTextColor(255,255,255);doc.setFontSize(9);doc.text('LA County Public Works · FEMA-4683-DR-CA',W-M,52,{align:'right'});doc.text('Seal ID '+D.seal,W-M,68,{align:'right'});
+   y=140;doc.setTextColor(6,36,63);doc.setFont('times','normal');doc.setFontSize(26);doc.text('Force-Account Labor Attestation',M,y);
+   y+=18;doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(90,104,118);doc.text('This attestation was signed electronically and sealed. Any change after sealing invalidates the fingerprint below.',M,y);
+   y+=30;var rows=[['Seal ID',D.seal],['Request ID',D.req],['Sealed',D.sealed],['Signed by','Heidi Liu, PE · Resident Engineer'],['Signature ID',D.sid],['Signer IP','198.147.24.12'],['Project','PW-00428 · Malibu Canyon Road (PM 4.2 to PM 5.8)'],['Filed to','PW-00428 › 1. Force-Account Labor'],['Employee','Hector Aguayo (#609142) · Heavy Equipment Operator'],['Shift','Thursday, January 12, 2023 · 07:00–23:30 · 8.0 regular + 8.0 emergency OT'],['Equipment','CAT 320 Hydraulic Excavator (#EQ-PW-109)']];
+   doc.setDrawColor(213,217,220);rows.forEach(function(r){doc.setFontSize(8);doc.setTextColor(110,120,130);doc.text(r[0].toUpperCase(),M,y);doc.setFontSize(10.5);doc.setTextColor(20,40,60);doc.text(r[1],M+120,y);y+=8;doc.line(M,y,W-M,y);y+=16;});
+   y+=6;doc.setFillColor(244,247,250);doc.rect(M,y,W-2*M,96,'F');doc.setFillColor(176,138,78);doc.rect(M,y,3,96,'F');doc.setFontSize(8);doc.setTextColor(154,119,64);doc.text('LEGAL ATTESTATION UNDER 18 U.S.C. § 1001',M+16,y+18);
+   doc.setFont('times','italic');doc.setFontSize(10.5);doc.setTextColor(20,40,60);doc.text(doc.splitTextToSize('"I declare under penalty of perjury under the laws of the United States and the State of California that I was the designated field supervisor on duty during the dates and times specified. I personally observed and directed the emergency force-account labor and equipment operation stated above. All emergency overtime performed was necessary and directly attributable to disaster recovery under FEMA-4683-DR-CA."',W-2*M-32),M+16,y+34);
+   y+=120;try{doc.addImage(img,'PNG',M,y,220,54);}catch(e){}y+=62;doc.setDrawColor(20,40,60);doc.line(M,y,M+260,y);doc.setFont('helvetica','bold');doc.setFontSize(10);doc.text('Heidi Liu, PE',M,y+16);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(110,120,130);doc.text('Resident Engineer · LA County Public Works',M,y+30);
+   doc.setDrawColor(176,138,78);doc.setLineWidth(1.5);doc.circle(W-M-46,y-14,40,'S');doc.setLineWidth(.6);doc.circle(W-M-46,y-14,34,'S');doc.setFontSize(7.5);doc.setTextColor(154,119,64);doc.text('DIGITALLY',W-M-46,y-20,{align:'center'});doc.text('SEALED',W-M-46,y-9,{align:'center'});
+   doc.setLineWidth(.5);doc.setDrawColor(213,217,220);doc.line(M,738,W-M,738);doc.setFontSize(7.5);doc.setTextColor(110,120,130);doc.text('SHA-256 '+D.hash,M,752);doc.text('Prototype · sample data · not a legal record',W-M,764,{align:'right'});doc.text('Generated by ObliGate',M,764);
+   var blob=doc.output('blob'),fn='ObliGate-Attestation-'+D.seal+'.pdf';
+   var cu=window.claude&&window.claude.use?window.claude.use('downloads'):Promise.resolve(null);
+   Promise.resolve(cu).catch(function(){return null;}).then(function(dl){if(dl){return dl.save({filename:fn,data:blob}).then(function(){note('<b>Certificate saved</b> · '+fn);},function(e){if(e&&e.code==='declined')note('Download cancelled');else note('Download is not available in this view');});}
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);note('<b>Certificate downloaded</b> · '+fn);});
+  },function(){note('Could not load the PDF generator. Check your connection and try again.');});}
+})();
+</script>
+<style>
+.og .sgx-again{margin-left:auto;padding:0;border:0;background:none;font:600 12.5px Manrope,Arial,sans-serif;color:var(--blue);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.og .sgx-top:has(.sgx-again) .sgx-id{margin-left:auto;margin-right:12px}
+.og .is-sealed .sgx-again{display:none}
+.og .sga-bar .sg-done{margin:-16px -32px;width:calc(100% + 64px)}
+.og .cert{border:1px solid var(--line);border-radius:4px;overflow:hidden;font-size:12.5px}
+.og .cert-h{display:flex;justify-content:space-between;align-items:baseline;padding:12px 16px;background:#06243F;color:#fff;border-bottom:2px solid #B08A4E}
+.og .cert-h span:first-child{font-family:"Cormorant Garamond",Georgia,serif;font-size:20px;font-weight:600}
+.og .cert-h span:last-child{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#C9A56A}
+.og .cert-g{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin:0;padding:14px 16px}
+.og .cert-g dt{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray)}
+.og .cert-g dd{margin:2px 0 0;font-weight:600;color:var(--head)}
+.og .cert-sig{display:flex;flex-direction:column;gap:4px;padding:6px 16px 12px}
+.og .cert-sig img{max-height:56px;max-width:220px;object-fit:contain;object-position:left}
+.og .cert-sig span{padding-top:6px;border-top:1px solid var(--ink);font-size:11.5px;color:var(--gray)}
+.og .cert-f{margin:0!important;padding:10px 16px;background:var(--pale);font-size:11.5px;color:var(--gray)}
+.og[data-theme="dark"] .cert-sig img{filter:invert(1) hue-rotate(180deg)}
+</style>
+<style>@media (min-width:1101px){.og .lb-tbl col:last-child{width:176px!important}.og .lb-tbl td.lb-act{text-align:left!important}.og .lb-tbl td.lb-act > *{margin-left:0!important;margin-right:auto!important}.og .lb-tbl .lb-act{justify-content:flex-start!important}}</style>
 
 <div class="og rv-app" data-theme="light" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column">
 
