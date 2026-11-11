@@ -1732,6 +1732,11 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
 .og .dz-side svg{width:28px;height:28px}
 .og .dz-side{gap:6px;padding:16px 14px!important}
 </style>
+<style>
+/* band without an overlapping card below: no reserved overlap space */
+.og .band:has(+ section.ck3[style*="none"]){min-height:0!important}
+.og .band:has(+ section.ck3[style*="none"]) .band-in{padding-bottom:32px!important}
+</style>
 <script src="review/config.js?v=2"></script><script src="review/review.js?v=11" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
 
