@@ -1431,7 +1431,26 @@ button.is-pulse{animation:anPulse 1.2s ease-out 2}
 </style>
 <style>.og .an-fn{gap:2px}.og .an-fn b{line-height:1.25}.og .an-fn small{line-height:1.3}</style>
 <style>.og .an-where{line-height:1.25;gap:1px}.og .an-where b{line-height:1.25}.og .an-tx b{line-height:1.3}.og .an-tx small{line-height:1.4}.og .sga-facts dd,.og .sg2-v,.og .sgx-who{gap:1px;line-height:1.3}</style>
-<style>@media (min-width:1101px){.og .lb-tbl col:last-child{width:168px!important}.og .lb-tbl col:nth-child(4){width:196px!important}.og .lb-tbl th,.og .lb-tbl td{padding-left:14px!important;padding-right:14px!important}.og .lb-tbl th:first-child,.og .lb-tbl td:first-child{padding-left:20px!important}.og .lb-tbl th:last-child,.og .lb-tbl td:last-child{padding-right:20px!important}.og .lb-tbl td.lb-act{text-align:right!important}}</style>
+<style>@media (min-width:1101px){.og .lb-tbl col:last-child{width:168px!important}.og .lb-tbl col:nth-child(4){width:156px!important}.og .lb-tbl col:nth-child(5){width:92px!important}.og .lb-tbl th,.og .lb-tbl td{padding-left:12px!important;padding-right:12px!important}.og .lb-tbl th:first-child,.og .lb-tbl td:first-child{padding-left:20px!important}.og .lb-tbl th:last-child,.og .lb-tbl td:last-child{padding-right:20px!important}.og .lb-tbl td.lb-act{text-align:right!important}}</style>
+<style>.og .lb-dt .lb-meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block!important}.og .lb-dt .lb-meta .lb-kind{display:flex!important;width:max-content}</style>
+<script>
+(function(){function fit(){var t=document.querySelector('.lb-tbl');if(!t||innerWidth<1101)return;var cols=t.querySelectorAll('col'),n=cols.length;
+ var mx=function(sel){var m=0;t.querySelectorAll(sel).forEach(function(e){if(e.offsetParent)m=Math.max(m,e.getBoundingClientRect().width);});return Math.ceil(m);};
+ var a=mx('tbody td.lb-act > *'),s=mx('tbody td .st2');if(a)cols[n-1].style.setProperty('width',(a+34)+'px','important');if(s)cols[n-2].style.setProperty('width',(s+28)+'px','important');}
+ function run(){fit();setTimeout(fit,400);setTimeout(fit,1500);}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();addEventListener('resize',function(){clearTimeout(window.__lbf);window.__lbf=setTimeout(fit,150);});
+ document.addEventListener('click',function(){setTimeout(fit,350);});})();
+</script>
+<script>
+/* Library: size status and action columns to their content so the document column gets the rest */
+(function(){function fit(){var t=document.querySelector('.lb-tbl');if(!t||innerWidth<1101)return;var cols=t.querySelectorAll('col');if(cols.length<7)return;
+ var mx=function(sel){var m=0;t.querySelectorAll(sel).forEach(function(e){if(e.offsetParent)m=Math.max(m,e.getBoundingClientRect().width);});return Math.ceil(m);};
+ var a=mx('tbody td.lb-act > *'),s=mx('tbody td .st2');if(a)cols[6].style.setProperty("width",(a+32)+'px','important');if(s)cols[5].style.setProperty("width",(s+24)+'px','important');}
+ function run(){fit();setTimeout(fit,400);setTimeout(fit,1500);}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();addEventListener('resize',fit);
+ document.addEventListener('click',function(){setTimeout(fit,50);});})();
+</script>
+<style>@media (min-width:1101px){.og .lb-meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.og .lb-meta > *{white-space:normal}}</style>
 
 <div class="og gn" data-theme="light" style="min-height: 1400px">
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
