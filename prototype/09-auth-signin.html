@@ -1037,14 +1037,18 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   foot.innerHTML=n?'<b>'+n+' file'+(n>1?'s':'')+'</b> ready to analyze':'Add at least one file to start';
   go.classList.toggle('is-off',!n);go.setAttribute('aria-disabled',n?'false':'true');
   try{sessionStorage.setItem('og-up-n',String(n));}catch(e){}}
- function add(fl){if(isSample){files=[];isSample=false;}var bad=[];for(var i=0;i<fl.length;i++){var f=fl[i],e=(f.name.split('.').pop()||'').toLowerCase();
+ function add(fl){if(isSample){files=[];isSample=false;}var bad=[],dup=[];for(var i=0;i<fl.length;i++){var f=fl[i],e=(f.name.split('.').pop()||'').toLowerCase();
    if(!/^(pdf|jpg|jpeg|png|heic|xlsx|xls|csv)$/.test(e)){bad.push(f.name+' (.'+e+' not supported)');continue;}
    if(f.size>200e6){bad.push(f.name+' (over 200 MB)');continue;}
-   if(!files.some(function(x){return x.name===f.name&&x.size===f.size;}))files.push({name:f.name,size:f.size});}
+   if(files.some(function(x){return x.name===f.name&&x.size===f.size;})){dup.push(f.name);continue;}files.push({name:f.name,size:f.size});}
   render();var old=document.querySelector('.an-skip');if(old)old.remove();
-  if(bad.length){var d=document.createElement('div');d.className='an-skip';d.setAttribute('role','status');
-   d.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg><span><b>'+bad.length+' file'+(bad.length>1?'s':'')+' skipped.</b> '+bad.map(esc).join(', ')+'. Use PDF, JPG / PNG, Excel or CSV.</span><button type="button" aria-label="Dismiss">✕</button>';
-   d.querySelector('button').onclick=function(){d.remove();};list.parentNode.insertBefore(d,list);}}
+  if(bad.length||dup.length){var d=document.createElement('div');d.className='an-skip'+(bad.length?'':' is-info');d.setAttribute('role','status');var m=[];
+   if(dup.length)m.push('<b>'+dup.length+' already added.</b> '+dup.map(esc).join(', ')+(dup.length>1?' are':' is')+' already in the list, so '+(dup.length>1?'they were':'it was')+' not added again.');
+   if(bad.length)m.push('<b>'+bad.length+' file'+(bad.length>1?'s':'')+' skipped.</b> '+bad.map(esc).join(', ')+'. Use PDF, JPG / PNG, Excel or CSV.');
+   d.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(bad.length?'<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>':'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/>')+'</svg><span>'+m.join('<br>')+'</span><button type="button" aria-label="Dismiss">✕</button>';
+   d.querySelector('button').onclick=function(){d.remove();};list.parentNode.insertBefore(d,list);
+   dup.forEach(function(n){var k=files.findIndex(function(x){return x.name===n;});if(k>5&&!open){open=true;render();}var li=list.querySelectorAll('.an-files li')[k];if(li){li.classList.remove('is-dup');void li.offsetWidth;li.classList.add('is-dup');}});
+   if(dup.length&&!bad.length)setTimeout(function(){if(d.parentNode)d.remove();},6000);}}
  function init(){list=document.querySelector('.an-list');if(!list)return;foot=document.querySelector('.an-foot > span');go=document.querySelector('.an-go');empty=document.querySelector('.an-empty');
   var dz=document.querySelector('.an-drop'),inp=dz.querySelector('input[type=file]');
   inp.addEventListener('change',function(){add(inp.files);inp.value='';});
