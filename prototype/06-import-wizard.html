@@ -974,7 +974,14 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   foot.innerHTML=n?'<b>'+n+' file'+(n>1?'s':'')+'</b> ready to analyze':'Add at least one file to start';
   go.classList.toggle('is-off',!n);go.setAttribute('aria-disabled',n?'false':'true');
   try{sessionStorage.setItem('og-up-n',String(n));}catch(e){}}
- function add(fl){for(var i=0;i<fl.length;i++){var f=fl[i];if(!files.some(function(x){return x.name===f.name&&x.size===f.size;}))files.push({name:f.name,size:f.size});}render();}
+ function add(fl){var bad=[];for(var i=0;i<fl.length;i++){var f=fl[i],e=(f.name.split('.').pop()||'').toLowerCase();
+   if(!/^(pdf|jpg|jpeg|png|heic|xlsx|xls|csv)$/.test(e)){bad.push(f.name+' (.'+e+' not supported)');continue;}
+   if(f.size>200e6){bad.push(f.name+' (over 200 MB)');continue;}
+   if(!files.some(function(x){return x.name===f.name&&x.size===f.size;}))files.push({name:f.name,size:f.size});}
+  render();var old=document.querySelector('.an-skip');if(old)old.remove();
+  if(bad.length){var d=document.createElement('div');d.className='an-skip';d.setAttribute('role','status');
+   d.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg><span><b>'+bad.length+' file'+(bad.length>1?'s':'')+' skipped.</b> '+bad.map(esc).join(', ')+'. Use PDF, JPG / PNG, Excel or CSV.</span><button type="button" aria-label="Dismiss">✕</button>';
+   d.querySelector('button').onclick=function(){d.remove();};list.parentNode.insertBefore(d,list);}}
  function init(){list=document.querySelector('.an-list');if(!list)return;foot=document.querySelector('.an-foot > span');go=document.querySelector('.an-go');empty=document.querySelector('.an-empty');
   var dz=document.querySelector('.an-drop'),inp=dz.querySelector('input[type=file]');
   inp.addEventListener('change',function(){add(inp.files);inp.value='';});
