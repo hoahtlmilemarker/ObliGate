@@ -425,17 +425,21 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 (function(){function init(){var t=document.querySelector('.ux-t');if(!t)return;
 function msg(h){var o=document.querySelector('.og-toast');if(o)o.remove();var d=document.createElement('div');d.className='og-toast';d.setAttribute('role','status');
  d.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.6 2.6L16 9.7"/></svg><span>'+h+'</span><button type="button" class="x" aria-label="Dismiss">✕</button>';document.body.appendChild(d);d.querySelector('.x').onclick=function(){d.remove();};setTimeout(function(){d.remove();},4500);}
-function sync(){var rows=t.querySelectorAll('tbody tr:not(.ux-done)'),n=rows.length,s=t.querySelectorAll('tbody tr:not(.ux-done) .ux-ok').length;
+function sync(){t.querySelectorAll('tbody tr').forEach(function(tr){var a=tr.querySelector('.ux-a');if(a&&!a.querySelector('.ux-rm'))a.insertAdjacentHTML('beforeend','<button class="ux-rm" type="button" title="Not a disaster record. Remove it." aria-label="Not a disaster record. Remove '+((tr.querySelector('.ux-name')||{}).textContent||'file')+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button>');});
+ var rows=t.querySelectorAll('tbody tr:not(.ux-done)'),n=rows.length,s=t.querySelectorAll('tbody tr:not(.ux-done) .ux-ok').length;
+ var nt=document.querySelector('.ux-allnote'),acts=document.querySelector('.ux-all')&&document.querySelector('.ux-all').parentNode;if(acts&&!nt){nt=document.createElement('p');nt.className='ux-allnote';acts.parentNode.insertBefore(nt,acts.nextSibling);}if(nt){nt.hidden=!(n-s);nt.textContent=(n-s)+' document'+(n-s>1?'s have':' has')+' no confident suggestion. Choose a folder for '+(n-s>1?'them':'it')+' in the list.';}
  document.querySelectorAll('.ux-n').forEach(function(e){e.textContent=n;});document.querySelectorAll('.ux-sn').forEach(function(e){e.textContent=s;});
  var all=document.querySelector('.ux-all');if(all)all.disabled=!s;var q=document.querySelector('.q-on .cnt-chip');if(q)q.textContent=n;
  var e=document.querySelector('.ux-empty');if(e)e.hidden=n>0;t.style.display=n?'':'none';}
-function file(tr,folder,quiet){if(tr.classList.contains('ux-done'))return;tr.classList.add('ux-done');setTimeout(function(){tr.remove();sync();},300);
+function mark(tr){var u=tr.getAttribute('data-up');if(!u)return;try{var d=JSON.parse(sessionStorage.getItem('og-up-done')||'[]');d.push(u);sessionStorage.setItem('og-up-done',JSON.stringify(d));}catch(x){}}
+function file(tr,folder,quiet){if(tr.classList.contains('ux-done'))return;tr.classList.add('ux-done');mark(tr);setTimeout(function(){tr.remove();sync();},300);
  if(!quiet)msg('<b>'+tr.querySelector('.ux-name').textContent+'</b> filed to '+folder);}
-t.addEventListener('click',function(e){var b=e.target.closest('.ux-ok');if(!b)return;var tr=b.closest('tr');file(tr,tr.querySelector('.ux-sug').textContent);});
+t.addEventListener('click',function(e){var rm=e.target.closest('.ux-rm');if(rm){var tr=rm.closest('tr'),nm=tr.querySelector('.ux-name').textContent;var go=function(){tr.classList.add('ux-done');mark(tr);setTimeout(function(){tr.remove();sync();},300);msg('<b>'+nm+'</b> removed. It was not a disaster record.');};if(window.ogDialog)window.ogDialog({eyebrow:'Remove file',title:'Remove '+nm+'?',ok:'Remove File',cancel:'Keep',danger:1,body:'<p>Use this for files that are not disaster records, such as personal photos or unrelated documents. The file is removed and will not be checked against FEMA rules.</p>',onOk:go});else go();return;}
+ var b=e.target.closest('.ux-ok');if(!b)return;var tr=b.closest('tr');file(tr,tr.querySelector('.ux-sug').textContent);});
 t.addEventListener('change',function(e){var s=e.target.closest('select');if(!s||!s.value)return;file(s.closest('tr'),s.value);});
 var all=document.querySelector('.ux-all');if(all)all.addEventListener('click',function(){var r=[].slice.call(t.querySelectorAll('tbody tr:not(.ux-done)')).filter(function(tr){return tr.querySelector('.ux-ok');});
  r.forEach(function(tr){file(tr,'',true);});if(r.length)msg('<b>'+r.length+' documents</b> filed to their suggested folders');});
-sync();}
+window.ogUxSync=sync;sync();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
 </script>
 <script>
@@ -846,22 +850,28 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
  function ft(n){var e=EXT(n);if(e==='pdf')return ['pdf','PDF'];if(/^(xlsx|xls|csv)$/.test(e))return ['xls',e.toUpperCase()];if(/^(jpg|jpeg|png|heic)$/.test(e))return ['img',e==='jpeg'?'JPG':e.toUpperCase()];return ['doc',e.slice(0,4).toUpperCase()];}
  /* Simulated AI read: decided from the file name only (prototype) */
- function classify(n){var e=EXT(n),img=/^(jpg|jpeg|png|heic)$/.test(e),sheet=/^(xlsx|xls|csv)$/.test(e),k,place=false,f=null;
-  if(/time.?sheet|time.?card/i.test(n)){k='Force-Account Timesheet';place=true;f={sev:'c',t:'No supervisor signature on timesheet',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Resolve in Cross-Check',href:'05-cross-check.html'};}
-  else if(/activity|daily.?log|field.?log|supervisor/i.test(n)){k='Daily Activity Log';place=true;if(/unsigned/i.test(n))f={sev:'c',t:'Field log is not signed',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Request Signature',href:'08-supervisor-signature.html'};}
-  else if(sheet&&/payroll|ecaps|labor|ders|hours/i.test(n)){k='Payroll export';place=true;f={sev:'a',t:'Payroll hours not yet matched to field logs',r:'PAPPG v4.0 Ch. 2 § II.B.1',fix:'Open in Cross-Check',href:'05-cross-check.html'};}
-  else if(/equip|eq-pw|cat\d/i.test(n)){k='Equipment log';place=true;}
-  else if(/invoice|receipt|contract|rfp|quote/i.test(n)){k='Contract or invoice';place=true;f={sev:'a',t:'Procurement record not attached',r:'2 CFR § 200.318',fix:'Open in Pre-Submission',href:'07-presubmission.html'};}
-  else if(/pw-?\d|dr-?\d|malibu|topanga/i.test(n)){k=img?'Site photo':sheet?'Spreadsheet':'Supporting document';place=true;}
-  else{k=img?'Photo':sheet?'Spreadsheet':'Document';}
-  var why=place?'':img?'No location or date that matches a disaster':'No DR number or project found';
-  var tag=!place?'Not placed':f?(f.sev==='c'?'1 critical finding':'1 advisory'):'Filed · PW-00428';
-  var c=!place?'idle':f?(f.sev==='c'?'risk':'warn'):'ok';
-  return {name:n,kind:k,place:place,f:f,why:why,tag:tag,c:c};}
+ function hsh(s){var x=7;for(var i=0;i<s.length;i++)x=(x*31+s.charCodeAt(i))%9973;return x;}
+ var F1='PW-00428 › 1. Force-Account Labor',F2='PW-00428 › 2. Equipment Records',F3='PW-00428 › 3. Contracts & Procurement',F4='PW-00428 › 4. Materials & Supplies';
+ /* Simulated AI read: decided from the file name only (prototype). Confidence tiers: >=85 filed automatically, 60-84 filed + check placement, <60 needs a folder */
+ function classify(n){var e=EXT(n),img=/^(jpg|jpeg|png|heic)$/.test(e),sheet=/^(xlsx|xls|csv)$/.test(e),k,lv=0,fd=null,f=null,why='',r=hsh(n);
+  if(/time.?sheet|time.?card/i.test(n)){k='Force-Account Timesheet';lv=3;fd=F1;f={sev:'c',t:'No supervisor signature on timesheet',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Resolve in Cross-Check',href:'05-cross-check.html'};}
+  else if(/activity|daily.?log|field.?log|supervisor/i.test(n)){k='Daily Activity Log';lv=3;fd=F1;if(/unsigned/i.test(n))f={sev:'c',t:'Field log is not signed',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Request Signature',href:'08-supervisor-signature.html'};}
+  else if(sheet&&/payroll|ecaps|labor|ders|hours/i.test(n)){k='Payroll export';lv=3;fd=F1;f={sev:'a',t:'Payroll hours not yet matched to field logs',r:'PAPPG v4.0 Ch. 2 § II.B.1',fix:'Open in Cross-Check',href:'05-cross-check.html'};}
+  else if(/equip|eq-pw|cat\d/i.test(n)){k='Equipment log';lv=3;fd=F2;}
+  else if(/invoice|contract|rfp|quote/i.test(n)){k='Contract or invoice';lv=3;fd=F3;f={sev:'a',t:'Procurement record not attached',r:'2 CFR § 200.318',fix:'Open in Pre-Submission',href:'07-presubmission.html'};}
+  else if(/receipt|scan|pw-?\d|dr-?\d|malibu|topanga/i.test(n)){k=/receipt/i.test(n)?'Receipt':img?'Site photo':sheet?'Spreadsheet':'Supporting document';lv=2;fd=/receipt/i.test(n)?F4:img?F2:F1;why='Project reference found, but the document type is uncertain';}
+  else if(img){k='Photo';lv=1;fd=F2;why='Photo has no location or date to confirm the project';}
+  else{k=sheet?'Spreadsheet':'Document';lv=0;why='No DR number, project or date found';}
+  var conf=lv===3?86+r%12:lv===2?62+r%20:lv===1?41+r%17:12+r%22;
+  var tier=lv===3?'auto':lv===2?'check':'inbox',place=tier!=='inbox';
+  var tag=!place?'Needs a folder':f?(f.sev==='c'?'1 critical finding':'1 advisory'):tier==='check'?'Check placement':'Filed · PW-00428';
+  var c=!place?'idle':f?(f.sev==='c'?'risk':'warn'):tier==='check'?'warn':'ok';
+  return {name:n,kind:k,place:place,tier:tier,conf:conf,folder:fd,f:f,why:why,tag:tag,c:c};}
+ window.ogClassify=classify;
  var raw=null;try{raw=JSON.parse(sessionStorage.getItem('og-up')||'null');}catch(e){}
  if(!raw||!raw.length)return;
  var up=raw.map(function(x){var o=classify(x.n);o.size=x.s;return o;});window.__ogUp=up;
- var N=up.length,P=up.filter(function(x){return x.place;}).length,U=N-P,FS=up.filter(function(x){return x.f;}).sort(function(a,b){return (a.f.sev==='c'?0:1)-(b.f.sev==='c'?0:1);}),C=FS.filter(function(x){return x.f.sev==='c';}).length,A=FS.length-C,READY=up.filter(function(x){return x.place&&!x.f;}).length;
+ var N=up.length,P=up.filter(function(x){return x.place;}).length,U=N-P,AU=up.filter(function(x){return x.tier==='auto';}).length,CK=up.filter(function(x){return x.tier==='check';}).length,FS=up.filter(function(x){return x.f;}).sort(function(a,b){return (a.f.sev==='c'?0:1)-(b.f.sev==='c'?0:1);}),C=FS.filter(function(x){return x.f.sev==='c';}).length,A=FS.length-C,READY=up.filter(function(x){return x.place&&!x.f;}).length;
  var pl=function(n,w){return n+' '+w+(n===1?'':'s');};
  var CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
  var AR='<svg class="ba" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M9 4.5 12.5 8 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -872,21 +882,32 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   if(q('.an-pct')){var ey=q('.band .ps-row .lbl');if(ey)ey.textContent='Analysis in progress · '+pl(N,'file');
    var feed=q('.an-feed');if(feed)feed.innerHTML=up.map(function(x){return row(x,'<span class="an-tag idle">Waiting</span>');}).join('');
    var ck=document.querySelector('.an-card-h > span');if(ck)ck.textContent='0 of '+N+' checked';
-   var lg=q('.an-legend');if(lg)lg.innerHTML=(P?'<span>Detected <b style="color: var(--head)">DR-4683-CA</b> · California Severe Winter Storms</span><span>'+pl(P,'file')+' → PW-00428</span>':'<span>No disaster detected yet</span>')+(U?'<span>'+pl(U,'file')+' → Unplaced Inbox</span>':'');
+   var lg=q('.an-legend');if(lg)lg.innerHTML=(P?'<span>Detected <b style="color: var(--head)">DR-4683-CA</b> · California Severe Winter Storms</span><span>'+pl(P,'file')+' → PW-00428</span>':'<span>No disaster detected yet</span>')+(U?'<span>'+pl(U,'file')+' → Needs a folder</span>':'');
    var st=document.querySelectorAll('.an-steps li p');if(st[0])st[0].textContent=N+' of '+N+' files read.';
-   if(st[1])st[1].textContent=P?('DR-4683-CA detected. '+pl(P,'file')+' placed in PW-00428'+(U?'; '+U+' could not be placed.':'.')):('No DR number or project found. '+pl(U,'file')+' go to the Unplaced Inbox.');
+   if(st[1])st[1].textContent=P?('DR-4683-CA detected. '+AU+' filed automatically'+(CK?', '+CK+' filed for you to check':'')+(U?', '+U+' need'+(U===1?'s':'')+' a folder.':'.')):('No DR number or project found. '+pl(U,'file')+' need'+(U===1?'s':'')+' a folder.');
    if(st[2])st[2].textContent='Checking '+pl(P,'filed document')+'.';}
+  /* 03c · inbox: put the user's own unplaced files on top */
+  var ut=q('.ux-t tbody');if(ut&&!q('.ux-new')){var done=[];try{done=JSON.parse(sessionStorage.getItem('og-up-done')||'[]');}catch(e){}
+   var mine=up.filter(function(x){return !x.place&&done.indexOf(x.name)<0;});
+   var opts=(ut.querySelector('select')||{innerHTML:''}).innerHTML.replace(/<option value="" selected disabled>[^<]*<\/option>/,'');
+   var szf=function(b){return b>=1e6?(b/1e6).toFixed(1)+' MB':Math.max(1,Math.round(b/1e3))+' KB';};
+   ut.insertAdjacentHTML('afterbegin',mine.map(function(x){var t2=ft(x.name);var sug=x.folder&&x.conf>=40;
+    return '<tr class="ux-new" data-up="'+esc(x.name)+'"><td><div class="ux-f"><span class="ux-ext">'+t2[1]+'</span><div><a class="ux-name" href="04-document-review.html" title="'+esc(x.name)+'">'+esc(x.name)+'</a><small><span class="ux-newpill">New</span>Uploaded just now by you · '+szf(x.size||0)+'</small></div></div></td>'+
+     '<td><div class="ux-s">'+(sug?'<span class="ux-sug">'+esc(x.folder)+'</span><span class="tag t-warn ux-c">'+x.conf+'% match</span>':'<span class="ux-none">No confident suggestion</span><span class="tag t-risk ux-c">'+x.conf+'%</span>')+'</div><p class="ux-why">'+esc(x.why)+'.</p></td>'+
+     '<td class="ux-act"><div class="ux-a">'+(sug?'<button class="btn btn-p btn-sm ux-ok" type="button">Accept</button>':'')+'<label class="ux-mv"><span class="sr">Move to folder</span><select aria-label="Move '+esc(x.name)+' to folder"><option value="" selected disabled>'+(sug?'Move to…':'Choose folder…')+'</option>'+opts+'</select></label></div></td></tr>';}).join(''));
+   if(mine.length){var hs=q('.ux-h');if(hs&&!q('.ux-from')){hs.insertAdjacentHTML('afterend','<div class="ux-from"><span class="an-done" style="height:22px">'+CHECK+'From your upload</span><span><b>'+pl(mine.length,'file')+'</b> from your upload need'+(mine.length===1?'s':'')+' a folder. They are at the top, marked <span class="ux-newpill">New</span>.</span></div>');}}
+   if(window.ogUxSync)window.ogUxSync();}
   /* 14 · report */
   if(q('.an-kpis')){var lb=q('.an-just .lbl');if(lb)lb.textContent=pl(N,'file')+' analyzed just now'+(P?' · DR-4683-CA':'');
    var h1=q('.band h1'),pp=q('.band .band-in > p'),cta=q('.band .acts .btn-p');
    if(C+A){h1.textContent=pl(C+A,'finding')+' to fix before FEMA review';pp.textContent='We read your '+pl(N,'file')+' and checked the filed ones against PAPPG v4.0 and 2 CFR § 200. Start with the first finding below.';}
-   else if(U){h1.textContent=(U===N?'Your files are in. Tell us where they belong.':pl(U,'file')+' still need'+(U===1?'s':'')+' a home');pp.textContent=(P?pl(P,'file')+' were filed to PW-00428 with no rule issues. ':'')+'We could not find a disaster or project in '+(U===N?'any of your files':pl(U,'file'))+'. Choose where '+(U===1?'it belongs':'they belong')+' so they can be checked.';}
+   else if(U){h1.textContent=(U===N?'Your files are in. Tell us where they belong.':pl(U,'file')+' still need'+(U===1?'s':'')+' a folder');pp.textContent=(P?pl(P,'file')+' were filed to PW-00428 with no rule issues. ':'')+'We could not find a disaster or project in '+(U===N?'any of your files':pl(U,'file'))+'. Choose where '+(U===1?'it belongs':'they belong')+' so they can be checked.';}
    else{h1.textContent='All '+pl(N,'file')+' are ready for FEMA';pp.textContent='Every file was filed to PW-00428 and passed the rule check.';}
    if(cta){if(C+A){cta.firstChild.textContent='Start with '+(FS[0].f.fix.replace(/^(Resolve in|Open in) /,''));cta.setAttribute('href',FS[0].f.href);}else if(U){cta.firstChild.textContent='File '+pl(U,'Document');cta.setAttribute('href','03c-unplaced-inbox.html');}else{cta.firstChild.textContent='Open Document Library';cta.setAttribute('href','03-document-library.html');}}
    var k=document.querySelectorAll('.an-kpis .kpi');
-   if(k[0])k[0].innerHTML='<span class="lbl">Files analyzed <em class="an-now">Just now</em></span><span class="big">'+N+'</span><span style="font-size: 13px; color: var(--gray)">'+P+' filed to PW-00428 · '+U+' not placed</span>';
+   if(k[0])k[0].innerHTML='<span class="lbl">Files analyzed <em class="an-now">Just now</em></span><span class="big">'+N+'</span><span style="font-size: 13px; color: var(--gray)">'+AU+' filed automatically · '+CK+' to check · '+U+' need a folder</span>';
    if(k[1])k[1].innerHTML='<span class="lbl">Ready for FEMA</span><span class="big" style="color: var(--good)">'+READY+'</span><div class="an-split" aria-hidden="true"><i style="flex: '+READY+'; background: var(--good)"></i><i style="flex: '+A+'; background: var(--warn)"></i><i style="flex: '+C+'; background: var(--risk)"></i><i style="flex: '+U+'; background: var(--blue)"></i></div>';
-   if(k[2])k[2].innerHTML='<span class="lbl">Need your attention</span><span class="big" style="color: var(--warn)">'+(N-READY)+'</span><span style="font-size: 13px; color: var(--gray)">'+A+' review · '+C+' action · '+U+' not placed</span>';
+   if(k[2])k[2].innerHTML='<span class="lbl">Need your attention</span><span class="big" style="color: var(--warn)">'+(N-READY)+'</span><span style="font-size: 13px; color: var(--gray)">'+A+' review · '+C+' action · '+U+' need a folder</span>';
    if(k[3])k[3].innerHTML='<span class="lbl">Open findings</span><span class="big" style="color: '+(C?'var(--risk)':A?'var(--warn)':'var(--good)')+'">'+(C+A)+'</span><span>'+(C+A?'<span class="tag '+(C?'t-risk':'t-warn')+'">'+C+' Critical · '+A+' Advisory</span>':'<span style="font-size: 13px; color: var(--gray)">No rule issues in filed documents</span>')+'</span>';
    var ol=q('.an-risk'),fh=q('.an-card[aria-label="Costs at risk"] .an-card-h .tag');
    if(ol){ol.innerHTML=FS.length?FS.map(function(x,i){return '<li'+(i===0?' class="is-first"':'')+'><span class="an-sev '+x.f.sev+'">'+(x.f.sev==='c'?'Critical':'Advisory')+'</span><div class="an-rt">'+(i===0?'<span class="an-start">Start here</span>':'')+'<b>'+esc(x.f.t)+'</b><small>'+esc(x.name)+' · '+x.f.r+'</small></div><a class="btn btn-o btn-sm" href="'+x.f.href+'">'+x.f.fix+AR+'</a></li>';}).join(''):'<li class="an-none"><span class="an-none-ic">'+CHECK+'</span><div class="an-rt"><b>No rule issues found</b><small>'+(P?'The '+pl(P,'filed document')+' passed every check.':'Nothing could be checked yet. Files are checked once they are placed in a project.')+'</small></div></li>';}
@@ -894,13 +915,14 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
    var at=q('.an-att');if(at){var r=[];
     if(A)r.push('<li><span class="an-cnt" style="background: var(--warn-t); color: var(--warn)">'+A+'</span><div class="an-tx"><b>Need review</b><small>Advisory findings to confirm before you submit.</small></div><a class="btn btn-o btn-sm" href="04-document-review.html">Review '+pl(A,'Document')+AR+'</a></li>');
     if(C)r.push('<li><span class="an-cnt" style="background: var(--risk-t); color: var(--risk)">'+C+'</span><div class="an-tx"><b>Action required</b><small>Critical findings that block reimbursement.</small></div><a class="btn btn-o btn-sm" href="05-cross-check.html">Resolve '+C+AR+'</a></li>');
-    if(U)r.push('<li><span class="an-cnt" style="background: var(--blue-t); color: var(--blue)">'+U+'</span><div class="an-tx"><b>Not placed</b><small>No disaster or project found in these files. Choose where they belong.</small></div><a class="btn btn-o btn-sm" href="03c-unplaced-inbox.html">File '+pl(U,'Document')+AR+'</a></li>');
+    if(U)r.push('<li><span class="an-cnt" style="background: var(--blue-t); color: var(--blue)">'+U+'</span><div class="an-tx"><b>Need a folder</b><small>AI was less than 60% sure where these belong. Choose a folder or remove them.</small></div><a class="btn btn-o btn-sm" href="03c-unplaced-inbox.html">File '+pl(U,'Document')+AR+'</a></li>');
+    if(CK)r.push('<li><span class="an-cnt" style="background: var(--warn-t); color: var(--warn)">'+CK+'</span><div class="an-tx"><b>Check placement</b><small>Filed automatically, but AI was 60–84% sure. Confirm when you have a moment.</small></div><a class="btn btn-o btn-sm" href="03-document-library.html">Check '+CK+AR+'</a></li>');
     if(!r.length)r.push('<li><span class="an-cnt" style="background: var(--good-t); color: var(--good)">'+CHECK+'</span><div class="an-tx"><b>Nothing waiting</b><small>All documents are filed and checked.</small></div></li>');
     at.innerHTML=r.join('');}
    var gc=q('.gn-c-n');if(gc){if(P){gc.textContent='+'+P;gc.title=pl(P,'file')+' added from your upload';}else gc.remove();}
    var wrap=q('.an-wrap');if(wrap&&!q('.an-yours')){var s=document.createElement('section');s.className='an-card an-yours';s.setAttribute('aria-label','Your uploaded files');
-    var tg=function(x){return x.place?'<span class="an-where"><b>PW-00428</b> Malibu Canyon</span><span class="an-tag '+x.c+'">'+(x.f?(x.f.sev==='c'?'Critical':'Advisory'):'Filed')+'</span>':'<span class="an-where"><b>Unplaced Inbox</b> needs a project</span><span class="an-tag idle">Not placed</span>';};
-    s.innerHTML='<div class="an-card-h"><h2>Your uploaded files</h2><span class="an-yours-sum">'+P+' filed · '+U+' not placed</span></div><div class="an-card-b" style="padding-top: 0"><ul class="an-files" style="border-top: 0; margin-top: 0">'+up.map(function(x){return row(x,tg(x));}).join('')+'</ul></div>';
+    var tg=function(x){var fp=x.folder?x.folder.replace('PW-00428 › ',''):'';return x.place?'<span class="an-where"><b>PW-00428</b> '+esc(fp)+'</span><span class="an-tag '+(x.f?x.c:x.tier==='check'?'warn':'ok')+'" title="AI confidence '+x.conf+'%">'+(x.f?(x.f.sev==='c'?'Critical':'Advisory'):x.tier==='check'?'Check · '+x.conf+'%':'Auto · '+x.conf+'%')+'</span>':'<span class="an-where"><b>Needs a folder</b> '+(x.folder?'AI suggests '+esc(fp):'no suggestion')+'</span><span class="an-tag idle" title="AI confidence '+x.conf+'%">'+x.conf+'% sure</span>';};
+    s.innerHTML='<div class="an-card-h"><h2>Your uploaded files</h2><span class="an-yours-sum">'+AU+' filed automatically · '+CK+' to check · '+U+' need a folder</span></div><div class="an-card-b" style="padding-top: 0"><ul class="an-files" style="border-top: 0; margin-top: 0">'+up.map(function(x){return row(x,tg(x));}).join('')+'</ul></div>';
     wrap.parentNode.insertBefore(s,wrap.nextSibling);}}
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else apply();
@@ -1072,6 +1094,18 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
 })();
 </script>
 <style>.og{min-height:100vh!important}.og:not(.gn):has(> .col.solo),.og:not(.gn):has(.col.solo),.og:not(.gn) > .col.solo{min-height:0!important}html,body{overscroll-behavior:none}html:has(.col.solo),html:has(.col.solo) body{background:#F3F6F8}html:has(.og[data-theme="dark"]),html:has(.og[data-theme="dark"]) body{background:#101B26}</style>
+<style>
+.og .ux-rm{flex:none;display:grid;place-items:center;width:30px;height:30px;border:1px solid transparent;border-radius:4px;background:none;color:var(--gray);cursor:pointer}
+.og .ux-rm:hover{border-color:var(--risk);background:var(--risk-t);color:var(--risk)}
+.og .ux-a{display:flex;align-items:center;justify-content:flex-end;gap:8px}.og .ux-t col:last-child{width:318px!important}@media (max-width:1100px){.og .ux-t col:last-child{width:auto!important}}
+.og tr.ux-new td{background:linear-gradient(90deg,rgba(176,138,78,.07),transparent 60%)}
+.og tr.ux-new td:first-child{box-shadow:inset 3px 0 0 #B08A4E}
+.og .ux-newpill{display:inline-block;margin-right:6px;padding:1px 6px;border-radius:4px;background:#B08A4E;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;vertical-align:1px}
+.og .ux-from{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0;padding:12px 24px;border-bottom:1px solid var(--line-soft);background:var(--pale);font-size:13px;color:var(--ink)}
+.og .ux-from .an-done{display:inline-flex;align-items:center;gap:6px;padding:0 9px 0 6px;border:1px solid rgba(46,158,98,.35);border-radius:4px;background:var(--good-t);color:var(--good);font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.og .ux-from .an-done svg{width:12px;height:12px}
+.og .ux-allnote{margin:2px 0 0;font-size:12.5px;color:rgba(255,255,255,.66)}
+</style>
 
 <div class="og gn" data-theme="light" style="min-height: 1400px">
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
