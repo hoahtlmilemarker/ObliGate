@@ -742,9 +742,8 @@ var A=[
  [/^Upload SAM\.gov Screenshot/,function(){if(window.ogUploadModal){window.ogDest='PW-00428 › 3. Contracts & Procurement';window.ogUploadModal();}}],
  [/^Auto-Run SAM\.gov Search API/,function(b){busy(b,'Searching SAM.gov…',1600,function(){toast('<b>SAM.gov search submitted</b> · the dated printout will be attached when it returns');});}],
  /* 08 */
- [/^Clear Pad/,function(){var pad=document.querySelector('[role=img][aria-label^="Signature pad"]');if(!pad)return;pad._sig=pad._sig||pad.innerHTML;pad.innerHTML='<span style="position:absolute;inset:0;display:grid;place-items:center;font-size:13px;color:var(--gray)">Sign here</span>';pad.setAttribute('aria-label','Signature pad (empty)');pad.dataset.empty='1';
-  pad.style.cursor='pointer';pad.onclick=function(){if(pad.dataset.empty){pad.innerHTML=pad._sig;pad.dataset.empty='';pad.setAttribute('aria-label','Signature pad with signature: Heidi Liu, PE');}};toast('Signature cleared · click the pad to sign again');}],
- [/^Confirm & Digitally Seal/,function(){var pad=document.querySelector('[role=img][aria-label^="Signature pad"]');var ck=document.querySelector('.att-ck input[type=checkbox]');
+ [/^Clear Pad/,function(){var pad=document.querySelector('[aria-label^="Signature pad"]');if(pad&&window.ogSignPad)window.ogSignPad(pad);}],
+ [/^Confirm & Digitally Seal/,function(){var pad=document.querySelector('[aria-label^="Signature pad"]');var ck=document.querySelector('.att-ck input[type=checkbox]');
   if(pad&&pad.dataset.empty){toast('Sign the pad before sealing',false);return;}if(ck&&!ck.checked){toast('Confirm the attestation statement first',false);return;}
   dlg({eyebrow:'Digital Seal',title:'Seal this attestation?',ok:'Confirm & Seal',body:'<p>Your signature is applied to this attestation and it is locked. This cannot be edited afterwards.</p>',onOk:function(){sealDone();toast('<b>Attestation sealed</b> · Rosa Keith has been notified');}});}],
  [/^Dispute Hours/,function(){dlg({danger:1,eyebrow:'Dispute',title:'Dispute the recorded hours',ok:'Submit Dispute',body:'<label>Hours you can confirm<input class="inp" placeholder="e.g. 4.0"></label><label>Explanation (required)<textarea data-req placeholder="Describe what differs from your field records"></textarea></label>',onOk:function(){toast('<b>Dispute submitted</b> · grants manager notified');}});}],
@@ -1241,6 +1240,69 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
 .og .up-back:hover{background:rgba(255,255,255,.08);color:#FFFFFF!important}
 .og .ux-from.is-done{background:var(--good-t)}
 </style>
+<script>
+/* 08 · signature pad: draw or type, then apply */
+(function(){
+ var SH='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.3 3 8 7 9.5 4-1.5 7-5.2 7-9.5V6z" fill="currentColor" fill-opacity=".14"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>';
+ var CK='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>';
+ var GL='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17M12 3.5c-2.5 2.6-2.5 14.4 0 17"/></svg>';
+ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+ function toast(h){var o=document.querySelector('.og-toast');if(o)o.remove();var d=document.createElement('div');d.className='og-toast';d.setAttribute('role','status');d.innerHTML='<span>'+h+'</span><button type="button" class="x" aria-label="Dismiss">✕</button>';document.body.appendChild(d);d.querySelector('.x').onclick=function(){d.remove();};setTimeout(function(){d.remove();},3500);}
+ window.ogSignPad=function(pad){if(pad.classList.contains('is-sealed'))return;var mode='draw',drawn=false,ctx,cv;
+  pad.dataset.empty='1';pad.setAttribute('role','group');pad.setAttribute('aria-label','Signature pad (empty)');pad.classList.add('is-edit');
+  pad.innerHTML='<div class="sgx-top"><div class="sgx-tabs" role="tablist" aria-label="How to sign"><button type="button" role="tab" data-m="draw" aria-selected="true">Draw</button><button type="button" role="tab" data-m="type" aria-selected="false">Type</button><button type="button" role="tab" data-m="upload" aria-selected="false">Upload</button></div><span class="sgx-id">Signing as <b>Heidi Liu, PE</b></span></div>'+
+   '<div class="sgx-field sgx-in"></div>'+
+   '<div class="sgx-foot"><span class="sgx-note">Your signature is bound to this attestation with the time and your IP address.</span><div class="sgx-acts"><button type="button" class="btn btn-o btn-sm" data-c>Clear</button><button type="button" class="btn btn-p btn-sm" data-a disabled>Apply Signature</button></div></div>';
+  var field=pad.querySelector('.sgx-in'),apply=pad.querySelector('[data-a]');
+  function ok(v){apply.disabled=!v;}
+  function setMode(m){mode=m;drawn=false;ok(false);pad.querySelectorAll('.sgx-tabs button').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.m===m));});
+   if(m==='draw'){field.innerHTML='<canvas aria-label="Draw your signature"></canvas><span class="sgx-hint">Sign here with your mouse, trackpad or finger</span>';cv=field.querySelector('canvas');var r=field.getBoundingClientRect(),dp=window.devicePixelRatio||1;cv.width=r.width*dp;cv.height=r.height*dp;cv.style.width=r.width+'px';cv.style.height=r.height+'px';ctx=cv.getContext('2d');ctx.scale(dp,dp);ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle=getComputedStyle(pad).getPropertyValue('--ink-sig')||'#14325A';ctx.lineWidth=2.4;
+    var dn=false,lx=0,ly=0;function pt(e){var b=cv.getBoundingClientRect();return [e.clientX-b.left,e.clientY-b.top];}
+    cv.addEventListener('pointerdown',function(e){dn=true;cv.setPointerCapture(e.pointerId);var q=pt(e);lx=q[0];ly=q[1];ctx.beginPath();ctx.moveTo(lx,ly);field.classList.add('has-ink');});
+    cv.addEventListener('pointermove',function(e){if(!dn)return;var q=pt(e);var mx=(lx+q[0])/2,my=(ly+q[1])/2;ctx.quadraticCurveTo(lx,ly,mx,my);ctx.stroke();ctx.beginPath();ctx.moveTo(mx,my);lx=q[0];ly=q[1];if(!drawn){drawn=true;ok(true);}});
+    ['pointerup','pointercancel','pointerleave'].forEach(function(ev){cv.addEventListener(ev,function(){dn=false;});});}
+   else if(m==='upload'){field.innerHTML='<label class="sgx-up"><input type="file" accept="image/png,image/jpeg" hidden><span class="sgx-up-in"><b>Choose a signature image</b><small>PNG or JPG of your handwritten signature · transparent PNG looks best</small></span></label>';var fi=field.querySelector('input');fi.addEventListener('change',function(){var f=fi.files&&fi.files[0];if(!f)return;if(!/^image\/(png|jpeg)$/.test(f.type)||f.size>5e6){toast('Use a PNG or JPG under 5 MB');return;}var rd=new FileReader();rd.onload=function(){field.innerHTML='<img class="sgx-img sgx-prev" alt="Signature preview" src="'+rd.result+'"><button type="button" class="sgx-chg">Choose another image</button>';field.querySelector('.sgx-chg').onclick=function(){setMode('upload');};ok(true);};rd.readAsDataURL(f);});}
+   else{field.innerHTML='<input class="sgx-type" type="text" value="Heidi Liu" aria-label="Type your signature" maxlength="40">';var inp=field.querySelector('input');inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length);ok(!!inp.value.trim());inp.addEventListener('input',function(){ok(!!inp.value.trim());});}}
+  pad.querySelector('.sgx-tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setMode(b.dataset.m);});
+  pad.querySelector('[data-c]').onclick=function(){setMode(mode);};
+  apply.onclick=function(){var sig;if(mode==='draw'){sig='<img class="sgx-img" alt="Signature of Heidi Liu" src="'+cv.toDataURL('image/png')+'">';}else if(mode==='upload'){sig='<img class="sgx-img" alt="Signature of Heidi Liu" src="'+field.querySelector('img').src+'">';}else{sig='<span class="sgx-sig">'+esc(field.querySelector('input').value.trim())+'</span>';}
+   var d=new Date(),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()],z=function(n){return (n<10?'0':'')+n;},ts=mo+' '+d.getUTCDate()+', '+d.getUTCFullYear()+' · '+z(d.getUTCHours())+':'+z(d.getUTCMinutes())+':'+z(d.getUTCSeconds())+' UTC',id='OG-'+Math.random().toString(16).slice(2,6).toUpperCase()+'-'+Math.random().toString(16).slice(2,6).toUpperCase();
+   pad.classList.remove('is-edit');pad.setAttribute('role','img');pad.dataset.empty='';pad.setAttribute('aria-label','Signature pad with signature: Heidi Liu, PE');
+   pad.innerHTML='<div class="sgx-top"><span class="sgx-chip">'+SH+'Signed electronically</span><span class="sgx-id">Signature ID <b>'+id+'</b></span></div><div class="sgx-field">'+sig+'</div><div class="sgx-foot"><div class="sgx-who"><b>Heidi Liu, PE</b><span>Resident Engineer · LA County Public Works</span></div><div class="sgx-meta"><span>'+CK+ts+'</span><span>'+GL+'IP 198.147.24.12</span></div></div>';
+   toast('<b>Signature applied.</b> Review the attestation, then seal it.');var sb=[].slice.call(document.querySelectorAll('button')).filter(function(b){return /^Confirm & Digitally Seal/.test(b.textContent.trim());})[0];if(sb){sb.classList.remove('is-pulse');void sb.offsetWidth;sb.classList.add('is-pulse');}};
+  setMode('draw');};
+})();
+</script>
+<style>
+.og .sgx{--ink-sig:#14325A}
+.og[data-theme="dark"] .sgx{--ink-sig:#CFE3F7}
+.og .sgx-tabs{display:inline-flex;padding:2px;border:1px solid var(--line);border-radius:4px;background:var(--pale)}
+.og .sgx-tabs button{height:26px;padding:0 14px;border:0;border-radius:3px;background:none;font:600 12px Manrope,Arial,sans-serif;color:var(--gray);cursor:pointer}
+.og .sgx-tabs button[aria-selected="true"]{background:var(--card);color:var(--head);box-shadow:0 1px 2px rgba(6,36,63,.14)}
+.og .sgx-in{position:relative;padding:0;min-height:110px;cursor:crosshair}
+.og .sgx-in canvas{position:absolute;inset:0;touch-action:none}
+.og .sgx-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:13px;color:var(--gray);pointer-events:none;transition:opacity .2s}
+.og .sgx-in.has-ink .sgx-hint{opacity:0}
+.og .sgx-type{width:100%;height:96px;border:0!important;background:none!important;box-shadow:none!important;outline:0;padding:0 4px!important;font-family:"Mrs Saint Delafield",cursive!important;font-size:64px!important;color:var(--ink-sig)!important;cursor:text}
+.og .sgx-note{font-size:12px;color:var(--gray);max-width:420px}
+.og .sgx-acts{display:flex;gap:8px;flex:none}
+.og .sgx-img{display:block;max-height:100px;max-width:100%}
+.og .sgx.is-edit{border-top-color:var(--blue)}
+.og .sgx-x{display:none}
+button.is-pulse{animation:anPulse 1.2s ease-out 2}
+@media (max-width:560px){.og .sgx-acts{width:100%}.og .sgx-acts .btn{flex:1;justify-content:center}}
+</style>
+<style>
+.og .sgx-up{position:absolute;inset:8px 0;display:grid;place-items:center;border:1px dashed var(--line);border-radius:4px;cursor:pointer;background:var(--pale)}
+.og .sgx-up:hover{border-color:var(--blue);background:var(--blue-t)}
+.og .sgx-up-in{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.og .sgx-up-in b{font-size:13.5px;color:var(--blue)}
+.og .sgx-up-in small{font-size:12px;color:var(--gray)}
+.og .sgx-prev{max-height:92px;margin:6px 4px}
+.og .sgx-chg{position:absolute;right:4px;bottom:8px;padding:0;border:0;background:none;font:600 12px Manrope,Arial,sans-serif;color:var(--blue);text-decoration:underline;cursor:pointer}
+.og .sgx-in:has(.sgx-up),.og .sgx-in:has(.sgx-type),.og .sgx-in:has(.sgx-prev){cursor:default}
+</style>
+<style>.og .sgx-acts .btn[disabled]{opacity:.45;pointer-events:none;filter:grayscale(.3)}.og .sgx-type::selection{background:rgba(176,138,78,.25)}</style>
 
 <div class="og" data-theme="light" style="min-height: 1100px">
   <header class="hd">
