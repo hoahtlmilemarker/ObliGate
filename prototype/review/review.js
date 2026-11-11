@@ -508,7 +508,7 @@
     var h = '<div class="rv-pill">' + (S.mode === 'edit' ? '<span class="rv-hint">Click any text and type · Enter to save · Esc to cancel</span>' : S.mode ? '<span class="rv-hint">Click anything to comment · C or Esc to exit</span>' : '') +
       '<div class="rv-seg"><button id="rvBrowse" title="Browse (C)" class="' + (!S.mode ? 'on' : '') + '">' + ICON.pointer + 'Browse</button><button id="rvComment" title="Comment (C)" class="' + (S.mode === true ? 'on' : '') + '">' + ICON.chat + 'Comment</button>' + bellBtn() + '</div></div>' + inboxHtml();
     if (!S.open) {
-      h += '<aside class="rv-rail"><button class="rv-side" id="rvTab" title="Open comments (Shift+C)" aria-label="Open comments">' + ICON.side + '</button><button class="rv-side" id="rvHide" title="Hide comments (full view)" aria-label="Hide comments">' + ICON.eyeoff + '</button><div class="rv-rail-list">' +
+      h += '<aside class="rv-rail"><button class="rv-side" id="rvTab" title="Open comments (O)" aria-label="Open comments">' + ICON.side + '</button><button class="rv-side" id="rvHide" title="Hide comments (full view)" aria-label="Hide comments">' + ICON.eyeoff + '</button><div class="rv-rail-list">' +
         S.threads.slice().sort(function (a, b) { return (b.at || 0) - (a.at || 0); }).map(function (t, i) { var col = t.resolved ? '#9CA3AF' : colorFor(t.author); return '<button class="rv-dot' + (S.active === t.id ? ' on' : '') + (t.resolved ? ' done' : '') + '" data-rail="' + t.id + '" style="background:' + col + ';color:' + col + '" title="#' + NUM[t.id] + ' · ' + esc(labelFor(t.page)) + ' · ' + esc(t.author) + ': ' + esc(t.text.slice(0, 80)) + '"><span style="color:#fff">' + esc((t.author.trim()[0] || '?')) + '</span></button>'; }).join('') +
         '</div></aside>';
     }
@@ -519,7 +519,7 @@
         .slice().sort(function (a, b) { return b.at - a.at; });
       var groups = [], gi = {};
       list.forEach(function (t) { var g = labelFor(t.page); if (gi[g] == null) { gi[g] = groups.length; groups.push({ name: g, items: [] }); } groups[gi[g]].items.push(t); });
-      h += '<aside class="rv-panel"><header class="rv-head"><h2>Comments<kbd class="rv-kbd" title="Shift+C opens or closes this panel · C switches Browse / Comment">Shift C</kbd></h2><div><button class="rv-ib" id="rvHide" title="Hide comments (full view)" aria-label="Hide comments">' + ICON.eyeoff + '</button><button class="rv-ib" id="rvClose" title="Close panel (Shift+C)" aria-label="Close panel">' + ICON.x + '</button></div></header>' +
+      h += '<aside class="rv-panel"><header class="rv-head"><h2>Comments<kbd class="rv-kbd" title="O opens or closes this panel · C switches Browse / Comment">O</kbd></h2><div><button class="rv-ib" id="rvHide" title="Hide comments (full view)" aria-label="Hide comments">' + ICON.eyeoff + '</button><button class="rv-ib" id="rvClose" title="Close panel (O)" aria-label="Close panel">' + ICON.x + '</button></div></header>' +
         '<div class="rv-fseg" role="tablist" aria-label="Filter comments">' + [['all', 'All', S.threads.length], ['open', 'Open', S.threads.filter(function (t) { return !t.resolved; }).length], ['resolved', 'Resolved', S.threads.filter(function (t) { return t.resolved; }).length]].map(function (f) { return '<button type="button" role="tab" aria-selected="' + (S.filter === f[0]) + '" class="rv-fseg-b' + (S.filter === f[0] ? ' on' : '') + (f[0] === 'open' && f[2] ? ' hot' : '') + '" data-filter="' + f[0] + '"><span>' + f[1] + '</span><b>' + f[2] + '</b></button>'; }).join('') + '</div>' +
         
         '<div class="rv-tools"><label class="rv-search">' + ICON.search + '<input id="rvSearch" placeholder="Search" value="' + esc(S.q || '') + '"></label>' +
@@ -766,13 +766,13 @@
   });
   fileIn.addEventListener('change', function () { addImages(fileIn.files); fileIn.value = ''; });
   document.addEventListener('keydown', onKey);
-  /* shortcuts: C = Browse <-> Comment, Shift+C = open / close the comments panel */
+  /* shortcuts: C = Browse <-> Comment, O = open / close the comments panel */
   function typing(el) { el = el || document.activeElement; return !!(el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))); }
   document.addEventListener('keydown', function (e) {
     if (S.hidden || e.ctrlKey || e.metaKey || e.altKey || e.isComposing || e.repeat || typing(e.target)) return;
-    if ((e.key || '').toLowerCase() !== 'c') return;
+    var k = (e.key || '').toLowerCase(); if (e.shiftKey || (k !== 'c' && k !== 'o')) return;
     e.preventDefault(); S.draft = null; if (S.tedit) endTextEdit(true);
-    if (e.shiftKey) { S.open = !S.open; if (!S.open) S.pmenu = null; renderUi(); shiftFloaters(); }
+    if (k === 'o') { S.open = !S.open; if (!S.open) S.pmenu = null; renderUi(); shiftFloaters(); }
     else setMode(S.mode === true ? false : true);
   });
   setInterval(function () { try { applyEdits(); } catch (e) {} }, 900);
