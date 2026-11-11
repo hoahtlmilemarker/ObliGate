@@ -867,16 +867,22 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   else if(/receipt|scan|pw-?\d|dr-?\d|malibu|topanga/i.test(n)){k=/receipt/i.test(n)?'Receipt':img?'Site photo':sheet?'Spreadsheet':'Supporting document';lv=2;fd=/receipt/i.test(n)?F4:img?F2:F1;why='Project reference found, but the document type is uncertain';}
   else if(img){k='Photo';lv=1;fd=F2;why='Photo has no location or date to confirm the project';}
   else{k=sheet?'Spreadsheet':'Document';lv=0;why='No DR number, project or date found';}
+  var PWN={'428':'Malibu Canyon','429':'Topanga Creek Debris','430':'Las Virgenes Road Slope Repair','431':'Emergency Protective Measures','432':'EOC Activation','433':'Big Tujunga Canyon Road Washout','434':'Pacific Coast Hwy Storm Drain Clearing','435':'Sepulveda Basin Debris Removal','436':'San Gabriel Canyon Road Culvert','437':'Swift-Water Rescue Operations','438':'Zuma Beach Parking Lot Repair','439':'Marina del Rey Breakwater Debris'};
+  var mp=n.match(/PW[-_ ]?0*(4[23]\d)(?!\d)/i),md=n.match(/DR[-_ ]?(4\d{3})/i),pw=mp&&PWN[mp[1]]?'PW-00'+mp[1]:null,dr=md?md[1]:null;
+  if(pw){if(fd)fd=fd.replace('PW-00428',pw);else{fd=pw+' › 1. Force-Account Labor';lv=2;k=img?'Site photo':sheet?'Spreadsheet':'Supporting document';why='Project '+pw+' found in the file, but the document type is uncertain';}}
+  var odr=null;if(dr&&dr!=='4683'){odr='DR-'+dr+'-CA';lv=0;fd=null;f=null;why='Belongs to '+odr+', which has no matching project in your portfolio yet';}
   var conf=lv===3?86+r%12:lv===2?62+r%20:lv===1?41+r%17:12+r%22;
   var tier=lv===3?'auto':lv===2?'check':'inbox',place=tier!=='inbox';
   var tag=!place?'Needs a folder':f?(f.sev==='c'?'1 critical finding':'1 advisory'):tier==='check'?'Check placement':'Filed · PW-00428';
   var c=!place?'idle':f?(f.sev==='c'?'risk':'warn'):tier==='check'?'warn':'ok';
-  return {name:n,kind:k,place:place,tier:tier,conf:conf,folder:fd,f:f,why:why,tag:tag,c:c};}
+  return {name:n,kind:k,place:place,tier:tier,conf:conf,folder:fd,f:f,why:why,tag:tag,c:c,dr:odr||'DR-4683-CA',pw:fd?fd.split(' › ')[0]:null};}
+
  window.ogClassify=classify;
+ var PWN2={'PW-00428':'Malibu Canyon','PW-00429':'Topanga Creek Debris','PW-00430':'Las Virgenes Road Slope Repair','PW-00431':'Emergency Protective Measures','PW-00432':'EOC Activation','PW-00433':'Big Tujunga Canyon Road Washout','PW-00434':'Pacific Coast Hwy Storm Drain Clearing','PW-00435':'Sepulveda Basin Debris Removal','PW-00436':'San Gabriel Canyon Road Culvert','PW-00437':'Swift-Water Rescue Operations','PW-00438':'Zuma Beach Parking Lot Repair','PW-00439':'Marina del Rey Breakwater Debris'};
  var raw=null;try{raw=JSON.parse(sessionStorage.getItem('og-up')||'null');}catch(e){}
  if(!raw||!raw.length)return;
  var FX={},CF={};try{FX=JSON.parse(sessionStorage.getItem('og-up-fix')||'{}');CF=JSON.parse(sessionStorage.getItem('og-up-conf')||'{}');}catch(e){}
- var RM=0;var up=raw.map(function(x){var o=classify(x.n);o.size=x.s;var fx=FX[x.n];if(fx==='__removed'){o.removed=true;RM++;}else if(fx){o.place=true;o.tier='manual';o.folder=fx;o.tag='Filed · '+fx.split(' › ')[0];o.c='ok';o.why='';}if(CF[x.n]&&o.tier==='check'){o.tier='manual';}return o;}).filter(function(o){return !o.removed;});window.__ogUp=up;window.__ogRm=RM;
+ var RM=0;var up=raw.map(function(x){var o=classify(x.n);o.size=x.s;var fx=FX[x.n];if(fx==='__removed'){o.removed=true;RM++;}else if(fx){o.place=true;o.tier='manual';o.folder=fx;o.pw=fx.split(' › ')[0];o.dr='DR-4683-CA';o.tag='Filed · '+fx.split(' › ')[0];o.c='ok';o.why='';}if(CF[x.n]&&o.tier==='check'){o.tier='manual';}return o;}).filter(function(o){return !o.removed;});window.__ogUp=up;window.__ogRm=RM;
  var N=up.length,P=up.filter(function(x){return x.place;}).length,U=N-P,AU=up.filter(function(x){return x.tier==='auto';}).length,MF=up.filter(function(x){return x.tier==='manual';}).length,CK=up.filter(function(x){return x.tier==='check';}).length,FS=up.filter(function(x){return x.f;}).sort(function(a,b){return (a.f.sev==='c'?0:1)-(b.f.sev==='c'?0:1);}),C=FS.filter(function(x){return x.f.sev==='c';}).length,A=FS.length-C,READY=up.filter(function(x){return x.place&&!x.f;}).length;
  var pl=function(n,w){return n+' '+w+(n===1?'':'s');};
  var CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
@@ -888,9 +894,9 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   if(q('.an-pct')){var ey=q('.band .ps-row .lbl');if(ey)ey.textContent='Analysis in progress · '+pl(N,'file');
    var feed=q('.an-feed');if(feed)feed.innerHTML=up.map(function(x){return row(x,'<span class="an-tag idle">Waiting</span>');}).join('');
    var ck=document.querySelector('.an-card-h > span');if(ck)ck.textContent='0 of '+N+' checked';
-   var lg=q('.an-legend');if(lg)lg.innerHTML=(P?'<span>Detected <b style="color: var(--head)">DR-4683-CA</b> · California Severe Winter Storms</span><span>'+pl(P,'file')+' → PW-00428</span>':'<span>No disaster detected yet</span>')+(U?'<span>'+pl(U,'file')+' → Needs a folder</span>':'');
+   var lg=q('.an-legend');if(lg){var byp={};up.forEach(function(x){if(x.place)byp[x.pw]=(byp[x.pw]||0)+1;});var odrs={};up.forEach(function(x){if(x.dr!=='DR-4683-CA')odrs[x.dr]=1;});lg.innerHTML=(P?'<span>Detected <b style="color: var(--head)">DR-4683-CA</b> · California Severe Winter Storms</span>'+Object.keys(byp).sort().map(function(k){return '<span>'+pl(byp[k],'file')+' → '+k+'</span>';}).join(''):'<span>No project detected yet</span>')+Object.keys(odrs).map(function(k){return '<span>Also found <b style="color: var(--head)">'+k+'</b></span>';}).join('')+(U?'<span>'+pl(U,'file')+' → Needs a folder</span>':'');}
    var st=document.querySelectorAll('.an-steps li p');if(st[0])st[0].textContent=N+' of '+N+' files read.';
-   if(st[1])st[1].textContent=P?('DR-4683-CA detected. '+AU+' filed automatically'+(CK?', '+CK+' filed for you to check':'')+(U?', '+U+' need'+(U===1?'s':'')+' a folder.':'.')):('No DR number or project found. '+pl(U,'file')+' need'+(U===1?'s':'')+' a folder.');
+   if(st[1])st[1].textContent=P?('DR-4683-CA detected across '+pl(Object.keys(up.reduce(function(a,x){if(x.pw)a[x.pw]=1;return a;},{})).length,'project')+'. '+AU+' filed automatically'+(CK?', '+CK+' filed for you to check':'')+(U?', '+U+' need'+(U===1?'s':'')+' a folder.':'.')):('No DR number or project found. '+pl(U,'file')+' need'+(U===1?'s':'')+' a folder.');
    if(st[2])st[2].textContent='Checking '+pl(P,'filed document')+'.';}
   /* back to the report while working through the upload */
   var bi=q('.band .band-in');if(bi&&(q('.ux-t')||q('.lb-tbl'))&&!q('.up-back')){bi.insertAdjacentHTML('afterbegin','<a class="sg-back up-back" href="14-analysis-report.html"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7 4.5 3.5 8 7 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Analysis Report</a>');}
@@ -917,7 +923,7 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
    lt.addEventListener('click',function(e){var b=e.target.closest('.lb-conf');if(!b)return;var n=b.getAttribute('data-n');try{var c2=JSON.parse(sessionStorage.getItem('og-up-conf')||'{}');c2[n]=1;sessionStorage.setItem('og-up-conf',JSON.stringify(c2));}catch(x){}var tr=b.closest('tr');tr.querySelector('.st2').outerHTML='<span class="st2 st2-good"><i></i>Filed by you</span>';b.outerHTML='<a class="lb-btn" href="04-document-review.html">View'+AR+'</a>';var o=document.querySelector('.og-toast');if(o)o.remove();var ts=document.createElement('div');ts.className='og-toast';ts.setAttribute('role','status');ts.innerHTML='<span><b>'+esc(n)+'</b> confirmed in its folder.</span><button type="button" class="x" aria-label="Dismiss">\u2715</button>';document.body.appendChild(ts);ts.querySelector('.x').onclick=function(){ts.remove();};setTimeout(function(){ts.remove();},3500);});
    var hm2=(location.hash||'').match(/^#f=(.+)$/);if(hm2){var nm2=decodeURIComponent(hm2[1]);var tr2=[].slice.call(lt.querySelectorAll('tr.lb-new')).filter(function(r){return r.getAttribute('data-up')===nm2;})[0];if(tr2)setTimeout(function(){tr2.scrollIntoView({block:'center'});tr2.classList.add('ux-focus');},400);}}
   /* 14 · report */
-  if(q('.an-kpis')){var lb=q('.an-just .lbl');if(lb)lb.textContent=pl(N,'file')+' analyzed just now'+(P?' · DR-4683-CA':'');
+  if(q('.an-kpis')){var lb=q('.an-just .lbl');var npj=Object.keys(up.reduce(function(a,x){if(x.pw&&x.place)a[x.pw]=1;return a;},{})).length;if(lb)lb.textContent=pl(N,'file')+' analyzed just now'+(P?' · DR-4683-CA · '+pl(npj,'project'):'');
    var h1=q('.band h1'),pp=q('.band .band-in > p'),cta=q('.band .acts .btn-p');
    if(!N){h1.textContent='Nothing left to check from this upload';pp.textContent='You removed all '+pl(window.__ogRm||0,'file')+' because they were not disaster records. Upload the records you want ObliGate to check.';if(cta){cta.firstChild.textContent='Upload Records';cta.setAttribute('href','12-upload-start.html');}}
    else if(C+A){h1.textContent=pl(C+A,'finding')+' to fix before FEMA review';pp.textContent='We read your '+pl(N,'file')+' and checked the filed ones against PAPPG v4.0 and 2 CFR § 200. Start with the first finding below.';}
@@ -939,12 +945,12 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
     if(CK)r.push('<li><span class="an-cnt" style="background: var(--warn-t); color: var(--warn)">'+CK+'</span><div class="an-tx"><b>Check placement</b><small>Filed automatically, but AI was 60–84% sure. Confirm when you have a moment.</small></div><a class="btn btn-o btn-sm" href="03-document-library.html">Confirm '+CK+AR+'</a></li>');
     if(!r.length)r.push('<li><span class="an-cnt" style="background: var(--good-t); color: var(--good)">'+CHECK+'</span><div class="an-tx"><b>Nothing waiting</b><small>All documents are filed and checked.</small></div></li>');
     at.innerHTML=r.join('');}
-   var gc=q('.gn-c-n');if(gc){if(P){gc.textContent='+'+P;gc.title=pl(P,'file')+' added from your upload';}else gc.remove();}
+   var gc=q('.gn-c-n');var P8=up.filter(function(x){return x.pw==='PW-00428'&&x.place;}).length;if(gc){if(P8){gc.textContent='+'+P8;gc.title=pl(P8,'file')+' added from your upload';}else gc.remove();}
    var wrap=q('.an-wrap');if(wrap&&!q('.an-yours')){var s=document.createElement('section');s.className='an-card an-yours';s.setAttribute('aria-label','Your uploaded files');
-    var tg=function(x){var fp=x.folder?x.folder.replace('PW-00428 › ',''):'';
-     if(x.place)return '<span class="an-where"><b>PW-00428</b> '+esc(fp)+'</span><span class="an-tag '+(x.f?x.c:x.tier==='check'?'warn':'ok')+'" title="AI confidence '+x.conf+'%">'+(x.f?(x.f.sev==='c'?'Critical':'Advisory'):x.tier==='check'?'Check · '+x.conf+'%':x.tier==='manual'?'Filed by you':'Auto · '+x.conf+'%')+'</span><a class="btn btn-o btn-sm an-row-btn" href="'+(x.f?x.f.href:'03-document-library.html#f='+encodeURIComponent(x.name))+'">'+(x.f?'Fix':x.tier==='check'?'Confirm Folder':'View')+AR+'</a>';
+    var tg=function(x){var fp=x.folder?x.folder.split(' › ').slice(1).join(' › '):'';
+     if(x.place)return '<span class="an-where"><b>'+x.pw+'</b> '+esc(fp)+'</span><span class="an-tag '+(x.f?x.c:x.tier==='check'?'warn':'ok')+'" title="AI confidence '+x.conf+'%">'+(x.f?(x.f.sev==='c'?'Critical':'Advisory'):x.tier==='check'?'Check · '+x.conf+'%':x.tier==='manual'?'Filed by you':'Auto · '+x.conf+'%')+'</span><a class="btn btn-o btn-sm an-row-btn" href="'+(x.f?x.f.href:'03-document-library.html#f='+encodeURIComponent(x.name))+'">'+(x.f?'Fix':x.tier==='check'?'Confirm Folder':'View')+AR+'</a>';
      return '<span class="an-where"><b>Needs a folder</b> '+(x.folder?'AI suggests '+esc(fp):'No suggestion')+'</span><span class="an-tag idle" title="AI confidence '+x.conf+'%">'+x.conf+'% sure</span><a class="btn btn-p btn-sm an-row-btn" href="03c-unplaced-inbox.html#f='+encodeURIComponent(x.name)+'">'+(x.folder?'Review Suggestion':'Choose Folder')+AR+'</a>';};
-    s.innerHTML='<div class="an-card-h"><h2>Your uploaded files</h2><span class="an-yours-r"><span class="an-yours-sum">'+AU+' filed automatically'+(MF?' · '+MF+' filed by you':'')+' · '+CK+' to check · '+U+' need a folder'+(window.__ogRm?' · '+window.__ogRm+' removed':'')+'</span>'+(U?'<a class="btn btn-p btn-sm" href="03c-unplaced-inbox.html">Choose Folders for '+pl(U,'File')+AR+'</a>':'')+'</span></div><div class="an-card-b" style="padding-top: 0"><ul class="an-files" style="border-top: 0; margin-top: 0">'+up.map(function(x){return row(x,tg(x));}).join('')+'</ul></div>';
+    s.innerHTML='<div class="an-card-h"><h2>Your uploaded files</h2><span class="an-yours-r"><span class="an-yours-sum">'+AU+' filed automatically'+(MF?' · '+MF+' filed by you':'')+' · '+CK+' to check · '+U+' need a folder'+(window.__ogRm?' · '+window.__ogRm+' removed':'')+'</span>'+(U?'<a class="btn btn-p btn-sm" href="03c-unplaced-inbox.html">Choose Folders for '+pl(U,'File')+AR+'</a>':'')+'</span></div><div class="an-card-b" style="padding-top: 0"><ul class="an-files" style="border-top: 0; margin-top: 0">'+(function(){var G={},ord=[];up.forEach(function(x){var g=x.place?x.dr+'|'+x.pw:'~|'+(x.dr!=='DR-4683-CA'?x.dr:'');if(!G[g]){G[g]=[];ord.push(g);}G[g].push(x);});ord.sort();return ord.map(function(g){var a=g.split('|'),hd=a[0]==='~'?'<b>Needs a folder</b>'+(a[1]?'<span>'+a[1]+' detected · no matching project</span>':'<span>AI was less than 60% sure</span>'):'<b>'+a[1]+' · '+(PWN2[a[1]]||'')+'</b><span>'+a[0]+'</span>';return '<li class="an-grp">'+hd+'<em>'+pl(G[g].length,'file')+'</em></li>'+G[g].map(function(x){return row(x,tg(x));}).join('');}).join('');})()+'</ul></div>';
     wrap.parentNode.insertBefore(s,wrap.nextSibling);}}
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else apply();
@@ -1409,6 +1415,13 @@ button.is-pulse{animation:anPulse 1.2s ease-out 2}
 .og[data-theme="dark"] .cert-sig img{filter:invert(1) hue-rotate(180deg)}
 </style>
 <style>@media (min-width:1101px){.og .lb-tbl col:last-child{width:176px!important}.og .lb-tbl td.lb-act{text-align:left!important}.og .lb-tbl td.lb-act > *{margin-left:0!important;margin-right:auto!important}.og .lb-tbl .lb-act{justify-content:flex-start!important}}</style>
+<style>
+.og .an-files li.an-grp{display:flex;align-items:baseline;gap:10px;padding:14px 0 8px;border-bottom:1px solid var(--line);font-size:12px}
+.og .an-files li.an-grp:not(:first-child){margin-top:10px}
+.og .an-grp b{font-size:13px;font-weight:800;color:var(--head)}
+.og .an-grp span{color:var(--gray)}
+.og .an-grp em{margin-left:auto;font-style:normal;font-weight:700;color:var(--gray)}
+</style>
 
 <div class="og" data-theme="light" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column">
 
