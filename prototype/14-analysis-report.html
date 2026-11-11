@@ -896,7 +896,8 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
      '<td><div class="ux-s">'+(sug?'<span class="ux-sug">'+esc(x.folder)+'</span><span class="tag t-warn ux-c">'+x.conf+'% match</span>':'<span class="ux-none">No confident suggestion</span><span class="tag t-risk ux-c">'+x.conf+'%</span>')+'</div><p class="ux-why">'+esc(x.why)+'.</p></td>'+
      '<td class="ux-act"><div class="ux-a">'+(sug?'<button class="btn btn-p btn-sm ux-ok" type="button">Accept</button>':'')+'<label class="ux-mv"><span class="sr">Move to folder</span><select aria-label="Move '+esc(x.name)+' to folder"><option value="" selected disabled>'+(sug?'Move to…':'Choose folder…')+'</option>'+opts+'</select></label></div></td></tr>';}).join(''));
    if(mine.length){var hs=q('.ux-h');if(hs&&!q('.ux-from')){hs.insertAdjacentHTML('afterend','<div class="ux-from"><span class="an-done" style="height:22px">'+CHECK+'From your upload</span><span><b>'+pl(mine.length,'file')+'</b> from your upload need'+(mine.length===1?'s':'')+' a folder. They are at the top, marked <span class="ux-newpill">New</span>.</span></div>');}}
-   if(window.ogUxSync)window.ogUxSync();}
+   if(window.ogUxSync)window.ogUxSync();
+   var hm=(location.hash||'').match(/^#f=(.+)$/);if(hm){var nm=decodeURIComponent(hm[1]);var tr=[].slice.call(ut.querySelectorAll('tr')).filter(function(r){return r.getAttribute('data-up')===nm;})[0];if(tr){setTimeout(function(){tr.scrollIntoView({block:'center'});tr.classList.add('ux-focus');var c=tr.querySelector('.ux-ok')||tr.querySelector('select');if(c)c.focus({preventScroll:true});},350);}}}
   /* 14 · report */
   if(q('.an-kpis')){var lb=q('.an-just .lbl');if(lb)lb.textContent=pl(N,'file')+' analyzed just now'+(P?' · DR-4683-CA':'');
    var h1=q('.band h1'),pp=q('.band .band-in > p'),cta=q('.band .acts .btn-p');
@@ -910,8 +911,8 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
    if(k[2])k[2].innerHTML='<span class="lbl">Need your attention</span><span class="big" style="color: var(--warn)">'+(N-READY)+'</span><span style="font-size: 13px; color: var(--gray)">'+A+' review · '+C+' action · '+U+' need a folder</span>';
    if(k[3])k[3].innerHTML='<span class="lbl">Open findings</span><span class="big" style="color: '+(C?'var(--risk)':A?'var(--warn)':'var(--good)')+'">'+(C+A)+'</span><span>'+(C+A?'<span class="tag '+(C?'t-risk':'t-warn')+'">'+C+' Critical · '+A+' Advisory</span>':'<span style="font-size: 13px; color: var(--gray)">No rule issues in filed documents</span>')+'</span>';
    var ol=q('.an-risk'),fh=q('.an-card[aria-label="Costs at risk"] .an-card-h .tag');
-   if(ol){ol.innerHTML=FS.length?FS.map(function(x,i){return '<li'+(i===0?' class="is-first"':'')+'><span class="an-sev '+x.f.sev+'">'+(x.f.sev==='c'?'Critical':'Advisory')+'</span><div class="an-rt">'+(i===0?'<span class="an-start">Start here</span>':'')+'<b>'+esc(x.f.t)+'</b><small>'+esc(x.name)+' · '+x.f.r+'</small></div><a class="btn btn-o btn-sm" href="'+x.f.href+'">'+x.f.fix+AR+'</a></li>';}).join(''):'<li class="an-none"><span class="an-none-ic">'+CHECK+'</span><div class="an-rt"><b>No rule issues found</b><small>'+(P?'The '+pl(P,'filed document')+' passed every check.':'Nothing could be checked yet. Files are checked once they are placed in a project.')+'</small></div></li>';}
-   if(fh)fh.innerHTML=FS.length?'<span class="dot"></span>'+FS.length+' open':'None';if(fh&&!FS.length)fh.className='tag t-good';
+   if(ol){ol.innerHTML=FS.length?FS.map(function(x,i){return '<li'+(i===0?' class="is-first"':'')+'><span class="an-sev '+x.f.sev+'">'+(x.f.sev==='c'?'Critical':'Advisory')+'</span><div class="an-rt">'+(i===0?'<span class="an-start">Start here</span>':'')+'<b>'+esc(x.f.t)+'</b><small>'+esc(x.name)+' · '+x.f.r+'</small></div><a class="btn btn-o btn-sm" href="'+x.f.href+'">'+x.f.fix+AR+'</a></li>';}).join(''):(P?'<li class="an-none"><span class="an-none-ic">'+CHECK+'</span><div class="an-rt"><b>No rule issues found</b><small>The '+pl(P,'filed document')+' passed every check.</small></div></li>':'<li class="an-none is-wait"><span class="an-none-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg></span><div class="an-rt"><b>Not checked yet</b><small>Files are checked against FEMA rules once they are in a project. File them first, then the findings appear here.</small></div><a class="btn btn-p btn-sm" href="03c-unplaced-inbox.html">File '+pl(U,'Document')+AR+'</a></li>');}
+   if(fh)fh.innerHTML=FS.length?'<span class="dot"></span>'+FS.length+' open':(P?'None':'Not checked');if(fh&&!FS.length)fh.className=P?'tag t-good':'tag';
    var at=q('.an-att');if(at){var r=[];
     if(A)r.push('<li><span class="an-cnt" style="background: var(--warn-t); color: var(--warn)">'+A+'</span><div class="an-tx"><b>Need review</b><small>Advisory findings to confirm before you submit.</small></div><a class="btn btn-o btn-sm" href="04-document-review.html">Review '+pl(A,'Document')+AR+'</a></li>');
     if(C)r.push('<li><span class="an-cnt" style="background: var(--risk-t); color: var(--risk)">'+C+'</span><div class="an-tx"><b>Action required</b><small>Critical findings that block reimbursement.</small></div><a class="btn btn-o btn-sm" href="05-cross-check.html">Resolve '+C+AR+'</a></li>');
@@ -921,8 +922,10 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
     at.innerHTML=r.join('');}
    var gc=q('.gn-c-n');if(gc){if(P){gc.textContent='+'+P;gc.title=pl(P,'file')+' added from your upload';}else gc.remove();}
    var wrap=q('.an-wrap');if(wrap&&!q('.an-yours')){var s=document.createElement('section');s.className='an-card an-yours';s.setAttribute('aria-label','Your uploaded files');
-    var tg=function(x){var fp=x.folder?x.folder.replace('PW-00428 › ',''):'';return x.place?'<span class="an-where"><b>PW-00428</b> '+esc(fp)+'</span><span class="an-tag '+(x.f?x.c:x.tier==='check'?'warn':'ok')+'" title="AI confidence '+x.conf+'%">'+(x.f?(x.f.sev==='c'?'Critical':'Advisory'):x.tier==='check'?'Check · '+x.conf+'%':'Auto · '+x.conf+'%')+'</span>':'<span class="an-where"><b>Needs a folder</b> '+(x.folder?'AI suggests '+esc(fp):'no suggestion')+'</span><span class="an-tag idle" title="AI confidence '+x.conf+'%">'+x.conf+'% sure</span>';};
-    s.innerHTML='<div class="an-card-h"><h2>Your uploaded files</h2><span class="an-yours-sum">'+AU+' filed automatically · '+CK+' to check · '+U+' need a folder</span></div><div class="an-card-b" style="padding-top: 0"><ul class="an-files" style="border-top: 0; margin-top: 0">'+up.map(function(x){return row(x,tg(x));}).join('')+'</ul></div>';
+    var tg=function(x){var fp=x.folder?x.folder.replace('PW-00428 › ',''):'';
+     if(x.place)return '<span class="an-where"><b>PW-00428</b> '+esc(fp)+'</span><span class="an-tag '+(x.f?x.c:x.tier==='check'?'warn':'ok')+'" title="AI confidence '+x.conf+'%">'+(x.f?(x.f.sev==='c'?'Critical':'Advisory'):x.tier==='check'?'Check · '+x.conf+'%':'Auto · '+x.conf+'%')+'</span><a class="btn btn-o btn-sm an-row-btn" href="'+(x.f?x.f.href:'03-document-library.html')+'">'+(x.f?'Fix':'View')+AR+'</a>';
+     return '<span class="an-where"><b>Needs a folder</b> '+(x.folder?'AI suggests '+esc(fp):'No suggestion')+'</span><span class="an-tag idle" title="AI confidence '+x.conf+'%">'+x.conf+'% sure</span><a class="btn btn-p btn-sm an-row-btn" href="03c-unplaced-inbox.html#f='+encodeURIComponent(x.name)+'">File it'+AR+'</a>';};
+    s.innerHTML='<div class="an-card-h"><h2>Your uploaded files</h2><span class="an-yours-r"><span class="an-yours-sum">'+AU+' filed automatically · '+CK+' to check · '+U+' need a folder</span>'+(U?'<a class="btn btn-p btn-sm" href="03c-unplaced-inbox.html">File '+pl(U,'Document')+AR+'</a>':'')+'</span></div><div class="an-card-b" style="padding-top: 0"><ul class="an-files" style="border-top: 0; margin-top: 0">'+up.map(function(x){return row(x,tg(x));}).join('')+'</ul></div>';
     wrap.parentNode.insertBefore(s,wrap.nextSibling);}}
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else apply();
@@ -935,7 +938,13 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
 .og .an-where b{font-size:12.5px;color:var(--head)}
 .og .an-yours .an-tag{min-width:72px;justify-content:center}
 .og .an-none{display:flex!important;align-items:center;gap:14px}
-.og .an-none-ic{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--good-t);color:var(--good)}
+.og .an-none-ic{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--good-t);color:var(--good)}
+.og .an-none.is-wait .an-none-ic{background:var(--blue-t);color:var(--blue)}
+.og .an-none .btn{margin-left:auto;flex:none}
+.og .an-kpis ~ .an-wrap{align-items:stretch}
+.og .an-kpis ~ .an-wrap > .an-card{display:flex;flex-direction:column}
+.og .an-kpis ~ .an-wrap > .an-card > ol,.og .an-kpis ~ .an-wrap > .an-card > ul{flex:1;display:flex;flex-direction:column;margin:0}
+.og .an-kpis ~ .an-wrap > .an-card > ol > li.an-none,.og .an-kpis ~ .an-wrap > .an-card > ul > li:only-child{flex:1}
 .og .an-sev.a{background:var(--warn-t);color:var(--warn)}
 @media (max-width:640px){.og .an-where{display:none}}
 </style>
@@ -1108,6 +1117,16 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
 .og .ux-from .an-done svg{width:12px;height:12px}
 .og .ux-pick select{width:226px!important;border-color:var(--blue)!important;background-color:var(--blue-t)!important}
 .og .ux-allnote{margin:2px 0 0;font-size:12.5px;color:rgba(255,255,255,.66)}
+</style>
+<style>
+.og .an-yours-r{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.og .an-yours li{gap:14px}
+.og .an-yours .an-where{min-width:220px}
+.og .an-yours .an-tag{min-width:96px}
+.og .an-row-btn{flex:none;min-width:84px;justify-content:center}
+.og tr.ux-focus td{animation:uxF 2.4s ease-out}
+@keyframes uxF{0%,40%{background:rgba(176,138,78,.22)}100%{background:rgba(176,138,78,.05)}}
+@media (max-width:640px){.og .an-yours .an-tag{display:none}}
 </style>
 
 <div class="og gn" data-theme="light" style="min-height: 1250px">
