@@ -1853,26 +1853,28 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
  var LK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
  function toast(h){var o=document.querySelector('.og-toast');if(o)o.remove();var d=document.createElement('div');d.className='og-toast';d.setAttribute('role','status');d.innerHTML='<span>'+h+'</span><button type="button" class="x" aria-label="Dismiss">✕</button>';(document.querySelector('.og')||document.body).appendChild(d);d.querySelector('.x').onclick=function(){d.remove();};setTimeout(function(){d.remove();},4200);return d;}
  function caps(r){return '<div class="tm-caps">'+CAP.map(function(c,i){return MX[r][i]?'<span class="tm-cap">'+CK+c+'</span>':'';}).join('')+'</div>';}
+ function sec(h2,p,body,cls){return '<section class="st-sec tm-sec'+(cls?' '+cls:'')+'"><div class="st-sh"><h2>'+h2+'</h2><p>'+p+'</p></div><div class="st-card">'+body+'</div></section>';}
  function render(){var mg=S.as==='gm',q=S.q.toLowerCase();
   var list=M.filter(function(m){return (!S.f||m.r===S.f)&&(!q||(m.n+' '+m.e+' '+m.d+' '+R[m.r][0]).toLowerCase().indexOf(q)>-1);});
   var nSign=M.filter(function(m){return MX[m.r][4];}).length,nAppr=M.filter(function(m){return MX[m.r][5];}).length,nPend=I.filter(function(i){return !i.x;}).length;
-  var h='<div class="tm-proto"><b>Prototype only</b><span>Viewing as</span><div class="tm-seg" role="group" aria-label="Viewing as"><button type="button" data-as="gm" aria-pressed="'+mg+'">Grants Manager</button><button type="button" data-as="ga" aria-pressed="'+!mg+'">Grants Analyst</button></div><span>Sample people and addresses; no email is sent.</span></div>';
-  h+='<div class="tm-kpis"><div class="tm-kpi"><small>Members</small><b>'+M.length+'</b><span>LA County Public Works</span></div><div class="tm-kpi"><small>Pending invites</small><b>'+nPend+'</b><span>'+(I.length-nPend)+' expired</span></div><div class="tm-kpi"><small>Can approve submission</small><b>'+nAppr+'</b><span>Grants Manager, Leadership</span></div><div class="tm-kpi"><small>Can sign attestations</small><b>'+nSign+'</b><span>Field Documenters</span></div></div>';
+  var h=sec('Team overview','LA County Public Works · DR-4683-CA. Sample people and addresses; no email is sent from this prototype.',
+   '<div class="tm-kpis"><div class="tm-kpi"><small>Members</small><b>'+M.length+'</b></div><div class="tm-kpi"><small>Pending invites</small><b>'+nPend+'</b><span>'+(I.length-nPend)+' expired</span></div><div class="tm-kpi"><small>Approve submission</small><b>'+nAppr+'</b></div><div class="tm-kpi"><small>Sign attestations</small><b>'+nSign+'</b></div></div>'+
+   '<div class="tm-view"><div><b>Viewing as</b><small>Prototype only: preview what a non-manager sees.</small></div><div class="tm-seg" role="group" aria-label="Viewing as"><button type="button" data-as="gm" aria-pressed="'+mg+'">Grants Manager</button><button type="button" data-as="ga" aria-pressed="'+!mg+'">Grants Analyst</button></div></div>');
   if(!mg)h+='<div class="tm-note" role="note">'+LK+'<span><b>View only.</b> Only a Grants Manager can invite people, change roles or remove members. Ask Rosa Keith if someone needs access.</span></div>';
-  if(mg){h+='<section class="tm-card"><div class="tm-ch"><div><h2>Invite a team member</h2><p>They get an email link and join after signing in with County SSO.</p></div></div><div class="tm-cb"><form class="tm-form" novalidate><div class="tm-inv">'+
-   '<label class="tm-f"><span>Work email</span><input class="inp tm-em" type="email" placeholder="name@agency.gov" autocomplete="off"><em class="tm-err" aria-live="polite"></em></label>'+
+  if(mg){h+=sec('Invite a team member','They get an email link and join after signing in with County SSO. Invites expire after 7 days.','<div class="st-cb"><form class="tm-form" novalidate><div class="tm-inv">'+
+   '<label class="tm-f tm-emw"><span>Work email</span><input class="inp tm-em" type="email" placeholder="name@agency.gov" autocomplete="off"><em class="tm-err" aria-live="polite"></em></label>'+
    '<label class="tm-f"><span>Role</span><select class="inp tm-ro">'+opts('ga')+'</select></label>'+
    '<label class="tm-f tm-pjw"><span>Project access</span><select class="inp tm-pj">'+PJ.map(function(p){return '<option>'+p+'</option>';}).join('')+'</select></label>'+
    '<label class="tm-f tm-dpw" hidden><span>Department</span><input class="inp tm-dp" type="text" placeholder="e.g. Stormwater"><em class="tm-derr" aria-live="polite"></em></label>'+
-   '</div><div class="tm-rd"></div><div class="tm-act"><button class="btn btn-p tm-send" type="submit">Send Invitation</button><small>Invites expire after 7 days.</small></div></form></div></section>';
-   h+='<section class="tm-card"><div class="tm-ch"><div><h2>Pending invitations</h2><p>'+(I.length?I.length+' waiting to be accepted':'No open invitations')+'</p></div></div>'+(I.length?I.map(function(i){return '<div class="tm-row" data-i="'+i.id+'"><span class="tm-av" style="background:var(--line);color:var(--gray)">'+esc(i.e[0].toUpperCase())+'</span><div class="tm-who"><b>'+esc(i.e)+'</b><small>'+esc(i.p)+'</small></div>'+pill(i.r)+'<span class="tm-meta'+(i.x?' exp':'')+'">'+esc(i.s)+'</span><div class="tm-btns"><button type="button" class="btn btn-o btn-sm tm-resend">'+(i.x?'Send Again':'Resend')+'</button><button type="button" class="btn btn-o btn-sm tm-revoke">Revoke</button></div></div>';}).join(''):'<div class="tm-empty">Everyone you invited has joined.</div>')+'</section>';}
-  h+='<section class="tm-card"><div class="tm-ch"><div><h2>Members</h2><p>'+(list.length===M.length?M.length+' people':'Showing '+list.length+' of '+M.length)+'</p></div><div class="tm-tools"><input class="inp tm-q" type="search" placeholder="Search name, email, role…" value="'+esc(S.q)+'" aria-label="Search members"><select class="inp tm-fr" aria-label="Filter by role"><option value="">All roles</option>'+Object.keys(R).map(function(k){return '<option value="'+k+'"'+(S.f===k?' selected':'')+'>'+R[k][0]+'</option>';}).join('')+'</select></div></div>';
-  h+=list.length?'<div class="tm-scroll"><table class="tm-tbl"><thead><tr><th>Member</th><th>Role</th><th>Department</th><th>Project access</th><th>Last active</th>'+(mg?'<th><span class="sr">Actions</span></th>':'')+'</tr></thead><tbody>'+list.map(function(m){var me=mg?m.me:m.id===2;
+   '</div><div class="tm-rd"></div><div class="tm-act"><button class="btn btn-p tm-send" type="submit">Send Invitation</button></div></form></div>');
+   h+=sec('Pending invitations',I.length?I.length+' waiting to be accepted. Resend a link or revoke it.':'No open invitations.',(I.length?I.map(function(i){return '<div class="tm-row" data-i="'+i.id+'"><span class="tm-av" style="background:var(--line);color:var(--gray)">'+esc(i.e[0].toUpperCase())+'</span><div class="tm-who"><b>'+esc(i.e)+'</b><small>'+R[i.r][0]+' · '+esc(i.p)+'</small><small class="tm-meta'+(i.x?' exp':'')+'">'+esc(i.s)+'</small></div><div class="tm-btns"><button type="button" class="btn btn-o btn-sm tm-resend">'+(i.x?'Send Again':'Resend')+'</button><button type="button" class="btn btn-o btn-sm tm-revoke">Revoke</button></div></div>';}).join(''):'<div class="tm-empty">Everyone you invited has joined.</div>'));}
+  var tbl=(list.length?'<div class="tm-scroll"><table class="tm-tbl"><thead><tr><th>Member</th><th>Role</th><th>Access</th><th>Last active</th>'+(mg?'<th><span class="sr">Actions</span></th>':'')+'</tr></thead><tbody>'+list.map(function(m){var me=mg?m.me:m.id===2;
     return '<tr data-m="'+m.id+'"><td><div class="tm-m"><span class="tm-av" style="background:'+COL[m.r]+'">'+ini(m.n)+'</span><div class="tm-who"><b>'+esc(m.n)+(me?'<span class="tm-you">You</span>':'')+'</b><small>'+esc(m.e)+'</small></div></div></td>'+
-    '<td data-l="Role">'+(mg&&!me?'<select class="tm-rsel" aria-label="Role for '+esc(m.n)+'">'+opts(m.r)+'</select>':pill(m.r))+'</td><td data-l="Department">'+esc(m.d)+'</td><td data-l="Access">'+esc(m.p)+'</td><td data-l="Active" class="tm-meta">'+esc(m.a)+'</td>'+
-    (mg?'<td class="tm-x">'+(me?'<span class="tm-lock" title="You can’t remove yourself">'+LK+'</span>':'<button type="button" class="tm-ib tm-rm" title="Remove from team" aria-label="Remove '+esc(m.n)+'">'+TR+'</button>')+'</td>':'')+'</tr>';}).join('')+'</tbody></table></div>':'<div class="tm-empty"><b>No members match</b>Try another name or role.</div>';
-  h+='</section>';
-  h+='<section class="tm-card"><div class="tm-ch"><div><h2>What each role can do</h2><p>Permissions follow FEMA PA separation of duties: the person who documents work does not approve the claim.</p></div></div><div class="tm-scroll"><table class="tm-mx"><thead><tr><th>Role</th>'+CAP.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr></thead><tbody>'+Object.keys(R).map(function(k){var cur=(mg&&k==='gm')||(!mg&&k==='ga');return '<tr'+(cur?' class="me"':'')+'><td>'+pill(k)+'</td>'+MX[k].map(function(v){return '<td>'+(v?'<span class="y" aria-label="Yes">'+CK+'</span>':'<span class="n" aria-label="No">—</span>')+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table></div></section>';
+    '<td data-l="Role">'+(mg&&!me?'<select class="tm-rsel" aria-label="Role for '+esc(m.n)+'">'+opts(m.r)+'</select>':pill(m.r))+'</td><td data-l="Access"><span class="tm-acc">'+esc(m.p)+'</span><small class="tm-dep">'+esc(m.d)+'</small></td><td data-l="Active" class="tm-meta">'+esc(m.a)+'</td>'+
+    (mg?'<td class="tm-x">'+(me?'<span class="tm-lock" title="You can’t remove yourself">'+LK+'</span>':'<button type="button" class="tm-ib tm-rm" title="Remove from team" aria-label="Remove '+esc(m.n)+'">'+TR+'</button>')+'</td>':'')+'</tr>';}).join('')+'</tbody></table></div>':'<div class="tm-empty"><b>No members match</b>Try another name or role.</div>');
+  h+=sec('Members',(list.length===M.length?M.length+' people':'Showing '+list.length+' of '+M.length)+(mg?'. Change a role from the list; managers need a confirmation.':'. Roles are set by a Grants Manager.'),
+   '<div class="tm-tools"><input class="inp tm-q" type="search" placeholder="Search name, email, role…" value="'+esc(S.q)+'" aria-label="Search members"><select class="inp tm-fr" aria-label="Filter by role"><option value="">All roles</option>'+Object.keys(R).map(function(k){return '<option value="'+k+'"'+(S.f===k?' selected':'')+'>'+R[k][0]+'</option>';}).join('')+'</select></div>'+tbl);
+  h+=sec('What each role can do','Follows FEMA PA separation of duties: the person who documents work does not approve the claim.','<div class="tm-scroll"><table class="tm-mx"><thead><tr><th>Role</th>'+CAP.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr></thead><tbody>'+Object.keys(R).map(function(k){var cur=(mg&&k==='gm')||(!mg&&k==='ga');return '<tr'+(cur?' class="me"':'')+'><td>'+pill(k)+'</td>'+MX[k].map(function(v){return '<td>'+(v?'<span class="y" aria-label="Yes">'+CK+'</span>':'<span class="n" aria-label="No">—</span>')+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table></div>');
   var fo=document.activeElement&&document.activeElement.classList.contains('tm-q');root.innerHTML=h;
   if(fo){var qi=root.querySelector('.tm-q');qi.focus();qi.setSelectionRange(qi.value.length,qi.value.length);}
   rd();}
@@ -1906,6 +1908,36 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
 })();
 </script>
 <script>(function(){function f(){var n=document.querySelector('.st-tabs'),o=n&&n.querySelector('.st-tab.on');if(o&&n.scrollWidth>n.clientWidth)n.scrollLeft=Math.max(0,o.offsetLeft-16);}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',f);else f();})();</script>
+<style>
+/* Team & Roles: settings layout */
+.og .tm-main{gap:0!important;padding-top:0!important;padding-bottom:0!important}
+.og .tm-sec .st-card{min-width:0}.og .tm-main > .tm-sec:last-child{padding-bottom:16px!important}
+.og .tm-kpis{border:0!important;border-radius:0!important;border-bottom:1px solid var(--line-soft)!important}
+.og .tm-kpi{padding:18px 20px}
+.og .tm-kpi b{font-variant-numeric:lining-nums;font-size:32px}
+.og .tm-view{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;padding:16px 20px}
+.og .tm-view b{display:block;font-size:14px;color:var(--head)}
+.og .tm-view small{display:block;margin-top:3px;font-size:12.5px;color:var(--gray)}
+.og .tm-inv{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+.og .tm-inv .tm-emw{grid-column:1/-1}
+.og .tm-row{padding:16px 20px!important}
+.og .tm-who small.tm-meta{margin-top:4px}
+.og .tm-tools{display:flex;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line-soft)}
+.og .tm-tools .inp{flex:1;width:auto!important}
+.og .tm-tools select{flex:none;width:180px}
+.og .tm-tbl th:first-child,.og .tm-tbl td:first-child{padding-left:20px}
+.og .tm-tbl th:last-child,.og .tm-tbl td:last-child{padding-right:20px}
+.og .tm-tbl td,.og .tm-tbl th{padding-left:12px;padding-right:12px}
+.og .tm-tbl th{white-space:nowrap}.og .tm-acc{display:block;font-size:13px;color:var(--ink);white-space:nowrap}
+.og .tm-dep{display:block;margin-top:2px;font-size:12px;color:var(--gray);white-space:nowrap}
+.og .tm-mx th,.og .tm-mx td{padding:11px 6px}
+.og .tm-mx thead th{font-size:9.5px;letter-spacing:.08em}
+.og .tm-mx th:first-child,.og .tm-mx td:first-child{padding-left:20px}
+.og .tm-mx td:last-child,.og .tm-mx th:last-child{padding-right:20px}
+.og .tm-note{margin:24px 0 0}
+@media (max-width:760px){.og .tm-tools{flex-wrap:wrap}.og .tm-tools select{width:100%}}
+@media (max-width:640px){.og .tm-inv{grid-template-columns:1fr!important}}
+</style>
 <script src="review/config.js?v=2"></script><script src="review/review.js?v=11" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
 
