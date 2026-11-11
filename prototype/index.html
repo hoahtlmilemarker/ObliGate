@@ -1713,6 +1713,12 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
 .og .sbm-sep{width:32px;height:1px;margin:2px 0;background:var(--line)}
 .og[data-theme="dark"].sb-mini .sbm{background:linear-gradient(180deg,rgba(140,192,241,.07),var(--card) 55%);box-shadow:6px 0 14px -10px rgba(0,0,0,.45)}
 </style>
+<style>
+/* compact panel top so the side drop zone fits */
+.og .sbm-head{padding:0!important;margin:-6px -4px -6px 0;height:24px;align-items:center}
+.og .sbm-head button{height:24px;padding:0 6px;font-size:11.5px}
+.og .sb-rail:has(> .sbm-head){padding-top:10px!important}
+</style>
 <script src="review/config.js?v=2"></script><script src="review/review.js?v=11" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
 
