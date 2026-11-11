@@ -893,7 +893,24 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
  function hsh(s){var x=7;for(var i=0;i<s.length;i++)x=(x*31+s.charCodeAt(i))%9973;return x;}
  var F1='PW-00428 › 1. Force-Account Labor',F2='PW-00428 › 2. Equipment Records',F3='PW-00428 › 3. Contracts & Procurement',F4='PW-00428 › 4. Materials & Supplies';
  /* Simulated AI read: decided from the file name only (prototype). Confidence tiers: >=85 filed automatically, 60-84 filed + check placement, <60 needs a folder */
- function classify(n){var e=EXT(n),img=/^(jpg|jpeg|png|heic)$/.test(e),sheet=/^(xlsx|xls|csv)$/.test(e),k,lv=0,fd=null,f=null,why='',r=hsh(n);
+ var KN={
+  'Timesheet_Aguayo_PayPeriod_02.pdf':['Force-Account Timesheet',1,{sev:'c',st:'OT Mismatch',t:'8.0 OT hours claimed on Jan 12; the field log supports 4.0 ($325.20)',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Resolve in Cross-Check',href:'cross-check'},['Jan 01 – Jan 14','2023','Aguayo, Hector','Heavy Equip Op','HA','$4,820.00']],
+  'Timesheet_Delgado_PayPeriod_02.pdf':['Force-Account Timesheet',1,{sev:'c',st:'Missing Log',t:'40.0 hours claimed with no matching daily field log',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Request Attestation',href:'supervisor-signature'},['Jan 01 – Jan 14','2023','Delgado, Marco','Laborer','DM','$1,940.00']],
+  'Timesheet_Chen_PayPeriod_02.pdf':['Force-Account Timesheet',1,null,['Jan 01 – Jan 14','2023','Chen, Lawrence','Equipment Op','CL','$2,168.00']],
+  'Timesheet_Santos_PayPeriod_02.pdf':['Force-Account Timesheet',1,null,['Jan 01 – Jan 14','2023','Santos, Maria','Laborer','SM','$2,168.00']],
+  'Timesheet_Aguayo_PayPeriod_01.pdf':['Force-Account Timesheet',1,null,['Dec 18 – Dec 31','2022','Aguayo, Hector','Heavy Equip Op','HA','$4,336.00']],
+  'SupervisorLog_Jan14-16_Unsigned.pdf':['Supervisor Field Log',1,{sev:'c',st:'Missing Signature',t:'Field log is not signed by the supervisor',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Request Signature',href:'supervisor-signature'},['Jan 14 – Jan 16','2023','Liu, Heidi','Resident Engineer','HL','24.0 hrs']],
+  'ActivityLog_PW00428_Jan12_Crew3.pdf':['Daily Activity Log',1,null,['Jan 12','2023','Culvert Clearing Crew','4 members','CC','32.0 hrs']],
+  'ActivityLog_PW00428_Jan10_Crew3.pdf':['Daily Activity Log',1,null,['Jan 10','2023','Culvert Clearing Crew','4 members','CC','32.0 hrs']],
+  'ActivityLog_PW00428_Jan13_Crew3.pdf':['Daily Activity Log',1,{sev:'a',st:'Needs Review',t:'One crew sign-out time is illegible; hours assumed from the 8-hour shift',r:'Data review',fix:'Review',href:'document-review'},['Jan 13','2023','Culvert Clearing Crew','4 members','CC','32.0 hrs']],
+  'EquipLog_CAT320_EQ-PW-109_Jan.pdf':['Equipment Usage Log',2,null,['Jan 09 – Jan 13','2023','CAT 320 Excavator','#EQ-PW-109','CAT','40.0 hrs']],
+  'eCAPS_Labor_Export_F7060865.xlsx':['DeRS Baseline Export',1,null,['PP 01 – PP 04','2023','Countywide Payroll','167 rows','CP','$482,450.00']],
+  'eCAPS_Labor_Export_PP01.xlsx':['DeRS Baseline Export',1,null,['PP 01','2023','Countywide Payroll','42 rows','CP','$118,920.00']],
+  'FieldPhoto_MalibuCyn_PM5.1_Jan12.jpg':['Site photo',1,null,['Jan 12','2023','Liu, Heidi','Malibu Cyn Rd PM 5.1','HL','—']],
+  'FieldPhoto_MalibuCyn_Jan09.jpg':['Site photo',1,null,['Jan 09','2023','Liu, Heidi','Malibu Cyn Rd PM 4.2','HL','—']]};
+ function classify(n){var kn=KN[String(n).replace(/\s*\(\d+\)(?=\.\w+$)/,'')];if(kn){var r0=hsh(n),fdk=kn[1]===2?F2:F1;var ff=kn[2];return {name:n,kind:kn[0],place:true,tier:'auto',conf:90+r0%9,folder:fdk,f:ff,why:'',tag:ff?(ff.sev==='c'?'1 critical finding':'1 advisory'):'Filed · PW-00428',c:ff?(ff.sev==='c'?'risk':'warn'):'ok',dr:'DR-4683-CA',pw:'PW-00428',meta:kn[3]};}
+  return classify0(n);}
+ function classify0(n){var e=EXT(n),img=/^(jpg|jpeg|png|heic)$/.test(e),sheet=/^(xlsx|xls|csv)$/.test(e),k,lv=0,fd=null,f=null,why='',r=hsh(n);
   if(/time.?sheet|time.?card/i.test(n)){k='Force-Account Timesheet';lv=3;fd=F1;f={sev:'c',t:'No supervisor signature on timesheet',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Resolve in Cross-Check',href:'cross-check'};}
   else if(/activity|daily.?log|field.?log|supervisor/i.test(n)){k='Daily Activity Log';lv=3;fd=F1;if(/unsigned/i.test(n))f={sev:'c',t:'Field log is not signed',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Request Signature',href:'supervisor-signature'};}
   else if(sheet&&/payroll|ecaps|labor|ders|hours/i.test(n)){k='Payroll export';lv=3;fd=F1;f={sev:'a',t:'Payroll hours not yet matched to field logs',r:'PAPPG v4.0 Ch. 2 § II.B.1',fix:'Open in Cross-Check',href:'cross-check'};}
@@ -1948,7 +1965,10 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
   toast(files.length);
   var rows=[].slice.call(tb.querySelectorAll('tr.just'));analyze(rows,files);}
  var AR='<svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M9 4.5 12.5 8 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
- function rules(name){var e=(name.split('.').pop()||'').toLowerCase();
+ function rules(name){var C=window.ogClassify&&window.ogClassify(name);
+  if(C){var D={'No supervisor signature on timesheet':'FEMA requires a supervisor signature or attestation for force-account hours.','Field log is not signed':'FEMA requires the supervisor to sign daily field logs.','Payroll hours not yet matched to field logs':'Claimed hours must match daily activity logs before submission.','Procurement record not attached':'Contracts need the procurement record that shows how the vendor was chosen.'};
+   return {kind:C.kind,meta:C.meta,f:C.f?[{sev:C.f.sev==='c'?'risk':'warn',st:C.f.st,t:C.f.t,r:C.f.r,d:D[C.f.t]||'',fix:C.f.fix,href:C.f.href}]:[]};}
+  var e=(name.split('.').pop()||'').toLowerCase();
   if(/timesheet/i.test(name))return {kind:'Force-Account Timesheet',f:[{sev:'risk',t:'No supervisor signature',r:'PAPPG v4.0 Ch. 2 § II.B',d:'FEMA requires a supervisor signature or attestation for force-account hours.',fix:'Request Attestation',href:'supervisor-signature'}]};
   if(['jpg','jpeg','png','heic','tif','tiff'].indexOf(e)>-1)return {kind:'Site photo',f:[]};
   if(['xlsx','xls','csv'].indexOf(e)>-1)return {kind:'Payroll export',f:[{sev:'warn',t:'Hours not yet matched to field logs',r:'PAPPG v4.0 Ch. 2 § II.B.1',d:'Claimed hours must match daily activity logs before submission.',fix:'Open Cross-Check',href:'cross-check'}]};
@@ -1963,9 +1983,13 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
    var s=r.querySelector('.st2'),kd=r.querySelector('.lb-kind'),act=r.lastElementChild;
    s.className='st2 st2-proc';s.innerHTML='<i></i>Reading…';
    setTimeout(function(){kd.innerHTML='<span class="new-pill">New</span>'+R.kind;s.innerHTML='<i></i>Checking FEMA rules…';act.innerHTML='<span style="font-size:12px;color:var(--gray)">AI checking</span>';},1200+k*250);
-   setTimeout(function(){var who=r.querySelector('.lb-who span');if(who&&/Detecting/.test(who.textContent))who.textContent='Not detected';if(!R.f.length){s.className='st2 st2-good';s.innerHTML='<i></i>Verified · no findings';act.innerHTML='<a class="lb-btn" href="#">View'+AR+'</a>';}
-    else{var risk=R.f.some(function(z){return z.sev==='risk';});s.className='st2 '+(risk?'st2-risk':'st2-warn');s.innerHTML='<i></i>'+R.f.length+' finding'+(R.f.length>1?'s':'');
-     act.innerHTML='<button type="button" class="lb-btn lb-btn-p fd-open">View Findings'+AR+'</button>';act.querySelector('.fd-open').onclick=function(e){e.preventDefault();e.stopPropagation();findingsDlg([x]);};}
+   setTimeout(function(){var M=R.meta,wb=r.querySelector('.lb-who'),pc=r.querySelector('.lb-per'),vc=r.querySelector('.lb-val');
+    if(M){if(pc)pc.innerHTML='<span class="per-d">'+M[0]+'</span><span class="per-y">'+M[1]+'</span>';if(wb)wb.innerHTML='<span class="ini">'+M[4]+'</span><div><span title="'+M[2]+'">'+M[2]+'</span><small title="'+M[3]+'">'+M[3]+'</small></div>';if(vc)vc.textContent=M[5];}
+    else{var who=r.querySelector('.lb-who span');if(who&&/Detecting/.test(who.textContent))who.textContent='Not detected';if(pc)pc.innerHTML='<span class="per-d lb-na">No date found</span>';}
+    if(!R.f.length){s.className='st2 st2-good';s.innerHTML='<i></i>Verified · no findings';act.innerHTML='<a class="lb-btn" href="document-review">View'+AR+'</a>';}
+    else{var z0=R.f[0],risk=z0.sev==='risk';s.className='st2 '+(risk?'st2-risk':'st2-warn');s.innerHTML='<i></i>'+(z0.st||(risk?'Critical finding':'Needs review'));s.title=z0.t;
+     act.innerHTML='<a class="lb-btn lb-btn-p'+(risk?'':' lb-btn-r')+'" href="'+z0.href+'" title="'+z0.t+'">'+z0.fix.replace(/ in Cross-Check$/,'')+AR+'</a>';}
+    try{dispatchEvent(new Event('resize'));}catch(_){}
     if(k===rows.length-1){if(window.ogTabCounts)window.ogTabCounts();last=res;var n=0;res.forEach(function(z){n+=z.f.length;});
      var o=document.querySelector('.og-toast');if(o)o.remove();var t=document.createElement('div');t.className='og-toast';t.setAttribute('role','status');
      t.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.6 2.6L16 9.7"/></svg><span><b>'+res.length+' file'+(res.length>1?'s':'')+' checked against FEMA rules</b> · '+(n?n+' finding'+(n>1?'s':''):'no findings')+'</span>'+(n?'<button type="button" class="v">View Findings</button>':'')+'<button type="button" class="x" aria-label="Dismiss">✕</button>';
