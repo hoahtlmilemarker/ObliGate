@@ -1452,14 +1452,7 @@ button.is-pulse{animation:anPulse 1.2s ease-out 2}
 <style>.og .an-where{line-height:1.25;gap:1px}.og .an-where b{line-height:1.25}.og .an-tx b{line-height:1.3}.og .an-tx small{line-height:1.4}.og .sga-facts dd,.og .sg2-v,.og .sgx-who{gap:1px;line-height:1.3}</style>
 <style>@media (min-width:1101px){.og .lb-tbl col:last-child{width:168px!important}.og .lb-tbl col:nth-child(4){width:156px!important}.og .lb-tbl col:nth-child(5){width:92px!important}.og .lb-tbl th,.og .lb-tbl td{padding-left:12px!important;padding-right:12px!important}.og .lb-tbl th:first-child,.og .lb-tbl td:first-child{padding-left:20px!important}.og .lb-tbl th:last-child,.og .lb-tbl td:last-child{padding-right:20px!important}.og .lb-tbl td.lb-act{text-align:right!important}}</style>
 <style>.og .lb-dt .lb-meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block!important}.og .lb-dt .lb-meta .lb-kind{display:flex!important;width:max-content}</style>
-<script>
-(function(){function fit(){var t=document.querySelector('.lb-tbl');if(!t||innerWidth<1101)return;var cols=t.querySelectorAll('col'),n=cols.length;
- var mx=function(sel){var m=0;t.querySelectorAll(sel).forEach(function(e){if(e.offsetParent)m=Math.max(m,e.getBoundingClientRect().width);});return Math.ceil(m);};
- var a=mx('tbody td.lb-act > *'),s=mx('tbody td .st2');if(a)cols[n-1].style.setProperty('width',(a+34)+'px','important');if(s)cols[n-2].style.setProperty('width',(s+28)+'px','important');}
- function run(){fit();setTimeout(fit,400);setTimeout(fit,1500);}
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();addEventListener('resize',function(){clearTimeout(window.__lbf);window.__lbf=setTimeout(fit,150);});
- document.addEventListener('click',function(){setTimeout(fit,350);});})();
-</script>
+
 <script>
 /* Library: size status and action columns to their content so the document column gets the rest */
 (function(){function fit(){var t=document.querySelector('.lb-tbl');if(!t||innerWidth<1101)return;var cols=t.querySelectorAll('col');if(cols.length<7)return;
@@ -1703,7 +1696,7 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
 <style>
 /* collapsed queues strip: more presence */
 .og.sb-mini .shell{grid-template-columns:68px minmax(0,1fr)!important}
-.og.sb-mini .sbm{gap:10px;padding:14px 0;background:linear-gradient(180deg,var(--blue-t),var(--card) 55%);border-right:1px solid var(--line);box-shadow:inset -1px 0 0 rgba(255,255,255,.4)}
+.og.sb-mini .sbm{z-index:5;gap:10px;padding:14px 0;background:linear-gradient(180deg,var(--blue-t),var(--card) 55%);border-right:1px solid var(--line);box-shadow:inset -1px 0 0 rgba(255,255,255,.4),10px 0 24px -12px rgba(6,36,63,.28),4px 0 8px -6px rgba(6,36,63,.12)}
 .og .sbm-b{width:44px;height:44px;border:1px solid var(--line);background:var(--card);color:var(--head);box-shadow:0 1px 2px rgba(6,36,63,.06);transition:border-color .15s,background .15s,color .15s,transform .15s}
 .og .sbm-b svg{width:20px;height:20px}
 .og .sbm-b:hover{border-color:var(--blue);background:var(--card);color:var(--blue);transform:translateY(-1px)}
@@ -1714,7 +1707,7 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
 .og .sbm-n{top:-6px;right:-7px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;border:2px solid var(--card);font:800 10px/15px Manrope,Arial,sans-serif;box-shadow:0 2px 6px -2px rgba(6,36,63,.4)}
 .og .sbm-b.is-on .sbm-n{background:var(--blue);color:#fff}
 .og .sbm-sep{width:32px;height:1px;margin:2px 0;background:var(--line)}
-.og[data-theme="dark"].sb-mini .sbm{background:linear-gradient(180deg,rgba(140,192,241,.07),var(--card) 55%);box-shadow:none}
+.og[data-theme="dark"].sb-mini .sbm{background:linear-gradient(180deg,rgba(140,192,241,.07),var(--card) 55%);box-shadow:10px 0 26px -12px rgba(0,0,0,.6)}
 </style>
 <script src="review/config.js?v=2"></script><script src="review/review.js?v=11" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
