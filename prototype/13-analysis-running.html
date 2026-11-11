@@ -1451,6 +1451,58 @@ button.is-pulse{animation:anPulse 1.2s ease-out 2}
  document.addEventListener('click',function(){setTimeout(fit,50);});})();
 </script>
 <style>@media (min-width:1101px){.og .lb-meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.og .lb-meta > *{white-space:normal}}</style>
+<script>
+/* Library / Inbox: collapsible "Queues & Filing Cabinet" panel on desktop */
+(function(){
+ var I=function(d,s){return '<svg width="'+(s||18)+'" height="'+(s||18)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';};
+ var PANEL='<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M9.5 4.5v15"/>';
+ function init(){var sh=document.querySelector('.shell'),rail=sh&&sh.querySelector('.sb-rail.sb-panel');if(!rail||sh.querySelector('.sbm'))return;var og=sh.closest('.og');
+  var qs=[].slice.call(rail.querySelectorAll('a.q-item'));
+  var m=document.createElement('nav');m.className='sbm';m.setAttribute('aria-label','Queues and filing cabinet');
+  m.innerHTML='<button type="button" class="sbm-b sbm-open" aria-label="Show queues and filing cabinet" title="Show queues & filing cabinet">'+I(PANEL+'<path d="m13 10 2 2-2 2"/>')+'</button><span class="sbm-sep"></span>'+
+   qs.map(function(a){var on=a.classList.contains('q-on')||/aria-current/.test(a.outerHTML)||location.pathname.indexOf(a.getAttribute('href'))>-1;var ic=a.querySelector('svg');var n=(a.querySelector('.cnt-chip')||{}).textContent||'';var lb=(a.querySelector('.q-lbl')||a).textContent.trim();
+    return '<a class="sbm-b'+(on?' is-on':'')+(a.classList.contains('q-warn')?' is-warn':'')+'" href="'+a.getAttribute('href')+'" title="'+lb+'" aria-label="'+lb+' ('+n+')">'+(ic?ic.outerHTML:'')+(n?'<span class="sbm-n">'+n+'</span>':'')+'</a>';}).join('')+
+   '<button type="button" class="sbm-b sbm-cab" aria-label="Filing cabinet" title="Filing cabinet">'+I('<path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H9l2 2h8.5A1.5 1.5 0 0 1 21 9.5v8A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z"/>')+'</button>';
+  sh.insertBefore(m,rail);
+  var hd=document.createElement('div');hd.className='sbm-head';hd.innerHTML='<button type="button" class="sbm-col" title="Collapse panel">'+I(PANEL+'<path d="m15 10-2 2 2 2"/>',16)+'<span>Collapse</span></button><button type="button" class="sbm-pin" title="Keep this panel open">'+I('<path d="M9 4h6l-1 6 3 3H7l3-3z"/><path d="M12 13v7"/>',16)+'<span>Keep open</span></button>';rail.insertBefore(hd,rail.firstChild);
+  function pref(){try{return localStorage.getItem('og-sb');}catch(e){return null;}}
+  function setPref(v){try{localStorage.setItem('og-sb',v);}catch(e){}}
+  function apply(){var w=innerWidth,p=pref(),col=w>=1101&&(p==='closed'||(p!=='open'&&w<1600));og.classList.toggle('sb-mini',col);if(!col)close();}
+  function open(){og.classList.add('sb-drawer');var r=sh.getBoundingClientRect();rail.style.left=r.left+'px';}
+  function close(){og.classList.remove('sb-drawer');rail.style.left='';}
+  m.querySelector('.sbm-open').onclick=function(e){e.stopPropagation();og.classList.contains('sb-drawer')?close():open();};
+  m.querySelector('.sbm-cab').onclick=function(e){e.stopPropagation();open();var c=rail.querySelector('details[aria-label="Filing cabinet"]');if(c){c.open=true;c.scrollIntoView({block:'start'});}};
+  hd.querySelector('.sbm-col').onclick=function(){setPref('closed');close();apply();};
+  hd.querySelector('.sbm-pin').onclick=function(){setPref('open');close();apply();};
+  document.addEventListener('click',function(e){if(og.classList.contains('sb-drawer')&&!rail.contains(e.target)&&!m.contains(e.target))close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&og.classList.contains('sb-drawer'))close();});
+  addEventListener('resize',apply);apply();setTimeout(function(){addEventListener('resize',function(){},{});},0);}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<style>
+.og .sbm,.og .sbm-head{display:none}
+@media (min-width:1101px){
+ .og .sbm-head{display:flex;justify-content:flex-end;gap:4px;padding:8px 10px 0}
+ .og .sbm-head button{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 8px;border:0;border-radius:4px;background:none;font:600 12px Manrope,Arial,sans-serif;color:var(--gray);cursor:pointer}
+ .og .sbm-head button:hover{background:var(--blue-t);color:var(--blue)}
+ .og:not(.sb-mini) .sbm-pin{display:none}
+ .og.sb-mini .shell{grid-template-columns:60px minmax(0,1fr)!important}
+ .og.sb-mini .sbm{position:sticky;top:var(--hd-h,57px);align-self:start;height:calc(100vh - var(--hd-h,57px));display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 0;background:var(--card);border-right:1px solid var(--line);box-sizing:border-box}
+ .og.sb-mini .shell > .sb-rail{display:none!important}
+ .og.sb-mini.sb-drawer .shell > .sb-rail{display:flex!important;position:fixed!important;top:var(--hd-h,57px)!important;width:300px;height:calc(100vh - var(--hd-h,57px))!important;max-height:none!important;z-index:60;overflow-y:auto;background:var(--card)!important;border-right:1px solid var(--line);box-shadow:16px 0 40px -18px rgba(6,36,63,.35)!important;animation:sbmIn .18s ease-out;opacity:1!important}
+ @keyframes sbmIn{from{transform:translateX(-12px);opacity:0}to{transform:none;opacity:1}}
+ .og .sbm-b{position:relative;display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:4px;background:none;color:var(--gray);cursor:pointer;text-decoration:none}
+ .og .sbm-b svg{width:18px;height:18px}
+ .og .sbm-b:hover{background:var(--blue-t);color:var(--blue)}
+ .og .sbm-b.is-on{background:var(--blue);color:#fff}
+ .og .sbm-b.is-warn:not(.is-on){color:var(--warn)}
+ .og .sbm-n{position:absolute;top:2px;right:0;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#B08A4E;color:#fff;font:800 9.5px/16px Manrope,Arial,sans-serif;text-align:center;box-sizing:border-box}
+ .og .sbm-b.is-on .sbm-n{background:#fff;color:var(--blue)}
+ .og .sbm-sep{width:24px;height:1px;margin:2px 0;background:var(--line)}
+}
+</style>
+<style>.og .st-c{padding-bottom:24px!important}.og .col > div:last-child[style^="height:"]:empty{display:none}.og .col{padding-bottom:32px!important}</style>
 
 <div class="og" data-theme="light" style="min-height: 1100px">
   
