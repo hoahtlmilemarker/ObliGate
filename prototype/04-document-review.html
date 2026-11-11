@@ -841,14 +841,91 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
 .og .ck3-note-ic{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--good);color:#fff}
 </style>
 <script>
+(function(){
+ var EXT=function(n){return (n.split('.').pop()||'').toLowerCase();};
+ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+ function ft(n){var e=EXT(n);if(e==='pdf')return ['pdf','PDF'];if(/^(xlsx|xls|csv)$/.test(e))return ['xls',e.toUpperCase()];if(/^(jpg|jpeg|png|heic)$/.test(e))return ['img',e==='jpeg'?'JPG':e.toUpperCase()];return ['doc',e.slice(0,4).toUpperCase()];}
+ /* Simulated AI read: decided from the file name only (prototype) */
+ function classify(n){var e=EXT(n),img=/^(jpg|jpeg|png|heic)$/.test(e),sheet=/^(xlsx|xls|csv)$/.test(e),k,place=false,f=null;
+  if(/time.?sheet|time.?card/i.test(n)){k='Force-Account Timesheet';place=true;f={sev:'c',t:'No supervisor signature on timesheet',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Resolve in Cross-Check',href:'05-cross-check.html'};}
+  else if(/activity|daily.?log|field.?log|supervisor/i.test(n)){k='Daily Activity Log';place=true;if(/unsigned/i.test(n))f={sev:'c',t:'Field log is not signed',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Request Signature',href:'08-supervisor-signature.html'};}
+  else if(sheet&&/payroll|ecaps|labor|ders|hours/i.test(n)){k='Payroll export';place=true;f={sev:'a',t:'Payroll hours not yet matched to field logs',r:'PAPPG v4.0 Ch. 2 § II.B.1',fix:'Open in Cross-Check',href:'05-cross-check.html'};}
+  else if(/equip|eq-pw|cat\d/i.test(n)){k='Equipment log';place=true;}
+  else if(/invoice|receipt|contract|rfp|quote/i.test(n)){k='Contract or invoice';place=true;f={sev:'a',t:'Procurement record not attached',r:'2 CFR § 200.318',fix:'Open in Pre-Submission',href:'07-presubmission.html'};}
+  else if(/pw-?\d|dr-?\d|malibu|topanga/i.test(n)){k=img?'Site photo':sheet?'Spreadsheet':'Supporting document';place=true;}
+  else{k=img?'Photo':sheet?'Spreadsheet':'Document';}
+  var why=place?'':img?'No location or date that matches a disaster':'No DR number or project found';
+  var tag=!place?'Not placed':f?(f.sev==='c'?'1 critical finding':'1 advisory'):'Filed · PW-00428';
+  var c=!place?'idle':f?(f.sev==='c'?'risk':'warn'):'ok';
+  return {name:n,kind:k,place:place,f:f,why:why,tag:tag,c:c};}
+ var raw=null;try{raw=JSON.parse(sessionStorage.getItem('og-up')||'null');}catch(e){}
+ if(!raw||!raw.length)return;
+ var up=raw.map(function(x){var o=classify(x.n);o.size=x.s;return o;});window.__ogUp=up;
+ var N=up.length,P=up.filter(function(x){return x.place;}).length,U=N-P,FS=up.filter(function(x){return x.f;}).sort(function(a,b){return (a.f.sev==='c'?0:1)-(b.f.sev==='c'?0:1);}),C=FS.filter(function(x){return x.f.sev==='c';}).length,A=FS.length-C,READY=up.filter(function(x){return x.place&&!x.f;}).length;
+ var pl=function(n,w){return n+' '+w+(n===1?'':'s');};
+ var CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+ var AR='<svg class="ba" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M9 4.5 12.5 8 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+ function row(x,tagHtml){var t=ft(x.name);return '<li><span class="an-ft '+t[0]+'">'+t[1]+'</span><span class="an-fn"><b title="'+esc(x.name)+'">'+esc(x.name)+'</b><small>'+esc(x.kind)+(x.why?' · '+x.why:'')+'</small></span>'+tagHtml+'</li>';}
+ function q(s){return document.querySelector(s);}
+ function apply(){
+  /* 13 · running */
+  if(q('.an-pct')){var ey=q('.band .ps-row .lbl');if(ey)ey.textContent='Analysis in progress · '+pl(N,'file');
+   var feed=q('.an-feed');if(feed)feed.innerHTML=up.map(function(x){return row(x,'<span class="an-tag idle">Waiting</span>');}).join('');
+   var ck=document.querySelector('.an-card-h > span');if(ck)ck.textContent='0 of '+N+' checked';
+   var lg=q('.an-legend');if(lg)lg.innerHTML=(P?'<span>Detected <b style="color: var(--head)">DR-4683-CA</b> · California Severe Winter Storms</span><span>'+pl(P,'file')+' → PW-00428</span>':'<span>No disaster detected yet</span>')+(U?'<span>'+pl(U,'file')+' → Unplaced Inbox</span>':'');
+   var st=document.querySelectorAll('.an-steps li p');if(st[0])st[0].textContent=N+' of '+N+' files read.';
+   if(st[1])st[1].textContent=P?('DR-4683-CA detected. '+pl(P,'file')+' placed in PW-00428'+(U?'; '+U+' could not be placed.':'.')):('No DR number or project found. '+pl(U,'file')+' go to the Unplaced Inbox.');
+   if(st[2])st[2].textContent='Checking '+pl(P,'filed document')+'.';}
+  /* 14 · report */
+  if(q('.an-kpis')){var lb=q('.an-just .lbl');if(lb)lb.textContent=pl(N,'file')+' analyzed just now'+(P?' · DR-4683-CA':'');
+   var h1=q('.band h1'),pp=q('.band .band-in > p'),cta=q('.band .acts .btn-p');
+   if(C+A){h1.textContent=pl(C+A,'finding')+' to fix before FEMA review';pp.textContent='We read your '+pl(N,'file')+' and checked the filed ones against PAPPG v4.0 and 2 CFR § 200. Start with the first finding below.';}
+   else if(U){h1.textContent=(U===N?'Your files are in. Tell us where they belong.':pl(U,'file')+' still need'+(U===1?'s':'')+' a home');pp.textContent=(P?pl(P,'file')+' were filed to PW-00428 with no rule issues. ':'')+'We could not find a disaster or project in '+(U===N?'any of your files':pl(U,'file'))+'. Choose where '+(U===1?'it belongs':'they belong')+' so they can be checked.';}
+   else{h1.textContent='All '+pl(N,'file')+' are ready for FEMA';pp.textContent='Every file was filed to PW-00428 and passed the rule check.';}
+   if(cta){if(C+A){cta.firstChild.textContent='Start with '+(FS[0].f.fix.replace(/^(Resolve in|Open in) /,''));cta.setAttribute('href',FS[0].f.href);}else if(U){cta.firstChild.textContent='File '+pl(U,'Document');cta.setAttribute('href','03c-unplaced-inbox.html');}else{cta.firstChild.textContent='Open Document Library';cta.setAttribute('href','03-document-library.html');}}
+   var k=document.querySelectorAll('.an-kpis .kpi');
+   if(k[0])k[0].innerHTML='<span class="lbl">Files analyzed <em class="an-now">Just now</em></span><span class="big">'+N+'</span><span style="font-size: 13px; color: var(--gray)">'+P+' filed to PW-00428 · '+U+' not placed</span>';
+   if(k[1])k[1].innerHTML='<span class="lbl">Ready for FEMA</span><span class="big" style="color: var(--good)">'+READY+'</span><div class="an-split" aria-hidden="true"><i style="flex: '+READY+'; background: var(--good)"></i><i style="flex: '+A+'; background: var(--warn)"></i><i style="flex: '+C+'; background: var(--risk)"></i><i style="flex: '+U+'; background: var(--blue)"></i></div>';
+   if(k[2])k[2].innerHTML='<span class="lbl">Need your attention</span><span class="big" style="color: var(--warn)">'+(N-READY)+'</span><span style="font-size: 13px; color: var(--gray)">'+A+' review · '+C+' action · '+U+' not placed</span>';
+   if(k[3])k[3].innerHTML='<span class="lbl">Open findings</span><span class="big" style="color: '+(C?'var(--risk)':A?'var(--warn)':'var(--good)')+'">'+(C+A)+'</span><span>'+(C+A?'<span class="tag '+(C?'t-risk':'t-warn')+'">'+C+' Critical · '+A+' Advisory</span>':'<span style="font-size: 13px; color: var(--gray)">No rule issues in filed documents</span>')+'</span>';
+   var ol=q('.an-risk'),fh=q('.an-card[aria-label="Costs at risk"] .an-card-h .tag');
+   if(ol){ol.innerHTML=FS.length?FS.map(function(x,i){return '<li'+(i===0?' class="is-first"':'')+'><span class="an-sev '+x.f.sev+'">'+(x.f.sev==='c'?'Critical':'Advisory')+'</span><div class="an-rt">'+(i===0?'<span class="an-start">Start here</span>':'')+'<b>'+esc(x.f.t)+'</b><small>'+esc(x.name)+' · '+x.f.r+'</small></div><a class="btn btn-o btn-sm" href="'+x.f.href+'">'+x.f.fix+AR+'</a></li>';}).join(''):'<li class="an-none"><span class="an-none-ic">'+CHECK+'</span><div class="an-rt"><b>No rule issues found</b><small>'+(P?'The '+pl(P,'filed document')+' passed every check.':'Nothing could be checked yet. Files are checked once they are placed in a project.')+'</small></div></li>';}
+   if(fh)fh.innerHTML=FS.length?'<span class="dot"></span>'+FS.length+' open':'None';if(fh&&!FS.length)fh.className='tag t-good';
+   var at=q('.an-att');if(at){var r=[];
+    if(A)r.push('<li><span class="an-cnt" style="background: var(--warn-t); color: var(--warn)">'+A+'</span><div class="an-tx"><b>Need review</b><small>Advisory findings to confirm before you submit.</small></div><a class="btn btn-o btn-sm" href="04-document-review.html">Review '+pl(A,'Document')+AR+'</a></li>');
+    if(C)r.push('<li><span class="an-cnt" style="background: var(--risk-t); color: var(--risk)">'+C+'</span><div class="an-tx"><b>Action required</b><small>Critical findings that block reimbursement.</small></div><a class="btn btn-o btn-sm" href="05-cross-check.html">Resolve '+C+AR+'</a></li>');
+    if(U)r.push('<li><span class="an-cnt" style="background: var(--blue-t); color: var(--blue)">'+U+'</span><div class="an-tx"><b>Not placed</b><small>No disaster or project found in these files. Choose where they belong.</small></div><a class="btn btn-o btn-sm" href="03c-unplaced-inbox.html">File '+pl(U,'Document')+AR+'</a></li>');
+    if(!r.length)r.push('<li><span class="an-cnt" style="background: var(--good-t); color: var(--good)">'+CHECK+'</span><div class="an-tx"><b>Nothing waiting</b><small>All documents are filed and checked.</small></div></li>');
+    at.innerHTML=r.join('');}
+   var gc=q('.gn-c-n');if(gc){if(P){gc.textContent='+'+P;gc.title=pl(P,'file')+' added from your upload';}else gc.remove();}
+   var wrap=q('.an-wrap');if(wrap&&!q('.an-yours')){var s=document.createElement('section');s.className='an-card an-yours';s.setAttribute('aria-label','Your uploaded files');
+    var tg=function(x){return x.place?'<span class="an-where"><b>PW-00428</b> Malibu Canyon</span><span class="an-tag '+x.c+'">'+(x.f?(x.f.sev==='c'?'Critical':'Advisory'):'Filed')+'</span>':'<span class="an-where"><b>Unplaced Inbox</b> needs a project</span><span class="an-tag idle">Not placed</span>';};
+    s.innerHTML='<div class="an-card-h"><h2>Your uploaded files</h2><span class="an-yours-sum">'+P+' filed · '+U+' not placed</span></div><div class="an-card-b" style="padding-top: 0"><ul class="an-files" style="border-top: 0; margin-top: 0">'+up.map(function(x){return row(x,tg(x));}).join('')+'</ul></div>';
+    wrap.parentNode.insertBefore(s,wrap.nextSibling);}}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else apply();
+})();
+</script>
+<style>
+.og .an-yours{margin-top:24px}
+.og .an-yours-sum{font-size:13px;color:var(--gray)}
+.og .an-where{flex:none;display:flex;flex-direction:column;align-items:flex-end;margin-left:auto;font-size:11.5px;color:var(--gray);line-height:1.35;text-align:right}
+.og .an-where b{font-size:12.5px;color:var(--head)}
+.og .an-yours .an-tag{min-width:72px;justify-content:center}
+.og .an-none{display:flex!important;align-items:center;gap:14px}
+.og .an-none-ic{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--good-t);color:var(--good)}
+.og .an-sev.a{background:var(--warn-t);color:var(--warn)}
+@media (max-width:640px){.og .an-where{display:none}}
+</style>
+<script>
 (function(){function run(){var pct=document.querySelector('.an-pct');if(!pct||pct.dataset.run)return;pct.dataset.run='1';
  var bar=document.querySelector('.an-bar i'),pb=document.querySelector('.an-bar'),eta=document.querySelector('.an-eta');
- var tags=[].slice.call(document.querySelectorAll('.an-feed .an-tag'));var done=['Filed · PW-00428','Filed · PW-00428','Matched 167 rows','Missing signature','Filed · PW-00428','Filed · PW-00428'];var cls=['ok','ok','ok','risk','ok','ok'];
+ var tags=[].slice.call(document.querySelectorAll('.an-feed .an-tag'));var done=['Filed · PW-00428','Filed · PW-00428','Matched 167 rows','Missing signature','Filed · PW-00428','Filed · PW-00428'];var cls=['ok','ok','ok','risk','ok','ok'];var N=44;if(window.__ogUp){N=window.__ogUp.length;done=window.__ogUp.map(function(x){return x.tag;});cls=window.__ogUp.map(function(x){return x.c;});}var step=Math.max(4,Math.floor(90/Math.max(1,tags.length)));
  var steps=[].slice.call(document.querySelectorAll('.an-steps li'));
  var v=0,t0=performance.now(),D=5200;
- function tick(now){v=Math.min(100,Math.round((now-t0)/D*100));pct.textContent=v+'%';var ck=document.querySelector('.an-card-h > span');if(ck&&/checked/.test(ck.textContent))ck.textContent=Math.round(v/100*44)+' of 44 checked';if(bar)bar.style.width=v+'%';if(pb)pb.setAttribute('aria-valuenow',v);
+ function tick(now){v=Math.min(100,Math.round((now-t0)/D*100));pct.textContent=v+'%';var ck=document.querySelector('.an-card-h > span');if(ck&&/checked/.test(ck.textContent))ck.textContent=Math.round(v/100*N)+' of '+N+' checked';if(bar)bar.style.width=v+'%';if(pb)pb.setAttribute('aria-valuenow',v);
   if(eta)eta.textContent=v<100?'About '+Math.max(1,Math.ceil((100-v)/40))+' minute'+((100-v)>40?'s':'')+' left':'Building your report…';
-  tags.forEach(function(g,i){if(v>=(i+1)*15&&!g.dataset.d){g.dataset.d=1;g.className='an-tag '+cls[i];g.textContent=done[i];}});
+  tags.forEach(function(g,i){if(v>=(i+1)*step&&!g.dataset.d){g.dataset.d=1;g.className='an-tag '+cls[i];g.textContent=done[i];}});
   if(v>=70&&steps[2]&&!steps[2].dataset.d){steps[2].dataset.d=1;steps[2].classList.remove('is-run');var n=steps[2].querySelector('.an-n');n.className='an-n done';n.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';steps[2].querySelector('p').textContent='38 of 38 files checked.';if(steps[3]){steps[3].classList.add('is-run');steps[3].querySelector('.an-n').className='an-n run';steps[3].querySelector('p').textContent='Adding up costs FEMA could question…';}}
   if(window.__anStop){t0+=16;requestAnimationFrame(tick);return;}if(v<100)requestAnimationFrame(tick);else setTimeout(function(){if(!window.__anStop)location.href='14-analysis-report.html';},700);}
  pct.textContent='0%';if(bar)bar.style.width='0%';
@@ -954,7 +1031,7 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
 </script>
 <script>
 (function(){
- var list,foot,go,empty,files=[],extra=0,open=false;
+ var list,foot,go,empty,files=[],extra=0,open=false,isSample=false;
  var SAMPLE=[['Timesheet_Aguayo_PP02.pdf','Force-Account Timesheet',412e3],['ActivityLog_PW00428_Jan18.pdf','Daily Activity Log',268e3],['eCAPS_Labor_Export_PP01-04.xlsx','DeRS payroll export',1.9e6],['SupervisorLog_Jan14-16_Unsigned.pdf','Supervisor Field Log',534e3],['EquipLog_CAT320_EQ-PW-109_Jan.pdf','Equipment log',301e3],['FieldPhoto_MalibuCyn_Jan09.jpg','Site photo',3.4e6]];
  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
  function typ(n){var e=(n.split('.').pop()||'').toLowerCase();
@@ -968,7 +1045,7 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   foot.innerHTML=n?'<b>'+n+' file'+(n>1?'s':'')+'</b> ready to analyze':'Add at least one file to start';
   go.classList.toggle('is-off',!n);go.setAttribute('aria-disabled',n?'false':'true');
   try{sessionStorage.setItem('og-up-n',String(n));}catch(e){}}
- function add(fl){var bad=[];for(var i=0;i<fl.length;i++){var f=fl[i],e=(f.name.split('.').pop()||'').toLowerCase();
+ function add(fl){if(isSample){files=[];isSample=false;}var bad=[];for(var i=0;i<fl.length;i++){var f=fl[i],e=(f.name.split('.').pop()||'').toLowerCase();
    if(!/^(pdf|jpg|jpeg|png|heic|xlsx|xls|csv)$/.test(e)){bad.push(f.name+' (.'+e+' not supported)');continue;}
    if(f.size>200e6){bad.push(f.name+' (over 200 MB)');continue;}
    if(!files.some(function(x){return x.name===f.name&&x.size===f.size;}))files.push({name:f.name,size:f.size});}
@@ -982,13 +1059,15 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   ['dragenter','dragover'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('is-over');});});
   ['dragleave','drop'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove('is-over');});});
   dz.addEventListener('drop',function(e){if(e.dataTransfer&&e.dataTransfer.files)add(e.dataTransfer.files);});
-  empty.querySelector('.an-sample').onclick=function(){files=SAMPLE.map(function(s){return {name:s[0],kind:s[1],size:s[2]};});var W=['Aguayo','Delgado','Nguyen','Ramirez','Chen','Okafor','Patel','Lopez','Brooks','Kim'],K=[['Timesheet_{w}_PP0{p}.pdf','Force-Account Timesheet',3.9e5],['ActivityLog_PW00428_Jan{d}.pdf','Daily Activity Log',2.6e5],['FieldPhoto_MalibuCyn_Jan{d}.jpg','Site photo',3.1e6],['EquipLog_EQ-PW-1{d}_Jan.pdf','Equipment log',2.9e5]];for(var q=0;q<38;q++){var k=K[q%4],d=String(10+q%19),nm=k[0].replace('{w}',W[q%10]).replace('{p}',1+q%4).replace(/\{d\}/g,d);if(files.some(function(x){return x.name===nm;}))nm=nm.replace(/(\.\w+)$/,'_'+(q+2)+'$1');files.push({name:nm,kind:k[1],size:k[2]+q*7300});}extra=0;open=false;render();};
+  go.addEventListener('click',function(){try{if(isSample)sessionStorage.removeItem('og-up');else sessionStorage.setItem('og-up',JSON.stringify(files.map(function(f){return {n:f.name,s:f.size};})));}catch(e){}});
+  empty.querySelector('.an-sample').onclick=function(){isSample=true;files=SAMPLE.map(function(s){return {name:s[0],kind:s[1],size:s[2]};});var W=['Aguayo','Delgado','Nguyen','Ramirez','Chen','Okafor','Patel','Lopez','Brooks','Kim'],K=[['Timesheet_{w}_PP0{p}.pdf','Force-Account Timesheet',3.9e5],['ActivityLog_PW00428_Jan{d}.pdf','Daily Activity Log',2.6e5],['FieldPhoto_MalibuCyn_Jan{d}.jpg','Site photo',3.1e6],['EquipLog_EQ-PW-1{d}_Jan.pdf','Equipment log',2.9e5]];for(var q=0;q<38;q++){var k=K[q%4],d=String(10+q%19),nm=k[0].replace('{w}',W[q%10]).replace('{p}',1+q%4).replace(/\{d\}/g,d);if(files.some(function(x){return x.name===nm;}))nm=nm.replace(/(\.\w+)$/,'_'+(q+2)+'$1');files.push({name:nm,kind:k[1],size:k[2]+q*7300});}extra=0;open=false;render();};
   list.addEventListener('click',function(e){var tg=e.target.closest('.an-tog');if(tg){var kb=e.detail===0;open=!open;render();var nb=list.querySelector('.an-tog');if(nb&&kb)nb.focus();if(!open)list.scrollIntoView({block:'nearest'});return;}var x=e.target.closest('.an-x');if(x){files.splice(+x.dataset.i,1);if(!files.length)extra=0;render();return;}
-   if(e.target.closest('.an-clear')){files=[];extra=0;render();dz.focus&&dz.focus();}});
+   if(e.target.closest('.an-clear')){files=[];extra=0;isSample=false;render();dz.focus&&dz.focus();}});
   render();}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+<style>.og{min-height:100vh!important}</style>
 
 <div class="og rv-app" data-theme="light" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column">
 
