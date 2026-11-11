@@ -85,6 +85,11 @@
       "source": "/14-analysis-report(.html)?",
       "destination": "/analysis-report",
       "permanent": true
+    },
+    {
+      "source": "/15-team-management(.html)?",
+      "destination": "/team",
+      "permanent": true
     }
   ]
 }
