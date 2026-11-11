@@ -879,7 +879,8 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
 .og .tr-pop li b{flex:none;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--blue-t);color:var(--blue);font-size:11px}
 .og .tr-f{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
 .og .tr-dots{display:flex;gap:5px}.og .tr-dots i{width:6px;height:6px;border-radius:50%;background:var(--line)}.og .tr-dots i.on{width:16px;border-radius:3px;background:#B08A4E}
-.og .tr-act{display:flex;gap:8px;margin-left:auto}
+.og .tr-act{display:flex;align-items:center;gap:8px;margin-left:auto}
+.og .tr-act .tr-skip{margin-right:6px}
 .og .tr-b{height:32px;padding:0 14px;border:1px solid var(--line);border-radius:4px;background:var(--card);font:600 12.5px Manrope,Arial,sans-serif;color:var(--ink);cursor:pointer}
 .og .tr-b:hover{border-color:var(--blue);color:var(--blue)}
 .og .tr-b.p{border-color:var(--blue);background:var(--blue);color:#fff}.og .tr-b.p:hover{filter:brightness(1.08);color:#fff}
@@ -900,11 +901,9 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
  function vis(el){if(!el)return false;var r=el.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(el).visibility!=='hidden';}
  var UP='a.btn-w[href*="12-upload"]';
  var STEPS=[
-  {t:UP,ey:'Step 1',h:'Start by uploading your records',p:'Add timesheets, invoices, equipment logs and contracts. AI reads each file, matches it to its disaster and project, and checks it against FEMA rules.',hint:'Tip: click <b>Upload Records</b> to begin right away.'},
-  {t:'.sb-rail',ey:'Step 2',h:'Filter by lifecycle',p:'Switch between Active, Closeout, Appeals and Archived disasters. The counts update as records are analyzed.'},
-  {t:'.ledger',ey:'Step 3',h:'Your portfolio at a glance',p:'Total obligated, amount at risk and open findings across every disaster you manage.'},
-  {t:'.dtbl',ey:'Step 4',h:'Open a disaster',p:'Each row is a declared disaster. Open one to see its projects, documents and the findings AI raised.'},
-  {t:UP,ey:'You’re set',h:'Upload your first records',p:'Once files are analyzed, disasters and projects appear here automatically. You can replay this tour anytime.',last:1}
+  {t:UP,h:'Start by uploading your records',p:'Drop in timesheets, invoices, equipment logs and contracts. AI files each one under the right disaster and project, then checks it against FEMA rules.',hint:'Click <b>Upload Records</b> any time to begin.'},
+  {t:'.sb-rail',h:'Filter by lifecycle',p:'Switch between Active, Closeout, Appeals and Archived disasters. Counts update as your records are analyzed.'},
+  {t:'.dtbl',h:'Open a disaster',p:'Each row is a declared disaster with its obligated amount and evidence health. Open one to see its projects, documents and findings.'}
  ];
  var host,dim,ring,pop,cur=-1,list=[],tgt=null,prevFocus=null;
  function close(mark){if(mark!==false)setDone();[dim,ring,pop].forEach(function(n){if(n)n.remove();});dim=ring=pop=null;tgt=null;cur=-1;
@@ -914,22 +913,15 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   else if(e.key==='Tab'){var f=pop.querySelectorAll('button,a');if(!f.length)return;var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}}
  function mk(c){var d=document.createElement('div');d.className=c;host.appendChild(d);return d;}
  function dots(i){var s='';for(var k=0;k<list.length;k++)s+='<i class="'+(k===i?'on':'')+'"></i>';return '<span class="tr-dots" aria-hidden="true">'+s+'</span>';}
- function welcome(){prevFocus=document.activeElement;dim=mk('tr-dim');dim.style.clipPath='none';pop=mk('tr-pop tr-c');
-  pop.setAttribute('role','dialog');pop.setAttribute('aria-modal','true');pop.setAttribute('aria-labelledby','trH');pop.tabIndex=-1;
-  pop.innerHTML='<div class="tr-ey"><span>Welcome to ObliGate</span><button class="tr-x" type="button" aria-label="Close tour">✕</button></div>'+
-   '<h3 id="trH">Check every record before FEMA does</h3><p>This is your Disasters page. In under a minute, here’s how to get started:</p>'+
-   '<ul><li><b>1</b><span><strong>Upload Records</strong> — drop in the files you already have.</span></li><li><b>2</b><span>AI finds the disaster and project each file belongs to.</span></li><li><b>3</b><span>Review findings and fix gaps before you submit.</span></li></ul>'+
-   '<div class="tr-f"><button class="tr-skip" type="button" data-s>Skip tour</button><span class="tr-act"><button class="btn btn-sm btn-p" type="button" data-n>Show me around</button></span></div>';
-  wire();document.addEventListener('keydown',key,true);addEventListener('resize',place);addEventListener('scroll',place,true);pop.querySelector('[data-n]').focus();}
  function wire(){pop.querySelector('.tr-x').onclick=function(){close();};var s=pop.querySelector('[data-s]');if(s)s.onclick=function(){close();};
   var n=pop.querySelector('[data-n]');if(n)n.onclick=function(){go(cur+1);};var b=pop.querySelector('[data-b]');if(b)b.onclick=function(){go(cur-1);};
   var u=pop.querySelector('[data-u]');if(u)u.onclick=function(){setDone();var a=document.querySelector(UP);close();if(a)a.click();};}
  function go(i){if(i>=list.length){close();return;}if(i<0)i=0;cur=i;var st=list[i];tgt=document.querySelector(st.t);
   if(!ring)ring=mk('tr-ring');pop.className='tr-pop';pop.removeAttribute('style');
-  var last=st.last;
-  pop.innerHTML='<div class="tr-ey"><span>'+st.ey+(last?'':' of '+(list.length-1))+'</span><button class="tr-x" type="button" aria-label="Close tour">✕</button></div>'+
+  var last=i===list.length-1;
+  pop.innerHTML='<div class="tr-ey"><span>'+(i===0?'Welcome to ObliGate · ':'')+'Step '+(i+1)+' of '+list.length+'</span><button class="tr-x" type="button" aria-label="Close tour">✕</button></div>'+
    '<h3 id="trH">'+st.h+'</h3><p>'+st.p+'</p>'+(st.hint?'<p class="tr-hint">'+st.hint+'</p>':'')+
-   '<div class="tr-f">'+dots(i)+'<span class="tr-act">'+(i>0&&!last?'<button class="btn btn-sm btn-o" type="button" data-b>Back</button>':'')+
+   '<div class="tr-f">'+dots(i)+'<span class="tr-act">'+(i===0?'<button class="tr-skip" type="button" data-s>Skip tour</button>':'<button class="btn btn-sm btn-o" type="button" data-b>Back</button>')+
    (last?'<button class="btn btn-sm btn-o" type="button" data-n>Done</button><button class="btn btn-sm btn-p" type="button" data-u>Upload Records</button>':'<button class="btn btn-sm btn-p" type="button" data-n>Next</button>')+'</span></div>';
   wire();
   var mob=innerWidth<=640;tgt.style.scrollMarginTop=mob?'84px':'96px';tgt.style.scrollMarginBottom='24px';
@@ -948,7 +940,9 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   pop.style.left=x+'px';pop.style.top=y+'px';}
  function start(force){if(!document.querySelector(UP)||!document.querySelector('.addm'))return;if(pop)return;if(!force&&done())return;
   host=document.querySelector(UP).closest('.og')||document.body;
-  list=STEPS.filter(function(s){return vis(document.querySelector(s.t));});welcome();}
+  list=STEPS.filter(function(s){return vis(document.querySelector(s.t));});
+  prevFocus=document.activeElement;dim=mk('tr-dim');pop=mk('tr-pop');pop.setAttribute('role','dialog');pop.setAttribute('aria-modal','true');pop.setAttribute('aria-labelledby','trH');pop.tabIndex=-1;
+  document.addEventListener('keydown',key,true);addEventListener('resize',place);addEventListener('scroll',place,true);go(0);}
  window.ogTour=function(){close(false);start(true);};
  function boot(){var a=document.querySelector(UP);if(!a||!document.querySelector('.addm'))return;
   var row=a.parentNode;if(row&&!row.querySelector('.tr-again')){var b=document.createElement('button');b.type='button';b.className='btn btn-ghost tr-again';
