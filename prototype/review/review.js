@@ -80,7 +80,7 @@
 
   /* ---------- where are we? (top page or the embedded careers/services page) ---------- */
   var CAREER_ROUTE = { 'index.html': '/tuyen-dung', 'jobs.html': '/tuyen-dung/vi-tri', 'services.html': '/dich-vu' };
-  function topRoute() { var f = (location.pathname.split('/').pop() || 'index.html').replace(/\.html$/, ''); return '/' + (f === 'index' ? '09-auth-signin' : f); }
+  function topRoute() { var f = (location.pathname.split('/').pop() || 'index').replace(/\.html$/, ''); return '/' + (f === 'index' || f === '' ? 'sign-in' : f); }
   function frameEl() { var f = document.querySelector('iframe.ree-careers-frame'); try { return f && f.contentDocument && f.contentDocument.body ? f : null; } catch (e) { return null; } }
   function ctx() {
     var f = frameEl();
@@ -90,7 +90,7 @@
     }
     return { doc: document, win: window, frame: null, key: 'site:' + topRoute() };
   }
-  var PAGE_NAMES = { '/01-disaster-portfolio': '01 · Disasters', '/02-project-detail': '02 · Project Overview', '/03-document-library': '03 · Document Library', '/03b-document-library-empty': '03b · Library (empty)', '/03c-unplaced-inbox': '03c · Unplaced Inbox', '/04-document-review': '04 · Document Review', '/05-cross-check': '05 · Cross-Check', '/06-import-wizard': '06 · Import Wizard', '/07-presubmission': '07 · Pre-Submission', '/08-supervisor-signature': '08 · Supervisor Signature', '/09-auth-signin': '09 · Sign in', '/10-my-profile': '10 · My Profile', '/11-notification-settings': '11 · Notification Settings', '/12-upload-start': '12 · Upload Records', '/13-analysis-running': '13 · Analysis Running', '/14-analysis-report': '14 · Analysis Report' };
+  var PAGE_NAMES = { '/disasters': 'Disasters', '/project-overview': 'Project Overview', '/document-library': 'Document Library', '/library-empty': 'Library (empty)', '/unplaced-inbox': 'Unplaced Inbox', '/document-review': 'Document Review', '/cross-check': 'Cross-Check', '/import-wizard': 'Import Wizard', '/pre-submission': 'Pre-Submission', '/supervisor-signature': 'Supervisor Signature', '/sign-in': 'Sign in', '/my-profile': 'My Profile', '/notification-settings': 'Notification Settings', '/upload': 'Upload Records', '/analyzing': 'Analysis Running', '/analysis-report': 'Analysis Report' };
   function humanSlug(x) { x = decodeURIComponent(String(x || '')).replace(/[-_]+/g, ' ').trim(); return x ? x.charAt(0).toUpperCase() + x.slice(1) : ''; }
   function labelFor(key) {
     key = String(key || '');
@@ -635,7 +635,7 @@
     var t = S.threads.filter(function (x) { return x.id === id; })[0]; if (!t) return;
     S.active = id; S.reveal = id; markSeen(id); S.expanded = {}; S.expanded[id] = true; S.menu = null;
     if (ctx().key === t.page) return focusThread(id);
-    if (t.page.indexOf('site:') === 0) { lsSet(GOTO_KEY, id); location.href = t.page.slice(6) + '.html'; return; }
+    if (t.page.indexOf('site:') === 0) { lsSet(GOTO_KEY, id); location.href = t.page.slice(6); return; }
     else {
       var f = t.page.slice(8), file = f.split('#')[0], hash = f.indexOf('#') >= 0 ? f.slice(f.indexOf('#')) : '';
       var route = file === 'job.html' ? '/tuyen-dung/' + hash.slice(1) : (CAREER_ROUTE[file] || '/tuyen-dung');
@@ -995,22 +995,23 @@
    * You are notified when someone else replies in a thread you started or replied to,
    * or mentions you with @YourName. Read state is kept per browser (localStorage). */
   var LOADED = !REMOTE, SEEN_KEY = 'ree-review-seen', SEEN = {}, SEEN_INIT = false, NOTIFIED = {}, BASE_TITLE = document.title;
-  try { var sv = JSON.parse(lsGet(SEEN_KEY, 'null')); if (sv && sv.ids) { sv.ids.forEach(function (i) { SEEN[i] = 1; }); SEEN_INIT = sv.n === authorKey(S.name) && !!S.name; } } catch (e) {}
-  function storeSeen() { var ids = Object.keys(SEEN); if (ids.length > 3000) ids = ids.slice(-3000); lsSet(SEEN_KEY, JSON.stringify({ n: authorKey(S.name), ids: ids })); }
+  try { var sv = JSON.parse(lsGet(SEEN_KEY, 'null')); if (sv && sv.ids) { sv.ids.forEach(function (i) { SEEN[i] = 1; }); SEEN_INIT = sv.n === authorKey(S.name || ''); } } catch (e) {}
+  function storeSeen() { var ids = Object.keys(SEEN); if (ids.length > 3000) ids = ids.slice(-3000); lsSet(SEEN_KEY, JSON.stringify({ n: authorKey(S.name || ''), ids: ids })); }
   function inbox() {
-    if (!S.name) return [];
-    var me = authorKey(S.name), out = [];
+    var me = S.name ? authorKey(S.name) : '', out = [];
     S.threads.forEach(function (t) {
-      var inThread = authorKey(t.author) === me;
+      var mine = me && authorKey(t.author) === me, inThread = mine;
+      if (!mine && t.id) out.push({ t: t, r: { id: 'c:' + t.id, author: t.author, text: t.text, at: t.at }, kind: 'comment' });
       (t.replies || []).forEach(function (r) {
         var who = authorKey(r.author);
-        if (who === me) { inThread = true; return; }
-        var mention = String(r.text || '').normalize('NFC').toLowerCase().indexOf('@' + me) >= 0;
-        if ((inThread || mention) && r.id) out.push({ t: t, r: r, mention: mention && !inThread });
+        if (me && who === me) { inThread = true; return; }
+        var mention = me && String(r.text || '').normalize('NFC').toLowerCase().indexOf('@' + me) >= 0;
+        if (r.id) out.push({ t: t, r: r, kind: mention && !inThread ? 'mention' : inThread ? 'reply-you' : 'reply', mention: mention && !inThread });
       });
     });
     return out.sort(function (a, b) { return (b.r.at || 0) - (a.r.at || 0); });
   }
+  function verb(x) { return x.kind === 'comment' ? 'commented on ' + labelFor(x.t.page) : x.kind === 'mention' ? 'mentioned you' : x.kind === 'reply-you' ? 'replied to your comment' : 'replied in a thread'; }
   function unread() { return inbox().filter(function (x) { return !SEEN[x.r.id]; }); }
   function unreadIn(id) { return unread().filter(function (x) { return x.t.id === id; }).length; }
   function markSeen(id) {
@@ -1020,7 +1021,7 @@
   function askNotify() { try { if (window.Notification && Notification.permission === 'default') Notification.requestPermission(); } catch (e) {} }
   function notifyToast(x) {
     var n = document.createElement('div'); n.className = 'rv-toast rv-nt'; n.setAttribute('role', 'status');
-    n.innerHTML = ICON.bell + '<span><b>' + esc(x.r.author) + '</b> ' + (x.mention ? 'mentioned you' : 'replied') + ': ' + esc(String(x.r.text || '').slice(0, 140)) + '</span>';
+    n.innerHTML = ICON.bell + '<span><b>' + esc(x.r.author) + '</b> ' + esc(verb(x)) + ': ' + esc(String(x.r.text || '').slice(0, 140)) + '</span>';
     n.addEventListener('click', function () { n.remove(); S.open = true; goTo(x.t.id); shiftFloaters(); });
     root.querySelectorAll('.rv-nt').forEach(function (o) { o.remove(); });
     root.appendChild(n); setTimeout(function () { n.remove(); }, 8000);
@@ -1028,12 +1029,12 @@
   function notifyBrowser(x) {
     try {
       if (!window.Notification || Notification.permission !== 'granted' || !document.hidden) return;
-      var nn = new Notification(x.r.author + (x.mention ? ' mentioned you' : ' replied to your comment'), { body: String(x.r.text || '').slice(0, 180), tag: 'ree-' + x.r.id });
+      var nn = new Notification(x.r.author + ' ' + verb(x), { body: String(x.r.text || '').slice(0, 180), tag: 'ree-' + x.r.id });
       nn.onclick = function () { window.focus(); S.open = true; goTo(x.t.id); shiftFloaters(); nn.close(); };
     } catch (e) {}
   }
   function checkInbox() {
-    if (!S.name || !LOADED) return;
+    if (!LOADED) return;
     if (!SEEN_INIT) { inbox().forEach(function (x) { SEEN[x.r.id] = 1; }); SEEN_INIT = true; storeSeen(); }
     var un = unread(), fresh = un.filter(function (x) { return !NOTIFIED[x.r.id]; });
     un.forEach(function (x) { NOTIFIED[x.r.id] = 1; });
@@ -1041,20 +1042,19 @@
     document.title = (un.length ? '(' + un.length + ') ' : '') + BASE_TITLE.replace(/^\(\d+\) /, '');
   }
   function bellBtn() {
-    if (!S.name) return '';
     var n = unread().length;
     return '<button class="rv-bell' + (S.pmenu === 'inbox' ? ' on' : '') + '" data-pmenu="inbox" title="Notifications" aria-label="Notifications' + (n ? ' (' + n + ' unread)' : '') + '">' + ICON.bell + (n ? '<b>' + (n > 9 ? '9+' : n) + '</b>' : '') + '</button>';
   }
   function inboxHtml() {
-    if (S.pmenu !== 'inbox' || !S.name) return '';
+    if (S.pmenu !== 'inbox') return '';
     root.querySelectorAll('.rv-nt').forEach(function (o) { o.remove(); });
     var list = inbox().slice(0, 30), n = unread().length;
     return '<div class="rv-inbox" role="dialog" aria-label="Notifications"><h3>Notifications' + (n ? '<button id="rvReadAll">Mark all as read</button>' : '') + '</h3>' +
       (list.length ? list.map(function (x) {
         var col = colorFor(x.r.author), seen = !!SEEN[x.r.id];
         return '<button class="rv-ni' + (seen ? ' seen' : '') + '" data-inbox="' + x.t.id + '"><span class="rv-av" style="background:' + col + '">' + esc((String(x.r.author).trim()[0] || '?')) + '</span>' +
-          '<span class="rv-ni-b"><b>' + esc(x.r.author) + '</b> ' + (x.mention ? 'mentioned you' : 'replied') + '<span class="rv-ni-t">' + esc(x.r.text) + '</span><small>' + esc(labelFor(x.t.page)) + ' · ' + ago(x.r.at || x.t.at) + '</small></span>' + (seen ? '' : '<i></i>') + '</button>';
-      }).join('') : '<p>No replies to your comments yet.</p>') + '</div>';
+          '<span class="rv-ni-b"><b>' + esc(x.r.author) + '</b> ' + esc(verb(x)) + '<span class="rv-ni-t">' + esc(x.r.text) + '</span><small>' + esc(labelFor(x.t.page)) + ' · ' + ago(x.r.at || x.t.at) + '</small></span>' + (seen ? '' : '<i></i>') + '</button>';
+      }).join('') : '<p>No new comments or replies yet.</p>') + '</div>';
   }
 
   /* ---------- start ---------- */

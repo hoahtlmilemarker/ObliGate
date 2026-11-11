@@ -2,5 +2,89 @@
   "framework": null,
   "installCommand": "",
   "buildCommand": "",
-  "outputDirectory": "prototype"
+  "outputDirectory": "prototype",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/01-disaster-portfolio(.html)?",
+      "destination": "/disasters",
+      "permanent": true
+    },
+    {
+      "source": "/02-project-detail(.html)?",
+      "destination": "/project-overview",
+      "permanent": true
+    },
+    {
+      "source": "/03-document-library(.html)?",
+      "destination": "/document-library",
+      "permanent": true
+    },
+    {
+      "source": "/03b-document-library-empty(.html)?",
+      "destination": "/library-empty",
+      "permanent": true
+    },
+    {
+      "source": "/03c-unplaced-inbox(.html)?",
+      "destination": "/unplaced-inbox",
+      "permanent": true
+    },
+    {
+      "source": "/04-document-review(.html)?",
+      "destination": "/document-review",
+      "permanent": true
+    },
+    {
+      "source": "/05-cross-check(.html)?",
+      "destination": "/cross-check",
+      "permanent": true
+    },
+    {
+      "source": "/06-import-wizard(.html)?",
+      "destination": "/import-wizard",
+      "permanent": true
+    },
+    {
+      "source": "/07-presubmission(.html)?",
+      "destination": "/pre-submission",
+      "permanent": true
+    },
+    {
+      "source": "/08-supervisor-signature(.html)?",
+      "destination": "/supervisor-signature",
+      "permanent": true
+    },
+    {
+      "source": "/09-auth-signin(.html)?",
+      "destination": "/sign-in",
+      "permanent": true
+    },
+    {
+      "source": "/10-my-profile(.html)?",
+      "destination": "/my-profile",
+      "permanent": true
+    },
+    {
+      "source": "/11-notification-settings(.html)?",
+      "destination": "/notification-settings",
+      "permanent": true
+    },
+    {
+      "source": "/12-upload-start(.html)?",
+      "destination": "/upload",
+      "permanent": true
+    },
+    {
+      "source": "/13-analysis-running(.html)?",
+      "destination": "/analyzing",
+      "permanent": true
+    },
+    {
+      "source": "/14-analysis-report(.html)?",
+      "destination": "/analysis-report",
+      "permanent": true
+    }
+  ]
 }
