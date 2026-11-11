@@ -1516,7 +1516,79 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
 ::-webkit-scrollbar-thumb{background:var(--sb);border-radius:10px;border:3px solid transparent;background-clip:padding-box}
 ::-webkit-scrollbar-thumb:hover{background:var(--sbh);background-clip:padding-box}
 </style>
-<script src="review/config.js?v=2"></script><script src="review/review.js?v=6" defer></script>
+<style>
+.og .dsm{width:360px}
+.og .dsm .fp-i{box-sizing:border-box;min-height:auto;padding:9px 10px;align-items:flex-start;text-decoration:none}
+.og .dsm .ds-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.og .dsm .ds-t b{font-weight:800;font-size:13px;color:var(--head)}
+.og .dsm .ds-t small{font-weight:500;font-size:12px;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.og .dsm .ds-m{flex:none;font-size:11.5px;font-weight:700;color:var(--gray);padding-top:1px}
+.og .dsm .ds-ck{flex:none;width:16px;height:16px;margin-top:1px;color:#B08A4E;visibility:hidden}
+.og .dsm .fp-i[aria-current="true"] .ds-ck{visibility:visible}
+.og .dsm .fp-i[aria-current="true"]{background:var(--blue-t)}
+.og .dsm .fp-i.ds-off .ds-t b{color:var(--ink)}
+.og a.org-sw[aria-expanded="true"]{background:rgba(255,255,255,.1)}
+.og a.org-sw[aria-expanded="true"] b svg{transform:rotate(180deg)}
+.og a.org-sw b svg{transition:transform .15s}
+</style>
+<script>
+(function(){
+ var D=[['DR-4683-CA','California Severe Winter Storms, Flooding, Landslides & Mudslides','16 projects',1],['DR-4758-CA','February 2024 Atmospheric River & High Winds','14 projects',0],['DR-4699-CA','Northern California Severe Storms & Flooding','8 projects',0],['DR-4558-CA','Bobcat Fire Complex Recovery','Closed',0]];
+ var CK='<svg class="ds-ck" viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.8 2.8 6.2-6.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+ var menu=null,btn=null;
+ function close(f){if(!menu)return;menu.remove();menu=null;if(btn){btn.setAttribute('aria-expanded','false');if(f)btn.focus();}document.removeEventListener('mousedown',out,true);}
+ function out(e){if(menu&&!menu.contains(e.target)&&!btn.contains(e.target))close();}
+ function note(){var o=document.querySelector('.og-toast');if(o)o.remove();var d=document.createElement('div');d.className='og-toast';d.setAttribute('role','status');d.innerHTML='<span>This prototype only has data for <b>DR-4683-CA</b>. Other disasters are sample rows.</span>';(document.querySelector('.og')||document.body).appendChild(d);setTimeout(function(){d.remove();},3600);}
+ function open(a){btn=a;var cur=(a.querySelector('b')||a).textContent.trim();
+  var h='<div class="fp-g">Switch disaster</div><div class="fp-l" role="menu">'+
+   '<a role="menuitem" class="fp-i" href="'+a.getAttribute('href')+'"'+(cur==='All Disasters'?' aria-current="true"':'')+'>'+CK+'<span class="ds-t"><b>All Disasters</b><small>Portfolio overview · 4 declarations</small></span></a>'+
+   D.map(function(d){return '<a role="menuitem" class="fp-i'+(d[3]?'':' ds-off')+'" href="'+(d[3]?a.getAttribute('href').replace(/disasters|disasters/,function(m){return m==='disasters'?'project-overview':'project-overview';}):'#')+'"'+(cur===d[0]?' aria-current="true"':'')+(d[3]?'':' data-off="1"')+'>'+CK+'<span class="ds-t"><b>'+d[0]+'</b><small>'+d[1]+'</small></span><span class="ds-m">'+d[2]+'</span></a>';}).join('')+
+   '</div><div class="fp-f">Sample data · only DR-4683-CA is built in this prototype</div>';
+  menu=document.createElement('div');menu.className='fp dsm';menu.innerHTML=h;(a.closest('.og')||document.body).appendChild(menu);
+  var r=a.getBoundingClientRect();menu.style.left=Math.max(12,Math.min(r.left,innerWidth-menu.offsetWidth-12))+'px';menu.style.top=(r.bottom+6)+'px';
+  a.setAttribute('aria-expanded','true');document.addEventListener('mousedown',out,true);
+  var it=[].slice.call(menu.querySelectorAll('.fp-i'));var f0=menu.querySelector('[aria-current="true"]')||it[0];f0.focus({preventScroll:true});setTimeout(function(){if(menu&&!menu.contains(document.activeElement))f0.focus({preventScroll:true});},60);
+  menu.addEventListener('click',function(e){var i=e.target.closest('.fp-i');if(i&&i.getAttribute('data-off')){e.preventDefault();close(true);note();}});
+  menu.addEventListener('keydown',function(e){var k=it.indexOf(document.activeElement);if(e.key==='Escape'){e.preventDefault();close(true);}else if(e.key==='ArrowDown'){e.preventDefault();it[(k+1)%it.length].focus();}else if(e.key==='ArrowUp'){e.preventDefault();it[(k-1+it.length)%it.length].focus();}else if(e.key==='Tab'){close();}});
+ }
+ function init(){document.querySelectorAll('a.org-sw').forEach(function(a){a.setAttribute('aria-haspopup','menu');a.setAttribute('aria-expanded','false');a.removeAttribute('title');
+  a.addEventListener('click',function(e){e.preventDefault();if(menu){close();return;}open(a);});
+  a.addEventListener('keydown',function(e){if(e.key==='ArrowDown'&&!menu){e.preventDefault();open(a);}});});
+  addEventListener('resize',function(){close();});addEventListener('scroll',function(e){if(menu&&!menu.contains(e.target))close();},true);}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script>
+/* Responsive type scale: tablet (641-1100px) 94%, mobile (<=640px) 88% of every px font size, with a small-text floor */
+(function(){
+ var BP=[['(min-width:641px) and (max-width:1100px)',.94,11],['(max-width:640px)',.88,10.5]];
+ function sc(v,k,fl){return Math.round(Math.max(v*k,Math.min(v,fl))*10)/10;}
+ function sv(s,b){return String(s).replace(/([\d.]+)(px|vw)/g,function(_,n,u){n=parseFloat(n);return (u==='px'?sc(n,b[1],b[2]):Math.round(n*b[1]*100)/100)+u;});}
+ function build(){
+  var out=[];
+  function walk(rules,media){
+   for(var i=0;i<rules.length;i++){var r=rules[i];
+    if(r.type===4){walk(r.cssRules,media.concat(r.media.mediaText));continue;}
+    if(r.type!==1||!r.style)continue;
+    if(/\.rv\b|\.rv-|data-review|og-fs-x/.test(r.selectorText))continue;
+    var fs=r.style.getPropertyValue('font-size');if(!/\d(px|vw)/.test(fs))continue;
+    var imp=r.style.getPropertyPriority('font-size')?'!important':'';
+    BP.forEach(function(b){var nv=sv(fs,b);if(nv===fs)return;
+     out.push('@media '+media.concat(b[0]).map(function(x){return x.trim();}).join(' and ')+'{'+r.selectorText+'{font-size:'+nv+imp+'}}');});
+   }
+  }
+  for(var s=0;s<document.styleSheets.length;s++){var sh=document.styleSheets[s];if(sh.ownerNode&&sh.ownerNode.id==='og-fs')continue;try{walk(sh.cssRules,[]);}catch(e){}}
+  var st=document.getElementById('og-fs')||document.createElement('style');st.id='og-fs';st.textContent=out.join('\n');document.head.appendChild(st);
+ }
+ /* inline font-size styles */
+ function inl(){var w=innerWidth,b=w<=640?BP[1]:w<=1100?BP[0]:null;
+  document.querySelectorAll('.og [style*="font-size"],.og [data-fs0]').forEach(function(e){if(e.closest('[data-review-ui]'))return;var o=e.getAttribute('data-fs0');if(o==null){o=e.style.fontSize;if(!/\d(px|vw)/.test(o))return;e.setAttribute('data-fs0',o);}e.style.fontSize=b?sv(o,b):o;});}
+ build();inl();var t;addEventListener('resize',function(){clearTimeout(t);t=setTimeout(inl,80);});
+ window.ogFsInline=inl;
+ if(document.readyState!=='complete')addEventListener('load',function(){inl();});
+})();
+</script>
+<script src="review/config.js?v=2"></script><script src="review/review.js?v=8" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
 
 <div class="og rv-app" data-theme="light" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column">
