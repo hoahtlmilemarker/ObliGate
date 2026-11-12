@@ -3,7 +3,7 @@ src = sys.argv[1]; out = sys.argv[2]
 PREFETCH = """<script>
 (function(){
   var done={};
-  function pf(h){if(!h||done[h]||h.indexOf('.html')<0||h.indexOf('://')>-1)return;done[h]=1;
+  function pf(h){if(!h||done[h]||h.charAt(0)==='#'||h.indexOf('://')>-1||/^(mailto|tel|javascript|data|blob):/i.test(h))return;h=h.split('#')[0];if(!h||done[h])return;done[h]=1;
     var l=document.createElement('link');l.rel='prefetch';l.href=h;document.head.appendChild(l);}
   function on(e){var a=e.target.closest&&e.target.closest('a[href]');if(a)pf(a.getAttribute('href'));}
   document.addEventListener('mouseover',on,{passive:true});
@@ -40,6 +40,7 @@ for f in sorted(glob.glob(os.path.join(src,'[012][0-9]*.dc.html'))):
     helmet = re.search(r'<helmet>(.*?)</helmet>', s, re.S).group(1).strip()
     body = re.search(r'<x-dc>.*?</helmet>(.*)</x-dc>', s, re.S).group(1).strip()
     body = body.replace('data-theme="{{theme}}"', 'data-theme="light"')
+    body = re.sub(r'(<div class="og[^"]*" data-theme="light"[^>]*>)', r'\1<script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>', body, count=1)
     body = body.replace('onClick="{{toggleTheme}}"', 'onclick="ogToggle()" data-og-toggle')
     body = body.replace('{{nextTheme}}', 'dark').replace('{{themeLabel}}', '<span class="og-theme-label">Dark</span>')
     body = body.replace('/_blob/8cfa11a04b8e7f1a0a8159c51c90be37', 'obligate-wordmark.svg')
@@ -69,6 +70,6 @@ for f in sorted(glob.glob(os.path.join(src,'[012][0-9]*.dc.html'))):
     if name == '09-auth-signin.html':
         open(os.path.join(out, name), 'w').write(inner)
     else:
-        doc = f'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<title>{title}</title>\n<link rel="icon" type="image/svg+xml" href="favicon.svg">\n{remember}\n{PRECONNECT}\n{helmet}\n<style>body{{margin:0;background:#FFFFFF}}img{{max-width:100%}}</style>\n</head>\n<body>\n{LOADER}\n{body}\n{JS}\n{PREFETCH}\n{SEARCH if 'class="btn btn-ghost srch"' in body else ''}\n</body>\n</html>\n'
+        doc = f'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<title>{title}</title>\n<link rel="icon" type="image/svg+xml" href="favicon.svg">\n{remember}\n{PRECONNECT}\n{helmet}\n<style>body{{margin:0;background:#FFFFFF}}img{{max-width:100%}}html.og-dk body{{background:#0E151D}}@view-transition{{navigation:auto}}::view-transition-old(root),::view-transition-new(root){{animation-duration:.14s}}</style>\n<script>try{{if(localStorage.getItem(\'og-theme\')===\'dark\')document.documentElement.classList.add(\'og-dk\');}}catch(e){{}}</script>\n</head>\n<body>\n{LOADER}\n{body}\n{JS}\n{PREFETCH}\n{SEARCH if 'class="btn btn-ghost srch"' in body else ''}\n</body>\n</html>\n'
         open(os.path.join(out, name), 'w').write(doc)
     print(name, len(open(os.path.join(out, name)).read()))

@@ -546,7 +546,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 <style>
 /* page transitions: skeleton while the next page loads, soft entrance on arrival */
-.og .col,.og .rv-panes{animation:pgIn .38s cubic-bezier(.2,.7,.2,1) both}
+.og .col,.og .rv-panes{animation:none}
 @keyframes pgIn{from{opacity:0}to{opacity:1}}
 .og .pg-sk{position:fixed;right:0;bottom:0;z-index:2147481000;padding:24px 28px;background:var(--pale,#F3F5F8);overflow:hidden;display:flex;flex-direction:column;gap:20px;animation:pgSkIn .16s ease-out}
 .og[data-theme="dark"] .pg-sk{background:#0E151D}
@@ -577,7 +577,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 document.addEventListener('click',function(e){if(e.defaultPrevented)return;var a=e.target.closest&&e.target.closest('a[href]');if(!a||e.metaKey||e.ctrlKey||e.shiftKey||a.target==='_blank')return;
  var h=a.getAttribute('href')||'';if(!h||h.charAt(0)==='#'||h.indexOf('://')>-1||/^(mailto|tel|javascript|data|blob):/i.test(h))return;
  var to=h.split('#')[0],cur=location.pathname.split('/').pop(),hs=(h.split('#')[1]||'');if(to===cur&&!/#signin/.test(h)&&!(/^PW-\d{5}$/.test(hs)&&'#'+hs!==location.hash))return;
- if(/09-auth-signin/.test(to))return;setTimeout(sk,0);});
+ if(/09-auth-signin/.test(to))return;setTimeout(sk,320);});
 window.addEventListener('pageshow',function(e){if(e.persisted){var s=document.querySelector('.pg-sk');if(s)s.remove();}});})();
 </script>
 
@@ -2926,7 +2926,7 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
  window.ogHold=function(k){H[k]=1;de.classList.add('og-hold');};
  window.ogRelease=function(k){delete H[k];if(!Object.keys(H).length)de.classList.remove('og-hold');};
  setTimeout(function(){H={};de.classList.remove('og-hold');},1500);
- if(/^#PW-\d{5}$/.test(location.hash))ogHold('ctx');
+ if(/^#PW-\d{5}$/.test(location.hash)){ogHold('ctx');de.classList.add('og-hold-ctx');}
  if(/(03-document-library|03b-document-library-empty|03c-unplaced-inbox|document-library|library-empty|unplaced-inbox)(\.html)?$/.test(location.pathname))ogHold('cab');
 })();
 (function(){
@@ -2977,7 +2977,7 @@ function nav(){var g=document.querySelector('.gnav');if(!g||g.dataset.ctx)return
  return true;}
 if(C){var org=document.querySelector('a.org-sw b');}
 function run(){var ok=nav();if(C){var app=document.querySelector('.og');if(app){walk(app);try{document.title=rep(document.title);}catch(e){}}}return ok&&!!document.querySelector('.og');}
-var n=0;(function tick(){if(!run()&&n++<50)setTimeout(tick,100);else ogRelease('ctx');})();
+var n=0;(function tick(){if(!run()&&n++<200)(n<20?requestAnimationFrame:function(f){setTimeout(f,60);})(tick);else ogRelease('ctx');})();
 if(C){var pend=[],sch=0;try{new MutationObserver(function(ms){ms.forEach(function(m){[].forEach.call(m.addedNodes,function(x){if(x.nodeType===1)pend.push(x);else if(x.nodeType===3&&x.parentNode)pend.push(x.parentNode);});});if(!sch){sch=1;requestAnimationFrame(function(){sch=0;var a=pend;pend=[];a.forEach(function(x){if(x.isConnected)walk(x);});});}}).observe(document.documentElement,{childList:true,subtree:true});}catch(e){}}
 window.addEventListener('hashchange',function(){if(/^#PW-\d{5}$/.test(location.hash)&&here)location.reload();});
 })();
@@ -3069,12 +3069,13 @@ function page(nav){
  try{document.title=cur+' · Documents · ObliGate';}catch(e){}
 }
 function run(){var nav=document.querySelector('.gnav');if(!nav)return false;setup(nav);page(nav);return true;}
-var n=0;(function tick(){if(!run()&&n++<40)setTimeout(tick,100);})();
+var n=0;(function tick(){if(!run()&&n++<200)(n<20?requestAnimationFrame:function(f){setTimeout(f,60);})(tick);})();
 window.addEventListener('hashchange',function(){var nav=document.querySelector('.gnav');if(nav)page(nav);window.scrollTo(0,0);});
 })();
 </script>
 <style>
-html.og-hold .og .col,html.og-hold .og .gnav,html.og-hold .og .rv-panes{visibility:hidden}
+html.og-hold .og .tree{visibility:hidden}
+html.og-hold.og-hold-ctx .og .col,html.og-hold.og-hold-ctx .og .gnav .gn-proj,html.og-hold.og-hold-ctx .og .rv-panes{visibility:hidden}
 /* ===== filing cabinet scoped to the current project ===== */
 .og .tree.tr-scoped .tr-hide{display:none!important}
 .og .tree.tr-scoped .tr-anc > .tr-row{display:none!important}
@@ -3119,8 +3120,15 @@ function scope(){var tree=document.querySelector('.tree');if(!tree)return false;
  var sec=tree.closest('details.sb-sec'),hl=sec&&sec.querySelector(':scope>summary .lbl');
  if(hl&&dept&&!hl.querySelector('.cab-dept'))hl.insertAdjacentHTML('beforeend','<span class="cab-dept"></span>'),hl.querySelector('.cab-dept').textContent=dept;
  return true;}
-var n=0;(function tick(){if(!scope()&&n++<60)setTimeout(tick,100);else if(window.ogRelease)ogRelease('cab');})();
+var n=0;(function tick(){if(!scope()&&n++<200)(n<20?requestAnimationFrame:function(f){setTimeout(f,60);})(tick);else if(window.ogRelease)ogRelease('cab');})();
 })();
+</script>
+<script>
+/* keep the sidebar scroll position between pages */
+(function(){var K='og-gn-scroll';function g(){return document.querySelector('.gnav');}
+function restore(){var n=g();if(!n)return false;try{var v=+sessionStorage.getItem(K)||0;if(v)n.scrollTop=v;}catch(e){}return true;}
+var i=0;(function t(){if(!restore()&&i++<120)requestAnimationFrame(t);})();
+addEventListener('pagehide',function(){var n=g();if(n)try{sessionStorage.setItem(K,String(n.scrollTop));}catch(e){}});})();
 </script>
 <script src="review/config.js?v=2"></script><script src="review/review.js?v=11" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
