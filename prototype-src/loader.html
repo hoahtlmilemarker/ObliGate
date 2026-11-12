@@ -2915,7 +2915,8 @@ html.og-lock body{padding-right:var(--og-sbw,0px)}
 .og[data-theme="dark"] .gn-proj[open]:has(.on) > summary{background:rgba(110,178,234,.08)!important}
 .og .ux-newpill{display:inline-flex!important;align-items:center;justify-content:center;height:16px;padding:0 6px!important;line-height:1!important;vertical-align:middle!important;box-sizing:border-box}
 .og .ux-from .ux-newpill{margin:0 1px 0 2px!important}
-.og .gn-n{display:block!important;box-sizing:border-box!important;width:22px!important;height:22px!important;text-align:center;line-height:1!important;text-box:trim-both cap alphabetic;padding-top:calc((20px - 0.72em) / 2)!important}
+.og .gn-n{display:inline-flex!important;align-items:center;justify-content:center;box-sizing:border-box!important;width:22px!important;height:22px!important;line-height:1!important;padding:0 0 2px!important}
+@supports (text-box:trim-both cap alphabetic){.og .gn-n{display:block!important;text-align:center;text-box:trim-both cap alphabetic;padding:calc((20px - 0.72em) / 2) 0 0!important}}
 /* back link on top-level pages */
 .og .sg-back{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;width:max-content;height:30px;padding:0 10px 0 8px;margin:0 0 4px -8px;border-radius:4px;font-size:13px;font-weight:600;color:var(--gray);text-decoration:none}
 .og .sg-back:hover{color:var(--blue);background:var(--blue-t)}
