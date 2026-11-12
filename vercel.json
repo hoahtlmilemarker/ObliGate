@@ -63,12 +63,12 @@
     },
     {
       "source": "/10-my-profile(.html)?",
-      "destination": "/my-profile",
+      "destination": "/profile",
       "permanent": true
     },
     {
       "source": "/11-notification-settings(.html)?",
-      "destination": "/notification-settings",
+      "destination": "/notifications",
       "permanent": true
     },
     {
@@ -89,6 +89,46 @@
     {
       "source": "/15-team-management(.html)?",
       "destination": "/team",
+      "permanent": true
+    },
+    {
+      "source": "/16-settings-security(.html)?",
+      "destination": "/security",
+      "permanent": true
+    },
+    {
+      "source": "/17-settings-disasters(.html)?",
+      "destination": "/disaster-scope",
+      "permanent": true
+    },
+    {
+      "source": "/18-settings-policy(.html)?",
+      "destination": "/policy-thresholds",
+      "permanent": true
+    },
+    {
+      "source": "/19-settings-overrides(.html)?",
+      "destination": "/finding-overrides",
+      "permanent": true
+    },
+    {
+      "source": "/20-settings-data(.html)?",
+      "destination": "/data-retention",
+      "permanent": true
+    },
+    {
+      "source": "/21-settings-patterns(.html)?",
+      "destination": "/reviewer-patterns",
+      "permanent": true
+    },
+    {
+      "source": "/my-profile",
+      "destination": "/profile",
+      "permanent": true
+    },
+    {
+      "source": "/notification-settings",
+      "destination": "/notifications",
       "permanent": true
     }
   ]

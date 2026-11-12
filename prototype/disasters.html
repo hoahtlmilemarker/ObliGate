@@ -108,17 +108,18 @@
  av.setAttribute('role','button');av.setAttribute('tabindex','0');av.setAttribute('aria-haspopup','menu');av.setAttribute('aria-expanded','false');av.setAttribute('aria-label','Account menu for '+name);av.removeAttribute('title');
  var I=function(d){return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';};
  var u=document.createElement('div');u.className='um';u.setAttribute('role','menu');u.hidden=true;
- u.innerHTML='<div class="um-h"><span class="av">'+ini+'</span><div style="min-width:0"><b>'+name+'</b>'+(role?'<small>'+role+'</small>':'')+(org?'<small class="um-org">'+org+'</small>':'')+'</div></div>'+
-  '<a class="um-i" role="menuitem" href="my-profile">'+I('<circle cx="12" cy="8.5" r="3.5" fill="currentColor" fill-opacity=".18"/><circle cx="12" cy="8.5" r="3.5"/><path d="M5 19.5c1.2-3.2 3.8-5 7-5s5.8 1.8 7 5"/>')+'My Profile</a>'+
-  '<a class="um-i" role="menuitem" href="notification-settings">'+I('<path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.5 2h-15z" fill="currentColor" fill-opacity=".18"/><path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.5 2h-15z"/><path d="M10 21h4"/>')+'Notification Settings</a>'+
-  '<a class="um-i" role="menuitem" href="team">'+I('<circle cx="9" cy="8.5" r="3.2" fill="currentColor" fill-opacity=".18"/><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19c.9-2.9 3.2-4.6 6-4.6s5.1 1.7 6 4.6"/><path d="M15.5 5.6a3 3 0 0 1 0 5.8M17.5 14.6c1.6.6 2.8 2 3.4 4"/>')+'Team &amp; Roles</a>'+
-  '<button class="um-i" role="menuitem" data-k>'+I('<rect x="3" y="6" width="18" height="12" rx="2" fill="currentColor" fill-opacity=".18"/><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/>')+'Search<kbd>⌘K</kbd></button>'+
-  '<button class="um-i" role="menuitem" data-t>'+I('<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/>')+'Theme<span class="um-v"></span></button>'+
-  '<button class="um-i" role="menuitem" data-p>'+I('<circle cx="12" cy="12" r="9" fill="currentColor" fill-opacity=".18"/><circle cx="12" cy="12" r="9"/><path d="M9.6 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.4M12 16.8h.01"/>')+'Help &amp; Support</button>'+
+ var em=(name==='Rosa Keith'?'r.keith@example.gov':name.toLowerCase().replace(/[^a-z]+/g,'.')+'@example.gov');
+ u.innerHTML='<div class="um-h"><span class="av">'+ini+'</span><div style="min-width:0"><b>'+name+'</b><small>'+em+'</small>'+(org?'<small class="um-org">'+(role?role+' · ':'')+org+'</small>':'')+'</div></div>'+
+  '<a class="um-i" role="menuitem" href="import-wizard">'+I('<path d="M12 4v11" /><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 19.5h14"/>')+'Import Data</a>'+
+  '<a class="um-i" role="menuitem" href="team">'+I('<circle cx="9" cy="8.5" r="3.2" fill="currentColor" fill-opacity=".18"/><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19c.9-2.9 3.2-4.6 6-4.6s5.1 1.7 6 4.6"/><path d="M15.5 5.6a3 3 0 0 1 0 5.8M17.5 14.6c1.6.6 2.8 2 3.4 4"/>')+'Team</a>'+
+  '<a class="um-i" role="menuitem" href="security">'+I('<circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity=".18"/><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/>')+'Settings</a>'+
+  '<div class="um-sep"></div>'+
+  '<label class="um-pd"><input type="checkbox" class="um-pdc"><span><b>Private device: 24-hour idle window</b><small>Off: 30 minutes. Shared across ObliGate tabs; other security rules may end your session earlier.</small></span></label>'+
   '<div class="um-sep"></div>'+
   '<a class="um-i um-out" role="menuitem" href="./#signin" data-o>'+I('<path d="M10 4h7.5A1.5 1.5 0 0 1 19 5.5v13a1.5 1.5 0 0 1-1.5 1.5H10A1.5 1.5 0 0 1 8.5 18.5v-13A1.5 1.5 0 0 1 10 4Z" fill="currentColor" fill-opacity=".18" stroke="none"/><path d="M8.5 8V5.5A1.5 1.5 0 0 1 10 4h7.5A1.5 1.5 0 0 1 19 5.5v13a1.5 1.5 0 0 1-1.5 1.5H10a1.5 1.5 0 0 1-1.5-1.5V16"/><path d="M14 12H3.5M6.5 9 3.5 12l3 3"/>')+'Sign Out</a>';
  host.appendChild(u);
- function themeLbl(){var d=(host.getAttribute('data-theme')==='dark');u.querySelector('.um-v').textContent=d?'Dark':'Light';}
+ function themeLbl(){var c=u.querySelector('.um-pdc');try{c.checked=localStorage.getItem('og-private')==='1';}catch(x){}}
+ u.querySelector('.um-pdc').addEventListener('change',function(e){try{localStorage.setItem('og-private',e.target.checked?'1':'0');}catch(x){}var o=document.querySelector('.og-toast');if(o)o.remove();var d=document.createElement('div');d.className='og-toast';d.setAttribute('role','status');d.innerHTML='<span>'+(e.target.checked?'<b>Private device on</b> · you stay signed in after up to 24 hours idle':'<b>Private device off</b> · idle sessions end after 30 minutes')+'</span>';document.body.appendChild(d);setTimeout(function(){d.remove();},3200);});
  function place(){var r=av.getBoundingClientRect();u.style.top=(r.bottom+8)+'px';u.style.right=Math.max(8,innerWidth-r.right)+'px';}
  function open(o){u.hidden=!o;av.setAttribute('aria-expanded',o?'true':'false');if(o){place();themeLbl();}}
  av.addEventListener('click',function(e){e.stopPropagation();open(u.hidden);});
@@ -1945,6 +1946,174 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
 @media (max-width:760px){.og .tm-tools{flex-wrap:wrap}.og .tm-tools select{width:100%}}
 @media (max-width:640px){.og .tm-inv{grid-template-columns:1fr!important}}
 </style>
+<style>
+.og .um-pd{display:flex;gap:10px;align-items:flex-start;margin:4px 6px;padding:10px 10px;border-radius:4px;cursor:pointer}
+.og .um-pd:hover{background:var(--pale)}
+.og .um-pd input{flex:none;width:16px;height:16px;margin:2px 0 0;accent-color:var(--blue)}
+.og .um-pd b{display:block;font-size:13px;font-weight:700;color:var(--head);line-height:1.35}
+.og .um-pd small{display:block;margin-top:4px;font-size:11.5px;line-height:1.45;color:var(--gray)}
+.og .um-h small{color:rgba(255,255,255,.74)}
+</style>
+<style>
+/* ===== Settings (live IA) ===== */
+.og .sx-wrap{padding-top:28px!important}
+.og .sx{display:grid;grid-template-columns:220px minmax(0,1fr);gap:40px;align-items:start}
+.og .sx-nav{position:sticky;top:84px;display:flex;flex-direction:column;gap:2px}
+.og .sx-nav h6{margin:16px 0 6px;padding:0 12px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#9A7740}
+.og .sx-nav h6:first-child{margin-top:0}
+.og .sx-nav a{display:flex;align-items:center;gap:10px;height:36px;padding:0 12px;border-radius:4px;font-size:13.5px;font-weight:600;color:var(--ink);text-decoration:none;border-left:2px solid transparent}
+.og .sx-nav a svg{flex:none;color:var(--gray)}
+.og .sx-nav a:hover{background:var(--pale);color:var(--head)}
+.og .sx-nav a[aria-current="page"]{background:var(--blue-t);color:var(--blue);border-left-color:var(--blue);border-radius:0 4px 4px 0}
+.og .sx-nav a[aria-current="page"] svg{color:var(--blue)}
+.og .sx-body{display:flex;flex-direction:column;gap:22px;min-width:0;padding-bottom:16px}
+.og .sx-card{border:1px solid var(--line);border-radius:4px;background:var(--card);overflow:hidden}
+.og .sx-card.top{border-top:2px solid #B08A4E}
+.og .sx-ch{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px 20px;padding:22px 24px 18px;border-bottom:1px solid var(--line-soft)}
+.og .sx-ch h2{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0;font-size:21px;font-weight:300;color:var(--head)}
+.og .sx-ch p{margin:6px 0 0;max-width:620px;font-size:13px;line-height:1.55;color:var(--gray)}
+.og .sx-cb{padding:20px 24px}
+.og .sx-tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:4px;background:var(--pale);border:1px solid var(--line);font:700 10.5px Manrope,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--gray)}
+.og .sx-lbl{display:block;margin-bottom:8px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gray)}
+.og .sx-g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.og .sx-f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.og .sx-f > span{font-size:12.5px;font-weight:700;color:var(--head)}
+.og .sx-f .inp{height:42px;width:100%;box-sizing:border-box}
+.og .sx-f em{font-style:normal;font-size:12px;color:var(--risk)}
+.og .sx-f em.ok{color:var(--good)}
+.og .sx-act{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:18px}
+.og .sx-act small{font-size:12px;color:var(--gray)}
+.og .sx-div{height:1px;margin:22px 0;background:var(--line-soft)}
+.og .sx-empty{padding:40px 28px;text-align:center}
+.og .sx-empty .ic{display:inline-grid;place-items:center;width:52px;height:52px;margin-bottom:14px;border-radius:50%;background:var(--blue-t);color:var(--blue)}
+.og .sx-empty b{display:block;font-size:16px;font-weight:700;color:var(--head)}
+.og .sx-empty p{max-width:460px;margin:6px auto 0;font-size:13px;line-height:1.55;color:var(--gray)}
+.og .sx-soon{display:inline-flex;align-items:center;gap:6px;margin-top:14px;height:24px;padding:0 10px;border-radius:999px;background:rgba(176,138,78,.12);color:#9A7740;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.og .sx-th{display:grid;grid-template-columns:minmax(0,1.3fr) 200px 120px 110px;gap:16px;align-items:center;padding:18px 24px;border-top:1px solid var(--line-soft)}
+.og .sx-th:first-child{border-top:0}
+.og .sx-th b{display:block;font-size:14px;color:var(--head)}
+.og .sx-th small{display:block;margin-top:3px;font-size:12.5px;color:var(--gray)}
+.og .sx-money{position:relative}
+.og .sx-money .inp{height:40px;width:100%;padding-left:24px;box-sizing:border-box;font-variant-numeric:tabular-nums;font-weight:700;color:var(--head)}
+.og .sx-money::before{content:"$";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-weight:700;color:var(--gray)}
+.og .sx-money .inp[aria-invalid="true"]{border-color:var(--risk)}
+.og .sx-floor{font-variant-numeric:tabular-nums;font-size:13.5px;color:var(--gray)}
+.og .sx-chip{display:inline-flex;align-items:center;gap:6px;justify-self:start;height:24px;padding:0 10px;border-radius:4px;font-size:11.5px;font-weight:800;white-space:nowrap}
+.og .sx-chip i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.og .sx-chip.at{background:var(--pale);color:var(--gray)}.og .sx-chip.above{background:rgba(63,127,217,.12);color:var(--blue)}.og .sx-chip.below{background:rgba(180,71,58,.1);color:var(--risk)}
+.og .sx-err{grid-column:2/-1;margin-top:-8px;font-size:12px;color:var(--risk)}
+.og .sx-bar{position:sticky;bottom:16px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px 12px 20px;border:1px solid var(--line);border-radius:4px;background:var(--card);box-shadow:0 10px 30px -18px rgba(6,36,63,.45)}
+.og .sx-bar span{font-size:13px;color:var(--gray)}
+.og .sx-bar span.dirty{color:var(--head);font-weight:700}
+.og .sx-bar div{display:flex;gap:8px}
+.og .sx-li{display:flex;align-items:center;gap:14px;padding:16px 24px;border-top:1px solid var(--line-soft)}
+.og .sx-li:first-child{border-top:0}
+.og .sx-li .who{flex:1;min-width:0}
+.og .sx-li .who b{display:block;font-size:14px;color:var(--head)}
+.og .sx-li .who small{display:block;margin-top:3px;font-size:12.5px;color:var(--gray)}
+.og .sx-ico{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:4px;background:var(--blue-t);color:var(--blue)}
+.og .sx-note{margin:0;font-size:12.5px;line-height:1.55;color:var(--gray)}
+.og .sx-sw{position:relative;flex:none;width:40px;height:22px;border:0;border-radius:11px;background:var(--line);cursor:pointer;transition:background .15s}
+.og .sx-sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+.og .sx-sw[aria-checked="true"]{background:var(--blue)}
+.og .sx-sw[aria-checked="true"]::after{transform:translateX(18px)}
+.og .sx-meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px;font-size:12px;color:var(--gray)}
+.og .sx-li .who .sx-meta b,.og .sx-meta b{font-weight:700;color:var(--ink);display:inline;font-size:12px}.og .sx-meta span{display:inline}.og .sx-body .btn:disabled{opacity:.45;cursor:default;pointer-events:none}
+.og .sx-pill{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:4px;font-size:12px;font-weight:700;white-space:nowrap}
+.og .sx-pill i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.og .sx-pill.good{background:rgba(46,125,79,.12);color:var(--good)}.og .sx-pill.risk{background:rgba(180,71,58,.1);color:var(--risk)}.og .sx-pill.mid{background:var(--pale);color:var(--gray)}
+.og .sx-tools{display:flex;gap:10px;padding:14px 24px;border-bottom:1px solid var(--line-soft)}
+.og .sx-tools .inp{height:38px;width:280px;max-width:100%}
+.og .sx-vt{width:100%;border-collapse:collapse}
+.og .sx-vt th{padding:11px 12px;text-align:left;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);background:var(--pale);border-bottom:1px solid var(--line);white-space:nowrap}
+.og .sx-vt td{padding:14px 12px;border-top:1px solid var(--line-soft);font-size:13px;color:var(--ink)}
+.og .sx-vt tr:first-child td{border-top:0}
+.og .sx-vt th:first-child,.og .sx-vt td:first-child{padding-left:24px}.og .sx-vt th:last-child,.og .sx-vt td:last-child{padding-right:24px}
+.og .sx-vt td b{display:block;color:var(--head)}.og .sx-vt td small{display:block;margin-top:2px;font-size:12px;color:var(--gray)}
+.og .sx-qr{display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;align-items:start}
+.og .sx-qr .qr{width:150px;height:150px;padding:8px;box-sizing:border-box;border:1px solid var(--line);border-radius:4px;background:#fff}
+.og .sx-code{display:flex;gap:8px}
+.og .sx-code input{width:40px;height:46px;text-align:center;font:700 18px Manrope,Arial,sans-serif;color:var(--head);border:1px solid var(--line);border-radius:4px;background:var(--card)}
+.og .sx-code input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(63,127,217,.18)}
+.og .sx-key{display:inline-block;margin-top:6px;padding:6px 10px;border-radius:4px;background:var(--pale);font:600 12.5px/1.4 ui-monospace,Menlo,monospace;letter-spacing:.06em;color:var(--head);word-break:break-all}
+.og .sx-mob{display:none}
+@media (max-width:1100px){.og .sx{grid-template-columns:minmax(0,1fr);gap:18px}.og .sx-nav{position:static;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;gap:4px;padding-bottom:6px;border-bottom:1px solid var(--line);scrollbar-width:none}.og .sx-nav::-webkit-scrollbar{display:none}.og .sx-nav h6{display:none}.og .sx-nav a{flex:none;white-space:nowrap;border-left:0;border-bottom:2px solid transparent;border-radius:4px 4px 0 0}.og .sx-nav a[aria-current="page"]{border-left:0;border-bottom-color:var(--blue);border-radius:4px 4px 0 0}}
+@media (max-width:760px){.og .sx-th{grid-template-columns:1fr 1fr;row-gap:10px}.og .sx-th > div:first-child{grid-column:1/-1}.og .sx-err{grid-column:1/-1}.og .sx-g2{grid-template-columns:1fr}.og .sx-qr{grid-template-columns:1fr}.og .sx-vt thead{display:none}.og .sx-vt,.og .sx-vt tbody,.og .sx-vt tr,.og .sx-vt td{display:block;width:100%;box-sizing:border-box}.og .sx-vt tr{padding:12px 16px;border-top:1px solid var(--line-soft)}.og .sx-vt td{padding:3px 0!important;border:0!important}}
+@media (max-width:760px){.og .sx-th.sx-thh{display:none}}@media (max-width:640px){.og .sx-bar{position:static;flex-direction:column;align-items:stretch;padding:14px 16px}.og .sx-bar div{flex-direction:column}.og .sx-bar .btn{width:100%;justify-content:center}.og .sx-ch .btn{width:100%;justify-content:center}}@media (max-width:640px){.og .sx-cb,.og .sx-ch{padding-left:16px;padding-right:16px}.og .sx-th,.og .sx-li{padding-left:16px;padding-right:16px}.og .sx-tools{padding:12px 16px}.og .sx-tools .inp{width:100%}}
+</style>
+<script>
+(function(){function go(){var root=document.querySelector('[data-sx]');if(!root)return;var K=root.getAttribute('data-sx');
+ var I=function(d,s){return '<svg width="'+(s||16)+'" height="'+(s||16)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';};
+ var IC={security:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',profile:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5 19.5c1.2-3.2 3.8-5 7-5s5.8 1.8 7 5"/>',scope:'<path d="M12 3 3 8l9 5 9-5z"/><path d="m3 13 9 5 9-5"/>',policy:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',overrides:'<path d="M5 12h14M12 5v14"/><circle cx="12" cy="12" r="9"/>',notifications:'<path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.5 2h-15z"/><path d="M10 21h4"/>',data:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',patterns:'<path d="M3 17l5-6 4 4 4-7 5 9"/><circle cx="8" cy="11" r="1"/><circle cx="16" cy="8" r="1"/>'};
+ var NAV=[['Account',[['security','Security','security']]],['Organization',[['profile','Profile & branding','profile'],['scope','Disasters & scope','disaster-scope']]],['Compliance Engine',[['policy','Policy & thresholds','policy-thresholds'],['overrides','Finding overrides','finding-overrides']]],['Workspace',[['notifications','Notifications','notifications'],['data','Data & retention','data-retention']]],['FEMA Pattern Memory',[['patterns','Reviewer patterns','reviewer-patterns']]]];
+ var nav='<nav class="sx-nav" aria-label="Settings">'+NAV.map(function(g){return '<h6>'+g[0]+'</h6>'+g[1].map(function(x){return '<a href="'+x[2]+'.html"'+(x[0]===K?' aria-current="page"':'')+'>'+I(IC[x[0]])+x[1].replace('&','&amp;')+'</a>';}).join('');}).join('')+'</nav>';
+ function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+ function toast(h){var o=document.querySelector('.og-toast');if(o)o.remove();var d=document.createElement('div');d.className='og-toast';d.setAttribute('role','status');d.innerHTML='<span>'+h+'</span><button type="button" class="x" aria-label="Dismiss">✕</button>';(document.querySelector('.og')||document.body).appendChild(d);d.querySelector('.x').onclick=function(){d.remove();};setTimeout(function(){d.remove();},4000);return d;}
+ function soon(t,p){return '<div class="sx-card"><div class="sx-empty"><span class="ic">'+I('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',22)+'</span><b>'+t+'</b><p>'+p+'</p><span class="sx-soon">Coming soon</span></div></div>';}
+ var B='';
+ if(K==='security'){var auths=[];
+  function sec(){return '<div class="sx-card top"><div class="sx-ch"><div><h2>Authenticator app (TOTP)</h2><p>Add a second factor from an app like Google Authenticator, Microsoft Authenticator, Authy, or 1Password. After it’s set up, you’ll enter a 6-digit code from the app when you sign in.</p></div><button type="button" class="btn btn-p sx-add">+ Add authenticator</button></div><div class="sx-cb"><span class="sx-lbl">Your authenticators</span>'+
+   (auths.length?auths.map(function(a,i){return '<div class="sx-li" style="padding:12px 0;border-top:'+(i?'1px solid var(--line-soft)':'0')+'"><span class="sx-ico">'+I('<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/>',18)+'</span><div class="who"><b>'+esc(a.n)+'</b><small>Added '+a.t+' · last used never</small></div><span class="sx-pill good"><i></i>Active</span><button type="button" class="btn btn-o btn-sm sx-rma" data-i="'+i+'">Remove</button></div>';}).join(''):'<p class="sx-note">No authenticator set up yet. Your account is protected by your password only.</p>')+'</div></div>'+
+   soon('More sign-in protection','Session management and recovery codes will live here.');}
+  B=sec();root._r=function(){root.querySelector('.sx-body').innerHTML=sec();};
+  root.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+   if(b.classList.contains('sx-rma')){var a=auths[+b.dataset.i];window.ogDialog({eyebrow:'Remove authenticator',title:'Remove '+a.n+'?',ok:'Remove',danger:1,body:'<p>You’ll sign in with your password only until you add another authenticator.</p>',onOk:function(){auths.splice(+b.dataset.i,1);root._r();toast('Authenticator removed');}});}
+   if(b.classList.contains('sx-add')){var cells='';for(var y=0;y<21;y++)for(var x=0;x<21;x++){var f=((x<7&&y<7)||(x>13&&y<7)||(x<7&&y>13))?((x%14===0||x%14===6||y%14===0||y%14===6)||(x%14>=2&&x%14<=4&&y%14>=2&&y%14<=4)):((x*7+y*13+x*y)%3===0);if(f)cells+='<rect x="'+x+'" y="'+y+'" width="1" height="1"/>';}
+    var key='JBSW Y3DP EHPK 3PXP 4NQ7 KC2X';
+    window.ogDialog({eyebrow:'Two-factor authentication',title:'Set up your authenticator app',ok:'Verify & Turn On',body:'<div class="sx-qr"><svg class="qr" viewBox="0 0 21 21" shape-rendering="crispEdges" aria-label="Sample QR code" fill="#06243F">'+cells+'</svg><div><p style="margin:0 0 8px">1. Scan the code with your authenticator app, or enter this key:</p><span class="sx-key">'+key+'</span><p style="margin:14px 0 8px">2. Enter the 6-digit code it shows.</p><div class="sx-code">'+'<input inputmode="numeric" maxlength="1" aria-label="Digit">'.repeat(6)+'</div><em class="sx-ce" style="display:block;margin-top:8px;font-style:normal;font-size:12px;color:var(--risk)"></em><p style="margin:10px 0 0;font-size:12px;color:var(--gray)">Prototype: any 6 digits work.</p></div></div>',
+     onOk:function(){var d=document.querySelector('.sx-code');var v=[].map.call(d.querySelectorAll('input'),function(x){return x.value;}).join('');if(!/^\d{6}$/.test(v)){document.querySelector('.sx-ce').textContent='Enter all 6 digits.';return false;}auths.push({n:'Authenticator app',t:'just now'});root._r();toast('<b>Two-factor authentication is on</b> · you’ll be asked for a code at sign-in');}});
+    setTimeout(function(){var ins=document.querySelectorAll('.sx-code input');if(ins[0])ins[0].focus();ins.forEach(function(inp,i){inp.addEventListener('input',function(){inp.value=inp.value.replace(/\D/g,'').slice(-1);if(inp.value&&ins[i+1])ins[i+1].focus();});inp.addEventListener('keydown',function(e){if(e.key==='Backspace'&&!inp.value&&ins[i-1])ins[i-1].focus();});});},60);}});
+ }
+ if(K==='profile'){var P={n:'Rosa Keith',j:'Grants Manager',e:'r.keith@example.gov'},saved=JSON.parse(JSON.stringify(P));
+  B='<div class="sx-card top"><div class="sx-ch"><div><h2>Profile</h2><p>Your personal account details.</p></div></div><div class="sx-cb"><div class="sx-g2"><label class="sx-f"><span>Full name</span><input class="inp sx-pn" value="'+P.n+'" autocomplete="name"><em class="sx-pne"></em></label><label class="sx-f"><span>Job title</span><input class="inp sx-pj" value="'+P.j+'" autocomplete="organization-title"></label></div><div class="sx-act"><button type="button" class="btn btn-p sx-ps" disabled>Save Profile</button><small class="sx-psm">No unsaved changes</small></div></div></div>'+
+   '<div class="sx-card"><div class="sx-ch"><div><h2>Account</h2><p>Sign-in password and the email ObliGate uses to reach you.</p></div></div><div class="sx-cb"><span class="sx-lbl">Change password</span><div class="sx-g2"><label class="sx-f"><span>New password</span><input class="inp sx-p1" type="password" autocomplete="new-password" placeholder="At least 12 characters"></label><label class="sx-f"><span>Confirm new password</span><input class="inp sx-p2" type="password" autocomplete="new-password" placeholder="Type it again"><em class="sx-pe"></em></label></div><div class="sx-act"><button type="button" class="btn btn-p sx-pu" disabled>Update Password</button></div>'+
+   '<div class="sx-div"></div><span class="sx-lbl">Change email</span><div class="sx-em"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px"><span style="font-size:14px;font-weight:700;color:var(--head)">'+P.e+'</span><span class="sx-pill good"><i></i>Verified</span><button type="button" class="btn btn-o btn-sm sx-eu">Update Email</button></div></div></div></div>';
+  root.addEventListener('input',function(e){var t=e.target;
+   if(t.classList.contains('sx-pn')||t.classList.contains('sx-pj')){var n=root.querySelector('.sx-pn').value.trim(),j=root.querySelector('.sx-pj').value.trim(),dirty=n!==saved.n||j!==saved.j;root.querySelector('.sx-ps').disabled=!dirty||!n;root.querySelector('.sx-psm').textContent=dirty?(n?'Unsaved changes':''):'No unsaved changes';root.querySelector('.sx-pne').textContent=n?'':'Name can’t be empty.';}
+   if(t.classList.contains('sx-p1')||t.classList.contains('sx-p2')){var a=root.querySelector('.sx-p1').value,b=root.querySelector('.sx-p2').value,er=root.querySelector('.sx-pe'),ok=a.length>=12&&a===b;er.classList.remove('ok');er.textContent=!a&&!b?'':a.length<12?'Use at least 12 characters.':b&&a!==b?'Passwords don’t match.':a===b?'Passwords match.':'';if(ok)er.classList.add('ok');root.querySelector('.sx-pu').disabled=!ok;}});
+  root.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+   if(b.classList.contains('sx-ps')){saved.n=root.querySelector('.sx-pn').value.trim();saved.j=root.querySelector('.sx-pj').value.trim();b.disabled=true;root.querySelector('.sx-psm').textContent='Saved just now';toast('<b>Profile saved</b>');}
+   if(b.classList.contains('sx-pu')){b.disabled=true;b.textContent='Updating…';setTimeout(function(){root.querySelector('.sx-p1').value='';root.querySelector('.sx-p2').value='';root.querySelector('.sx-pe').textContent='';b.textContent='Update Password';toast('<b>Password updated</b> · other sessions were signed out');},700);}
+   if(b.classList.contains('sx-eu')){var w=root.querySelector('.sx-em');w.innerHTML='<div class="sx-g2"><label class="sx-f"><span>New email</span><input class="inp sx-ne" type="email" placeholder="name@agency.gov"><em class="sx-nee"></em></label></div><div class="sx-act"><button type="button" class="btn btn-p sx-es">Send Verification Link</button><button type="button" class="btn btn-o sx-ec">Cancel</button><small>Your email changes after you click the link we send.</small></div>';w.querySelector('.sx-ne').focus();}
+   if(b.classList.contains('sx-ec')){location.reload();}
+   if(b.classList.contains('sx-es')){var v=root.querySelector('.sx-ne').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){root.querySelector('.sx-nee').textContent='Enter a valid email.';return;}root.querySelector('.sx-em').innerHTML='<div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px"><span style="font-size:14px;font-weight:700;color:var(--head)">'+P.e+'</span><span class="sx-pill mid"><i></i>Change pending: '+esc(v)+'</span></div><p class="sx-note" style="margin-top:8px">We sent a link to '+esc(v)+'. Sample only: no email leaves this prototype.</p>';toast('Verification link sent to <b>'+esc(v)+'</b>');}});
+ }
+ if(K==='scope')B=soon('Disasters & scope','Choose which declarations, applicants and projects this organization manages, and who can see each one.');
+ if(K==='data')B=soon('Data & retention','Retention periods for documents, audit logs and exports, plus organization-wide data export.');
+ if(K==='overrides')B='<div class="sx-card top"><div class="sx-empty"><span class="ic">'+I('<path d="M12 3 4 6v6c0 4.5 3.4 7.8 8 9 4.6-1.2 8-4.5 8-9V6z"/><path d="M9 12h6"/>',22)+'</span><b>No finding overrides configured.</b><p>Overrides let you suppress or lower the severity of specific compliance findings when your org has a documented policy reason.</p></div></div>';
+ if(K==='policy'){var R=[['Micro-purchase','Below this, no quotes required',15000],['Simplified acquisition','Requires ≥ 2 quotes (per PAPPG v5 Ch.4 §V)',350000],['Large project','Triggers formal FEMA review',1000000]],V=R.map(function(r){return r[2];}),S=V.slice();
+  function fmt(n){return n.toLocaleString('en-US');}
+  B='<div class="sx-card top"><div class="sx-ch"><div><h2>Procurement thresholds <span class="sx-tag">2 CFR 200.320 · agency override allowed above federal floor</span></h2><p>Dollar thresholds that trigger competitive procurement requirements. Findings fire when a project exceeds a threshold without matching documentation.</p></div></div>'+
+   '<div class="sx-th sx-thh" style="padding-top:12px;padding-bottom:10px;background:var(--pale)"><span class="sx-lbl" style="margin:0">Threshold</span><span class="sx-lbl" style="margin:0">Your policy</span><span class="sx-lbl" style="margin:0">FEMA floor</span><span></span></div>'+
+   R.map(function(r,i){return '<div class="sx-th" data-i="'+i+'"><div><b>'+r[0]+'</b><small>'+r[1]+'</small></div><label class="sx-money"><input class="inp sx-v" inputmode="numeric" value="'+fmt(V[i])+'" aria-label="'+r[0]+' threshold"></label><span class="sx-floor">$'+fmt(r[2])+'</span><span class="sx-chip at"><i></i>At floor</span><div class="sx-err" hidden></div></div>';}).join('')+'</div>'+
+   '<div class="sx-bar"><span class="sx-bs">No unsaved changes</span><div><button type="button" class="btn btn-o sx-rst">Reset to FEMA defaults</button><button type="button" class="btn btn-p sx-sv" disabled>Save changes</button></div></div>';
+  function upd(){var dirty=false,bad=false;root.querySelectorAll('.sx-th[data-i]').forEach(function(row){var i=+row.dataset.i,inp=row.querySelector('.sx-v'),n=parseInt(inp.value.replace(/[^\d]/g,''),10),fl=R[i][2],ch=row.querySelector('.sx-chip'),er=row.querySelector('.sx-err');
+    if(isNaN(n)){ch.className='sx-chip below';ch.innerHTML='<i></i>Required';er.hidden=false;er.textContent='Enter a dollar amount.';inp.setAttribute('aria-invalid','true');bad=true;return;}
+    V[i]=n;if(n!==S[i])dirty=true;
+    if(n<fl){ch.className='sx-chip below';ch.innerHTML='<i></i>Below floor';er.hidden=false;er.textContent='Can’t be lower than the federal floor of $'+fmt(fl)+'.';inp.setAttribute('aria-invalid','true');bad=true;}
+    else{inp.removeAttribute('aria-invalid');er.hidden=true;if(n===fl){ch.className='sx-chip at';ch.innerHTML='<i></i>At floor';}else{ch.className='sx-chip above';ch.innerHTML='<i></i>+'+Math.round((n/fl-1)*100)+'% above';}}});
+   var s=root.querySelector('.sx-bs');s.textContent=bad?'Fix the highlighted threshold':dirty?'Unsaved changes':'No unsaved changes';s.className='sx-bs'+(dirty||bad?' dirty':'');root.querySelector('.sx-sv').disabled=!dirty||bad;root.querySelector('.sx-rst').disabled=V.every(function(v,i){return v===R[i][2];});}
+  root.addEventListener('input',function(e){if(e.target.classList.contains('sx-v'))upd();});
+  root.addEventListener('focusout',function(e){var t=e.target;if(t.classList.contains('sx-v')){var n=parseInt(t.value.replace(/[^\d]/g,''),10);if(!isNaN(n))t.value=fmt(n);}});
+  root.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+   if(b.classList.contains('sx-rst')){window.ogDialog({eyebrow:'Policy & thresholds',title:'Reset to FEMA defaults?',ok:'Reset',body:'<p>All three thresholds go back to the federal floor. Nothing changes until you save.</p>',onOk:function(){root.querySelectorAll('.sx-v').forEach(function(x,i){x.value=fmt(R[i][2]);});upd();}});}
+   if(b.classList.contains('sx-sv')){S=V.slice();upd();toast('<b>Thresholds saved</b> · they apply on the next project scan <button type="button" class="sx-rs" style="margin-left:8px;border:0;background:none;color:var(--blue);font-weight:700;cursor:pointer">Rescan now</button>');var r=document.querySelector('.sx-rs');if(r)r.onclick=function(){toast('Rescan started for 12 projects in DR-4683-CA');};}});
+  setTimeout(upd,0);}
+ if(K==='notifications'){var D=[['Public Works Department',14,'Monday','Jan 16, 2023','Jan 30, 2023',1],['Sheriff’s Emergency Operations',14,'Wednesday','Jan 11, 2023','Jan 25, 2023',1],['Department of Beaches & Harbors',14,'Friday','Dec 30, 2022','Overdue since Jan 13, 2023',0]];
+  B='<div class="sx-card top"><div class="sx-ch"><div><h2>Bi-weekly import reminders</h2><p>ObliGate sends a reminder when the cadence window elapses since your last successful eCAPS import. Reminders fire on the anchor weekday (deferred one weekday on US federal holidays) and go to everyone in the org with the Grants Manager or Grants Analyst role.</p></div></div>'+
+   D.map(function(d,i){return '<div class="sx-li"><span class="sx-ico">'+I('<path d="M4 7h16v12H4z"/><path d="M8 3v4M16 3v4M4 11h16"/>',18)+'</span><div class="who"><b>'+d[0]+'</b><div class="sx-meta"><span>Every <b>'+d[1]+' days</b> on <b>'+d[2]+'</b></span><span>Last import <b>'+d[3]+'</b></span><span class="sx-nx"'+(/Overdue/.test(d[4])?' style="color:var(--risk);font-weight:700"':'')+'>Next reminder <b style="color:inherit">'+d[4]+'</b></span></div></div><button type="button" class="sx-sw" role="switch" aria-checked="'+(d[5]?'true':'false')+'" aria-label="Reminders for '+d[0]+'" data-i="'+i+'"></button></div>';}).join('')+'</div>'+
+   '<p class="sx-note">Cadence and anchor weekday are configured during onboarding and need an administrator to change. Turning a department on or off is the only adjustment available here; it never deletes that department’s reconciliation setup.</p>';
+  root.addEventListener('click',function(e){var b=e.target.closest('.sx-sw');if(!b)return;var on=b.getAttribute('aria-checked')!=='true';b.setAttribute('aria-checked',on);var d=D[+b.dataset.i];toast((on?'<b>Reminders on</b> for ':'<b>Reminders paused</b> for ')+d[0]);});}
+ if(K==='patterns'){var VD=[['Granite Construction','Debris removal · 6 projects','trusted','0 findings in 24 months'],['Pacific Rock Supply','Aggregate & materials · 4 projects','trusted','1 advisory, resolved'],['Westside Hauling LLC','Hauling · 3 projects','risk','2 procurement findings returned by FEMA'],['Coastal Equipment Rental','Equipment rental · 2 projects','neutral','Not enough history yet'],['Summit Traffic Control','Traffic control · 1 project','neutral','Not enough history yet']],q='';
+  function vt(){var l=VD.filter(function(v){return !q||(v[0]+' '+v[1]).toLowerCase().indexOf(q)>-1;});return l.length?'<table class="sx-vt"><thead><tr><th>Vendor</th><th>Standing</th><th>History</th></tr></thead><tbody>'+l.map(function(v){return '<tr><td><b>'+v[0]+'</b><small>'+v[1]+'</small></td><td>'+(v[2]==='trusted'?'<span class="sx-pill good"><i></i>Trusted</span>':v[2]==='risk'?'<span class="sx-pill risk"><i></i>Compliance risk</span>':'<span class="sx-pill mid"><i></i>Neutral</span>')+'</td><td>'+v[3]+'</td></tr>';}).join('')+'</tbody></table>':'<div class="sx-empty" style="padding:28px"><b>No vendors match</b></div>';}
+  B='<div class="sx-card top"><div class="sx-empty" style="text-align:left;padding:26px 28px"><span class="ic">'+I('<path d="M3 17l5-6 4 4 4-7 5 9"/>',22)+'</span><b>No patterns recorded yet</b><p style="margin-left:0">ObliGate learns from FEMA return events on your submitted projects. When FEMA returns findings on the same rule across multiple projects, that rule will appear here and receive higher prominence in future pre-submission reviews.</p><p style="margin:12px 0 0;font-size:12px">Patterns are specific to your organization — they are never shared with or influenced by data from other organizations.</p></div></div>'+
+   '<div class="sx-card"><div class="sx-ch"><div><h2>Vendor familiarity</h2><p>What ObliGate has learned from your org’s vendor compliance history. Trusted vendors surface advisory framing on procurement findings; compliance-risk vendors surface a closer-review prompt. Per-org only — no data crosses organizations.</p></div><button type="button" class="btn btn-o btn-sm sx-rf">Refresh</button></div><div class="sx-tools"><input class="inp sx-vq" type="search" placeholder="Filter vendors…" aria-label="Filter vendors"><span class="sx-tag" style="align-self:center">Sample data</span></div><div class="sx-vl">'+vt()+'</div></div>';
+  root.addEventListener('input',function(e){if(e.target.classList.contains('sx-vq')){q=e.target.value.toLowerCase();root.querySelector('.sx-vl').innerHTML=vt();}});
+  root.addEventListener('click',function(e){var b=e.target.closest('.sx-rf');if(!b)return;b.disabled=true;b.textContent='Refreshing…';setTimeout(function(){b.disabled=false;b.textContent='Refresh';toast('Vendor history is up to date');},800);});}
+ root.innerHTML=nav+'<div class="sx-body">'+B+'</div>';
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();})();
+</script>
 <script src="review/config.js?v=2"></script><script src="review/review.js?v=11" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
 
