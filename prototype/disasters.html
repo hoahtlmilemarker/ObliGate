@@ -2730,7 +2730,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    var sb=q(root,'[data-sort]');if(sb)sb.innerHTML=S(I.sort)+'Sort: '+SO.filter(function(x){return x[0]===st.s;})[0][1];}
   function render(){drawRail();drawMain();}
   root.innerHTML='<section class="cq-ledger" aria-label="Cross-check totals"></section><div class="cq-body"><aside class="cq-rail" aria-label="Queues and filters"></aside><div class="cq-main"><div class="cq-tools"><label class="cq-srch">'+S('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>')+'<input type="search" placeholder="Filter projects by name or PW…" aria-label="Filter projects"></label><span class="cq-meta"></span><span class="xq-acts">'+seg('cx',demoEmpty('cx'))+'<button type="button" class="xq-btn" data-cols aria-haspopup="true" aria-expanded="false">'+S('<rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M9.5 4.5v15M14.5 4.5v15"/>')+'Columns</button><button type="button" class="xq-btn" data-sort aria-haspopup="true" aria-expanded="false"></button><button type="button" class="xq-btn" data-export>'+S(I.dl)+'Export CSV</button></span></div><div class="cq-card"></div></div></div>';
-  function openRow(pw){var r=R.filter(function(x){return x.pw===pw;})[0];if(!r)return;if(r.built){location.href='cross-check';return;}toast('<b>'+r.pw+' · '+esc(r.name)+'</b> is a sample row. Open <a href="cross-check" style="color:inherit;font-weight:700">PW-00428</a> to work a full cross-check.');}
+  function openRow(pw){var r=R.filter(function(x){return x.pw===pw;})[0];if(!r)return;location.href='cross-check'+(r.pw==='PW-00428'?'':'#'+r.pw);}
   function csv(list){var hd=['Project','Name','Disaster','Department','Variance','Open flagged','Resolved','RFIs','Assignee','Due'];return [hd].concat(list.map(function(r){return [r.pw,r.name,r.dr,r.dept,r.v,r.open,r.res,r.rfi,r.who||'Unassigned',r.due?r.due.toISOString().slice(0,10):''];})).map(function(a){return a.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');}
   var inp=q(root,'.cq-srch input');inp.addEventListener('input',function(){st.term=inp.value;st.page=1;render();});
   root.addEventListener('change',function(e){var t=e.target;if(t.hasAttribute('data-f')){st.f[t.getAttribute('data-f')]=t.checked;}else if(t.hasAttribute('data-dis')){var d=t.getAttribute('data-dis');st.dis=t.checked?st.dis.concat(d):st.dis.filter(function(x){return x!==d;});}else if(t.hasAttribute('data-dept')){var d2=t.getAttribute('data-dept');st.dept=t.checked?st.dept.concat(d2):st.dept.filter(function(x){return x!==d2;});}else return;st.page=1;var sel=t.getAttribute('data-f')?'[data-f="'+t.getAttribute('data-f')+'"]':t.getAttribute('data-dis')?'[data-dis="'+t.getAttribute('data-dis')+'"]':'[data-dept="'+t.getAttribute('data-dept')+'"]';render();var nb=q(root,sel);if(nb)nb.focus();});
@@ -2875,6 +2875,61 @@ html.og-lock body{padding-right:var(--og-sbw,0px)}
 .og .hd{border-bottom-color:rgba(0,0,0,.28)!important;box-shadow:none}
 .og .hd .org.org-sw{border-radius:0 4px 4px 0}
 </style>
+<script>
+/* ===== project context: open any active project with its own identity ===== */
+(function(){
+var P=window.OG_PROJ=[ /* sample data, same as the cross-check queue */
+ {pw:'PW-00428',name:'Malibu Canyon',dr:'DR-4683-CA',dept:'Public Works',v:3240,open:8},
+ {pw:'PW-00429',name:'Topanga Creek Debris',dr:'DR-4683-CA',dept:'Public Works',v:1180,open:3},
+ {pw:'PW-00433',name:'Big Tujunga Canyon Road Washout',dr:'DR-4683-CA',dept:'Public Works',v:12460,open:5},
+ {pw:'PW-00436',name:'San Gabriel Canyon Road Culvert',dr:'DR-4683-CA',dept:'Stormwater',v:0,open:0},
+ {pw:'PW-00431',name:'Emergency Protective Measures',dr:'DR-4683-CA',dept:'Sheriff’s Emergency Ops',v:640,open:1},
+ {pw:'PW-00434',name:'Pacific Coast Hwy Storm Drain Clearing',dr:'DR-4683-CA',dept:'Department of Beaches',v:2915,open:4},
+ {pw:'PW-01112',name:'Coastal Bluff Drainage',dr:'DR-4758-CA',dept:'Public Works',v:2050,open:2},
+ {pw:'PW-01118',name:'Las Flores Creek Debris Basin',dr:'DR-4758-CA',dept:'Stormwater',v:7380,open:6}];
+var DRN={'DR-4683-CA':'California Severe Winter Storms, Flooding, Landslides & Mudslides','DR-4758-CA':'February 2024 Atmospheric River & High Winds'};
+window.OG_ACTIVE={};P.forEach(function(p){OG_ACTIVE[p.pw]=p;});
+var PG={'project-overview':'overview','document-library':'docs','cross-check':'cross','pre-submission':'pre'};
+var REV={};Object.keys(PG).forEach(function(k){REV[PG[k]]=k;});
+function key(h){h=(h||'').split('#')[0].split('?')[0];var f=h.split('/').pop();for(var k in PG){if(f===k||f===k.replace('.html',''))return PG[k];}return null;}
+var here=key(location.pathname),m=/^#(PW-\d{5})$/.exec(location.hash),C=m&&OG_ACTIVE[m[1]];
+window.OG_CTX=C||null;
+var NUM=C?C.pw.replace('PW-','').replace(/^0+/,''):'';
+var money=function(v){return '$'+v.toLocaleString('en-US');};
+function rep(t){if(!t)return t;var o=t;
+ t=t.replace(/PW-00428/g,C.pw).replace(/PW00428/g,C.pw.replace('-','')).replace(/Malibu C(?:anyon|yn)(?: (?:Rd|Road))?/g,C.name).replace(/#428-/g,'#'+NUM+'-').replace(/MalibuCyn/g,C.name.split(' ').slice(0,2).join('').replace(/[^A-Za-z]/g,''));
+ if(C.dr!=='DR-4683-CA')t=t.replace(/DR-4683-CA/g,C.dr).replace(/California Severe Winter Storms, Flooding, Landslides (&|&amp;) Mudslides/g,DRN[C.dr]);
+ if(here==='cross')t=t.replace(/\$3,240/g,money(C.v));
+ return t===o?o:t;}
+var ATT=['title','aria-label','data-upload','alt','placeholder'];
+function walk(root){if(!root||(root.closest&&root.closest('.gnav,[data-review-ui]')))return;
+ var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(n){var p=n.parentNode;return p&&!(p.closest&&p.closest('.gnav,[data-review-ui],script,style'))?1:2;}}),n;
+ while((n=w.nextNode())){var v=rep(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v;}
+ var els=root.querySelectorAll?root.querySelectorAll('*'):[];[root].concat([].slice.call(els)).forEach(function(e){if(!e.getAttribute||(e.closest&&e.closest('.gnav,[data-review-ui]')))return;
+  ATT.forEach(function(a){var v=e.getAttribute(a);if(v){var r=rep(v);if(r!==v)e.setAttribute(a,r);}});
+  if(e.tagName==='A'){var h=e.getAttribute('href');if(h&&key(h)&&h.indexOf('#')<0)e.setAttribute('href',h+'#'+C.pw);}});}
+function link(a,k,p){a.setAttribute('href',REV[k]+'#'+p);}
+function nav(){var g=document.querySelector('.gnav');if(!g||g.dataset.ctx)return !!g;g.dataset.ctx='1';
+ var tpl=null;[].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var c=(d.querySelector('.gn-code')||{}).textContent;if(c==='PW-00428')tpl=d;});
+ if(C&&C.dr!=='DR-4683-CA'&&tpl){var dis=g.querySelector('.gn-dis');if(dis){dis.querySelector('b').textContent=C.dr;dis.querySelector('span:last-child').textContent=DRN[C.dr];}
+  var mine=P.filter(function(p){return p.dr===C.dr;});var host=tpl.parentNode;
+  [].slice.call(g.querySelectorAll('.gn-proj')).forEach(function(d){d.remove();});
+  var pc=g.querySelector('.gn-pc');if(pc)pc.textContent=mine.length;
+  mine.forEach(function(p){var d=tpl.cloneNode(true);d.querySelector('.gn-code').textContent=p.pw;var nm=d.querySelector('.gn-name');nm.textContent=p.name;nm.title=p.name;[].forEach.call(d.querySelectorAll('.gn-c'),function(x){x.remove();});host.appendChild(d);});}
+ [].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var c=(d.querySelector('.gn-code')||{}).textContent.trim(),p=OG_ACTIVE[c];if(!p)return;d.dataset.empty='';d.dataset.active='1';
+  var ov=d.querySelector('.gn-ov');if(ov)link(ov,'overview',c);
+  var st=d.querySelectorAll('.gn-st');['docs','cross','pre'].forEach(function(k,i){if(st[i])link(st[i],k,c);});
+  if(c!=='PW-00428'&&st[1]){var cc=st[1].querySelector('.gn-c');if(p.open){if(!cc){cc=document.createElement('span');cc.className='gn-c gn-c-r';st[1].appendChild(cc);}cc.textContent=p.open;cc.title=p.open+' findings to resolve';}else if(cc)cc.remove();}
+  if(C){var on=c===C.pw;d.open=on;[].forEach.call(d.querySelectorAll('.on,[aria-current]'),function(x){x.classList.remove('on');x.removeAttribute('aria-current');});
+   if(on){var t=here==='overview'?ov:st[['docs','cross','pre'].indexOf(here)];if(t){t.classList.add('on');t.setAttribute('aria-current','page');}}}});
+ return true;}
+if(C){var org=document.querySelector('a.org-sw b');}
+function run(){var ok=nav();if(C){var app=document.querySelector('.og');if(app){walk(app);try{document.title=rep(document.title);}catch(e){}}}return ok&&!!document.querySelector('.og');}
+var n=0;(function tick(){if(!run()&&n++<50)setTimeout(tick,100);})();
+if(C){var pend=[],sch=0;try{new MutationObserver(function(ms){ms.forEach(function(m){[].forEach.call(m.addedNodes,function(x){if(x.nodeType===1)pend.push(x);else if(x.nodeType===3&&x.parentNode)pend.push(x.parentNode);});});if(!sch){sch=1;requestAnimationFrame(function(){sch=0;var a=pend;pend=[];a.forEach(function(x){if(x.isConnected)walk(x);});});}}).observe(document.documentElement,{childList:true,subtree:true});}catch(e){}}
+window.addEventListener('hashchange',function(){if(/^#PW-\d{5}$/.test(location.hash)&&here)location.reload();});
+})();
+</script>
 <style>
 /* ===== illustrated empty states (shared) ===== */
 .og .es-ill{display:block;width:132px;height:auto;margin:0 auto 12px;color:var(--head)}
@@ -2937,7 +2992,7 @@ var ART='<svg class="es3-svg" viewBox="0 0 120 96" fill="none" aria-hidden="true
 function code(d){var c=d.querySelector('.gn-code');return c?c.textContent.trim():'';}
 function off(a){a.classList.remove('on');a.removeAttribute('aria-current');}
 function setup(nav){
- [].forEach.call(nav.querySelectorAll('.gn-proj'),function(d){var c=code(d);if(!c||c===BUILT||d.dataset.empty)return;d.dataset.empty='1';
+ [].forEach.call(nav.querySelectorAll('.gn-proj'),function(d){var c=code(d);if(!c||c===BUILT||d.dataset.empty||(window.OG_ACTIVE&&OG_ACTIVE[c]))return;d.dataset.empty='1';
   var ov=d.querySelector('.gn-ov');if(ov){ov.href=EMP+'#'+c;off(ov);}
   [].forEach.call(d.querySelectorAll('.gn-st'),function(a,i){off(a);
    if(i===0){a.href=EMP+'#'+c;var n=a.querySelector('.gn-c');if(n)n.remove();}
