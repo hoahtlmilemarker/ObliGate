@@ -43,7 +43,7 @@ for f in sorted(glob.glob(os.path.join(src,'[012][0-9]*.dc.html'))):
     body = body.replace('onClick="{{toggleTheme}}"', 'onclick="ogToggle()" data-og-toggle')
     body = body.replace('{{nextTheme}}', 'dark').replace('{{themeLabel}}', '<span class="og-theme-label">Dark</span>')
     body = body.replace('/_blob/8cfa11a04b8e7f1a0a8159c51c90be37', 'obligate-wordmark.svg')
-    body = re.sub(r'href="([0-9A-Za-z-]+)\.dc\.html"', r'href="\1.html"', body)
+    body = re.sub(r'href="([0-9A-Za-z-]+)\.dc\.html(#[\w-]*)?"', r'href="\1.html\2"', body)
     body = re.sub(r'<form action="#"', '<form action="#" onsubmit="event.preventDefault()"', body)
     for _i,_k in enumerate(['active','closeout','appeals','archived']):
         body = body.replace('class="{{c_'+_k+'}}"', 'class="side side-on"' if _i==0 else 'class="side"').replace('aria-pressed="{{p_'+_k+'}}"', 'aria-pressed="'+('true' if _i==0 else 'false')+'"').replace(' onClick="{{pick_'+_k+'}}"', '')

@@ -122,6 +122,16 @@
       "permanent": true
     },
     {
+      "source": "/22-cross-check-projects(.html)?",
+      "destination": "/cross-check-projects",
+      "permanent": true
+    },
+    {
+      "source": "/23-import(.html)?",
+      "destination": "/import",
+      "permanent": true
+    },
+    {
       "source": "/my-profile",
       "destination": "/profile",
       "permanent": true
