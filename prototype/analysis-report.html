@@ -740,8 +740,8 @@ var A=[
  [/^(Active Declarations|Closeout Stage|FEMA Appeals|Archived Disasters)/,function(b){var K={'Active Declarations':'active','Closeout Stage':'closeout','FEMA Appeals':'appeals','Archived Disasters':'archived'};window.ogLc=K[txt(b.querySelector('span'))]||'active';lcApply();}],
  [/^Archive$/,function(b){var r=b.closest('tr'),id=txt(r.querySelector('.decl'));dlg({eyebrow:'Archive declaration',title:'Archive '+id+'?',ok:'Archive Declaration',body:'<p>It moves to Archived Disasters. Its documents and audit log stay available read-only, and you can restore it at any time.</p>',onOk:function(){r.setAttribute('data-lc','archived');var a=b,sv=a.querySelector('svg');a.textContent='Restore';if(sv)a.appendChild(sv);lcApply();toast('<b>'+id+' archived</b> · moved to Archived Disasters');}});}],
  [/^Restore$/,function(b){var r=b.closest('tr'),id=txt(r.querySelector('.decl'));r.setAttribute('data-lc','active');var sv=b.querySelector('svg');b.textContent='Archive';if(sv)b.appendChild(sv);lcApply();toast('<b>'+id+' restored</b> to Active Declarations');}],
- [/^Add Disaster/,function(b){var dm=b.closest('details');if(dm)dm.open=false;dlg({eyebrow:'Add manually',title:'Add a declared disaster',ok:'Add Disaster',body:'<label>Declaration number<input class="inp" data-req placeholder="e.g. DR-0000-CA"></label><div class="row2"><label>Incident type<select><option>Winter Storms</option><option>Wildfire</option><option>Flooding</option><option>Earthquake</option></select></label><label>Incident start<input class="inp" type="date"></label></div>',onOk:function(d){toast('<b>'+d.querySelector('[data-req]').value+'</b> added · upload its records next');}});}],
- [/^New Project/,function(b){var dm=b.closest('details');if(dm)dm.open=false;dlg({eyebrow:'Add manually',title:'Create Project Worksheet',ok:'Create Project',body:'<label>Project number<input class="inp" data-req placeholder="e.g. PW-00436"></label><label>Project name<input class="inp" placeholder="Short description"></label><label>Disaster<select><option>DR-4683-CA · Winter Storms</option></select></label>',onOk:function(d){toast('<b>'+d.querySelector('[data-req]').value+'</b> created under DR-4683-CA');}});}],
+ [/^Add Disaster/,function(b){var dm=b.closest('details');if(dm)dm.open=false;window.ogAddDisaster();}],
+ [/^(New|Add) Project/,function(b){var dm=b.closest('details');if(dm)dm.open=false;window.ogAddProject();}],
  [/^Export Summary/,function(b){busy(b,'Exporting…',900,function(){toast('<b>disaster-portfolio-summary.csv</b> prepared · file download is not available in this preview');});}],
  [/^Columns$/,function(b){var t=document.querySelector('.dtbl, table');if(!t)return;var ex=document.querySelector('.colpop');if(ex){ex.remove();b.setAttribute('aria-expanded','false');return;}
   var ths=[].slice.call(t.querySelectorAll('thead th')),p=document.createElement('div');p.className='colpop';p.setAttribute('role','dialog');p.setAttribute('aria-label','Show columns');
@@ -1586,7 +1586,7 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
   var h='<div class="fp-g">Switch disaster</div><div class="fp-l" role="menu">'+
    '<a role="menuitem" class="fp-i" href="'+a.getAttribute('href')+'"'+(cur==='All Disasters'?' aria-current="true"':'')+'>'+CK+'<span class="ds-t"><b>All Disasters</b><small>Portfolio overview · 4 declarations</small></span></a>'+
    D.map(function(d){return '<a role="menuitem" class="fp-i'+(d[3]?'':' ds-off')+'" href="'+(d[3]?a.getAttribute('href').replace(/disasters|disasters/,function(m){return m==='disasters'?'project-overview':'project-overview';}):'#')+'"'+(cur===d[0]?' aria-current="true"':'')+(d[3]?'':' data-off="1"')+'>'+CK+'<span class="ds-t"><b>'+d[0]+'</b><small>'+d[1]+'</small></span><span class="ds-m">'+d[2]+'</span></a>';}).join('')+
-   '</div><div class="fp-f">Sample data · only DR-4683-CA is built in this prototype</div>';
+   '</div>';
   menu=document.createElement('div');menu.className='fp dsm';menu.innerHTML=h;(a.closest('.og')||document.body).appendChild(menu);
   var r=a.getBoundingClientRect();menu.style.left=Math.max(12,Math.min(r.left,innerWidth-menu.offsetWidth-12))+'px';menu.style.top=(r.bottom+6)+'px';
   a.setAttribute('aria-expanded','true');document.addEventListener('mousedown',out,true);
@@ -2114,6 +2114,109 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
  root.innerHTML=nav+'<div class="sx-body">'+B+'</div>';
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();})();
+</script>
+<style>
+/* ===== Add Disaster / Add Project (live app fields) ===== */
+.og .dlg-b.fm{width:min(560px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column}
+.og .dlg-b.fm .dlg-c{flex:1;min-height:0;overflow-y:auto;padding:10px 22px 6px;scrollbar-width:thin}
+.og .dlg-b.fm .dlg-f{border-top:1px solid var(--line-soft);background:var(--pale);padding:12px 22px}
+.og .fm-f{display:flex;flex-direction:column;gap:6px;margin:0 0 14px}
+.og .dlg-c .fm-f > label{margin:0}
+.og .fm-l{display:flex;align-items:center;gap:6px;font:700 11px/1 Manrope,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--gray)}
+.og .fm-l i{font-style:normal;color:#B4473A}
+.og .fm-l .fm-q{display:inline-grid;place-items:center;width:15px;height:15px;border:1px solid var(--line);border-radius:50%;font-size:9.5px;letter-spacing:0;color:var(--gray);cursor:help;position:relative}
+.og .fm-l .fm-q:hover::after,.og .fm-l .fm-q:focus::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);width:240px;padding:8px 10px;border-radius:4px;background:#0B1F33;color:#fff;font:500 12px/1.45 Manrope,Arial,sans-serif;text-transform:none;letter-spacing:0;z-index:2;box-shadow:0 8px 20px -10px rgba(0,0,0,.4)}
+.og .fm-h{margin:0;font-size:12px;line-height:1.5;color:var(--gray)}
+.og .fm-e{margin:0;font-size:12px;font-weight:600;color:#B4473A}
+.og .fm-f.bad .inp,.og .fm-f.bad select,.og .fm-f.bad .fm-money{border-color:#B4473A}
+.og .dlg-c select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2360666C' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.og .dlg-c select:invalid{color:var(--gray)}
+.og .dlg-c input[type=date]{height:36px}
+.og .fm-box{margin:2px 0 14px;padding:14px 14px 4px;border:1px solid var(--line);border-radius:4px;background:var(--pale)}
+.og .fm-box > b{display:block;margin:0 0 12px;font-size:13px;color:var(--head)}
+.og .fm-box .fm-h{margin:-4px 0 10px}
+.og .fm-money{display:flex;align-items:center;height:36px;border:1px solid var(--line);border-radius:4px;background:var(--card)}
+.og .fm-money span{padding:0 4px 0 12px;font-weight:700;color:var(--gray)}
+.og .fm-money input{flex:1;min-width:0;height:34px;border:0!important;box-shadow:none!important;background:none;padding:0 12px 0 2px;font-variant-numeric:tabular-nums}
+.og .fm-money:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,90,156,.14)}
+.og .fm-ck{display:flex!important;flex-direction:row!important;align-items:flex-start;gap:10px!important;margin:0 0 14px!important;padding:12px 14px;border:1px solid var(--line);border-radius:4px;text-transform:none!important;letter-spacing:0!important;cursor:pointer}
+.og .fm-ck input{width:16px;height:16px;margin:2px 0 0;accent-color:#0A4E86;flex:none}
+.og .fm-ck span{display:flex;flex-direction:column;gap:4px;font:700 13px/1.4 Manrope,Arial,sans-serif;color:var(--head)}
+.og .fm-ck small{font:500 12px/1.5 Manrope,Arial,sans-serif;color:var(--gray)}
+.og .fm-ck:has(input:checked){border-color:var(--blue);background:var(--blue-t)}
+.og .fm-rule{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:2px 0 12px;padding:11px 14px;border:1px solid var(--line);border-left:3px solid #B08A4E;border-radius:4px;background:var(--pale);font-size:12.5px;color:var(--gray)}
+.og .fm-rule b{color:var(--head)}
+.og .dlg-c .fm-h,.og .dlg-c .fm-e{margin:0}
+.og .dlg-c .fm-box .fm-h{margin:-4px 0 10px}
+.og .fm-chip{display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;font:700 11px/1.3 Manrope,Arial,sans-serif;border-radius:4px;background:var(--blue-t);color:var(--blue);margin-left:6px}
+.og .fm-chip.big{background:var(--warn-t);color:var(--warn)}
+.og .dlg-f .fm-req{margin-right:auto;align-self:center;font-size:12px;color:var(--gray)}
+.og .dlg-f .fm-req i{font-style:normal;color:#B4473A}
+@media (max-width:560px){.og .dlg-c .row2{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+ var DRS=[['DR-4683-CA','California Severe Winter Storms, Flooding, Landslides & Mudslides'],['DR-4758-CA','February 2024 Atmospheric River & High Winds'],['DR-4699-CA','Northern California Severe Storms & Flooding'],['DR-4558-CA','Bobcat Fire Complex Recovery']];
+ var PWS=['00428','00429','00430','00431','00432','00433','00434','00435','00436','00437','00438','00439'];
+ try{var ex=JSON.parse(sessionStorage.getItem('og-new-dr')||'[]');ex.forEach(function(x){DRS.push(x);});}catch(e){}
+ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+ function q(d,s){return d.querySelector(s);}
+ function err(f,msg){var w=f.closest('.fm-f');if(!w)return;var e=w.querySelector('.fm-e');w.classList.toggle('bad',!!msg);if(msg){if(!e){e=document.createElement('p');e.className='fm-e';e.setAttribute('role','alert');w.appendChild(e);}e.textContent=msg;}else if(e)e.remove();}
+ function toast(h){if(window.ogToast2)window.ogToast2(h);}
+ function req(lbl,tip){return '<span class="fm-l">'+lbl+' <i aria-hidden="true">*</i>'+(tip?'<span class="fm-q" tabindex="0" data-tip="'+esc(tip)+'" aria-label="'+esc(tip)+'">?</span>':'')+'</span>';}
+ function opt(lbl,tip){return '<span class="fm-l">'+lbl+(tip?'<span class="fm-q" tabindex="0" data-tip="'+esc(tip)+'" aria-label="'+esc(tip)+'">?</span>':'')+'</span>';}
+ function form(o){var d=window.ogDialog({eyebrow:o.eyebrow,title:o.title,ok:o.ok,body:o.body,onOk:function(dd){return o.submit(dd);}});var b=q(d,'.dlg-b');b.classList.add('fm');
+  q(d,'.dlg-f').insertAdjacentHTML('afterbegin','<span class="fm-req"><i>*</i> Required</span>');
+  var ok=q(d,'.dlg-ok');function chk(){ok.disabled=[].some.call(d.querySelectorAll('[data-need]'),function(x){return !x.value.trim();});}
+  d.addEventListener('input',function(e){chk();if(e.target.closest('.fm-f.bad'))err(e.target,'');o.live&&o.live(d,e);});d.addEventListener('change',function(e){chk();o.live&&o.live(d,e);});chk();o.live&&o.live(d,{});return d;}
+ /* PAPPG version by declaration date (FEMA applies the PAPPG in effect on the declaration date). */
+ function pappg(v){if(!v)return ['PAPPG v5.0 Amended (Jan 2025)','current edition · confirmed by the declaration date'];if(v>='2025-01-06')return ['PAPPG v5.0 Amended (Jan 2025)','declared on or after Jan 6, 2025'];if(v>='2020-06-01')return ['PAPPG v4.0 (Jun 2020)','declared Jun 1, 2020 – Jan 5, 2025'];return ['PAPPG v3.1 (Apr 2018)','declared before Jun 1, 2020'];}
+
+ window.ogAddDisaster=function(){
+  var T=['Severe Storm','Flood','Wildfire','Earthquake','Hurricane','Tornado','Mudslide / Landslide','Winter Storm','Tsunami','Biological','Other'];
+  form({eyebrow:'Add manually',title:'Add Disaster',ok:'Add Disaster',
+   body:'<div class="fm-f"><label for="ad-n">'+req('Name')+'</label><input id="ad-n" class="inp" data-need maxlength="120" placeholder="e.g., 2026 Winter Storms & Flooding" autocomplete="off"></div>'+
+    '<div class="fm-f"><label for="ad-dr">'+opt('FEMA Disaster Number')+'</label><input id="ad-dr" class="inp" placeholder="e.g., DR-4856-CA" autocomplete="off" spellcheck="false"><p class="fm-h">Optional but recommended. Found on your FEMA declaration letter.</p></div>'+
+    '<div class="fm-f"><label for="ad-t">'+opt('Disaster Type')+'</label><select id="ad-t"><option value="" selected>Select disaster type</option>'+T.map(function(t){return '<option>'+t+'</option>';}).join('')+'</select></div>'+
+    '<div class="fm-f"><label for="ad-dd">'+opt('Declaration Date')+'</label><input id="ad-dd" class="inp" type="date"></div>'+
+    '<div class="row2"><div class="fm-f"><label for="ad-s">'+req('Incident Start Date')+'</label><input id="ad-s" class="inp" type="date" data-need></div><div class="fm-f"><label for="ad-e">'+opt('Incident End Date')+'</label><input id="ad-e" class="inp" type="date"><p class="fm-h">Leave blank if the incident period is still open.</p></div></div>'+
+    '<div class="fm-rule" aria-live="polite"></div>',
+   live:function(d){var p=pappg(q(d,'#ad-dd').value);q(d,'.fm-rule').innerHTML='<span>Compliance rules: <b>'+p[0]+'</b></span><span class="fm-chip">'+p[1]+'</span>';},
+   submit:function(d){var n=q(d,'#ad-n'),dr=q(d,'#ad-dr'),dd=q(d,'#ad-dd'),s=q(d,'#ad-s'),e=q(d,'#ad-e'),bad=false;
+    var v=dr.value.trim().toUpperCase().replace(/\s+/g,'');if(v&&/^\d{4}$/.test(v))v='DR-'+v;if(v&&/^DR\d{4}/.test(v))v=v.replace(/^DR/,'DR-');
+    if(v&&!/^DR-\d{4}(-[A-Z]{2})?$/.test(v)){err(dr,'Use the FEMA format, e.g. DR-4856 or DR-4856-CA.');bad=true;}
+    else if(v&&DRS.some(function(x){return x[0].slice(0,7)===v.slice(0,7);})){err(dr,v.slice(0,7)+' is already in your portfolio.');bad=true;}else if(v)dr.value=v;
+    if(e.value&&s.value&&e.value<s.value){err(e,'Must be on or after the incident start date.');bad=true;}
+    if(dd.value&&s.value&&dd.value<s.value){err(dd,'A declaration comes after the incident starts. Check the date.');bad=true;}
+    if(bad){var f=q(d,'.fm-f.bad .inp');if(f)f.focus();return false;}
+    var id=v||'Pending DR number',nm=n.value.trim();DRS.push([id,nm]);try{var x=JSON.parse(sessionStorage.getItem('og-new-dr')||'[]');x.push([id,nm]);sessionStorage.setItem('og-new-dr',JSON.stringify(x));}catch(z){}
+    toast('<b>'+esc(nm)+'</b>'+(v?' ('+v+')':'')+' added · '+pappg(dd.value)[0]+'. Next: <a href="#" data-addp style="color:inherit;font-weight:700">add a project</a> or <a href="upload" style="color:inherit;font-weight:700">upload records</a>.');
+    setTimeout(function(){var a=document.querySelector('.og-toast [data-addp]');if(a)a.onclick=function(ev){ev.preventDefault();var t=a.closest('.og-toast');if(t)t.remove();window.ogAddProject(id);};},0);}});};
+
+ window.ogAddProject=function(pre){
+  var C=[['A','Debris Removal'],['B','Emergency Protective Measures'],['C','Roads & Bridges'],['D','Water Control Facilities'],['E','Public Buildings & Equipment'],['F','Public Utilities'],['G','Parks, Recreational & Other Facilities'],['Z','Management Costs']];
+  var cur=pre||(document.querySelector('a.org-sw b')||{}).textContent||'';
+  var opts=DRS.length?'<option value="" disabled'+(DRS.some(function(x){return x[0]===cur;})?'':' selected')+'>Select a disaster</option>'+DRS.map(function(x){return '<option value="'+esc(x[0])+'"'+(x[0]===cur?' selected':'')+'>'+esc(x[0])+' · '+esc(x[1])+'</option>';}).join(''):'<option value="" selected disabled>No disasters yet</option>';
+  form({eyebrow:'Add manually',title:'Add Project',ok:'Add Project',
+   body:'<div class="fm-f"><label for="ap-d">'+req('Disaster')+'</label><select id="ap-d" data-need required>'+opts+'</select>'+(DRS.length?'':'<p class="fm-h">Add a disaster first. <a href="#" data-add-dr>Add Disaster</a></p>')+'</div>'+
+    '<div class="fm-f"><label for="ap-t">'+req('Title','A short name your team will recognise, e.g. the site and the work.')+'</label><input id="ap-t" class="inp" data-need maxlength="120" placeholder="e.g., Main Library Roof Repair" autocomplete="off"></div>'+
+    '<div class="fm-f"><label for="ap-c">'+req('Work Category','FEMA Category of Work A–G (plus Z for management costs).')+'</label><select id="ap-c" data-need required><option value="" selected disabled>Select work category</option>'+C.map(function(c){return '<option value="'+c[0]+'">Category '+c[0]+' · '+c[1]+'</option>';}).join('')+'</select><p class="fm-h">Use the category from your FEMA paperwork or Damage Inventory if you have it. It decides which compliance checks run on this project.</p></div>'+
+    '<div class="fm-box"><b>Identifiers, if you have them</b><div class="row2"><div class="fm-f"><label for="ap-pw">'+opt('PW #')+'</label><input id="ap-pw" class="inp" inputmode="numeric" placeholder="e.g., 1234" autocomplete="off"></div><div class="fm-f"><label for="ap-ec">'+opt('eCAPS project code')+'</label><input id="ap-ec" class="inp" placeholder="e.g., F7060865" autocomplete="off" spellcheck="false"></div></div>'+
+     '<p class="fm-h">Both optional. FEMA assigns the PW number after submission, and the eCAPS code comes from your financial system. Adding them early turns on duplicate-detection and transfer-detection once imports start.</p></div>'+
+    '<label class="fm-ck"><input id="ap-nf" type="checkbox"><span>This project will have no force-account labor<small>No agency crews’ time will be claimed. We use this to guide which records to import. You can change it later in project settings.</small></span></label>'+
+    '<div class="fm-f"><label for="ap-cost">'+opt('Estimated Cost')+'</label><div class="fm-money"><span>$</span><input id="ap-cost" inputmode="decimal" placeholder="Leave blank if unknown" autocomplete="off"></div><p class="fm-h" id="ap-costh">Used to size small / large project handling; confirmed at submission from reconciled totals.</p></div>',
+   live:function(d,e){var m=q(d,'#ap-cost');if(e&&e.target===m){var raw=m.value.replace(/[^\d.]/g,'');var p=raw.split('.');var i=p[0].replace(/^0+(?=\d)/,'');m.value=(i?Number(i).toLocaleString('en-US'):'')+(p.length>1?'.'+p[1].slice(0,2):'');}
+    var n=parseFloat(m.value.replace(/,/g,''));var h=q(d,'#ap-costh');h.innerHTML='Used to size small / large project handling; confirmed at submission from reconciled totals.'+(n>0?'<span class="fm-chip'+(n>=1e6?' big':'')+'">'+(n>=1e6?'Large project · your threshold $1,000,000':'Small project')+'</span>':'');
+    var ad=e&&e.target&&e.target.closest&&e.target.closest('[data-add-dr]');if(ad){var dl=d;dl.remove();window.ogAddDisaster();}},
+   submit:function(d){var pw=q(d,'#ap-pw'),ec=q(d,'#ap-ec'),bad=false;var v=pw.value.trim().replace(/^PW[-\s]?/i,'');
+    if(v&&!/^\d{1,6}$/.test(v)){err(pw,'Numbers only, e.g. 1234.');bad=true;}else if(v&&PWS.indexOf(('00000'+v).slice(-5))>-1&&q(d,'#ap-d').value==='DR-4683-CA'){err(pw,'PW-'+('00000'+v).slice(-5)+' already exists in DR-4683-CA.');bad=true;}
+    var c=ec.value.trim().toUpperCase();if(c&&!/^[A-Z]\d{5,9}$/.test(c)){err(ec,'Use the code from eCAPS, e.g. F7060865.');bad=true;}else ec.value=c;
+    if(bad){var f=q(d,'.fm-f.bad .inp');if(f)f.focus();return false;}
+    var t=q(d,'#ap-t').value.trim(),dr=q(d,'#ap-d').value,cat=q(d,'#ap-c').value;if(v)PWS.push(('00000'+v).slice(-5));
+    toast('<b>'+esc(t)+'</b> added to '+esc(dr)+' · Category '+cat+(v?' · PW-'+('00000'+v).slice(-5):' · PW number pending')+(q(d,'#ap-nf').checked?' · no force-account labor':'')+'. Next: <a href="upload" style="color:inherit;font-weight:700">upload its records</a>.');}});
+  };
+ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.dlg [data-add-dr]');if(!a)return;e.preventDefault();var dl=a.closest('.dlg');if(dl)dl.remove();window.ogAddDisaster();});
+})();
 </script>
 <script src="review/config.js?v=2"></script><script src="review/review.js?v=11" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
