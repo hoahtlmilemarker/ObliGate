@@ -2581,6 +2581,16 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .xq-seg button{height:26px;padding:0 10px;border:0;border-radius:3px;background:none;font:700 12px/1 Manrope,Arial,sans-serif;letter-spacing:0;text-transform:none;color:var(--gray);cursor:pointer}
 .og .xq-seg button:hover{color:var(--head)}
 .og .xq-seg button[aria-pressed="true"]{background:var(--blue-t);color:var(--blue)}
+.og{--proto:#6B3FD0;--proto-b:rgba(122,79,216,.55);--proto-t:rgba(122,79,216,.07);--proto-on:rgba(122,79,216,.16)}
+.og[data-theme="dark"]{--proto:#C4B0FF;--proto-b:rgba(167,139,250,.5);--proto-t:rgba(167,139,250,.08);--proto-on:rgba(167,139,250,.2)}
+.og .xq-dm{gap:6px!important;height:32px;box-sizing:border-box;padding:0 3px 0 9px;border:1px dashed var(--proto-b);border-radius:4px;background:var(--proto-t);color:var(--proto)!important;font-size:10.5px!important;letter-spacing:.1em!important}
+.og .xq-dm > svg{flex:none}
+.og .xq-dm .xq-seg{padding:0;border:0;background:transparent;gap:2px}
+.og .xq-dm .xq-seg button{height:24px;color:var(--proto);opacity:.75}
+.og .xq-dm .xq-seg button:hover{opacity:1;color:var(--proto)}
+.og .xq-dm .xq-seg button[aria-pressed="true"]{opacity:1;background:var(--proto-on);color:var(--proto)}
+.og .an-demo{border:1px dashed var(--proto-b)!important;background:var(--proto-t)!important;color:var(--proto)!important}
+.og .an-sample{color:var(--proto)!important;text-decoration-color:var(--proto-b)!important}
 .og .xq-es{display:flex;flex-direction:column;align-items:center;gap:6px;padding:44px 20px 46px;text-align:center}
 .og .xq-es-art{width:132px;height:auto;margin-bottom:6px;color:var(--head)}
 .og[data-theme="dark"] .xq-es-art [fill="#E7EFF7"]{fill:#1B2B3C}
@@ -2678,7 +2688,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  /* prototype-only: preview each table with data or empty (persisted per browser) */
  function demoEmpty(k){try{return localStorage.getItem('og-empty-'+k)==='1';}catch(e){return false;}}
  function setDemoEmpty(k,v){try{localStorage.setItem('og-empty-'+k,v?'1':'0');}catch(e){}}
- function seg(k,on){return '<span class="xq-dm" title="Prototype only: preview the table with or without data">Preview<span class="xq-seg" role="group" aria-label="Preview state"><button type="button" data-dm="'+k+'" data-v="0" aria-pressed="'+!on+'">With data</button><button type="button" data-dm="'+k+'" data-v="1" aria-pressed="'+on+'">Empty</button></span></span>';}
+ function seg(k,on){return '<span class="xq-dm" title="Prototype only, not part of the product: preview the table with or without data"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype<span class="xq-seg" role="group" aria-label="Preview state"><button type="button" data-dm="'+k+'" data-v="0" aria-pressed="'+!on+'">With data</button><button type="button" data-dm="'+k+'" data-v="1" aria-pressed="'+on+'">Empty</button></span></span>';}
  var PPL={'Rosa Keith':['RK','#1E4F8F'],'Daniel Ortiz':['DO','#3F7FD9'],'Priya Natarajan':['PN','#7C4DB4'],'Marcus Hale':['MH','#2E7D4F']};
 
  /* ---------------- 22 · Cross-Check (all projects) ---------------- */
