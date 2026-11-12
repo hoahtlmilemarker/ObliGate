@@ -1,0 +1,2 @@
+const {chromium}=require('playwright');const fs=require('fs');(async()=>{const b=await chromium.launch();const fl=fs.readdirSync('out').filter(f=>f.endsWith('.html'));fs.mkdirSync('th',{recursive:true});
+for(const f of fl){const p=await b.newPage({viewport:{width:1440,height:900}});await p.goto('file://'+process.cwd()+'/out/'+f);await p.waitForTimeout(300);await p.screenshot({path:'th/'+f.replace('.html','.png')});await p.close()}await b.close()})();

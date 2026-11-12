@@ -1,0 +1,133 @@
+{
+ "01-disaster-portfolio": {
+  "found": {
+   "toast": {
+    "i": 3,
+    "t": "Active Declarations4"
+   },
+   "dlg": {
+    "i": 7,
+    "t": "Declare New Event"
+   }
+  },
+  "n": 9
+ },
+ "02-project-detail": {
+  "found": {
+   "upm": {
+    "i": 6,
+    "t": "Upload Documents"
+   }
+  },
+  "n": 5
+ },
+ "03-document-library": {
+  "found": {
+   "menu": {
+    "i": 8,
+    "t": "Batch Actions"
+   }
+  },
+  "n": 9
+ },
+ "03b-document-library-empty": {
+  "found": {
+   "upm": {
+    "i": 3,
+    "t": "Upload to this Folder"
+   }
+  },
+  "n": 1
+ },
+ "03c-unplaced-inbox": {
+  "found": {
+   "toast": {
+    "i": 3,
+    "t": "Accept All Suggestions · 5"
+   },
+   "upm": {
+    "i": 4,
+    "t": "Upload Documents"
+   }
+  },
+  "n": 7
+ },
+ "04-document-review": {
+  "found": {
+   "dlg": {
+    "i": 6,
+    "t": "Request Re-Scan"
+   }
+  },
+  "n": 7
+ },
+ "05-cross-check": {
+  "found": {
+   "toast": {
+    "i": 4,
+    "t": "Prev Period (PP 01)"
+   },
+   "dlg": {
+    "i": 7,
+    "t": "Accept Documented (Reduce Claim by $325."
+   }
+  },
+  "n": 6
+ },
+ "06-import-wizard": {
+  "found": {
+   "dlg": {
+    "i": 1,
+    "t": "Adjust Detected Regions"
+   },
+   "imd": {
+    "i": 2,
+    "t": "Back to Step 1"
+   }
+  },
+  "n": 3
+ },
+ "07-presubmission": {
+  "found": {
+   "dlg": {
+    "i": 3,
+    "t": "Lock & Assemble Binder"
+   },
+   "upm": {
+    "i": 4,
+    "t": "Upload SAM.gov Screenshot"
+   }
+  },
+  "n": 3
+ },
+ "08-supervisor-signature": {
+  "found": {
+   "toast": {
+    "i": 2,
+    "t": "Clear Pad"
+   },
+   "dlg": {
+    "i": 3,
+    "t": "Confirm & Digitally Seal Attestation"
+   }
+  },
+  "n": 3
+ },
+ "10-my-profile": {
+  "found": {
+   "toast": {
+    "i": 4,
+    "t": "Sign Out Other Sessions"
+   }
+  },
+  "n": 4
+ },
+ "11-notification-settings": {
+  "found": {},
+  "n": 22
+ },
+ "09-auth-signin": {
+  "found": {},
+  "n": 3
+ }
+}

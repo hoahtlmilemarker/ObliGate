@@ -1,0 +1,1354 @@
+[
+{
+"key": "00-sign-in",
+"src": "09-auth-signin",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/00-sign-in__light__00.html"
+},
+{
+"key": "00-sign-in",
+"src": "09-auth-signin",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/00-sign-in__dark__00.html"
+},
+{
+"key": "00-sign-in",
+"src": "09-auth-signin",
+"theme": "light",
+"name": "Loading \u00b7 first load",
+"act": null,
+"fixed": true,
+"keepld": true,
+"out": "out2/00-sign-in__light__09.html"
+},
+{
+"key": "00-sign-in",
+"src": "09-auth-signin",
+"theme": "dark",
+"name": "Loading \u00b7 first load",
+"act": null,
+"fixed": true,
+"keepld": true,
+"out": "out2/00-sign-in__dark__09.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/01-disaster-portfolio__light__00.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/01-disaster-portfolio_1.js",
+"fixed": true,
+"out": "out2/01-disaster-portfolio__light__01.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/01-disaster-portfolio_2.js",
+"fixed": true,
+"out": "out2/01-disaster-portfolio__light__02.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/01-disaster-portfolio_3.js",
+"fixed": true,
+"out": "out2/01-disaster-portfolio__light__03.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "light",
+"name": "Dialog \u00b7 Declare New Event",
+"act": "act/gen/01-disaster-portfolio_4.js",
+"fixed": true,
+"out": "out2/01-disaster-portfolio__light__04.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "light",
+"name": "Toast",
+"act": "act/gen/01-disaster-portfolio_5.js",
+"fixed": true,
+"out": "out2/01-disaster-portfolio__light__05.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/01-disaster-portfolio__dark__00.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/01-disaster-portfolio_1.js",
+"fixed": true,
+"out": "out2/01-disaster-portfolio__dark__01.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/01-disaster-portfolio_2.js",
+"fixed": true,
+"out": "out2/01-disaster-portfolio__dark__02.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/01-disaster-portfolio_3.js",
+"fixed": true,
+"out": "out2/01-disaster-portfolio__dark__03.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "dark",
+"name": "Dialog \u00b7 Declare New Event",
+"act": "act/gen/01-disaster-portfolio_4.js",
+"fixed": true,
+"out": "out2/01-disaster-portfolio__dark__04.html"
+},
+{
+"key": "01-disaster-portfolio",
+"src": "01-disaster-portfolio",
+"theme": "dark",
+"name": "Toast",
+"act": "act/gen/01-disaster-portfolio_5.js",
+"fixed": true,
+"out": "out2/01-disaster-portfolio__dark__05.html"
+},
+{
+"key": "02-project-detail",
+"src": "02-project-detail",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/02-project-detail__light__00.html"
+},
+{
+"key": "02-project-detail",
+"src": "02-project-detail",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/02-project-detail_1.js",
+"fixed": true,
+"out": "out2/02-project-detail__light__01.html"
+},
+{
+"key": "02-project-detail",
+"src": "02-project-detail",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/02-project-detail_2.js",
+"fixed": true,
+"out": "out2/02-project-detail__light__02.html"
+},
+{
+"key": "02-project-detail",
+"src": "02-project-detail",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/02-project-detail_3.js",
+"fixed": true,
+"out": "out2/02-project-detail__light__03.html"
+},
+{
+"key": "02-project-detail",
+"src": "02-project-detail",
+"theme": "light",
+"name": "Modal \u00b7 Upload documents",
+"act": "act/gen/02-project-detail_4.js",
+"fixed": true,
+"out": "out2/02-project-detail__light__04.html"
+},
+{
+"key": "02-project-detail",
+"src": "02-project-detail",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/02-project-detail__dark__00.html"
+},
+{
+"key": "02-project-detail",
+"src": "02-project-detail",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/02-project-detail_1.js",
+"fixed": true,
+"out": "out2/02-project-detail__dark__01.html"
+},
+{
+"key": "02-project-detail",
+"src": "02-project-detail",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/02-project-detail_2.js",
+"fixed": true,
+"out": "out2/02-project-detail__dark__02.html"
+},
+{
+"key": "02-project-detail",
+"src": "02-project-detail",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/02-project-detail_3.js",
+"fixed": true,
+"out": "out2/02-project-detail__dark__03.html"
+},
+{
+"key": "02-project-detail",
+"src": "02-project-detail",
+"theme": "dark",
+"name": "Modal \u00b7 Upload documents",
+"act": "act/gen/02-project-detail_4.js",
+"fixed": true,
+"out": "out2/02-project-detail__dark__04.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/03-document-library__light__00.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/03-document-library_1.js",
+"fixed": true,
+"out": "out2/03-document-library__light__01.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/03-document-library_2.js",
+"fixed": true,
+"out": "out2/03-document-library__light__02.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/03-document-library_3.js",
+"fixed": true,
+"out": "out2/03-document-library__light__03.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Skeleton \u00b7 switching folder",
+"act": "act/gen/03-document-library_4.js",
+"fixed": true,
+"out": "out2/03-document-library__light__04.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Dropdown \u00b7 Batch Actions",
+"act": "act/gen/03-document-library_5.js",
+"fixed": true,
+"out": "out2/03-document-library__light__05.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Toast \u00b7 Sent to review",
+"act": "act/gen/03-document-library_6.js",
+"fixed": true,
+"out": "out2/03-document-library__light__06.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Search \u00b7 results",
+"act": "act/gen/03-document-library_7.js",
+"fixed": true,
+"out": "out2/03-document-library__light__07.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Search \u00b7 no results",
+"act": "act/gen/03-document-library_8.js",
+"fixed": true,
+"out": "out2/03-document-library__light__08.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Modal \u00b7 Upload documents",
+"act": "act/gen/03-document-library_9.js",
+"fixed": true,
+"out": "out2/03-document-library__light__09.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "light",
+"name": "Modal \u00b7 Import payroll",
+"act": "act/gen/03-document-library_10.js",
+"fixed": true,
+"out": "out2/03-document-library__light__10.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/03-document-library__dark__00.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/03-document-library_1.js",
+"fixed": true,
+"out": "out2/03-document-library__dark__01.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/03-document-library_2.js",
+"fixed": true,
+"out": "out2/03-document-library__dark__02.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/03-document-library_3.js",
+"fixed": true,
+"out": "out2/03-document-library__dark__03.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Skeleton \u00b7 switching folder",
+"act": "act/gen/03-document-library_4.js",
+"fixed": true,
+"out": "out2/03-document-library__dark__04.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Dropdown \u00b7 Batch Actions",
+"act": "act/gen/03-document-library_5.js",
+"fixed": true,
+"out": "out2/03-document-library__dark__05.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Toast \u00b7 Sent to review",
+"act": "act/gen/03-document-library_6.js",
+"fixed": true,
+"out": "out2/03-document-library__dark__06.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Search \u00b7 results",
+"act": "act/gen/03-document-library_7.js",
+"fixed": true,
+"out": "out2/03-document-library__dark__07.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Search \u00b7 no results",
+"act": "act/gen/03-document-library_8.js",
+"fixed": true,
+"out": "out2/03-document-library__dark__08.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Modal \u00b7 Upload documents",
+"act": "act/gen/03-document-library_9.js",
+"fixed": true,
+"out": "out2/03-document-library__dark__09.html"
+},
+{
+"key": "03-document-library",
+"src": "03-document-library",
+"theme": "dark",
+"name": "Modal \u00b7 Import payroll",
+"act": "act/gen/03-document-library_10.js",
+"fixed": true,
+"out": "out2/03-document-library__dark__10.html"
+},
+{
+"key": "03b-document-library-empty",
+"src": "03b-document-library-empty",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/03b-document-library-empty__light__00.html"
+},
+{
+"key": "03b-document-library-empty",
+"src": "03b-document-library-empty",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/03b-document-library-empty_1.js",
+"fixed": true,
+"out": "out2/03b-document-library-empty__light__01.html"
+},
+{
+"key": "03b-document-library-empty",
+"src": "03b-document-library-empty",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/03b-document-library-empty_2.js",
+"fixed": true,
+"out": "out2/03b-document-library-empty__light__02.html"
+},
+{
+"key": "03b-document-library-empty",
+"src": "03b-document-library-empty",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/03b-document-library-empty_3.js",
+"fixed": true,
+"out": "out2/03b-document-library-empty__light__03.html"
+},
+{
+"key": "03b-document-library-empty",
+"src": "03b-document-library-empty",
+"theme": "light",
+"name": "Modal \u00b7 Upload documents",
+"act": "act/gen/03b-document-library-empty_4.js",
+"fixed": true,
+"out": "out2/03b-document-library-empty__light__04.html"
+},
+{
+"key": "03b-document-library-empty",
+"src": "03b-document-library-empty",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/03b-document-library-empty__dark__00.html"
+},
+{
+"key": "03b-document-library-empty",
+"src": "03b-document-library-empty",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/03b-document-library-empty_1.js",
+"fixed": true,
+"out": "out2/03b-document-library-empty__dark__01.html"
+},
+{
+"key": "03b-document-library-empty",
+"src": "03b-document-library-empty",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/03b-document-library-empty_2.js",
+"fixed": true,
+"out": "out2/03b-document-library-empty__dark__02.html"
+},
+{
+"key": "03b-document-library-empty",
+"src": "03b-document-library-empty",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/03b-document-library-empty_3.js",
+"fixed": true,
+"out": "out2/03b-document-library-empty__dark__03.html"
+},
+{
+"key": "03b-document-library-empty",
+"src": "03b-document-library-empty",
+"theme": "dark",
+"name": "Modal \u00b7 Upload documents",
+"act": "act/gen/03b-document-library-empty_4.js",
+"fixed": true,
+"out": "out2/03b-document-library-empty__dark__04.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/03c-unplaced-inbox__light__00.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/03c-unplaced-inbox_1.js",
+"fixed": true,
+"out": "out2/03c-unplaced-inbox__light__01.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/03c-unplaced-inbox_2.js",
+"fixed": true,
+"out": "out2/03c-unplaced-inbox__light__02.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/03c-unplaced-inbox_3.js",
+"fixed": true,
+"out": "out2/03c-unplaced-inbox__light__03.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "light",
+"name": "Toast \u00b7 Accepted",
+"act": "act/gen/03c-unplaced-inbox_4.js",
+"fixed": true,
+"out": "out2/03c-unplaced-inbox__light__04.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "light",
+"name": "Modal \u00b7 Upload documents",
+"act": "act/gen/03c-unplaced-inbox_5.js",
+"fixed": true,
+"out": "out2/03c-unplaced-inbox__light__05.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/03c-unplaced-inbox__dark__00.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/03c-unplaced-inbox_1.js",
+"fixed": true,
+"out": "out2/03c-unplaced-inbox__dark__01.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/03c-unplaced-inbox_2.js",
+"fixed": true,
+"out": "out2/03c-unplaced-inbox__dark__02.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/03c-unplaced-inbox_3.js",
+"fixed": true,
+"out": "out2/03c-unplaced-inbox__dark__03.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "dark",
+"name": "Toast \u00b7 Accepted",
+"act": "act/gen/03c-unplaced-inbox_4.js",
+"fixed": true,
+"out": "out2/03c-unplaced-inbox__dark__04.html"
+},
+{
+"key": "03c-unplaced-inbox",
+"src": "03c-unplaced-inbox",
+"theme": "dark",
+"name": "Modal \u00b7 Upload documents",
+"act": "act/gen/03c-unplaced-inbox_5.js",
+"fixed": true,
+"out": "out2/03c-unplaced-inbox__dark__05.html"
+},
+{
+"key": "04-document-review",
+"src": "04-document-review",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/04-document-review__light__00.html"
+},
+{
+"key": "04-document-review",
+"src": "04-document-review",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/04-document-review_1.js",
+"fixed": true,
+"out": "out2/04-document-review__light__01.html"
+},
+{
+"key": "04-document-review",
+"src": "04-document-review",
+"theme": "light",
+"name": "Dialog \u00b7 Request re-scan",
+"act": "act/gen/04-document-review_2.js",
+"fixed": true,
+"out": "out2/04-document-review__light__02.html"
+},
+{
+"key": "04-document-review",
+"src": "04-document-review",
+"theme": "light",
+"name": "Dialog \u00b7 Reject (danger)",
+"act": "act/gen/04-document-review_3.js",
+"fixed": true,
+"out": "out2/04-document-review__light__03.html"
+},
+{
+"key": "04-document-review",
+"src": "04-document-review",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/04-document-review__dark__00.html"
+},
+{
+"key": "04-document-review",
+"src": "04-document-review",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/04-document-review_1.js",
+"fixed": true,
+"out": "out2/04-document-review__dark__01.html"
+},
+{
+"key": "04-document-review",
+"src": "04-document-review",
+"theme": "dark",
+"name": "Dialog \u00b7 Request re-scan",
+"act": "act/gen/04-document-review_2.js",
+"fixed": true,
+"out": "out2/04-document-review__dark__02.html"
+},
+{
+"key": "04-document-review",
+"src": "04-document-review",
+"theme": "dark",
+"name": "Dialog \u00b7 Reject (danger)",
+"act": "act/gen/04-document-review_3.js",
+"fixed": true,
+"out": "out2/04-document-review__dark__03.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/05-cross-check__light__00.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/05-cross-check_1.js",
+"fixed": true,
+"out": "out2/05-cross-check__light__01.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/05-cross-check_2.js",
+"fixed": true,
+"out": "out2/05-cross-check__light__02.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/05-cross-check_3.js",
+"fixed": true,
+"out": "out2/05-cross-check__light__03.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "light",
+"name": "Dialog \u00b7 Accept documented",
+"act": "act/gen/05-cross-check_4.js",
+"fixed": true,
+"out": "out2/05-cross-check__light__04.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "light",
+"name": "Toast",
+"act": "act/gen/05-cross-check_5.js",
+"fixed": true,
+"out": "out2/05-cross-check__light__05.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/05-cross-check__dark__00.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/05-cross-check_1.js",
+"fixed": true,
+"out": "out2/05-cross-check__dark__01.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/05-cross-check_2.js",
+"fixed": true,
+"out": "out2/05-cross-check__dark__02.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/05-cross-check_3.js",
+"fixed": true,
+"out": "out2/05-cross-check__dark__03.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "dark",
+"name": "Dialog \u00b7 Accept documented",
+"act": "act/gen/05-cross-check_4.js",
+"fixed": true,
+"out": "out2/05-cross-check__dark__04.html"
+},
+{
+"key": "05-cross-check",
+"src": "05-cross-check",
+"theme": "dark",
+"name": "Toast",
+"act": "act/gen/05-cross-check_5.js",
+"fixed": true,
+"out": "out2/05-cross-check__dark__05.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/06-import-wizard__light__00.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/06-import-wizard_1.js",
+"fixed": true,
+"out": "out2/06-import-wizard__light__01.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/06-import-wizard_2.js",
+"fixed": true,
+"out": "out2/06-import-wizard__light__02.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/06-import-wizard_3.js",
+"fixed": true,
+"out": "out2/06-import-wizard__light__03.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "light",
+"name": "Dialog \u00b7 Adjust regions",
+"act": "act/gen/06-import-wizard_4.js",
+"fixed": true,
+"out": "out2/06-import-wizard__light__04.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "light",
+"name": "Overlay \u00b7 Detecting structure",
+"act": "act/gen/06-import-wizard_5.js",
+"fixed": true,
+"out": "out2/06-import-wizard__light__05.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/06-import-wizard__dark__00.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/06-import-wizard_1.js",
+"fixed": true,
+"out": "out2/06-import-wizard__dark__01.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/06-import-wizard_2.js",
+"fixed": true,
+"out": "out2/06-import-wizard__dark__02.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/06-import-wizard_3.js",
+"fixed": true,
+"out": "out2/06-import-wizard__dark__03.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "dark",
+"name": "Dialog \u00b7 Adjust regions",
+"act": "act/gen/06-import-wizard_4.js",
+"fixed": true,
+"out": "out2/06-import-wizard__dark__04.html"
+},
+{
+"key": "06-import-wizard",
+"src": "06-import-wizard",
+"theme": "dark",
+"name": "Overlay \u00b7 Detecting structure",
+"act": "act/gen/06-import-wizard_5.js",
+"fixed": true,
+"out": "out2/06-import-wizard__dark__05.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/07-presubmission__light__00.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/07-presubmission_1.js",
+"fixed": true,
+"out": "out2/07-presubmission__light__01.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/07-presubmission_2.js",
+"fixed": true,
+"out": "out2/07-presubmission__light__02.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/07-presubmission_3.js",
+"fixed": true,
+"out": "out2/07-presubmission__light__03.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "light",
+"name": "Dialog \u00b7 Lock & assemble",
+"act": "act/gen/07-presubmission_4.js",
+"fixed": true,
+"out": "out2/07-presubmission__light__04.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "light",
+"name": "Modal \u00b7 Upload documents",
+"act": "act/gen/07-presubmission_5.js",
+"fixed": true,
+"out": "out2/07-presubmission__light__05.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/07-presubmission__dark__00.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/07-presubmission_1.js",
+"fixed": true,
+"out": "out2/07-presubmission__dark__01.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/07-presubmission_2.js",
+"fixed": true,
+"out": "out2/07-presubmission__dark__02.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/07-presubmission_3.js",
+"fixed": true,
+"out": "out2/07-presubmission__dark__03.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "dark",
+"name": "Dialog \u00b7 Lock & assemble",
+"act": "act/gen/07-presubmission_4.js",
+"fixed": true,
+"out": "out2/07-presubmission__dark__04.html"
+},
+{
+"key": "07-presubmission",
+"src": "07-presubmission",
+"theme": "dark",
+"name": "Modal \u00b7 Upload documents",
+"act": "act/gen/07-presubmission_5.js",
+"fixed": true,
+"out": "out2/07-presubmission__dark__05.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/08-supervisor-signature__light__00.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/08-supervisor-signature_1.js",
+"fixed": true,
+"out": "out2/08-supervisor-signature__light__01.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/08-supervisor-signature_2.js",
+"fixed": true,
+"out": "out2/08-supervisor-signature__light__02.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/08-supervisor-signature_3.js",
+"fixed": true,
+"out": "out2/08-supervisor-signature__light__03.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "light",
+"name": "Dialog \u00b7 Confirm & seal",
+"act": "act/gen/08-supervisor-signature_4.js",
+"fixed": true,
+"out": "out2/08-supervisor-signature__light__04.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "light",
+"name": "Toast \u00b7 Pad cleared",
+"act": "act/gen/08-supervisor-signature_5.js",
+"fixed": true,
+"out": "out2/08-supervisor-signature__light__05.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/08-supervisor-signature__dark__00.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/08-supervisor-signature_1.js",
+"fixed": true,
+"out": "out2/08-supervisor-signature__dark__01.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/08-supervisor-signature_2.js",
+"fixed": true,
+"out": "out2/08-supervisor-signature__dark__02.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/08-supervisor-signature_3.js",
+"fixed": true,
+"out": "out2/08-supervisor-signature__dark__03.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "dark",
+"name": "Dialog \u00b7 Confirm & seal",
+"act": "act/gen/08-supervisor-signature_4.js",
+"fixed": true,
+"out": "out2/08-supervisor-signature__dark__04.html"
+},
+{
+"key": "08-supervisor-signature",
+"src": "08-supervisor-signature",
+"theme": "dark",
+"name": "Toast \u00b7 Pad cleared",
+"act": "act/gen/08-supervisor-signature_5.js",
+"fixed": true,
+"out": "out2/08-supervisor-signature__dark__05.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/10-my-profile__light__00.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/10-my-profile_1.js",
+"fixed": true,
+"out": "out2/10-my-profile__light__01.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/10-my-profile_2.js",
+"fixed": true,
+"out": "out2/10-my-profile__light__02.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/10-my-profile_3.js",
+"fixed": true,
+"out": "out2/10-my-profile__light__03.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "light",
+"name": "Unsaved changes bar",
+"act": "act/gen/10-my-profile_4.js",
+"fixed": true,
+"out": "out2/10-my-profile__light__04.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "light",
+"name": "Toast \u00b7 Sessions signed out",
+"act": "act/gen/10-my-profile_5.js",
+"fixed": true,
+"out": "out2/10-my-profile__light__05.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/10-my-profile__dark__00.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/10-my-profile_1.js",
+"fixed": true,
+"out": "out2/10-my-profile__dark__01.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/10-my-profile_2.js",
+"fixed": true,
+"out": "out2/10-my-profile__dark__02.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/10-my-profile_3.js",
+"fixed": true,
+"out": "out2/10-my-profile__dark__03.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "dark",
+"name": "Unsaved changes bar",
+"act": "act/gen/10-my-profile_4.js",
+"fixed": true,
+"out": "out2/10-my-profile__dark__04.html"
+},
+{
+"key": "10-my-profile",
+"src": "10-my-profile",
+"theme": "dark",
+"name": "Toast \u00b7 Sessions signed out",
+"act": "act/gen/10-my-profile_5.js",
+"fixed": true,
+"out": "out2/10-my-profile__dark__05.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "light",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/11-notification-settings__light__00.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "light",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/11-notification-settings_1.js",
+"fixed": true,
+"out": "out2/11-notification-settings__light__01.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "light",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/11-notification-settings_2.js",
+"fixed": true,
+"out": "out2/11-notification-settings__light__02.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "light",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/11-notification-settings_3.js",
+"fixed": true,
+"out": "out2/11-notification-settings__light__03.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "light",
+"name": "Unsaved changes bar",
+"act": "act/gen/11-notification-settings_4.js",
+"fixed": true,
+"out": "out2/11-notification-settings__light__04.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "light",
+"name": "Toast \u00b7 Settings saved",
+"act": "act/gen/11-notification-settings_5.js",
+"fixed": true,
+"out": "out2/11-notification-settings__light__05.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "dark",
+"name": "Default",
+"act": null,
+"fixed": false,
+"out": "out2/11-notification-settings__dark__00.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "dark",
+"name": "Loading \u00b7 page transition",
+"act": "act/gen/11-notification-settings_1.js",
+"fixed": true,
+"out": "out2/11-notification-settings__dark__01.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "dark",
+"name": "Dropdown \u00b7 Account menu",
+"act": "act/gen/11-notification-settings_2.js",
+"fixed": true,
+"out": "out2/11-notification-settings__dark__02.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "dark",
+"name": "Search \u00b7 Command palette",
+"act": "act/gen/11-notification-settings_3.js",
+"fixed": true,
+"out": "out2/11-notification-settings__dark__03.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "dark",
+"name": "Unsaved changes bar",
+"act": "act/gen/11-notification-settings_4.js",
+"fixed": true,
+"out": "out2/11-notification-settings__dark__04.html"
+},
+{
+"key": "11-notification-settings",
+"src": "11-notification-settings",
+"theme": "dark",
+"name": "Toast \u00b7 Settings saved",
+"act": "act/gen/11-notification-settings_5.js",
+"fixed": true,
+"out": "out2/11-notification-settings__dark__05.html"
+}
+]
