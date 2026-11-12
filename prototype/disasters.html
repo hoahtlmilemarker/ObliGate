@@ -2326,11 +2326,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  document.addEventListener('scroll',function(e){if(pop&&!pop.contains(e.target))place(pop,popOwner);},true);
 
  /* ---- custom select over a native <select> ---- */
- function select(sel,o){o=o||{};sel.classList.add('fm-native');sel.tabIndex=-1;var b=document.createElement('button');b.type='button';b.className='fm-sel';b.setAttribute('aria-haspopup','listbox');b.setAttribute('aria-expanded','false');b.id=sel.id+'-b';
-  var lab=sel.closest('.fm-f').querySelector('label');if(lab)lab.setAttribute('for',b.id);
+ function select(sel,o){o=o||{};sel.classList.add('fm-native');sel.tabIndex=-1;var b=document.createElement('button');b.type='button';b.className='fm-sel';b.setAttribute('aria-haspopup','listbox');b.setAttribute('aria-expanded','false');if(!sel.id)sel.id='ogs'+Math.random().toString(36).slice(2,8);b.id=sel.id+'-b';
+  var ff=sel.closest('.fm-f'),lab=ff&&ff.querySelector('label');if(lab)lab.setAttribute('for',b.id);if(sel.getAttribute('aria-label'))b.setAttribute('aria-label',sel.getAttribute('aria-label'));
   sel.parentNode.insertBefore(b,sel);
-  function opts(){return [].filter.call(sel.options,function(x){return x.value;});}
-  function render(){var c=sel.options[sel.selectedIndex];var has=c&&c.value;b.innerHTML=S(o.icon?IC[o.icon]:IC.tag)+'<span class="fm-v'+(has?'':' ph')+'">'+(has?(o.fmt?o.fmt(c.value,c.text):esc(c.text)):esc(o.ph||(sel.options[0]||{}).text||'Select'))+'</span>'+S(IC.car).replace('<svg ','<svg class="fm-car" ');}
+  function opts(){return [].filter.call(sel.options,function(x){return o.keepEmpty?true:x.value;});}
+  function render(){var c=sel.options[sel.selectedIndex];var has=c&&(c.value||o.keepEmpty);b.disabled=sel.disabled;b.innerHTML=(o.icon===false?'':S(o.icon?IC[o.icon]:IC.tag))+'<span class="fm-v'+(has?'':' ph')+'">'+(has?(o.fmt?o.fmt(c.value,c.text):esc(c.text)):esc(o.ph||(sel.options[0]||{}).text||'Select'))+'</span>'+S(IC.car).replace('<svg ','<svg class="fm-car" ');}
   render();sel.addEventListener('change',render);
   function open(){var L=document.createElement('div');L.className='fm-pop fm-sp';var lastG=null;L.innerHTML='<div class="fm-list" role="listbox" aria-label="'+esc(o.ph||'Options')+'">'+opts().map(function(x,i){var s=x.value===sel.value;var g=x.parentNode&&x.parentNode.tagName==='OPTGROUP'?x.parentNode.label:null;var gh='';if(g!==lastG){lastG=g;if(g)gh='<div class="fm-grp" role="presentation">'+esc(g)+'</div>';}return gh+'<div class="fm-o'+(s?' act':'')+'" role="option" id="'+sel.id+'-o'+i+'" data-v="'+esc(x.value)+'" aria-selected="'+s+'">'+(o.row?o.row(x.value,x.text):'<span class="fm-ot"><b>'+esc(x.text)+'</b></span>')+S(IC.ck).replace('<svg ','<svg class="fm-ck" ')+'</div>';}).join('')+'</div>';
    openPop(b,L);var items=[].slice.call(L.querySelectorAll('.fm-o')),k=Math.max(0,items.findIndex(function(x){return x.getAttribute('aria-selected')==='true';}));
@@ -3179,6 +3179,35 @@ function fix(){var h1=document.querySelector('.band h1'),tb=document.querySelect
 var pend=0;function sch(){if(pend)return;pend=1;requestAnimationFrame(function(){pend=0;fix();});}
 function init(){fix();try{new MutationObserver(sch).observe(document.body,{childList:true,subtree:true,characterData:true});}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
+</script>
+<style>
+/* ===== one dropdown style everywhere: native <select> → ObliGate select ===== */
+.og select.fm-native{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;margin:0!important;padding:0!important;border:0!important}
+.og .fm-sel.fm-auto{max-width:100%;font-weight:600;color:var(--head)}
+.og .fm-sel.fm-sm{height:32px;padding:0 10px;gap:8px;font-size:13px;min-width:136px}
+.og .fm-sel.fm-sm .fm-car{width:13px;height:13px}
+.og .fm-sel:disabled{opacity:.55;cursor:not-allowed;background:var(--pale)}
+.og .fm-pop.fm-sp{min-width:210px}.og .fm-pop.fm-sp .fm-ot b{white-space:nowrap}
+.og[data-theme="dark"] .fm-sel:hover{border-color:#3A4B5C}
+</style>
+<script>
+(function(){
+function up(sel){if(!window.ogFm||sel.classList.contains('fm-native')||sel.multiple||sel.size>1||sel.closest('[data-review-ui],.fm-keep'))return;
+ if(!sel.isConnected||!sel.closest('.og'))return;
+ var cs=getComputedStyle(sel),w=sel.getBoundingClientRect().width,pw=sel.parentElement?sel.parentElement.getBoundingClientRect().width:0;
+ var first=sel.options[0];
+ var b=ogFm.select(sel,{icon:false,keepEmpty:true,ph:first?first.text:'Select'});
+ b.classList.add('fm-auto');
+ var sm=!!sel.closest('td,.lb-tools,.ux-s')||parseFloat(cs.height)<36;if(sm)b.classList.add('fm-sm');
+ if(sel.style.width)b.style.width=sel.style.width;else if(w&&pw&&w<pw*0.92)b.style.width=Math.max(120,Math.round(w+8))+'px';
+ if(cs.flexGrow&&cs.flexGrow!=='0')b.style.flex=cs.flex;
+ sel.addEventListener('change',function(){b.disabled=sel.disabled;});
+}
+function scan(root){(root||document).querySelectorAll('.og select:not(.fm-native)').forEach(up);}
+var pend=0;function sch(){if(pend)return;pend=1;requestAnimationFrame(function(){pend=0;scan();});}
+function init(){scan();try{new MutationObserver(sch).observe(document.body,{childList:true,subtree:true});}catch(e){}}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
 </script>
 <script src="review/config.js?v=2"></script><script>document.documentElement.classList.add('rv-on');</script><script src="review/review.js?v=11" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail),html.rv-on body{padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
