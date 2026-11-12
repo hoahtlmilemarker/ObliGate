@@ -124,8 +124,8 @@
   if(b.tagName==='A'&&!b.hasAttribute('data-o'))return;if(b.hasAttribute('data-o')){try{sessionStorage.removeItem('og-page');sessionStorage.removeItem('og-ld');}catch(x){}return;}
   open(false);
   if(b.hasAttribute('data-k')){var s=document.querySelector('.srch');if(s){s.click();return;}}
-  var o=document.querySelector('.og-toast');if(o)o.remove();var t=document.createElement('div');t.className='og-toast';t.setAttribute('role','status');
-  t.innerHTML='<span><b>'+b.textContent.trim()+'</b> · not part of this prototype yet</span><button type="button" class="x" aria-label="Dismiss">✕</button>';
+  var o=document.querySelector('.og-toast');if(o)o.remove();var t=document.createElement('div');t.className='og-toast og-proto';t.setAttribute('role','status');
+  t.innerHTML='<span><span class="og-pt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype</span><b>'+b.textContent.trim()+'</b> · not part of this prototype yet</span><button type="button" class="x" aria-label="Dismiss">✕</button>';
   document.body.appendChild(t);t.querySelector('.x').onclick=function(){t.remove();};setTimeout(function(){t.remove();},3500);});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
@@ -396,7 +396,7 @@ function render(){if(!m)return;var L=m.querySelector('.upm-list');
   return '<li class="upm-f'+cls+'" data-i="'+i+'"><span class="upm-ext">'+x.toUpperCase().slice(0,4)+'</span><span class="upm-n" title="'+it.name.replace(/"/g,'&quot;')+'">'+it.name.replace(/</g,'&lt;')+'</span><span class="upm-s">'+(it.size?fmt(it.size):'')+'</span><div class="upm-m">'+mid+'</div></li>';}).join('');
  var live=items.filter(function(i){return i.st!=='gone';}),done=live.filter(function(i){return i.st==='done';}).length,up=live.filter(function(i){return i.st==='up';}).length,dup=live.filter(function(i){return i.st==='dup';}).length,bad=live.filter(function(i){return i.st==='bad';}).length;
  var sum=m.querySelector('.upm-sum');
- if(!live.length)sum.innerHTML='<button type="button" class="upm-demo">Try sample files (prototype)</button>';
+ if(!live.length)sum.innerHTML='<button type="button" class="upm-demo"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Try sample files</button>';
  else sum.innerHTML=[done?'<b>'+done+'</b> uploaded':'',up?'<b>'+up+'</b> uploading':'',dup?'<b>'+dup+'</b> duplicate'+(dup>1?'s':'')+' need a decision':'',bad?'<b>'+bad+'</b> rejected':''].filter(Boolean).join(' · ');
  var d=sum.querySelector('.upm-demo');if(d)d.onclick=demo;
  var btn=m.querySelector('.upm-done');btn.disabled=!(done>0&&!up&&!dup);btn.textContent=done?'Add '+done+' to folder':'Done';}
@@ -1579,7 +1579,7 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
  var menu=null,btn=null;
  function close(f){if(!menu)return;menu.remove();menu=null;if(btn){btn.setAttribute('aria-expanded','false');if(f)btn.focus();}document.removeEventListener('mousedown',out,true);}
  function out(e){if(menu&&!menu.contains(e.target)&&!btn.contains(e.target))close();}
- function note(){var o=document.querySelector('.og-toast');if(o)o.remove();var d=document.createElement('div');d.className='og-toast';d.setAttribute('role','status');d.innerHTML='<span>This prototype only has data for <b>DR-4683-CA</b>. Other disasters are sample rows.</span>';(document.querySelector('.og')||document.body).appendChild(d);setTimeout(function(){d.remove();},3600);}
+ function note(){var o=document.querySelector('.og-toast');if(o)o.remove();var d=document.createElement('div');d.className='og-toast og-proto';d.setAttribute('role','status');d.innerHTML='<span><span class="og-pt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype</span>This prototype only has data for <b>DR-4683-CA</b>. Other disasters are sample rows.</span>';(document.querySelector('.og')||document.body).appendChild(d);setTimeout(function(){d.remove();},3600);}
  function open(a){btn=a;var cur=(a.querySelector('b')||a).textContent.trim();
   var h='<div class="fp-g">Switch disaster</div><div class="fp-l" role="menu">'+
    '<a role="menuitem" class="fp-i" href="'+a.getAttribute('href')+'"'+(cur==='All Disasters'?' aria-current="true"':'')+'>'+CK+'<span class="ds-t"><b>All Disasters</b><small>Portfolio overview · 4 declarations</small></span></a>'+
@@ -1872,7 +1872,7 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
   var nSign=M.filter(function(m){return MX[m.r][4];}).length,nAppr=M.filter(function(m){return MX[m.r][5];}).length,nPend=I.filter(function(i){return !i.x;}).length;
   var h=sec('Team overview','LA County Public Works · DR-4683-CA. Sample people and addresses; no email is sent from this prototype.',
    '<div class="tm-kpis"><div class="tm-kpi"><small>Members</small><b>'+M.length+'</b></div><div class="tm-kpi"><small>Pending invites</small><b>'+nPend+'</b><span>'+(I.length-nPend)+' expired</span></div><div class="tm-kpi"><small>Approve submission</small><b>'+nAppr+'</b></div><div class="tm-kpi"><small>Sign attestations</small><b>'+nSign+'</b></div></div>'+
-   '<div class="tm-view"><div><b>Viewing as</b><small>Prototype only: preview what a non-manager sees.</small></div><div class="tm-seg" role="group" aria-label="Viewing as"><button type="button" data-as="gm" aria-pressed="'+mg+'">Grants Manager</button><button type="button" data-as="ga" aria-pressed="'+!mg+'">Grants Analyst</button></div></div>');
+   '<div class="tm-view"><div><b><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype · Viewing as</b><small>Preview what a non-manager sees. Not part of the product.</small></div><div class="tm-seg" role="group" aria-label="Viewing as"><button type="button" data-as="gm" aria-pressed="'+mg+'">Grants Manager</button><button type="button" data-as="ga" aria-pressed="'+!mg+'">Grants Analyst</button></div></div>');
   if(!mg)h+='<div class="tm-note" role="note">'+LK+'<span><b>View only.</b> Only a Grants Manager can invite people, change roles or remove members. Ask Rosa Keith if someone needs access.</span></div>';
   if(mg){h+=sec('Invite a team member','They get an email link and join after signing in with County SSO. Invites expire after 7 days.','<div class="st-cb"><form class="tm-form" novalidate><div class="tm-inv">'+
    '<label class="tm-f tm-emw"><span>Work email</span><input class="inp tm-em" type="email" placeholder="name@agency.gov" autocomplete="off"><em class="tm-err" aria-live="polite"></em></label>'+
@@ -2065,7 +2065,7 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
    if(b.classList.contains('sx-rma')){var a=auths[+b.dataset.i];window.ogDialog({eyebrow:'Remove authenticator',title:'Remove '+a.n+'?',ok:'Remove',danger:1,body:'<p>You’ll sign in with your password only until you add another authenticator.</p>',onOk:function(){auths.splice(+b.dataset.i,1);root._r();toast('Authenticator removed');}});}
    if(b.classList.contains('sx-add')){var cells='';for(var y=0;y<21;y++)for(var x=0;x<21;x++){var f=((x<7&&y<7)||(x>13&&y<7)||(x<7&&y>13))?((x%14===0||x%14===6||y%14===0||y%14===6)||(x%14>=2&&x%14<=4&&y%14>=2&&y%14<=4)):((x*7+y*13+x*y)%3===0);if(f)cells+='<rect x="'+x+'" y="'+y+'" width="1" height="1"/>';}
     var key='JBSW Y3DP EHPK 3PXP 4NQ7 KC2X';
-    window.ogDialog({eyebrow:'Two-factor authentication',title:'Set up your authenticator app',ok:'Verify & Turn On',body:'<div class="sx-qr"><svg class="qr" viewBox="0 0 21 21" shape-rendering="crispEdges" aria-label="Sample QR code" fill="#06243F">'+cells+'</svg><div><p style="margin:0 0 8px">1. Scan the code with your authenticator app, or enter this key:</p><span class="sx-key">'+key+'</span><p style="margin:14px 0 8px">2. Enter the 6-digit code it shows.</p><div class="sx-code">'+'<input inputmode="numeric" maxlength="1" aria-label="Digit">'.repeat(6)+'</div><em class="sx-ce" style="display:block;margin-top:8px;font-style:normal;font-size:12px;color:var(--risk)"></em><p style="margin:10px 0 0;font-size:12px;color:var(--gray)">Prototype: any 6 digits work.</p></div></div>',
+    window.ogDialog({eyebrow:'Two-factor authentication',title:'Set up your authenticator app',ok:'Verify & Turn On',body:'<div class="sx-qr"><svg class="qr" viewBox="0 0 21 21" shape-rendering="crispEdges" aria-label="Sample QR code" fill="#06243F">'+cells+'</svg><div><p style="margin:0 0 8px">1. Scan the code with your authenticator app, or enter this key:</p><span class="sx-key">'+key+'</span><p style="margin:14px 0 8px">2. Enter the 6-digit code it shows.</p><div class="sx-code">'+'<input inputmode="numeric" maxlength="1" aria-label="Digit">'.repeat(6)+'</div><em class="sx-ce" style="display:block;margin-top:8px;font-style:normal;font-size:12px;color:var(--risk)"></em><p style="margin:10px 0 0"><span class="og-proto-note"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype: any 6 digits work</span></p></div></div>',
      onOk:function(){var d=document.querySelector('.sx-code');var v=[].map.call(d.querySelectorAll('input'),function(x){return x.value;}).join('');if(!/^\d{6}$/.test(v)){document.querySelector('.sx-ce').textContent='Enter all 6 digits.';return false;}auths.push({n:'Authenticator app',t:'just now'});root._r();toast('<b>Two-factor authentication is on</b> · you’ll be asked for a code at sign-in');}});
     setTimeout(function(){var ins=document.querySelectorAll('.sx-code input');if(ins[0])ins[0].focus();ins.forEach(function(inp,i){inp.addEventListener('input',function(){inp.value=inp.value.replace(/\D/g,'').slice(-1);if(inp.value&&ins[i+1])ins[i+1].focus();});inp.addEventListener('keydown',function(e){if(e.key==='Backspace'&&!inp.value&&ins[i-1])ins[i-1].focus();});});},60);}});
  }
@@ -2618,7 +2618,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .xq-drop:hover,.og .xq-drop.over{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect x='.75' y='.75' width='calc(100%25 - 1.5px)' height='calc(100%25 - 1.5px)' rx='4' fill='none' stroke='%23005A9C' stroke-width='1.5' stroke-dasharray='6 5'/%3E%3C/svg%3E") no-repeat,var(--blue-t)}
 .og[data-theme="dark"] .xq-drop{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect x='.75' y='.75' width='calc(100%25 - 1.5px)' height='calc(100%25 - 1.5px)' rx='4' fill='none' stroke='%23415264' stroke-width='1.5' stroke-dasharray='6 5'/%3E%3C/svg%3E") no-repeat,var(--pale)}
 .og[data-theme="dark"] .xq-drop:hover,.og[data-theme="dark"] .xq-drop.over{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect x='.75' y='.75' width='calc(100%25 - 1.5px)' height='calc(100%25 - 1.5px)' rx='4' fill='none' stroke='%235AA7E6' stroke-width='1.5' stroke-dasharray='6 5'/%3E%3C/svg%3E") no-repeat,var(--blue-t)}
-.og .xq-drop > svg{flex:none;width:40px;height:40px;color:var(--blue);stroke-width:1.1}
+.og .xq-drop > svg{flex:none;width:40px;height:40px;color:var(--blue);stroke-width:.75}
 .og .xq-drop b{display:block;font-size:14px;color:var(--head)}
 .og .xq-drop small{display:block;margin-top:2px;font-size:12px;color:var(--gray)}
 .og .xq-drop u{color:var(--blue);font-weight:700;text-underline-offset:3px}
@@ -2878,6 +2878,28 @@ html.og-lock body{padding-right:var(--og-sbw,0px)}
 .og .hd{border-bottom-color:rgba(0,0,0,.28)!important;box-shadow:none}
 .og .hd .org.org-sw{border-radius:0 4px 4px 0}
 </style>
+<style>
+/* ===== prototype-only controls (violet, dashed) ===== */
+.og{--proto:#6B3FD0;--proto-b:rgba(122,79,216,.55);--proto-t:rgba(122,79,216,.07);--proto-on:rgba(122,79,216,.16)}
+.og[data-theme="dark"]{--proto:#C4B0FF;--proto-b:rgba(167,139,250,.5);--proto-t:rgba(167,139,250,.08);--proto-on:rgba(167,139,250,.2)}
+.og .tm-view{margin:0 20px 16px;padding:10px 12px!important;border:1px dashed var(--proto-b);border-radius:4px;background:var(--proto-t)}
+.og .tm-view b{display:inline-flex!important;align-items:center;gap:6px;font-size:10.5px!important;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--proto)!important}
+.og .tm-view small{font-size:12px!important;color:var(--proto)!important;opacity:.8}
+.og .tm-view .tm-seg{padding:2px;border:0;background:transparent}
+.og .tm-view .tm-seg button{height:24px;padding:0 9px;font-size:11.5px;font-weight:700;color:var(--proto);opacity:.75;box-shadow:none!important}
+.og .tm-view .tm-seg button:hover{opacity:1}
+.og .tm-view .tm-seg button[aria-pressed="true"]{opacity:1;background:var(--proto-on);color:var(--proto)}
+.og .upm-demo,.og .og-proto-note{display:inline-flex;align-items:center;gap:5px;padding:2px 8px!important;border:1px dashed var(--proto-b)!important;border-radius:4px;background:var(--proto-t)!important;color:var(--proto)!important;font-size:11.5px!important;font-weight:700}
+.og .upm-demo:hover{text-decoration:none!important;background:var(--proto-on)!important}
+.og-toast.og-proto{border-top-color:#8B6CF0!important}
+.og-toast.og-proto .og-pt{display:inline-flex;align-items:center;gap:4px;margin-right:8px;padding:1px 6px;border:1px dashed rgba(196,176,255,.6);border-radius:3px;color:#C4B0FF;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;vertical-align:1px}
+/* back link on top-level pages */
+.og .sg-back{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;width:max-content;height:30px;padding:0 10px 0 8px;margin:0 0 4px -8px;border-radius:4px;font-size:13px;font-weight:600;color:var(--gray);text-decoration:none}
+.og .sg-back:hover{color:var(--blue);background:var(--blue-t)}
+</style>
+<script>
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.sg-back[data-hist]');if(!a)return;try{var r=document.referrer;if(r&&new URL(r).origin===location.origin&&r.split('#')[0]!==location.href.split('#')[0]&&history.length>1){e.preventDefault();history.back();}}catch(x){}});
+</script>
 <script>
 /* ===== project context: open any active project with its own identity ===== */
 (function(){
