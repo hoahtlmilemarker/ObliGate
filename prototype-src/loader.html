@@ -1863,9 +1863,10 @@ html:has(.og[data-theme="dark"]),.og[data-theme="dark"]{--sb:rgba(255,255,255,.1
  function render(){var mg=S.as==='gm',q=S.q.toLowerCase();
   var list=M.filter(function(m){return (!S.f||m.r===S.f)&&(!q||(m.n+' '+m.e+' '+m.d+' '+R[m.r][0]).toLowerCase().indexOf(q)>-1);});
   var nSign=M.filter(function(m){return MX[m.r][4];}).length,nAppr=M.filter(function(m){return MX[m.r][5];}).length,nPend=I.filter(function(i){return !i.x;}).length;
-  var h=sec('Team overview','LA County Public Works · DR-4683-CA. Sample people and addresses; no email is sent from this prototype.',
+  var h='<div class="tm-pv"><span class="xq-dm" title="Prototype only, not part of the product: preview what a non-manager sees"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype · View as<span class="xq-seg" role="group" aria-label="Viewing as"><button type="button" data-as="gm" aria-pressed="'+mg+'">Grants Manager</button><button type="button" data-as="ga" aria-pressed="'+!mg+'">Grants Analyst</button></span></span></div>';
+  h+=sec('Team overview','LA County Public Works · DR-4683-CA. Sample people and addresses; no email is sent from this prototype.',
    '<div class="tm-kpis"><div class="tm-kpi"><small>Members</small><b>'+M.length+'</b></div><div class="tm-kpi"><small>Pending invites</small><b>'+nPend+'</b><span>'+(I.length-nPend)+' expired</span></div><div class="tm-kpi"><small>Approve submission</small><b>'+nAppr+'</b></div><div class="tm-kpi"><small>Sign attestations</small><b>'+nSign+'</b></div></div>'+
-   '<div class="tm-view"><div><b><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype · Viewing as</b><small>Preview what a non-manager sees. Not part of the product.</small></div><div class="tm-seg" role="group" aria-label="Viewing as"><button type="button" data-as="gm" aria-pressed="'+mg+'">Grants Manager</button><button type="button" data-as="ga" aria-pressed="'+!mg+'">Grants Analyst</button></div></div>');
+   '');
   if(!mg)h+='<div class="tm-note" role="note">'+LK+'<span><b>View only.</b> Only a Grants Manager can invite people, change roles or remove members. Ask Rosa Keith if someone needs access.</span></div>';
   if(mg){h+=sec('Invite a team member','They get an email link and join after signing in with County SSO. Invites expire after 7 days.','<div class="st-cb"><form class="tm-form" novalidate><div class="tm-inv">'+
    '<label class="tm-f tm-emw"><span>Work email</span><input class="inp tm-em" type="email" placeholder="name@agency.gov" autocomplete="off"><em class="tm-err" aria-live="polite"></em></label>'+
@@ -2926,6 +2927,7 @@ html.og-mac .og .gn-n{padding-bottom:.5px!important}html.og-mac .og section.ck3 
 .og .dtbl .meter>div{border-radius:3px!important;background-image:repeating-linear-gradient(-45deg,rgba(255,255,255,.3) 0 2px,rgba(255,255,255,0) 2px 5px)!important;box-shadow:none!important}
 .og .cq-mtr{height:5px}.og .cq-mtr u{background-image:repeating-linear-gradient(-45deg,rgba(255,255,255,.3) 0 2px,rgba(255,255,255,0) 2px 5px)}
 .og .um-i .um-ch,.og .um-i:hover .um-ch,.og .um-i:focus-visible .um-ch{width:13px!important;height:13px!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important;stroke-width:1.7}
+.og .tm-pv{display:flex;justify-content:flex-end;margin:16px 0 4px}
 /* back link on top-level pages */
 .og .sg-back{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;width:max-content;height:30px;padding:0 10px 0 8px;margin:0 0 4px -8px;border-radius:4px;font-size:13px;font-weight:600;color:var(--gray);text-decoration:none}
 .og .sg-back:hover{color:var(--blue);background:var(--blue-t)}
