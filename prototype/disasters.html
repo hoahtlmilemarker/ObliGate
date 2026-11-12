@@ -2921,6 +2921,12 @@ html.og-lock body{padding-right:var(--og-sbw,0px)}
 .og a.org-sw b{display:inline-flex;align-items:center;gap:6px}
 .og a.org-sw:hover{background:rgba(255,255,255,.06)}
 .og .org-sw{padding:6px 10px 6px 16px!important;margin-right:auto}
+/* sidebar: the project being worked on reads as active */
+.og .gn-proj[open]:has(.on) > summary{background:rgba(0,90,156,.05)!important}
+.og .gn-proj[open]:has(.on) > summary::before{content:"";position:absolute;left:-4px;top:8px;bottom:8px;width:2px;border-radius:2px;background:#C9A266;display:block!important}
+.og .gn-proj[open]:has(.on) > summary .gn-code{color:var(--blue)}
+.og .gn-proj[open]:has(.on) > summary .gn-name{color:var(--ink);font-weight:600}
+.og[data-theme="dark"] .gn-proj[open]:has(.on) > summary{background:rgba(110,178,234,.08)!important}
 /* back link on top-level pages */
 .og .sg-back{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;width:max-content;height:30px;padding:0 10px 0 8px;margin:0 0 4px -8px;border-radius:4px;font-size:13px;font-weight:600;color:var(--gray);text-decoration:none}
 .og .sg-back:hover{color:var(--blue);background:var(--blue-t)}
