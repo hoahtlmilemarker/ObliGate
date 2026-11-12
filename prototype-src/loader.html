@@ -547,7 +547,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <style>
 /* page transitions: skeleton while the next page loads, soft entrance on arrival */
 .og .col,.og .rv-panes{animation:pgIn .38s cubic-bezier(.2,.7,.2,1) both}
-@keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes pgIn{from{opacity:0}to{opacity:1}}
 .og .pg-sk{position:fixed;right:0;bottom:0;z-index:2147481000;padding:24px 28px;background:var(--pale,#F3F5F8);overflow:hidden;display:flex;flex-direction:column;gap:20px;animation:pgSkIn .16s ease-out}
 .og[data-theme="dark"] .pg-sk{background:#0E151D}
 @keyframes pgSkIn{from{opacity:0}to{opacity:1}}
