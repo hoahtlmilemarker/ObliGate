@@ -2802,6 +2802,24 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .um-sep{display:none}
 .og[data-theme="dark"] .um-i > svg:first-child{background:rgba(90,167,230,.14)!important}
 </style>
+<style>
+/* modals: no backdrop blur; page behind does not scroll while a modal is open */
+.og .dlg,.og .imx,.og .upm,.og .imd{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html.og-lock,html.og-lock body{overflow:hidden!important;overscroll-behavior:none}
+html.og-lock body{padding-right:var(--og-sbw,0px)}
+.og .dlg,.og .imx,.og .upm{overscroll-behavior:contain}
+.og .dlg-b .dlg-c{overscroll-behavior:contain}
+</style>
+<script>
+(function(){var SEL='.dlg,.imx,.upm';
+ function sync(){var open=!!document.querySelector(SEL),h=document.documentElement;if(open===h.classList.contains('og-lock'))return;
+  if(open){var w=innerWidth-h.clientWidth;h.style.setProperty('--og-sbw',(w>0?w:0)+'px');h.classList.add('og-lock');}else{h.classList.remove('og-lock');h.style.removeProperty('--og-sbw');}}
+ new MutationObserver(sync).observe(document.documentElement,{childList:true,subtree:true});
+ /* belt and braces: wheel/touch on the dimmed backdrop never reaches the page */
+ function block(e){var d=e.target.closest&&e.target.closest(SEL);if(!d)return;var sc=e.target.closest('.dlg-c,.fm-list,.um-list,[data-scroll]');if(sc&&d.contains(sc)&&sc.scrollHeight>sc.clientHeight)return;e.preventDefault();}
+ document.addEventListener('wheel',block,{passive:false});document.addEventListener('touchmove',block,{passive:false});
+ sync();})();
+</script>
 <script src="review/config.js?v=2"></script><script src="review/review.js?v=11" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
 
