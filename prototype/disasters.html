@@ -955,7 +955,7 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
    if(st[1])st[1].textContent=P?('DR-4683-CA detected across '+pl(Object.keys(up.reduce(function(a,x){if(x.pw)a[x.pw]=1;return a;},{})).length,'project')+'. '+AU+' filed automatically'+(CK?', '+CK+' filed for you to check':'')+(U?', '+U+' need'+(U===1?'s':'')+' a folder.':'.')):('No DR number or project found. '+pl(U,'file')+' need'+(U===1?'s':'')+' a folder.');
    if(st[2])st[2].textContent='Checking '+pl(P,'filed document')+'.';}
   /* back to the report while working through the upload */
-  var bi=q('.band .band-in');if(bi&&(q('.ux-t')||q('.lb-tbl'))&&!q('.up-back')){bi.insertAdjacentHTML('afterbegin','<a class="sg-back up-back" href="analysis-report"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7 4.5 3.5 8 7 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Analysis Report</a>');}
+  var bi=q('.band .band-in');if(bi&&!q('.gnav')&&(q('.ux-t')||q('.lb-tbl'))&&!q('.up-back')){bi.insertAdjacentHTML('afterbegin','<a class="sg-back up-back" href="analysis-report"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7 4.5 3.5 8 7 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Analysis Report</a>');}
   /* 03c · inbox: put the user's own unplaced files on top */
   var ut=q('.ux-t tbody');if(ut&&!q('.ux-new')){var done=[];try{done=JSON.parse(sessionStorage.getItem('og-up-done')||'[]');}catch(e){}
    var mine=up.filter(function(x){return !x.place&&done.indexOf(x.name)<0;});
@@ -2933,6 +2933,9 @@ html.og-lock body{padding-right:var(--og-sbw,0px)}
 .og .ux-from .ux-newpill{margin:0 1px 0 2px!important}
 .og .gn-n{display:inline-flex!important;align-items:center;justify-content:center;box-sizing:border-box!important;width:22px!important;height:22px!important;line-height:1!important;padding:0 0 2px!important}
 @supports (text-box:trim-both cap alphabetic){.og .gn-n{display:block!important;text-align:center;text-box:trim-both cap alphabetic;padding:calc((20px - 0.72em) / 2) 0 0!important}}
+.og .band .lbl:has(.fv-crumb){display:block!important;max-width:100%;font-size:10px!important;letter-spacing:.12em!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis}
+.og .band .lbl:has(.fv-crumb) .fv-sep{margin:0 6px}
+@media (max-width:640px){.og .band .lbl:has(.fv-crumb){white-space:normal!important;line-height:1.7}}
 /* back link on top-level pages */
 .og .sg-back{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;width:max-content;height:30px;padding:0 10px 0 8px;margin:0 0 4px -8px;border-radius:4px;font-size:13px;font-weight:600;color:var(--gray);text-decoration:none}
 .og .sg-back:hover{color:var(--blue);background:var(--blue-t)}
