@@ -38,7 +38,7 @@
 @keyframes ogLdBar{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
 @media (prefers-reduced-motion:reduce){#og-ld .tk i{animation:none;width:100%}#og-ld img,#og-ld .cap{animation:none;opacity:1;transform:none}}
 </style>
-<div id="og-pb" aria-hidden="true"></div>
+<script>try{if(/Mac|iPhone|iPad/.test((navigator.platform||'')+' '+navigator.userAgent))document.documentElement.classList.add('og-mac');}catch(e){}</script><div id="og-pb" aria-hidden="true"></div>
 <script>
 (function(){
   var first=true;try{first=!sessionStorage.getItem('og-ld');sessionStorage.setItem('og-ld','1');}catch(e){}
@@ -2922,8 +2922,9 @@ html.og-lock body{padding-right:var(--og-sbw,0px)}
 .og[data-theme="dark"] .gn-proj[open]:has(.on) > summary{background:rgba(110,178,234,.08)!important}
 .og .ux-newpill{display:inline-flex!important;align-items:center;justify-content:center;height:16px;padding:0 6px!important;line-height:1!important;vertical-align:middle!important;box-sizing:border-box}
 .og .ux-from .ux-newpill{margin:0 1px 0 2px!important}
-.og .gn-n{display:inline-flex!important;align-items:center;justify-content:center;box-sizing:border-box!important;width:22px!important;height:22px!important;line-height:1!important;padding:0 0 2px!important}
-@supports (text-box:trim-both cap alphabetic){.og .gn-n{display:block!important;text-align:center;text-box:trim-both cap alphabetic;padding:calc((20px - 0.72em) / 2) 0 0!important}}
+.og .gn-n{display:inline-flex!important;align-items:center;justify-content:center;box-sizing:border-box!important;width:22px!important;height:22px!important;line-height:1!important;padding:0!important}
+/* macOS draws Manrope ~1px lower than other systems: lift text in fixed-height chips and buttons */
+html.og-mac .og .gn-n,html.og-mac .og section.ck3 a.btn.ck3-rs{padding-bottom:2px!important}
 .og .band .lbl:has(.fv-crumb){display:block!important;max-width:100%;font-size:10px!important;letter-spacing:.12em!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis}
 .og .band .lbl:has(.fv-crumb) .fv-sep{margin:0 6px}
 @media (max-width:640px){.og .band .lbl:has(.fv-crumb){white-space:normal!important;line-height:1.7}}
