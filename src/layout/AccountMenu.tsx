@@ -1,17 +1,22 @@
 import { Box, ButtonBase, Divider, Menu, MenuItem, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HelpIcon, KeyboardIcon, SignOutIcon, ThemeIcon, UserIcon, BellIcon } from '@/icons';
-import { useColorMode } from '@/theme/ColorModeProvider';
+import { DownloadIcon, SettingsIcon, SignOutIcon, UsersIcon } from '@/icons';
 import { useToast } from '@/components';
 import { brand } from '@/theme/tokens';
 import { currentUser, routes } from './nav';
 
 /** Avatar button in the header + account dropdown. */
-export function AccountMenu({ onOpenSearch }: { onOpenSearch: () => void }) {
+export function AccountMenu(_props: { onOpenSearch?: () => void }) {
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const navigate = useNavigate();
-  const { mode, toggle } = useColorMode();
+  const [privateDevice, setPrivateDevice] = useState(() => {
+    try {
+      return localStorage.getItem('og-private') === '1';
+    } catch {
+      return false;
+    }
+  });
   const toast = useToast();
   const close = () => setAnchor(null);
   const go = (to: string) => {
@@ -56,47 +61,50 @@ export function AccountMenu({ onOpenSearch }: { onOpenSearch: () => void }) {
           <Box sx={{ minWidth: 0 }}>
             <Typography sx={{ fontSize: 14, fontWeight: 700, color: 'og.head' }}>{currentUser.name}</Typography>
             <Typography sx={{ fontSize: 12, color: 'og.gray' }} noWrap>
-              {currentUser.role}
+              {currentUser.email}
             </Typography>
             <Typography sx={{ fontSize: 11.5, color: 'og.gray', opacity: 0.8 }} noWrap>
-              {currentUser.org}
+              {currentUser.role} · {currentUser.org}
             </Typography>
           </Box>
         </Box>
-        <MenuItem onClick={() => go(routes.profile)}>
-          <UserIcon /> My Profile
+        <MenuItem onClick={() => go(routes.importWizard)}>
+          <DownloadIcon /> Import Data
         </MenuItem>
-        <MenuItem onClick={() => go(routes.notifications)}>
-          <BellIcon /> Notification Settings
+        <MenuItem onClick={() => go(routes.team)}>
+          <UsersIcon /> Team
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            close();
-            onOpenSearch();
-          }}
-        >
-          <KeyboardIcon /> Search
-          <Box component="kbd" sx={{ ml: 'auto', px: 1.5, border: 1, borderColor: 'og.line', borderRadius: '4px', fontSize: 11, color: 'og.gray', bgcolor: 'og.pale', fontFamily: 'inherit' }}>
-            ⌘K
-          </Box>
-        </MenuItem>
-        <MenuItem onClick={toggle}>
-          <ThemeIcon /> Theme
-          <Box component="span" sx={{ ml: 'auto', fontSize: 12, color: 'og.gray' }}>
-            {mode === 'dark' ? 'Dark' : 'Light'}
-          </Box>
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            close();
-            toast({ title: 'Help & Support', message: 'coming soon', tone: 'info' });
-          }}
-        >
-          <HelpIcon /> Help &amp; Support
+        <MenuItem onClick={() => go(routes.settings)}>
+          <SettingsIcon /> Settings
         </MenuItem>
         <Divider sx={{ my: 1, borderColor: 'og.lineSoft' }} />
+        <Box component="label" sx={{ display: 'flex', gap: 2.5, alignItems: 'flex-start', m: '2px 4px', p: '10px', borderRadius: '4px', cursor: 'pointer', '&:hover': { bgcolor: 'og.pale' } }}>
+          <Box
+            component="input"
+            type="checkbox"
+            checked={privateDevice}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const on = e.target.checked;
+              setPrivateDevice(on);
+              try {
+                localStorage.setItem('og-private', on ? '1' : '0');
+              } catch {
+                /* storage unavailable */
+              }
+              toast({ title: on ? 'Private device on' : 'Private device off', message: on ? 'you stay signed in after up to 24 hours idle' : 'idle sessions end after 30 minutes' });
+            }}
+            sx={{ flex: 'none', width: 16, height: 16, m: '2px 0 0', accentColor: 'var(--mui-palette-primary-main, #005A9C)' }}
+          />
+          <span>
+            <Box component="b" sx={{ display: 'block', fontSize: 13, fontWeight: 700, lineHeight: 1.35, color: 'og.head' }}>Private device: 24-hour idle window</Box>
+            <Box component="small" sx={{ display: 'block', mt: 1, fontSize: 11.5, lineHeight: 1.45, color: 'og.gray' }}>
+              Off: 30 minutes. Shared across ObliGate tabs; other security rules may end your session earlier.
+            </Box>
+          </span>
+        </Box>
+        <Divider sx={{ my: 1, borderColor: 'og.lineSoft' }} />
         <MenuItem onClick={() => go(routes.signIn)} sx={{ color: 'og.risk', '&:hover': { color: 'og.risk', bgcolor: 'og.riskTint' } }}>
-          <SignOutIcon /> Sign Out
+          <SignOutIcon /> Sign out
         </MenuItem>
       </Menu>
     </>

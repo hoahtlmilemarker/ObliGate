@@ -9,7 +9,7 @@ export interface SearchItem {
 
 /** Sample search index (prototype data). Replace with the search API. */
 export const searchIndex: SearchItem[] = [
-  { kind: 'folder', title: 'DR-4673-CA', sub: 'California Severe Winter Storms & Mudslides', to: routes.disasters },
+  { kind: 'folder', title: 'DR-4683-CA', sub: 'California Severe Winter Storms & Mudslides', to: routes.disasters },
   { kind: 'folder', title: 'PW-00428 · Malibu Canyon', sub: 'Project · Public Works Department', to: routes.project },
   { kind: 'folder', title: 'PW-00429 · Topanga Creek Debris', sub: 'Project · Public Works Department', to: routes.libraryEmpty },
   { kind: 'doc', title: 'Timesheet_Aguayo_PayPeriod_02.pdf', sub: 'Force-Account Timesheet · Review Needed (76%)', to: routes.review },

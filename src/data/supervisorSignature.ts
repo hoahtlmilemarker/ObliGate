@@ -10,7 +10,7 @@ export interface DetailRow {
 
 export const attestation = {
   portal: 'Field Verification Portal',
-  disaster: 'DR-4673-CA',
+  disaster: 'DR-4683-CA',
   supervisor: { name: 'Heidi Liu, PE', role: 'Resident Engineer', initials: 'HL' },
   requestId: 'SIG-2026-PW428-09',
   status: 'Action Required',
@@ -29,7 +29,7 @@ export const attestation = {
     '"Immediate emergency clearing of massive culvert mud blockage and unstable rock overhang following flash flood warning. Operator Hector Aguayo stayed on-site continuously until 23:30 to prevent roadway washout."',
   legalTitle: 'LEGAL ATTESTATION UNDER 18 U.S.C. § 1001',
   legalText:
-    '"I declare under penalty of perjury under the laws of the United States and the State of California that I was the designated field supervisor on duty during the dates and times specified. I personally observed and directed the emergency force-account labor and equipment operation stated above. All emergency overtime performed was necessary and directly attributable to disaster recovery under FEMA-4673-DR-CA."',
+    '"I declare under penalty of perjury under the laws of the United States and the State of California that I was the designated field supervisor on duty during the dates and times specified. I personally observed and directed the emergency force-account labor and equipment operation stated above. All emergency overtime performed was necessary and directly attributable to disaster recovery under FEMA-4683-DR-CA."',
   confirmText:
     'I confirm the shift hours (8.0 regular + 8.0 overtime) and equipment usage are true, accurate, and eligible for federal reimbursement.',
   signature: 'Heidi Liu, PE',

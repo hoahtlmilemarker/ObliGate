@@ -28,7 +28,7 @@ export function FolderBanner({
   prefix: string;
   crumbs: EyebrowPart[];
   separator?: string;
-  /** Put the separator between the prefix and the first crumb too ("Queue: To File · DR-4673-CA"). */
+  /** Put the separator between the prefix and the first crumb too ("Queue: To File · DR-4683-CA"). */
   separateFromPrefix?: boolean;
   title: ReactNode;
   subtitle?: ReactNode;

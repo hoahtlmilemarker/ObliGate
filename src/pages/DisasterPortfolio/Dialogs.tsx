@@ -77,7 +77,7 @@ export function NewProjectDialog({ open, onClose }: { open: boolean; onClose: ()
       confirmLabel="Create Project"
       confirmDisabled={!number.trim()}
       onConfirm={() => {
-        toast({ title: number, message: 'created under DR-4673-CA', inline: true });
+        toast({ title: number, message: 'created under DR-4683-CA', inline: true });
         onClose();
       }}
     >

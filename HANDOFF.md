@@ -2,7 +2,7 @@
 
 The prototype (`/prototype`, source in `/prototype-src`) is ahead of the React app. Port in this order; each item names the prototype page to copy behaviour from.
 
-## 1. Account menu and Settings (match the live app)
+## 1. Account menu and Settings (match the live app) — ✅ ported (`src/pages/Settings`, `src/layout/AccountMenu.tsx`)
 - **Account menu** (`AccountMenu.tsx`): header with name + email; items **Import Data** (`/import`), **Team** (`/team`), **Settings** (`/settings/security`); checkbox **"Private device: 24-hour idle window"** (off = 30-minute idle timeout, persisted per browser); **Sign out**. Remove My Profile / Notification Settings / Search / Theme / Help items (search and theme stay in the header).
 - **Settings shell**: left nav grouped as in the live app – Account: Security · Organization: Profile & branding, Disasters & scope · Compliance Engine: Policy & thresholds, Finding overrides · Workspace: Notifications, Data & retention · FEMA Pattern Memory: Reviewer patterns. Below 1100px the nav becomes a horizontal scrolling tab row.
 - **Security**: TOTP authenticator list; "Add authenticator" dialog (QR, secret key, 6-digit code, validation); remove with confirm.
@@ -13,7 +13,7 @@ The prototype (`/prototype`, source in `/prototype-src`) is ahead of the React a
 - **Disasters & scope**, **Data & retention**: "Coming soon" state.
 - **Reviewer patterns**: "No patterns recorded yet" + Vendor familiarity table (filter, refresh; Trusted / Compliance risk / Neutral).
 
-## 2. Team (`/team`, page 15)
+## 2. Team (`/team`, page 15) — ✅ ported (`src/pages/Team`)
 Overview counts, prototype-only "Viewing as" switch (manager vs analyst), invite form (email validation, duplicate member / pending invite checks, Department required for Department Liaison, role description + capability chips), pending invitations (Resend / Send Again / Revoke with confirm), members table (search incl. role, role filter, inline role select with Undo, confirm when granting or removing Grants Manager, remove with confirm + Undo, cannot remove yourself), role × capability matrix. Read-only notice for non-managers.
 
 ## 3. Upload → Analysis → Report (pages 12–14) and Unplaced Inbox

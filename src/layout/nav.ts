@@ -11,8 +11,10 @@ export const routes = {
   importWizard: '/import',
   preSubmission: '/pre-submission',
   signature: '/signature',
-  profile: '/account/profile',
-  notifications: '/account/notifications',
+  team: '/team',
+  settings: '/settings/security',
+  profile: '/settings/profile',
+  notifications: '/settings/notifications',
 } as const;
 
 export type MainNavKey = 'library' | 'crossCheck' | 'disasters' | 'preSubmission';
@@ -30,7 +32,7 @@ export const currentUser = {
   initials: 'RK',
   role: 'Grants Manager',
   org: 'LA County Public Works',
-  email: 'rkeith@dpw.lacounty.gov',
+  email: 'r.keith@example.gov',
 };
 
-export const currentDisaster = { org: 'LA County Public Works', id: 'DR-4673-CA' };
+export const currentDisaster = { org: 'LA County Public Works', id: 'DR-4683-CA' };

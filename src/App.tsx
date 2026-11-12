@@ -17,8 +17,15 @@ const CrossCheck = lazy(() => import('@/pages/CrossCheck'));
 const ImportWizard = lazy(() => import('@/pages/ImportWizard'));
 const PreSubmission = lazy(() => import('@/pages/PreSubmission'));
 const SupervisorSignature = lazy(() => import('@/pages/SupervisorSignature'));
-const MyProfile = lazy(() => import('@/pages/MyProfile'));
-const NotificationSettings = lazy(() => import('@/pages/NotificationSettings'));
+const Team = lazy(() => import('@/pages/Team'));
+const Security = lazy(() => import('@/pages/Settings/Security'));
+const ProfileBranding = lazy(() => import('@/pages/Settings/ProfileBranding'));
+const PolicyThresholds = lazy(() => import('@/pages/Settings/PolicyThresholds'));
+const DisastersScope = lazy(() => import('@/pages/Settings/Simple').then((m) => ({ default: m.DisastersScope })));
+const FindingOverrides = lazy(() => import('@/pages/Settings/Simple').then((m) => ({ default: m.FindingOverrides })));
+const Notifications = lazy(() => import('@/pages/Settings/Simple').then((m) => ({ default: m.Notifications })));
+const DataRetention = lazy(() => import('@/pages/Settings/Simple').then((m) => ({ default: m.DataRetention })));
+const ReviewerPatterns = lazy(() => import('@/pages/Settings/Simple').then((m) => ({ default: m.ReviewerPatterns })));
 
 export function App() {
   return (
@@ -41,8 +48,18 @@ export function App() {
               <Route path={routes.importWizard} element={<ImportWizard />} />
               <Route path={routes.preSubmission} element={<PreSubmission />} />
               <Route path={routes.signature} element={<SupervisorSignature />} />
-              <Route path={routes.profile} element={<MyProfile />} />
-              <Route path={routes.notifications} element={<NotificationSettings />} />
+              <Route path={routes.team} element={<Team />} />
+              <Route path="/settings" element={<Navigate to={routes.settings} replace />} />
+              <Route path="/settings/security" element={<Security />} />
+              <Route path="/settings/profile" element={<ProfileBranding />} />
+              <Route path="/settings/disasters-scope" element={<DisastersScope />} />
+              <Route path="/settings/policy-thresholds" element={<PolicyThresholds />} />
+              <Route path="/settings/finding-overrides" element={<FindingOverrides />} />
+              <Route path="/settings/notifications" element={<Notifications />} />
+              <Route path="/settings/data-retention" element={<DataRetention />} />
+              <Route path="/settings/reviewer-patterns" element={<ReviewerPatterns />} />
+              <Route path="/account/profile" element={<Navigate to={routes.profile} replace />} />
+              <Route path="/account/notifications" element={<Navigate to={routes.notifications} replace />} />
               <Route path="*" element={<Navigate to={routes.signIn} replace />} />
             </Routes>
           </Suspense>

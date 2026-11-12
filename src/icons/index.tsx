@@ -85,6 +85,8 @@ export const InboxIcon = make(
 export const ShieldIcon = make(<><path d="M12 3 5 6v5.5c0 4.3 3 7.9 7 9.5 4-1.6 7-5.2 7-9.5V6z" fill="currentColor" fillOpacity=".14" /><path d="m9 12 2.2 2.2L15.5 10" /></>, 'ShieldIcon');
 export const LockIcon = make(<><rect x="5" y="10.5" width="14" height="10" rx="2" /><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" /></>, 'LockIcon');
 export const UserIcon = make(<><circle cx="12" cy="8.5" r="3.5" fill="currentColor" fillOpacity=".18" /><path d="M5 19.5c1.2-3.2 3.8-5 7-5s5.8 1.8 7 5" /></>, 'UserIcon');
+export const UsersIcon = make(<><circle cx="9" cy="8.5" r="3.2" fill="currentColor" fillOpacity=".18" /><circle cx="9" cy="8.5" r="3.2" /><path d="M3 19c.9-2.9 3.2-4.6 6-4.6s5.1 1.7 6 4.6" /><path d="M15.5 5.6a3 3 0 0 1 0 5.8M17.5 14.6c1.6.6 2.8 2 3.4 4" /></>, 'UsersIcon');
+export const SettingsIcon = make(<><circle cx="12" cy="12" r="3" fill="currentColor" fillOpacity=".18" /><circle cx="12" cy="12" r="3" /><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7" /></>, 'SettingsIcon');
 export const BellIcon = make(<><path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.5 2h-15z" fill="currentColor" fillOpacity=".18" /><path d="M10 21h4" /></>, 'BellIcon');
 export const KeyboardIcon = make(<><rect x="3" y="6" width="18" height="12" rx="2" fill="currentColor" fillOpacity=".18" /><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8" /></>, 'KeyboardIcon');
 export const HelpIcon = make(<><circle cx="12" cy="12" r="9" fill="currentColor" fillOpacity=".18" /><path d="M9.6 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.4M12 16.8h.01" /></>, 'HelpIcon');

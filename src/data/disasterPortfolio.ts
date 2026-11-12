@@ -79,7 +79,7 @@ export const declarationColumns = [
 
 export const declarations: Declaration[] = [
   {
-    id: 'DR-4673-CA',
+    id: 'DR-4683-CA',
     incident: 'California Severe Winter Storms & Mudslides',
     period: 'Dec 27, 2022 – Jan 31, 2023',
     projects: '16 Projects',
@@ -130,4 +130,4 @@ export type SortOption = (typeof sortOptions)[number];
 
 /** Dialog options (Declare New Event / New Project). */
 export const incidentTypes = ['Winter Storms', 'Wildfire', 'Flooding', 'Earthquake'];
-export const projectDisasterOptions = ['DR-4673-CA · Winter Storms'];
+export const projectDisasterOptions = ['DR-4683-CA · Winter Storms'];

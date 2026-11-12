@@ -295,7 +295,7 @@ export function LibrarySidebar({ activeQueue, activeFolder, reviewCount = queueC
 
   return (
     <>
-      <SidebarSection label="Processing Queues" scope="All of DR-4673-CA">
+      <SidebarSection label="Processing Queues" scope="All of DR-4683-CA">
         <QueueItem icon={<ReviewQueueGlyph />} label="To Review · all projects" count={reviewCount} to={routes.review} active={activeQueue === 'review'} />
         <QueueItem icon={<InboxGlyph />} label="To File (Unplaced Inbox)" count={inboxCount} to={routes.inbox} active={activeQueue === 'inbox'} />
       </SidebarSection>

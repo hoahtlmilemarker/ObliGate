@@ -26,7 +26,7 @@ npm run build      # typecheck + production build to dist/ (also copies /prototy
 | `prototype/` | Original static HTML prototype, served at `/prototype/` |
 
 ## Routes
-`/sign-in` · `/disasters` · `/projects/:projectId` · `/library` · `/library/:projectId/:folder` · `/inbox` · `/review` · `/cross-check` · `/import` · `/pre-submission` · `/signature` · `/account/profile` · `/account/notifications`
+`/sign-in` · `/disasters` · `/projects/:projectId` · `/library` · `/library/:projectId/:folder` · `/inbox` · `/review` · `/cross-check` · `/import` · `/pre-submission` · `/signature` · `/team` · `/settings/security` · `/settings/profile` · `/settings/disasters-scope` · `/settings/policy-thresholds` · `/settings/finding-overrides` · `/settings/notifications` · `/settings/data-retention` · `/settings/reviewer-patterns` (old `/account/*` redirect)
 
 ## Notes for integration
 - Breakpoints: `sm` 640, `md` 820, `lg` 1024, `xl` 1320. Spacing unit 4px.
