@@ -2120,14 +2120,17 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <style>
 /* ===== Add Disaster / Add Project (live app fields) — premium modal, custom calendar + select ===== */
 .og .dlg-b.fm{width:min(600px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden;border-top:2px solid #B08A4E;box-shadow:0 24px 60px -28px rgba(0,20,40,.4),0 0 0 1px rgba(6,36,63,.04)}
-.og .dlg-b.fm .dlg-h{position:relative;align-items:flex-start;padding:20px 24px 16px;background:linear-gradient(180deg,var(--blue-t),transparent 85%);border-bottom:1px solid var(--line-soft)}
+.og .dlg-b.fm .dlg-h{position:relative;align-items:flex-start;padding:20px 24px 18px;background:linear-gradient(180deg,var(--blue-t),transparent 85%);border-bottom:1px solid var(--line-soft)}
 .og .dlg-b.fm .dlg-h > div{display:flex;gap:14px;align-items:flex-start;min-width:0}
 .og .dlg-b.fm .dlg-h small{color:#A57F3C;margin-bottom:6px}
 .og[data-theme="dark"] .dlg-b.fm .dlg-h small{color:#E2C27E}
 .og .dlg-b.fm .dlg-h h3{color:var(--head);font:600 20px/1.25 Manrope,Arial,sans-serif;letter-spacing:-.01em}
 .og .dlg-b.fm .dlg-h p.fm-sub{margin:5px 0 0;font:500 12.5px/1.55 Manrope,Arial,sans-serif;color:var(--gray)}
-.og .dlg-b.fm .dlg-x{color:var(--gray);border:0;background:none}
-.og .dlg-b.fm .dlg-x:hover{color:var(--blue);background:var(--blue-t)}
+.og .dlg-b.fm .dlg-x{flex:none;display:grid;place-items:center;width:32px;height:32px;margin:-2px -6px 0 0;padding:0;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--gray);box-shadow:0 1px 2px rgba(6,36,63,.05);transition:border-color .15s,color .15s,background .15s,transform .15s}
+.og .dlg-b.fm .dlg-x:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-t)}
+.og .dlg-b.fm .dlg-x:hover svg{transform:rotate(90deg)}
+.og .dlg-b.fm .dlg-x svg{transition:transform .2s ease}
+.og .dlg-b.fm .dlg-x:focus-visible{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,90,156,.18)}
 .og .fm-badge{flex:none;display:grid;place-items:center;width:40px;height:40px;margin-top:2px;border-radius:4px;background:var(--card);border:1px solid var(--line);color:var(--blue);box-shadow:0 1px 2px rgba(6,36,63,.05)}
 .og .fm-badge svg{width:20px;height:20px}
 .og .dlg-b.fm .dlg-c{flex:1;min-height:0;overflow-y:auto;padding:6px 24px 8px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
@@ -2365,8 +2368,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
  /* ---- dialog shell ---- */
  function form(o){var d=window.ogDialog({eyebrow:o.eyebrow,title:o.title,ok:o.ok,body:o.body,onOk:function(dd){return o.submit(dd);}});var b=q(d,'.dlg-b');b.classList.add('fm');
-  var hd=q(d,'.dlg-h > div');hd.insertAdjacentHTML('afterbegin','<span class="fm-badge" aria-hidden="true">'+S(IC[o.icon],24)+'</span>');var tx=document.createElement('div');while(hd.childNodes.length>1)tx.appendChild(hd.childNodes[1]);hd.appendChild(tx);tx.insertAdjacentHTML('beforeend','<p class="fm-sub">'+o.sub+'</p>');
-  q(d,'.dlg-x').innerHTML=S(IC.x,15);
+  var hd=q(d,'.dlg-h > div');var tx=document.createElement('div');while(hd.firstChild)tx.appendChild(hd.firstChild);hd.appendChild(tx);tx.insertAdjacentHTML('beforeend','<p class="fm-sub">'+o.sub+'</p>');
+  q(d,'.dlg-x').innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
   q(d,'.dlg-f').insertAdjacentHTML('afterbegin','<span class="fm-req"><i>*</i> Required</span>');
   var ok=q(d,'.dlg-ok');ok.innerHTML=S(IC.plus,15)+o.ok;
   o.enhance&&o.enhance(d);
@@ -2381,7 +2384,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  function days(a,b){return Math.round((parse(b)-parse(a))/864e5)+1;}
 
  window.ogAddDisaster=function(){
-  form({eyebrow:'Add manually',title:'Add Disaster',ok:'Add Disaster',icon:'storm',sub:'Enter the declaration as it appears on your FEMA letter. Projects and records are filed under it.',
+  form({eyebrow:'Add manually',title:'Add Disaster',ok:'Add Disaster',icon:'storm',sub:'Enter the declaration as it appears on your FEMA letter.',
    body:sec('1','Declaration')+
     '<div class="fm-f">'+lbl('ad-n','Name',1)+inp('ad-n','text','data-need maxlength="120" placeholder="e.g., 2026 Winter Storms & Flooding" autocomplete="off"')+'</div>'+
     '<div class="row2"><div class="fm-f">'+lbl('ad-dr','FEMA Disaster Number')+inp('ad-dr','hash','placeholder="e.g., DR-4856-CA" autocomplete="off" spellcheck="false"')+'<p class="fm-h">Optional but recommended. On your FEMA declaration letter.</p></div>'+
@@ -2413,7 +2416,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   var C=[['A','Debris Removal'],['B','Emergency Protective Measures'],['C','Roads & Bridges'],['D','Water Control Facilities'],['E','Public Buildings & Equipment'],['F','Public Utilities'],['G','Parks, Recreational & Other Facilities'],['Z','Management Costs']];
   var cur=pre||(document.querySelector('a.org-sw b')||{}).textContent||'';
   var opts=DRS.length?'<option value="">Select a disaster</option>'+DRS.map(function(x){return '<option value="'+esc(x[0])+'"'+(x[0]===cur?' selected':'')+'>'+esc(x[0])+' · '+esc(x[1])+'</option>';}).join(''):'<option value="">No disasters yet</option>';
-  form({eyebrow:'Add manually',title:'Add Project',ok:'Add Project',icon:'folder',sub:'Create a project under a disaster. Identifiers can be added later as FEMA and eCAPS assign them.',
+  form({eyebrow:'Add manually',title:'Add Project',ok:'Add Project',icon:'folder',sub:'Create a project under a disaster. Identifiers can come later.',
    body:sec('1','Project')+
     '<div class="fm-f">'+lbl('ap-d','Disaster',1)+'<select id="ap-d" data-need>'+opts+'</select>'+(DRS.length?'':'<p class="fm-h">Add a disaster first. <a href="#" data-add-dr>Add Disaster</a></p>')+'</div>'+
     '<div class="fm-f">'+lbl('ap-t','Title',1,'A short name your team will recognise, e.g. the site and the work.')+inp('ap-t','text','data-need maxlength="120" placeholder="e.g., Main Library Roof Repair" autocomplete="off"')+'</div>'+
