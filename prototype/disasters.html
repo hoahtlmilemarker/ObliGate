@@ -2572,6 +2572,18 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .xq-pop .mi svg{width:15px;height:15px;color:var(--blue)}
 .og .xq-btn.xq-add svg{width:17px;height:17px;color:var(--blue)}
 .og .xq-btn.xq-add:hover{background:var(--blue-t)}
+.og .xq-dm{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray)}
+.og .xq-seg{display:inline-flex;padding:2px;border:1px solid var(--line);border-radius:4px;background:var(--card)}
+.og .xq-seg button{height:26px;padding:0 10px;border:0;border-radius:3px;background:none;font:700 12px/1 Manrope,Arial,sans-serif;letter-spacing:0;text-transform:none;color:var(--gray);cursor:pointer}
+.og .xq-seg button:hover{color:var(--head)}
+.og .xq-seg button[aria-pressed="true"]{background:var(--blue-t);color:var(--blue)}
+.og .xq-es{display:flex;flex-direction:column;align-items:center;gap:6px;padding:44px 20px 46px;text-align:center}
+.og .xq-es-ic{display:grid;place-items:center;width:52px;height:52px;margin-bottom:8px;border-radius:50%;background:var(--blue-t);color:var(--blue)}
+.og .xq-es-ic svg{width:26px;height:26px;stroke-width:1.4}
+.og .xq-es b{font-size:16px;color:var(--head)}
+.og .xq-es p{max-width:440px;margin:0;font-size:13px;line-height:1.55;color:var(--gray)}
+.og .xq-es .xq-btn{margin-top:12px}
+.og .xq-es-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 /* popovers */
 .og .xq-pop{position:fixed;z-index:2147482500;min-width:220px;padding:6px;border:1px solid var(--line);border-top:2px solid #B08A4E;border-radius:4px;background:var(--card);box-shadow:0 18px 40px -18px rgba(0,20,40,.4);font-family:Manrope,Arial,sans-serif;animation:fmPop .14s ease-out}
 .og .xq-pop small.h{display:block;padding:8px 10px 6px;font:800 10px/1 Manrope,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gray)}
@@ -2657,6 +2669,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  function fmt(d){return d?d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';}
  function ago(h){return h<1?'Just now':h<24?h+' hour'+(h===1?'':'s')+' ago':Math.round(h/24)===1?'Yesterday':Math.round(h/24)+' days ago';}
  var ME='Rosa Keith';
+ /* prototype-only: preview each table with data or empty (persisted per browser) */
+ function demoEmpty(k){try{return localStorage.getItem('og-empty-'+k)==='1';}catch(e){return false;}}
+ function setDemoEmpty(k,v){try{localStorage.setItem('og-empty-'+k,v?'1':'0');}catch(e){}}
+ function seg(k,on){return '<span class="xq-dm" title="Prototype only: preview the table with or without data">Preview<span class="xq-seg" role="group" aria-label="Preview state"><button type="button" data-dm="'+k+'" data-v="0" aria-pressed="'+!on+'">With data</button><button type="button" data-dm="'+k+'" data-v="1" aria-pressed="'+on+'">Empty</button></span></span>';}
  var PPL={'Rosa Keith':['RK','#1E4F8F'],'Daniel Ortiz':['DO','#3F7FD9'],'Priya Natarajan':['PN','#7C4DB4'],'Marcus Hale':['MH','#2E7D4F']};
 
  /* ---------------- 22 · Cross-Check (all projects) ---------------- */
@@ -2675,6 +2691,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   var SO=[['v','Highest variance',function(a,b){return b.v-a.v;}],['open','Most open rows',function(a,b){return b.open-a.open;}],['due','Due soonest',function(a,b){return (a.due?a.due:9e15)-(b.due?b.due:9e15);}],['act','Recent activity',function(a,b){return a.h-b.h;}]];
   var COLS=[['dept','Department'],['rfi','RFIs'],['who','Assignee'],['due','Due']];
   var st={q:'all',f:{},dis:[],dept:[],s:'v',term:'',cols:{dept:1,rfi:1,who:1,due:1},page:1,per:10};
+  var R0=R;if(demoEmpty('cx'))R=[];
   var DRS=[...new Set(R.map(function(r){return r.dr;}))],DPS=[...new Set(R.map(function(r){return r.dept;}))];
   function pass(r,skip){var q=QS.filter(function(x){return x[0]===st.q;})[0];if(skip!=='q'&&!q[2](r))return false;for(var k in st.f){if(st.f[k]&&skip!==k){var c=QF.filter(function(x){return x[0]===k;})[0];if(!c[2](r))return false;}}if(st.dis.length&&skip!=='dis'&&st.dis.indexOf(r.dr)<0)return false;if(st.dept.length&&skip!=='dept'&&st.dept.indexOf(r.dept)<0)return false;var t=st.term.trim().toLowerCase();if(t&&(r.pw+' '+r.name+' '+r.dept+' '+r.dr+' '+(r.who||'')).toLowerCase().indexOf(t)<0)return false;return true;}
   function rows(){return R.filter(function(r){return pass(r);}).sort(SO.filter(function(x){return x[0]===st.s;})[0][2]);}
@@ -2682,19 +2699,19 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   function cnt(fn){return R.filter(fn).length;}
   function drawRail(){var h='<div><span class="lbl">Queue</span>'+QS.map(function(q){return '<button type="button" class="cq-q" data-q="'+q[0]+'" aria-pressed="'+(st.q===q[0])+'">'+q[1]+'<span>'+cnt(q[2])+'</span></button>';}).join('')+'</div>'+
    '<div><span class="lbl">Quick filters</span>'+QF.map(function(f){return '<label class="cq-ck"><input type="checkbox" data-f="'+f[0]+'"'+(st.f[f[0]]?' checked':'')+'><span>'+f[1]+'</span><em>'+cnt(f[2])+'</em></label>';}).join('')+'</div>'+
-   '<div><span class="lbl">Disaster</span>'+DRS.map(function(d){return '<label class="cq-ck"><input type="checkbox" data-dis="'+d+'"'+(st.dis.indexOf(d)>-1?' checked':'')+'><span>'+d+'</span><em>'+cnt(function(r){return r.dr===d;})+'</em></label>';}).join('')+'</div>'+
-   '<div><span class="lbl">Department</span>'+DPS.map(function(d){return '<label class="cq-ck"><input type="checkbox" data-dept="'+esc(d)+'"'+(st.dept.indexOf(d)>-1?' checked':'')+'><span>'+esc(d)+'</span><em>'+cnt(function(r){return r.dept===d;})+'</em></label>';}).join('')+'</div>'+
+   (DRS.length?'<div><span class="lbl">Disaster</span>'+DRS.map(function(d){return '<label class="cq-ck"><input type="checkbox" data-dis="'+d+'"'+(st.dis.indexOf(d)>-1?' checked':'')+'><span>'+d+'</span><em>'+cnt(function(r){return r.dr===d;})+'</em></label>';}).join('')+'</div>':'')+
+   (DPS.length?'<div><span class="lbl">Department</span>'+DPS.map(function(d){return '<label class="cq-ck"><input type="checkbox" data-dept="'+esc(d)+'"'+(st.dept.indexOf(d)>-1?' checked':'')+'><span>'+esc(d)+'</span><em>'+cnt(function(r){return r.dept===d;})+'</em></label>';}).join('')+'</div>':'')+
    (filtered()?'<button type="button" class="cq-reset" data-reset>Reset filters</button>':'');
    q(root,'.cq-rail').innerHTML=h;}
   function drawMain(){var all=rows(),n=all.length,pages=Math.max(1,Math.ceil(n/st.per));if(st.page>pages)st.page=pages;var vis=all.slice((st.page-1)*st.per,st.page*st.per),C=st.cols;
    var V=all.reduce(function(s,r){return s+r.v;},0),O=all.reduce(function(s,r){return s+r.open;},0),RS=all.reduce(function(s,r){return s+r.res;},0),RF=all.reduce(function(s,r){return s+r.rfi;},0),PD=all.filter(function(r){return r.due&&r.due<T0&&r.open>0;}).length,pct=O+RS?Math.round(RS/(O+RS)*100):100;
    q(root,'.cq-ledger').innerHTML='<div class="cq-k"><span class="lbl">Active variance</span><b class="'+(V?'risk':'')+'">$'+V.toLocaleString('en-US')+'</b><small>across '+n+' visible project'+(n===1?'':'s')+'</small></div>'+
-    '<div class="cq-k"><span class="lbl">Open flagged rows</span><b>'+O+'</b><span class="cq-mt"><i><u style="width:'+pct+'%"></u></i><span>'+pct+'% resolved</span></span></div>'+
+    '<div class="cq-k"><span class="lbl">Open flagged rows</span><b>'+O+'</b>'+(O+RS?'<span class="cq-mt"><i><u style="width:'+pct+'%"></u></i><span>'+pct+'% resolved</span></span>':'<small>No flagged rows yet</small>')+'</div>'+
     '<div class="cq-k"><span class="lbl">Open RFIs</span><b>'+RF+'</b><small>awaiting a reply across visible projects</small></div>'+
     '<div class="cq-k"><span class="lbl">Past due</span><b class="'+(PD?'risk':'')+'">'+PD+'</b><span class="cq-chip'+(PD?'':' ok')+'">'+(PD?PD+' project'+(PD===1?' needs':'s need')+' attention':'Nothing past due')+'</span></div>';
    q(root,'.cq-meta').innerHTML='Showing <b>'+n+'</b> of '+R.length+' projects';
    var th=function(t,c){return '<th'+(c?' class="'+c+'"':'')+'>'+t+'</th>';};
-   q(root,'.cq-card').innerHTML='<div class="cq-tw"><table class="cq-t"><thead><tr>'+th('Project')+th('Disaster')+(C.dept?th('Department'):'')+th('Variance','r')+th('Flagged rows')+(C.rfi?th('RFIs','r'):'')+(C.who?th('Assignee'):'')+(C.due?th('Due'):'')+th('Action')+'</tr></thead><tbody>'+
+   q(root,'.cq-card').innerHTML='<div class="cq-tw"><table class="cq-t"><thead'+(R.length?'':' hidden')+'><tr>'+th('Project')+th('Disaster')+(C.dept?th('Department'):'')+th('Variance','r')+th('Flagged rows')+(C.rfi?th('RFIs','r'):'')+(C.who?th('Assignee'):'')+(C.due?th('Due'):'')+th('Action')+'</tr></thead><tbody>'+
     (vis.length?vis.map(function(r){var late=r.due&&r.due<T0&&r.open>0,soon=r.due&&!late&&r.due<=dd(7),p=r.open+r.res?Math.round(r.res/(r.open+r.res)*100):100,tone=r.open===0?'good':r.open>=5?'risk':'warn',days=r.due?Math.round((r.due-T0)/DAY):null;
       return '<tr><td><button type="button" class="cq-pw" data-open="'+r.pw+'">'+r.pw+'</button><span class="cq-nm">'+esc(r.name)+'</span><span class="cq-up">Updated '+ago(r.h).toLowerCase()+(r.ready?' · ready for review':'')+(r.exc?' · documented exception':'')+'</span></td>'+
        '<td><span class="cq-dr">'+r.dr+'</span></td>'+(C.dept?'<td class="cq-dept">'+esc(r.dept)+'</td>':'')+
@@ -2703,21 +2720,22 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
        (C.rfi?'<td class="r">'+(r.rfi?'<b style="color:var(--head)">'+r.rfi+'</b>':'<span style="color:var(--gray)">—</span>')+'</td>':'')+
        (C.who?'<td>'+(r.who?'<span class="cq-as"><span class="cq-av">'+(PPL[r.who]||['?'])[0]+'</span><span>'+esc(r.who)+(r.who===ME?' <span style="color:var(--gray)">(you)</span>':'')+'<small>'+esc(r.role||'')+'</small></span></span>':'<span class="cq-un">Unassigned</span>')+'</td>':'')+
        (C.due?'<td class="cq-due">'+(r.due?fmt(r.due)+'<small class="'+(late?'late':soon?'soon':'ok')+'">'+(late?Math.abs(days)+' day'+(Math.abs(days)===1?'':'s')+' late':days===0?'Due today':'In '+days+' day'+(days===1?'':'s'))+'</small>':'<span style="color:var(--gray)">No due date</span>')+'</td>':'')+
-       '<td><button type="button" class="cq-go'+(r.built?' p':'')+'" data-open="'+r.pw+'">Open'+S(I.r)+'</button></td></tr>';}).join(''):'<tr><td colspan="9"><div class="cq-empty"><b>No projects match</b>Try another queue or remove a filter.<br><button type="button" class="xq-btn" data-reset>Reset filters</button></div></td></tr>')+
+       '<td><button type="button" class="cq-go'+(r.built?' p':'')+'" data-open="'+r.pw+'">Open'+S(I.r)+'</button></td></tr>';}).join(''):(R.length?'<tr><td colspan="9"><div class="cq-empty"><b>No projects match</b>Try another queue or remove a filter.<br><button type="button" class="xq-btn" data-reset>Reset filters</button></div></td></tr>':'<tr><td colspan="9"><div class="xq-es"><span class="xq-es-ic">'+S(I.scale)+'</span><b>No cross-check projects yet</b><p>A project shows up here once its payroll is imported and matched against field logs. Import a payroll export to start your first cross-check.</p><span class="xq-es-row"><a class="xq-btn p" href="import#payroll">'+S(I.dl)+'Import payroll</a><a class="xq-btn" href="upload">Upload records</a></span></div></td></tr>'))+
     '</tbody></table></div><div class="cq-foot"><span>Showing <b>'+(n?((st.page-1)*st.per+1)+'–'+Math.min(n,st.page*st.per):0)+'</b> of <b>'+n+'</b> projects</span><span class="xq-pg"><button type="button" data-pg="-1" aria-label="Previous page"'+(st.page<=1?' disabled':'')+'>'+S(I.l)+'</button><button type="button" data-pg="1" aria-label="Next page"'+(st.page>=pages?' disabled':'')+'>'+S(I.r)+'</button></span></div>';
    var sb=q(root,'[data-sort]');if(sb)sb.innerHTML=S(I.sort)+'Sort: '+SO.filter(function(x){return x[0]===st.s;})[0][1];}
   function render(){drawRail();drawMain();}
-  root.innerHTML='<section class="cq-ledger" aria-label="Cross-check totals"></section><div class="cq-body"><aside class="cq-rail" aria-label="Queues and filters"></aside><div class="cq-main"><div class="cq-tools"><label class="cq-srch">'+S('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>')+'<input type="search" placeholder="Filter projects by name or PW…" aria-label="Filter projects"></label><span class="cq-meta"></span><span class="xq-acts"><button type="button" class="xq-btn" data-cols aria-haspopup="true" aria-expanded="false">'+S('<rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M9.5 4.5v15M14.5 4.5v15"/>')+'Columns</button><button type="button" class="xq-btn" data-sort aria-haspopup="true" aria-expanded="false"></button><button type="button" class="xq-btn" data-export>'+S(I.dl)+'Export CSV</button></span></div><div class="cq-card"></div></div></div>';
+  root.innerHTML='<section class="cq-ledger" aria-label="Cross-check totals"></section><div class="cq-body"><aside class="cq-rail" aria-label="Queues and filters"></aside><div class="cq-main"><div class="cq-tools"><label class="cq-srch">'+S('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>')+'<input type="search" placeholder="Filter projects by name or PW…" aria-label="Filter projects"></label><span class="cq-meta"></span><span class="xq-acts">'+seg('cx',demoEmpty('cx'))+'<button type="button" class="xq-btn" data-cols aria-haspopup="true" aria-expanded="false">'+S('<rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M9.5 4.5v15M14.5 4.5v15"/>')+'Columns</button><button type="button" class="xq-btn" data-sort aria-haspopup="true" aria-expanded="false"></button><button type="button" class="xq-btn" data-export>'+S(I.dl)+'Export CSV</button></span></div><div class="cq-card"></div></div></div>';
   function openRow(pw){var r=R.filter(function(x){return x.pw===pw;})[0];if(!r)return;if(r.built){location.href='cross-check';return;}toast('<b>'+r.pw+' · '+esc(r.name)+'</b> is a sample row. Open <a href="cross-check" style="color:inherit;font-weight:700">PW-00428</a> to work a full cross-check.');}
   function csv(list){var hd=['Project','Name','Disaster','Department','Variance','Open flagged','Resolved','RFIs','Assignee','Due'];return [hd].concat(list.map(function(r){return [r.pw,r.name,r.dr,r.dept,r.v,r.open,r.res,r.rfi,r.who||'Unassigned',r.due?r.due.toISOString().slice(0,10):''];})).map(function(a){return a.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');}
   var inp=q(root,'.cq-srch input');inp.addEventListener('input',function(){st.term=inp.value;st.page=1;render();});
   root.addEventListener('change',function(e){var t=e.target;if(t.hasAttribute('data-f')){st.f[t.getAttribute('data-f')]=t.checked;}else if(t.hasAttribute('data-dis')){var d=t.getAttribute('data-dis');st.dis=t.checked?st.dis.concat(d):st.dis.filter(function(x){return x!==d;});}else if(t.hasAttribute('data-dept')){var d2=t.getAttribute('data-dept');st.dept=t.checked?st.dept.concat(d2):st.dept.filter(function(x){return x!==d2;});}else return;st.page=1;var sel=t.getAttribute('data-f')?'[data-f="'+t.getAttribute('data-f')+'"]':t.getAttribute('data-dis')?'[data-dis="'+t.getAttribute('data-dis')+'"]':'[data-dept="'+t.getAttribute('data-dept')+'"]';render();var nb=q(root,sel);if(nb)nb.focus();});
   root.addEventListener('click',function(e){var t=e.target.closest('button,a');if(!t)return;
+   if(t.matches('[data-dm]')){var v=t.getAttribute('data-v')==='1';setDemoEmpty('cx',v);R=v?[]:R0;DRS=[...new Set(R.map(function(r){return r.dr;}))];DPS=[...new Set(R.map(function(r){return r.dept;}))];st.q='all';st.f={};st.dis=[];st.dept=[];st.term='';inp.value='';st.page=1;q(root,'.xq-acts .xq-dm').outerHTML=seg('cx',v);render();var nb=q(root,'[data-dm][data-v="'+(v?1:0)+'"]');if(nb)nb.focus();return;}
    if(t.matches('[data-q]')){st.q=t.getAttribute('data-q');st.page=1;render();var b=q(root,'[data-q="'+st.q+'"]');if(b)b.focus();return;}
    if(t.matches('[data-reset]')){e.preventDefault();st.q='all';st.f={};st.dis=[];st.dept=[];st.term='';inp.value='';st.page=1;render();return;}
    if(t.matches('[data-open]')){openRow(t.getAttribute('data-open'));return;}
    if(t.matches('[data-pg]')){st.page+=+t.getAttribute('data-pg');drawMain();return;}
-   if(t.matches('[data-export]')){download('cross-check-projects.csv',csv(rows()));toast('<b>cross-check-projects.csv</b> · '+rows().length+' projects (sample data)');return;}
+   if(t.matches('[data-export]')){if(!R.length){toast('Nothing to export yet.');return;}download('cross-check-projects.csv',csv(rows()));toast('<b>cross-check-projects.csv</b> · '+rows().length+' projects (sample data)');return;}
    if(t.matches('[data-sort]')){var p=openPop(t,'<small class="h">Sort by</small>'+SO.map(function(s){return '<button type="button" class="mi" data-so="'+s[0]+'">'+(st.s===s[0]?S(I.check):S(''))+s[1]+'</button>';}).join(''),'r');p.addEventListener('click',function(ev){var b=ev.target.closest('[data-so]');if(!b)return;st.s=b.getAttribute('data-so');closePop();drawMain();var nb=q(root,'[data-sort]');if(nb)nb.focus();});return;}
    if(t.matches('[data-cols]')){var p3=openPop(t,'<small class="h">Columns</small>'+COLS.map(function(c){return '<label><input type="checkbox" data-col="'+c[0]+'"'+(st.cols[c[0]]?' checked':'')+'>'+c[1]+'</label>';}).join(''),'r');p3.addEventListener('change',function(ev){st.cols[ev.target.getAttribute('data-col')]=ev.target.checked;drawMain();});return;}});
   render();}
@@ -2739,9 +2757,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    '<div class="fm-f"><label for="im-p" class="fm-l">Project <i aria-hidden="true">*</i></label><div class="xq-row"><select id="im-p"><option value="">Choose a project…</option>'+PJ.map(function(p){return '<option value="'+p[0]+'">'+p[0]+' · '+p[1]+'</option>';}).join('')+'</select><button type="button" class="xq-btn xq-add" data-np>'+S('<path d="M3.5 7.5A1.5 1.5 0 0 1 5 6h4.2l2 2.2H19a1.5 1.5 0 0 1 1.5 1.5v8.3A1.5 1.5 0 0 1 19 19.5H5A1.5 1.5 0 0 1 3.5 18Z"'+F+'/><path d="M3.5 7.5A1.5 1.5 0 0 1 5 6h4.2l2 2.2H19a1.5 1.5 0 0 1 1.5 1.5v8.3A1.5 1.5 0 0 1 19 19.5H5A1.5 1.5 0 0 1 3.5 18Z"/><path d="M12 11v5.5M9.25 13.75h5.5"/>')+'New project</button><button type="button" class="xq-btn xq-add" data-nd>'+S('<path d="M7 16.5a4.5 4.5 0 0 1-.6-9 5.5 5.5 0 0 1 10.6 1.4A3.8 3.8 0 0 1 16.5 16.5Z"'+F+'/><path d="M7 16.5a4.5 4.5 0 0 1-.6-9 5.5 5.5 0 0 1 10.6 1.4A3.8 3.8 0 0 1 16.5 16.5"/><path d="m12.5 13-2 4h3l-2 4"/>')+'New disaster</button></div></div>'+
    '<div class="fm-f"><span class="fm-l">File <i aria-hidden="true">*</i></span><div data-file></div><p class="fm-h">CSV, TSV, XLSX, or XLS. Excel exports work directly. Up to 50 MB.</p></div></div>'+
    '<div class="xq-if"><small aria-live="polite" data-need></small><button type="button" class="xq-btn p" data-go disabled>Upload &amp; analyze'+S(I.r)+'</button></div></section>'+
-   '<div class="xq-h2"><span class="lbl">Import history</span></div>'+
-   '<section class="xq-card" aria-label="Import history" style="overflow:hidden"><table class="xq-ht"><thead><tr><th>File</th><th>Record type</th><th>Project</th><th>Rows</th><th>Status</th></tr></thead><tbody>'+
-   HIST.map(function(h){return '<tr><td><b>'+esc(h[0])+'</b><small>'+esc(h[4])+'</small></td><td>'+h[1]+'</td><td>'+h[2]+'</td><td>'+h[3]+'</td><td><span class="xq-s '+h[5]+'">'+h[6]+'</span>'+(h[5]==='mid'?' <a href="import-wizard" style="margin-left:8px;font-size:12px;font-weight:700">Resume</a>':'')+'</td></tr>';}).join('')+'</tbody></table></section>';
+   '<div class="xq-h2"><span class="lbl">Import history</span>'+seg('imp',demoEmpty('imp'))+'</div>'+
+   '<section class="xq-card" aria-label="Import history" style="overflow:hidden" data-hist></section>';
+  function drawHist(){var E=demoEmpty('imp');q(root,'[data-hist]').innerHTML=E?'<div class="xq-es"><span class="xq-es-ic">'+S(I.file)+'</span><b>No imports yet</b><p>Spreadsheets you import show up here with their status, row count and who imported them. Start with a payroll export above.</p></div>':'<table class="xq-ht"><thead><tr><th>File</th><th>Record type</th><th>Project</th><th>Rows</th><th>Status</th></tr></thead><tbody>'+
+   HIST.map(function(h){return '<tr><td><b>'+esc(h[0])+'</b><small>'+esc(h[4])+'</small></td><td>'+h[1]+'</td><td>'+h[2]+'</td><td>'+h[3]+'</td><td><span class="xq-s '+h[5]+'">'+h[6]+'</span>'+(h[5]==='mid'?' <a href="import-wizard" style="margin-left:8px;font-size:12px;font-weight:700">Resume</a>':'')+'</td></tr>';}).join('')+'</tbody></table>';}
+  drawHist();
   var ex=window.ogFm||{};
   var sT=q(root,'#im-t'),sP=q(root,'#im-p');
   if(ex.select){ex.select(sT,{ph:'Choose record type',icon:'doc',row:function(v){var t=TY.filter(function(x){return x[0]===v;})[0];return '<span class="fm-ot"><b>'+t[1]+'</b><small>'+t[2]+'</small></span>';}});
@@ -2757,6 +2777,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    if(!t){q(root,'[data-go]').disabled=!(st.pj&&st.file);if(st.pj&&st.file)q(root,'[data-need]').textContent='Ready. Record type will be detected from the columns.';else q(root,'[data-need]').textContent='Choose a '+['project','file'].filter(function(k){return k==='project'?!st.pj:!st.file;}).join(' and ')+' to continue.';}}
   sT.addEventListener('change',update);sP.addEventListener('change',update);
   root.addEventListener('click',function(e){var t=e.target.closest('a,button');if(!t)return;
+   if(t.matches('[data-dm]')){var v2=t.getAttribute('data-v')==='1';setDemoEmpty('imp',v2);q(root,'.xq-h2 .xq-dm').outerHTML=seg('imp',v2);drawHist();var nb2=q(root,'[data-dm][data-v="'+(v2?1:0)+'"]');if(nb2)nb2.focus();return;}
    if(t.matches('[data-rmf]')){st.file=null;drawFile();var d=q(fileBox,'.xq-drop');if(d)d.focus();return;}
    if(t.matches('[data-dltpl]')){e.preventDefault();var ty=TY.filter(function(x){return x[0]===st.type;})[0];download('obligate-'+st.type+'-template.csv',TPL[st.type]+'\n');toast('<b>obligate-'+st.type+'-template.csv</b> · '+ty[1]+' columns');return;}
    if(t.matches('[data-np]')){if(window.ogAddProject)window.ogAddProject();return;}
