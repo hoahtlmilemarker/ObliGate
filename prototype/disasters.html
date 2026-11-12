@@ -711,7 +711,7 @@ function sealDone(){var app=document.querySelector('.og');if(!app)return;try{ses
   '<div class="sg2-acts"><button type="button" class="btn btn-o sg2-dl">'+I('<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>')+'Download Certificate</button><a class="btn btn-p sg-done-btn" href="document-library">Back to Documents'+AR+'</a></div></div>';
  box.addEventListener('click',function(e){var c=e.target.closest('.sg2-copy');if(c){try{var pr=navigator.clipboard&&navigator.clipboard.writeText('SEAL-SIG-2026-PW428-09');if(pr&&pr.catch)pr.catch(function(){});}catch(x){}c.classList.add('is-ok');setTimeout(function(){c.classList.remove('is-ok');},1400);toast('Seal ID copied');}
   if(e.target.closest('.sg2-dl')&&window.ogCert)window.ogCert();});
- var pad=app.querySelector('[role=img][aria-label^="Signature pad"]');if(pad&&!pad.querySelector('.sg-stamp')){var s=document.createElement('span');s.className='sg-stamp';s.textContent='Sealed';pad.appendChild(s);pad.classList.add('is-sealed');}
+ var pad=app.querySelector('[role=img][aria-label^="Signature pad"]');if(pad&&!pad.querySelector('.sg-stamp')){var s=document.createElement('span');s.className='sg-stamp';s.textContent='Sealed';(pad.querySelector('.sgx-field')||pad).appendChild(s);pad.classList.add('is-sealed');}
  row.replaceWith(box);box.scrollIntoView({behavior:'smooth',block:'center'});}
 function cxResult(){var k=document.querySelector('section.kpis');if(!k)return;var old=document.querySelector('.cx-run');if(old)old.remove();
  var d=new Date(),p=function(n){return (n<10?'0':'')+n;},tm=p(d.getHours())+':'+p(d.getMinutes());
@@ -831,6 +831,8 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
 .og .sg-act .sg-done-btn{height:40px;padding:0 22px;color:#fff;margin:0}
 .og .is-sealed{background-image:none!important;border:1px solid var(--line)!important;background-color:var(--pale)!important}
 .og .is-sealed .sgp-chip{display:none}
+.og .lbl+.tag{padding:2px 8px;font-size:11px;line-height:16px;gap:5px;font-weight:600}.og .lbl+.tag .dot{width:6px;height:6px}
+.og .sgx-field{position:relative}.og .sgx-field .sg-stamp{top:50%;right:20px;transform:translateY(-50%) rotate(-6deg);background:var(--card)}
 .og .sg-stamp{position:absolute;top:16px;right:18px;padding:4px 10px;border:1.5px solid var(--sgb);border-radius:4px;color:var(--sgb);font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;transform:rotate(-4deg)}
 @media (max-width:900px){.og .sg-done{grid-template-columns:auto minmax(0,1fr)}.og .sg-act{grid-column:1 / -1}.og .sg-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.og .sg-meta dd{white-space:normal}}
 @media (max-width:520px){.og .sg-done{grid-template-columns:1fr;padding:22px 18px}.og .sg-seal svg{width:48px;height:48px}.og .sg-t{font-size:26px}.og .sg-act .sg-done-btn{width:100%;justify-content:center}}
