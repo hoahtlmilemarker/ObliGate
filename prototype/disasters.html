@@ -589,8 +589,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  d.className='pg-sk pg-spin';d.innerHTML='<div class="pg-mk"><svg class="ogspin" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2.2" opacity=".1"/><g class="o"><path d="M 24 6 A 18 18 0 1 1 6 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity=".55"/></g><g class="i"><path d="M 36 24 A 12 12 0 1 1 24 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity=".8"/></g><rect class="c" x="19" y="19" width="10" height="10" rx="1.5" fill="currentColor"/></svg></div><span class="pg-cap">Loading</span>';
  h.appendChild(d);}
 document.addEventListener('click',function(e){if(e.defaultPrevented)return;var a=e.target.closest&&e.target.closest('a[href]');if(!a||e.metaKey||e.ctrlKey||e.shiftKey||a.target==='_blank')return;
- var h=a.getAttribute('href')||'';if(!h||h.charAt(0)==='#'||h.indexOf('.html')<0||h.indexOf('://')>-1)return;
- var to=h.split('#')[0],cur=location.pathname.split('/').pop();if(to===cur&&!/#signin/.test(h))return;
+ var h=a.getAttribute('href')||'';if(!h||h.charAt(0)==='#'||h.indexOf('://')>-1||/^(mailto|tel|javascript|data|blob):/i.test(h))return;
+ var to=h.split('#')[0],cur=location.pathname.split('/').pop(),hs=(h.split('#')[1]||'');if(to===cur&&!/#signin/.test(h)&&!(/^PW-\d{5}$/.test(hs)&&'#'+hs!==location.hash))return;
  if(/sign-in/.test(to))return;setTimeout(sk,0);});
 window.addEventListener('pageshow',function(e){if(e.persisted){var s=document.querySelector('.pg-sk');if(s)s.remove();}});})();
 </script>
@@ -2930,6 +2930,13 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
 </script>
 <script>
 /* ===== project context: open any active project with its own identity ===== */
+(function(){var de=document.documentElement,H={};
+ window.ogHold=function(k){H[k]=1;de.classList.add('og-hold');};
+ window.ogRelease=function(k){delete H[k];if(!Object.keys(H).length)de.classList.remove('og-hold');};
+ setTimeout(function(){H={};de.classList.remove('og-hold');},1500);
+ if(/^#PW-\d{5}$/.test(location.hash))ogHold('ctx');
+ if(/(document-library|library-empty|unplaced-inbox|document-library|library-empty|unplaced-inbox)(\.html)?$/.test(location.pathname))ogHold('cab');
+})();
 (function(){
 var P=window.OG_PROJ=[ /* sample data, same as the cross-check queue */
  {pw:'PW-00428',name:'Malibu Canyon',dr:'DR-4683-CA',dept:'Public Works',v:3240,open:8},
@@ -2978,7 +2985,7 @@ function nav(){var g=document.querySelector('.gnav');if(!g||g.dataset.ctx)return
  return true;}
 if(C){var org=document.querySelector('a.org-sw b');}
 function run(){var ok=nav();if(C){var app=document.querySelector('.og');if(app){walk(app);try{document.title=rep(document.title);}catch(e){}}}return ok&&!!document.querySelector('.og');}
-var n=0;(function tick(){if(!run()&&n++<50)setTimeout(tick,100);})();
+var n=0;(function tick(){if(!run()&&n++<50)setTimeout(tick,100);else ogRelease('ctx');})();
 if(C){var pend=[],sch=0;try{new MutationObserver(function(ms){ms.forEach(function(m){[].forEach.call(m.addedNodes,function(x){if(x.nodeType===1)pend.push(x);else if(x.nodeType===3&&x.parentNode)pend.push(x.parentNode);});});if(!sch){sch=1;requestAnimationFrame(function(){sch=0;var a=pend;pend=[];a.forEach(function(x){if(x.isConnected)walk(x);});});}}).observe(document.documentElement,{childList:true,subtree:true});}catch(e){}}
 window.addEventListener('hashchange',function(){if(/^#PW-\d{5}$/.test(location.hash)&&here)location.reload();});
 })();
@@ -3075,6 +3082,7 @@ window.addEventListener('hashchange',function(){var nav=document.querySelector('
 })();
 </script>
 <style>
+html.og-hold .og .col,html.og-hold .og .gnav,html.og-hold .og .rv-panes{visibility:hidden}
 /* ===== filing cabinet scoped to the current project ===== */
 .og .tree.tr-scoped .tr-hide{display:none!important}
 .og .tree.tr-scoped .tr-anc > .tr-row{display:none!important}
@@ -3119,7 +3127,7 @@ function scope(){var tree=document.querySelector('.tree');if(!tree)return false;
  var sec=tree.closest('details.sb-sec'),hl=sec&&sec.querySelector(':scope>summary .lbl');
  if(hl&&dept&&!hl.querySelector('.cab-dept'))hl.insertAdjacentHTML('beforeend','<span class="cab-dept"></span>'),hl.querySelector('.cab-dept').textContent=dept;
  return true;}
-var n=0;(function tick(){if(!scope()&&n++<60)setTimeout(tick,100);})();
+var n=0;(function tick(){if(!scope()&&n++<60)setTimeout(tick,100);else if(window.ogRelease)ogRelease('cab');})();
 })();
 </script>
 <script src="review/config.js?v=2"></script><script src="review/review.js?v=11" defer></script>
