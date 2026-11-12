@@ -2187,8 +2187,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 /* popovers */
 .og .fm-pop{position:fixed;z-index:2147482700;border:1px solid var(--line);border-top:2px solid #B08A4E;border-radius:4px;background:var(--card);box-shadow:0 22px 48px -18px rgba(0,20,40,.45),0 2px 8px rgba(0,20,40,.06);font-family:Manrope,Arial,sans-serif;animation:fmPop .16s cubic-bezier(.2,.7,.2,1)}
 @keyframes fmPop{from{opacity:0;transform:translateY(-4px) scale(.985)}to{opacity:1;transform:none}}
-.og .fm-list{max-height:280px;overflow-y:auto;padding:6px;scrollbar-width:thin}
-.og .fm-o{display:flex;align-items:center;gap:10px;min-height:38px;padding:6px 10px;border-radius:4px;font-size:13.5px;color:var(--ink);cursor:pointer}
+.og .fm-list{max-height:300px;overflow-y:auto;padding:5px;scrollbar-width:thin}
+.og .fm-o{display:flex;align-items:center;gap:10px;box-sizing:border-box;min-height:34px;padding:6px 10px;border-radius:4px;font-size:13.5px;color:var(--ink);cursor:pointer}
 .og .fm-o > svg{flex:none;width:16px;height:16px;color:var(--gray)}
 .og .fm-o .fm-ot{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
 .og .fm-o .fm-ot b{font-weight:700;color:var(--head)}
@@ -2200,23 +2200,23 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .fm-o[aria-selected="true"]{box-shadow:inset 2px 0 0 #B08A4E}
 .og .fm-grp{padding:8px 10px 4px;font:800 10px/1 Manrope,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gray)}
 /* calendar */
-.og .fm-cal{width:308px;padding:14px 14px 10px;box-sizing:border-box}
-.og .fm-cal-h{display:flex;align-items:center;gap:6px;margin:0 0 10px}
-.og .fm-cal-t{flex:1;display:flex;align-items:center;gap:6px;height:32px;padding:0 8px;border:0;border-radius:4px;background:none;font:700 15px/1 Manrope,Arial,sans-serif;color:var(--head);cursor:pointer;text-align:left}
-.og .fm-cal-t em{font-style:normal;font-family:"Cormorant Garamond",Georgia,serif;font-size:19px;font-weight:600;color:#A57F3C}
+.og .fm-cal{width:264px;padding:10px 10px 8px;box-sizing:border-box}
+.og .fm-cal-h{display:flex;align-items:center;gap:4px;margin:0 0 6px}
+.og .fm-cal-t{flex:1;display:flex;align-items:center;gap:6px;height:28px;padding:0 6px;border:0;border-radius:4px;background:none;font:700 13.5px/1 Manrope,Arial,sans-serif;color:var(--head);cursor:pointer;text-align:left}
+.og .fm-cal-t em{font-style:normal;font-family:"Cormorant Garamond",Georgia,serif;font-size:16.5px;font-weight:600;color:#A57F3C}
 .og .fm-cal-t svg{width:13px;height:13px;color:var(--gray)}
 .og .fm-cal-t:hover{background:var(--blue-t)}
-.og .fm-nav{display:grid;place-items:center;width:32px;height:32px;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--head);cursor:pointer}
+.og .fm-nav{display:grid;place-items:center;width:28px;height:28px;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--head);cursor:pointer}
 .og .fm-nav:hover{border-color:var(--blue);color:var(--blue)}
-.og .fm-nav svg{width:15px;height:15px}
+.og .fm-nav svg{width:13px;height:13px}
 .og .fm-wd,.og .fm-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px 0}
-.og .fm-wd span{height:26px;display:grid;place-items:center;font:800 10px/1 Manrope,Arial,sans-serif;letter-spacing:.12em;color:var(--gray)}
+.og .fm-wd span{height:22px;display:grid;place-items:center;font:800 9.5px/1 Manrope,Arial,sans-serif;letter-spacing:.1em;color:var(--gray)}
 .og .fm-wd span:first-child,.og .fm-wd span:last-child{color:#A57F3C}
-.og .fm-d{position:relative;height:38px;border:0;border-radius:4px;background:none;font:600 13px/1 Manrope,Arial,sans-serif;color:var(--ink);cursor:pointer;font-variant-numeric:tabular-nums;transition:background .12s,color .12s}
+.og .fm-d{position:relative;height:32px;border:0;border-radius:4px;background:none;font:600 12.5px/1 Manrope,Arial,sans-serif;color:var(--ink);cursor:pointer;font-variant-numeric:tabular-nums;transition:background .12s,color .12s}
 .og .fm-d:hover{background:var(--blue-t);color:var(--blue)}
 .og .fm-d.fm-out{color:#A9B1B8;font-weight:500}
 .og .fm-d.fm-we:not(.fm-on):not(.fm-out){color:var(--head)}
-.og .fm-d.fm-tdy::after{content:"";position:absolute;left:50%;bottom:5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:#B08A4E}
+.og .fm-d.fm-tdy::after{content:"";position:absolute;left:50%;bottom:3px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:#B08A4E}
 .og .fm-d.fm-inr{background:rgba(0,90,156,.07);border-radius:0;color:var(--head)}
 .og .fm-d.fm-rs,.og .fm-d.fm-re{background:rgba(0,90,156,.16);color:var(--head)}
 .og .fm-d.fm-rs{border-radius:4px 0 0 4px}.og .fm-d.fm-re{border-radius:0 4px 4px 0}
@@ -2225,13 +2225,13 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .fm-d:disabled{color:#C9CED3;font-weight:500;cursor:not-allowed;background:none!important}
 .og .fm-d:focus-visible,.og .fm-ym:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
 .og .fm-ymg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:4px 0}
-.og .fm-ym{height:40px;border:1px solid var(--line-soft);border-radius:4px;background:var(--card);font:600 13px Manrope,Arial,sans-serif;color:var(--ink);cursor:pointer}
+.og .fm-ym{height:34px;border:1px solid var(--line-soft);border-radius:4px;background:var(--card);font:600 13px Manrope,Arial,sans-serif;color:var(--ink);cursor:pointer}
 .og .fm-ym:hover{border-color:var(--blue);color:var(--blue)}
 .og .fm-ym.fm-on{background:linear-gradient(160deg,#0A4E86,#06243F);color:#fff;border-color:transparent}
 .og .fm-ym.fm-cur:not(.fm-on){border-color:#B08A4E;color:#8A6A2E}
-.og .fm-cal-f{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft)}
-.og .fm-cal-f small{font-size:11.5px;color:var(--gray)}
-.og .fm-cal-f button{height:28px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:var(--card);font:700 12px Manrope,Arial,sans-serif;color:var(--head);cursor:pointer}
+.og .fm-cal-f{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;padding-top:8px;border-top:1px solid var(--line-soft)}
+.og .fm-cal-f small{font-size:11px;color:var(--gray)}
+.og .fm-cal-f button{height:26px;padding:0 9px;border:1px solid var(--line);border-radius:4px;background:var(--card);font:700 12px Manrope,Arial,sans-serif;color:var(--head);cursor:pointer}
 .og .fm-cal-f button:hover{border-color:var(--blue);color:var(--blue)}
 .og .fm-cal-f .fm-today{border-color:rgba(176,138,78,.6);color:#8A6A2E}
 /* blocks */
@@ -2266,7 +2266,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og[data-theme="dark"] .fm-d:disabled{color:#3B4855}
 .og[data-theme="dark"] .fm-sel .fm-v.ph,.og[data-theme="dark"] .fm-dt .fm-v.ph{color:#6F7C88}
 .og[data-theme="dark"] .fm-rule{border-color:rgba(226,194,126,.3)}
-@media (max-width:560px){.og .dlg-c .row2{grid-template-columns:1fr}.og .fm-badge{display:none}.og .fm-cal{width:min(308px,calc(100vw - 24px))}}
+@media (max-width:560px){.og .dlg-c .row2{grid-template-columns:1fr}.og .fm-badge{display:none}.og .fm-cal{width:min(264px,calc(100vw - 24px))}}
 @media (prefers-reduced-motion:reduce){.og .fm-pop{animation:none}}
 </style>
 <script>
@@ -2346,7 +2346,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     var h='<div class="fm-cal-h"><button type="button" class="fm-nav" data-n="-1" aria-label="Previous '+(mode==='d'?'month':mode==='m'?'year':'years')+'">'+S(IC.l)+'</button><button type="button" class="fm-cal-t" aria-label="Choose month and year">'+(mode==='d'?MO[m]+' <em>'+y+'</em>':mode==='m'?'<em>'+y+'</em>':'<em>'+(y-7)+' – '+(y+4)+'</em>')+S(mode==='d'?IC.car:'<path d="m6 15 6-6 6 6"/>')+'</button><button type="button" class="fm-nav" data-n="1" aria-label="Next '+(mode==='d'?'month':mode==='m'?'year':'years')+'">'+S(IC.r)+'</button></div>';
     if(mode==='d'){h+='<div class="fm-wd" aria-hidden="true">'+['Su','Mo','Tu','We','Th','Fr','Sa'].map(function(x){return '<span>'+x+'</span>';}).join('')+'</div><div class="fm-days" role="grid">';
      var st=new Date(y,m,1-view.getDay());var rs=parse(o.rangeStart&&o.rangeStart()),re=parse(o.rangeEnd&&o.rangeEnd());if(!re&&rs&&cur&&o.isEnd)re=cur;
-     for(var i=0;i<42;i++){var d=new Date(st.getFullYear(),st.getMonth(),st.getDate()+i),v=iso(d),c='fm-d';if(d.getMonth()!==m)c+=' fm-out';if(d.getDay()===0||d.getDay()===6)c+=' fm-we';if(+d===+today)c+=' fm-tdy';if(cur&&+d===+cur)c+=' fm-on';
+     var nc=Math.ceil((view.getDay()+new Date(y,m+1,0).getDate())/7)*7;for(var i=0;i<nc;i++){var d=new Date(st.getFullYear(),st.getMonth(),st.getDate()+i),v=iso(d),c='fm-d';if(d.getMonth()!==m)c+=' fm-out';if(d.getDay()===0||d.getDay()===6)c+=' fm-we';if(+d===+today)c+=' fm-tdy';if(cur&&+d===+cur)c+=' fm-on';
       if(rs&&re&&d>=rs&&d<=re){c+=+d===+rs?' fm-rs':+d===+re?' fm-re':' fm-inr';}
       var dis=(L.min&&d<L.min)||(L.max&&d>L.max);
       h+='<button type="button" class="'+c+'" data-v="'+v+'" tabindex="'+(+d===+focus?0:-1)+'" aria-label="'+MO[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear()+'"'+(cur&&+d===+cur?' aria-selected="true"':'')+(dis?' disabled':'')+'>'+d.getDate()+'</button>';}
@@ -2354,7 +2354,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     else if(mode==='m'){h+='<div class="fm-ymg">'+MO.map(function(x,i){return '<button type="button" class="fm-ym'+(i===m?' fm-on':'')+(i===today.getMonth()&&y===today.getFullYear()?' fm-cur':'')+'" data-m="'+i+'">'+x.slice(0,3)+'</button>';}).join('')+'</div>';}
     else{h+='<div class="fm-ymg">';for(var k=y-7;k<=y+4;k++)h+='<button type="button" class="fm-ym'+(k===y?' fm-on':'')+(k===today.getFullYear()?' fm-cur':'')+'" data-y="'+k+'">'+k+'</button>';h+='</div>';}
     var tdis=(L.min&&today<L.min)||(L.max&&today>L.max);
-    h+='<div class="fm-cal-f"><small>'+(o.hint?o.hint():(mode==='d'?'Arrow keys to move · Enter to pick':'Pick a '+(mode==='m'?'month':'year')))+'</small><span style="display:flex;gap:6px">'+(inp.value?'<button type="button" class="fm-clr">Clear</button>':'')+'<button type="button" class="fm-today"'+(tdis?' disabled':'')+'>Today</button></span></div>';
+    h+='<div class="fm-cal-f"><small>'+(o.hint?o.hint():(mode==='d'?'Arrows to move · Enter to pick':'Pick a '+(mode==='m'?'month':'year')))+'</small><span style="display:flex;gap:6px">'+(inp.value?'<button type="button" class="fm-clr">Clear</button>':'')+'<button type="button" class="fm-today"'+(tdis?' disabled':'')+'>Today</button></span></div>';
     C.innerHTML=h;place(C,b);var f=C.querySelector('.fm-d[tabindex="0"]');if(f&&C.contains(document.activeElement)===false&&C.dataset.kb)f.focus();}
    function pick(v){inp.value=v;fire(inp);closePop(true);}
    C.addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;
