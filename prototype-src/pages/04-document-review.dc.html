@@ -303,10 +303,19 @@ html,body{margin:0;height:100%;overflow:hidden}
 </style>
 </helmet>
 <div class="og rv-app" data-theme="{{theme}}" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column">
+  <header class="hd">
+    <a class="brand" href="01-disaster-portfolio.dc.html" aria-label="ObliGate home"><svg width="30" height="30" viewBox="0 0 48 48" fill="none" aria-hidden="true" style="color: var(--logo)"><path d="M 24 6 A 18 18 0 1 1 6 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity="0.55"></path><path d="M 36 24 A 12 12 0 1 1 24 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity="0.7"></path><rect x="19" y="19" width="10" height="10" rx="1.5" fill="currentColor"></rect></svg><img class="wm" src="/_blob/8cfa11a04b8e7f1a0a8159c51c90be37" alt="ObliGate"></a>
+    <a class="org org-sw" href="01-disaster-portfolio.dc.html" title="Switch disaster"><span>LA County Public Works</span><b>DR-4683-CA<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></b></a>
+    <div class="tools">
+      <button class="btn btn-ghost srch" type="button"><span style="display: flex; align-items: center; gap: 8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>Search...</span><span style="font-size: 12px">⌘K</span></button>
+      <button class="btn btn-ghost" type="button" onClick="{{toggleTheme}}" aria-label="Switch to {{nextTheme}} theme" style="padding: 0 12px"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path></svg></button>
+      <span class="av" title="Rosa Keith (Grants Manager)">RK</span>
+    </div>
+  </header>
 
   <div class="rv-bar" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; padding: 10px clamp(16px, 3vw, 36px); background: var(--pale); border-bottom: 1px solid var(--line)">
     <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px">
-      <a class="btn btn-o" href="03-document-library.dc.html"><svg class="ba" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7 4.5 3.5 8 7 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Library</a>
+      <a class="sg-back" href="03-document-library.dc.html"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7 4.5 3.5 8 7 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Library</a>
       <span class="rv-name" style="font-size: 16px; font-weight: 700; color: var(--head)">Timesheet_Aguayo_PayPeriod_02.pdf</span>
       <span class="tag t-warn rv-st">Needs Review (76%)</span>
       <span class="rv-nav"><button class="btn btn-o btn-sm rv-prev" type="button" aria-label="Previous document" disabled><svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="rv-count">Doc <b>1</b> of 14</span><button class="btn btn-o btn-sm rv-next" type="button" aria-label="Next document"><svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span>
@@ -316,8 +325,6 @@ html,body{margin:0;height:100%;overflow:hidden}
       <span style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray)"><span class="kbd">Enter</span> Confirm</span>
       <button class="btn btn-g" type="button">Zoom: 100%</button>
       <button class="btn btn-o" type="button">Rotate 90°</button>
-      
-      <button class="btn btn-o" type="button" onClick="{{toggleTheme}}" aria-label="Switch to {{nextTheme}} theme" style="padding: 0 12px"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path></svg></button>
     </div>
   </div>
 
