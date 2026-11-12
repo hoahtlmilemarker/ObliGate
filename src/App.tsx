@@ -17,6 +17,9 @@ const CrossCheck = lazy(() => import('@/pages/CrossCheck'));
 const ImportWizard = lazy(() => import('@/pages/ImportWizard'));
 const PreSubmission = lazy(() => import('@/pages/PreSubmission'));
 const SupervisorSignature = lazy(() => import('@/pages/SupervisorSignature'));
+const UploadStart = lazy(() => import('@/pages/Upload/Start'));
+const AnalysisRunning = lazy(() => import('@/pages/Upload/Running'));
+const AnalysisReport = lazy(() => import('@/pages/Upload/Report'));
 const Team = lazy(() => import('@/pages/Team'));
 const Security = lazy(() => import('@/pages/Settings/Security'));
 const ProfileBranding = lazy(() => import('@/pages/Settings/ProfileBranding'));
@@ -48,6 +51,9 @@ export function App() {
               <Route path={routes.importWizard} element={<ImportWizard />} />
               <Route path={routes.preSubmission} element={<PreSubmission />} />
               <Route path={routes.signature} element={<SupervisorSignature />} />
+              <Route path={routes.upload} element={<UploadStart />} />
+              <Route path={routes.analyzing} element={<AnalysisRunning />} />
+              <Route path={routes.analysisReport} element={<AnalysisReport />} />
               <Route path={routes.team} element={<Team />} />
               <Route path="/settings" element={<Navigate to={routes.settings} replace />} />
               <Route path="/settings/security" element={<Security />} />

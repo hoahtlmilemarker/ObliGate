@@ -16,8 +16,10 @@ The prototype (`/prototype`, source in `/prototype-src`) is ahead of the React a
 ## 2. Team (`/team`, page 15) — ✅ ported (`src/pages/Team`)
 Overview counts, prototype-only "Viewing as" switch (manager vs analyst), invite form (email validation, duplicate member / pending invite checks, Department required for Department Liaison, role description + capability chips), pending invitations (Resend / Send Again / Revoke with confirm), members table (search incl. role, role filter, inline role select with Undo, confirm when granting or removing Grants Manager, remove with confirm + Undo, cannot remove yourself), role × capability matrix. Read-only notice for non-managers.
 
-## 3. Upload → Analysis → Report (pages 12–14) and Unplaced Inbox
+## 3. Upload → Analysis → Report (pages 12–14) and Unplaced Inbox — ✅ ported (`src/pages/Upload`, `src/data/classify.ts`, `src/data/uploadSession.ts`)
 Duplicate detection (Skip / Replace / Skip all / Replace all with compare dialog), 6-row preview with Show more, cancel restores the list, per-project grouping by PW and DR, tiers auto ≥ 85% / check 60–84% / inbox < 60%, folder picker popover, Library rows for filed uploads. Real API replaces `classify()`; keep the same tiers and states.
+
+React notes: `classify()` decides from the **file name** (sample logic) – swap it for the classification API and keep the `Classified` shape. `uploadSession.ts` keeps the batch in sessionStorage with the prototype's keys; in the real app this is server state. Opening `/analyzing` or `/analysis-report` with no upload shows an 8-file sample batch (labelled "sample data"). The Inbox puts the user's unplaced files on top (New, gold rule, `#f=<name>` focuses the row, remove has Undo); the Library puts filed uploads on top of their folder with Fix / Confirm Folder / View. The report has no left rail in React (the prototype reuses the project tree there).
 
 ## 4. Smaller behaviour already in the prototype
 - Disasters: lifecycle tabs filter the table; search + quick filters with empty state; Archive/Restore buttons; Columns picker persisted per page; tablet drawer as tiles; KPI 2×2 on tablet.

@@ -24,6 +24,7 @@ export function FolderBanner({
   actions,
   overlap = true,
   loading,
+  back,
 }: {
   prefix: string;
   crumbs: EyebrowPart[];
@@ -36,6 +37,8 @@ export function FolderBanner({
   overlap?: boolean;
   /** Fade title and subtitle while folder content loads. */
   loading?: boolean;
+  /** Optional back link above the eyebrow, e.g. "Back to Analysis Report". */
+  back?: { label: string; to: string };
 }) {
   const fade = loading ? { opacity: 0.35, filter: 'blur(.4px)', transition: 'opacity .2s' } : { transition: 'opacity .2s' };
   return (
@@ -43,6 +46,14 @@ export function FolderBanner({
       <Box component="img" src={globe} alt="" aria-hidden sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'right center', opacity: 0.24, pointerEvents: 'none' }} />
       <Box component="img" src={cubes} alt="" aria-hidden sx={{ position: 'absolute', top: 16, right: 28, height: 164, width: 'auto', pointerEvents: 'none', display: { xs: 'none', md: 'block' } }} />
       <Box sx={{ position: 'relative', p: { xs: '20px 16px', md: '20px 28px' }, pb: overlap ? { xs: '84px', md: '70px' } : { xs: 6, md: 8 }, pr: { md: '220px' } }}>
+        {back && (
+          <Box component={RouterLink} to={back.to} sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.5, mb: 3, fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,.82)', textDecoration: 'none', '&:hover': { color: '#FFFFFF' } }}>
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M13 8H3.5M7 4.5 3.5 8 7 11.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            {back.label}
+          </Box>
+        )}
         <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 2, rowGap: 0.5, mb: 1.5 }}>
           <Typography variant="eyebrow" component="span">
             {prefix}

@@ -1,5 +1,5 @@
 import { Box, Button, Checkbox, keyframes, Tooltip, useMediaQuery, type Theme } from '@mui/material';
-import { Fragment, type ReactNode } from 'react';
+import { createContext, Fragment, useContext, type ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { StatusTag } from '@/components';
 import { routes } from '@/layout';
@@ -97,7 +97,7 @@ function DocCell({ d, q, index, stacked }: { d: LibraryDoc; q: string; index: nu
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', fontSize: 12, lineHeight: 1.4, color: 'og.gray', minWidth: 0 }}>
           <Box component="span" sx={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'og.ink', opacity: 0.85, lineHeight: 1.4 }}>
-            {d.isNew && (
+            {(d.isNew || d.fromUpload) && (
               <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', px: '6px', py: '1px', mr: 1.5, borderRadius: '4px', bgcolor: '#B08A4E', color: '#fff', fontSize: 9.5, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase', verticalAlign: '1px' }}>
                 New
               </Box>
@@ -176,7 +176,17 @@ function StatusCell({ d }: { d: LibraryDoc }) {
   );
 }
 
+/** Row actions that need the page (Confirm Folder on uploaded files). */
+export const LibraryActions = createContext<{ onConfirmFolder?: (d: LibraryDoc) => void }>({});
+
 function ActionCell({ d }: { d: LibraryDoc }) {
+  const ctx = useContext(LibraryActions);
+  if (d.action === 'confirmFolder')
+    return (
+      <Button size="small" variant="contained" onClick={() => ctx.onConfirmFolder?.(d)} aria-label={`Confirm folder: ${d.name}`} sx={{ px: '12px', fontWeight: 700, whiteSpace: 'nowrap' }}>
+        Confirm Folder
+      </Button>
+    );
   if (d.action === 'processing')
     return (
       <Box component="span" sx={{ fontSize: 12, color: 'og.gray' }}>
@@ -190,6 +200,8 @@ function ActionCell({ d }: { d: LibraryDoc }) {
     inspect: { label: 'Inspect', variant: 'outlined', to: routes.review },
     reconcile: { label: 'Reconcile', variant: 'outlined', to: routes.crossCheck },
     requestSignature: { label: 'Request Signature', variant: 'contained', to: routes.signature },
+    fix: { label: 'Fix', variant: 'contained', to: d.actionTo ?? routes.crossCheck },
+    view: { label: 'View', variant: 'outlined', to: routes.review },
   } as const;
   const a = map[d.action];
   if (d.action === 'inspect' && /^extracting/i.test(d.status))

@@ -13,6 +13,8 @@ export interface UnplacedDoc {
   match: string;
   tone: 'good' | 'warn' | 'risk';
   reason: string;
+  /** From the user's own upload in this session (shown on top, marked New). */
+  mine?: boolean;
 }
 
 export const unplacedDocs: UnplacedDoc[] = [

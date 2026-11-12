@@ -3,7 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Panel, StatusTag, useToast } from '@/components';
 import { AppShell, routes } from '@/layout';
-import { ChevronDownIcon } from '@/icons';
+import { CheckIcon, ChevronDownIcon, TrashIcon } from '@/icons';
+import { fileSize, fileType, plural } from '@/data/classify';
+import { getResults, isDemoBatch, setFix } from '@/data/uploadSession';
 import { inboxFolderOptions, unplacedDocs, type UnplacedDoc } from '@/data/unplacedInbox';
 import { FolderBanner } from '../DocumentLibrary/FolderBanner';
 import { LibrarySidebar } from '../DocumentLibrary/LibrarySidebar';
@@ -52,11 +54,24 @@ function MoveSelect({ doc, onPick }: { doc: UnplacedDoc; onPick: (folder: string
   );
 }
 
+/** Files from the user's own upload (this session) that AI could not file: shown on top, marked New. */
+function myUnplaced(): UnplacedDoc[] {
+  if (isDemoBatch()) return [];
+  return getResults()
+    .files.filter((x) => !x.placed)
+    .map((x) => {
+      const sug = x.folder && x.conf >= 40 ? x.folder : null;
+      return { id: `up-${x.name}`, ext: fileType(x.name).label, name: x.name, meta: `Uploaded just now by you · ${fileSize(x.size)}`, suggestion: sug, match: sug ? `${x.conf}% match` : `${x.conf}%`, tone: sug ? 'warn' : 'risk', reason: `${x.why}.`, mine: true };
+    });
+}
+
 /** 03c · Unplaced Inbox — documents the AI placement engine could not file; accept the suggestion or move manually. */
 export default function UnplacedInbox() {
   const toast = useToast();
   const stacked = useMediaQuery((t: Theme) => t.breakpoints.down('md'));
-  const [docs, setDocs] = useState(unplacedDocs);
+  const [mine] = useState(myUnplaced);
+  const [docs, setDocs] = useState(() => [...mine, ...unplacedDocs]);
+  const [focus, setFocus] = useState<string | null>(null);
   const [leaving, setLeaving] = useState<Set<string>>(new Set());
   const timers = useRef<number[]>([]);
   const [upload, setUpload] = useState<{ open: boolean; files: UploadFileLike[] | null }>({ open: false, files: null });
@@ -81,7 +96,25 @@ export default function UnplacedInbox() {
     };
   }, []);
 
+  // #f=<file name> (from the Analysis Report): scroll to that row and highlight it.
+  useEffect(() => {
+    const m = location.hash.match(/^#f=(.+)$/);
+    if (!m) return;
+    const id = `up-${decodeURIComponent(m[1])}`;
+    const t = window.setTimeout(() => {
+      const el = document.querySelector<HTMLElement>(`[data-doc="${CSS.escape(id)}"]`);
+      if (!el) return;
+      el.scrollIntoView({ block: 'center' });
+      setFocus(id);
+      el.querySelector<HTMLElement>('button, [role="combobox"]')?.focus({ preventScroll: true });
+    }, 350);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  const leavingRef = useRef(leaving);
+  leavingRef.current = leaving;
   const remaining = docs.filter((d) => !leaving.has(d.id));
+  const mineLeft = remaining.filter((d) => d.mine).length;
   const n = remaining.length;
   const suggested = remaining.filter((d) => d.suggestion).length;
 
@@ -90,7 +123,8 @@ export default function UnplacedInbox() {
     setLeaving((s) => new Set([...s, ...targets.map((d) => d.id)]));
     timers.current.push(
       window.setTimeout(() => {
-        const ids = new Set(targets.map((d) => d.id));
+        // Skip rows brought back by Undo within the fade.
+        const ids = new Set(targets.map((d) => d.id).filter((id) => leavingRef.current.has(id)));
         setDocs((list) => list.filter((d) => !ids.has(d.id)));
       }, 300),
     );
@@ -98,6 +132,7 @@ export default function UnplacedInbox() {
 
   const fileOne = (d: UnplacedDoc, folder: string) => {
     if (leaving.has(d.id)) return;
+    if (d.mine) setFix(d.name, folder);
     file([d]);
     toast({ title: d.name, message: `filed to ${folder}`, inline: true, duration: 4500 });
   };
@@ -105,8 +140,31 @@ export default function UnplacedInbox() {
   const acceptAll = () => {
     const r = remaining.filter((d) => d.suggestion);
     if (!r.length) return;
+    r.forEach((d) => d.mine && setFix(d.name, d.suggestion!));
     file(r);
     toast({ title: `${r.length} documents`, message: 'filed to their suggested folders', inline: true, duration: 4500 });
+  };
+
+  /** Remove a document that is not a disaster record (Undo puts it back where it was). */
+  const removeOne = (d: UnplacedDoc) => {
+    if (leaving.has(d.id)) return;
+    const at = docs.indexOf(d);
+    if (d.mine) setFix(d.name, '__removed');
+    file([d]);
+    toast({
+      title: d.name,
+      message: 'removed from the inbox',
+      inline: true,
+      duration: 5000,
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          if (d.mine) setFix(d.name, '');
+          setLeaving((s) => new Set([...s].filter((x) => x !== d.id)));
+          setDocs((list) => (list.some((x) => x.id === d.id) ? list : [...list.slice(0, at), d, ...list.slice(at)]));
+        },
+      },
+    });
   };
 
   const commit = (files: CommittedFile[]) => {
@@ -119,14 +177,15 @@ export default function UnplacedInbox() {
 
   const docCell = (d: UnplacedDoc) => (
     <Box sx={{ display: 'flex', gap: 3, minWidth: 0 }}>
-      <Box component="span" aria-hidden sx={{ flex: 'none', display: 'grid', placeItems: 'center', width: 36, height: 44, borderRadius: '4px', bgcolor: 'og.pale', font: '800 9.5px/1 Manrope, Arial, sans-serif', letterSpacing: '.06em', color: 'og.blue' }}>
+      <Box component="span" aria-hidden sx={{ flex: 'none', display: 'grid', placeItems: 'center', width: 36, height: 44, borderRadius: '4px', bgcolor: d.mine ? 'og.card' : 'og.pale', border: d.mine ? 1 : 0, borderColor: 'og.line', font: '800 9.5px/1 Manrope, Arial, sans-serif', letterSpacing: '.06em', color: 'og.blue' }}>
         {d.ext}
       </Box>
       <Box sx={{ minWidth: 0 }}>
         <Box component={RouterLink} to={routes.review} title={d.name} sx={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: 13.5, fontWeight: 700, color: 'og.head', textDecoration: 'none', '&:hover': { color: 'og.blue', textDecoration: 'underline' } }}>
           {d.name}
         </Box>
-        <Box component="small" sx={{ display: 'block', mt: '3px', fontSize: 12, color: 'og.gray' }}>
+        <Box component="small" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: '3px', fontSize: 12, color: 'og.gray' }}>
+          {d.mine && <NewPill />}
           {d.meta}
         </Box>
       </Box>
@@ -157,10 +216,13 @@ export default function UnplacedInbox() {
         </Button>
       )}
       <MoveSelect doc={d} onPick={(f) => fileOne(d, f)} />
+      <Button aria-label={`Remove ${d.name}`} title="Remove: not a disaster record" onClick={() => removeOne(d)} sx={{ minWidth: 0, width: 30, height: 30, p: 0, color: 'og.gray', '&:hover': { bgcolor: 'og.riskTint', color: 'og.risk' } }}>
+        <TrashIcon size={15} />
+      </Button>
     </Box>
   );
 
-  const rowSx = (d: UnplacedDoc) => ({ transition: 'opacity .3s, background-color .3s', opacity: leaving.has(d.id) ? 0 : 1 });
+  const rowSx = (d: UnplacedDoc) => ({ transition: 'opacity .3s, background-color .3s', opacity: leaving.has(d.id) ? 0 : 1, ...(d.mine && { bgcolor: 'rgba(176,138,78,.06)', boxShadow: 'inset 3px 0 0 #B08A4E' }), ...(focus === d.id && { outline: '2px solid', outlineColor: 'og.blue', outlineOffset: '-2px' }) });
 
   return (
     <AppShell active="library" sidebarLabel="Queues & filing cabinet" sidebar={<LibrarySidebar activeQueue="inbox" inboxCount={n} />}>
@@ -172,6 +234,7 @@ export default function UnplacedInbox() {
         title={`Unplaced Inbox (${n} Documents)`}
         subtitle="Documents the AI placement engine could not file with enough confidence. Accept the suggested folder or choose another."
         overlap={false}
+        back={mine.length ? { label: 'Back to Analysis Report', to: routes.analysisReport } : undefined}
         actions={
           <>
             <Button variant="inverse" disabled={!suggested} onClick={acceptAll}>
@@ -194,11 +257,24 @@ export default function UnplacedInbox() {
             </Typography>
           </Box>
 
+          {mineLeft > 0 && (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px 12px', p: { xs: '12px 16px', md: '12px 24px' }, borderBottom: 1, borderColor: 'og.lineSoft', bgcolor: 'og.pale', fontSize: 13, color: 'og.ink', '& b': { color: 'og.head' } }}>
+              <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.5, height: 24, px: '8px', border: 1, borderColor: 'og.good', borderRadius: '4px', bgcolor: 'og.goodTint', color: 'og.good', fontSize: 10.5, fontWeight: 800, letterSpacing: '.12em', textTransform: 'uppercase' }}>
+                <CheckIcon size={12} />
+                From your upload
+              </Box>
+              <span>
+                <b>{plural(mineLeft, 'file')}</b> from your upload need
+                {mineLeft === 1 ? 's' : ''} a folder. {mineLeft === 1 ? 'It is' : 'They are'} at the top, marked <NewPill />.
+              </span>
+            </Box>
+          )}
+
           {n > 0 &&
             (stacked ? (
               <Box role="list" aria-label="Unplaced documents">
                 {docs.map((d) => (
-                  <Box role="listitem" key={d.id} sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: '14px 16px', borderBottom: 1, borderColor: 'og.lineSoft', ...rowSx(d) }}>
+                  <Box role="listitem" key={d.id} data-doc={d.id} sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: '14px 16px', borderBottom: 1, borderColor: 'og.lineSoft', ...rowSx(d) }}>
                     {docCell(d)}
                     <Box>{suggestionCell(d)}</Box>
                     {actionCell(d)}
@@ -210,7 +286,7 @@ export default function UnplacedInbox() {
                 <colgroup>
                   <col style={{ width: '34%' }} />
                   <col />
-                  <col style={{ width: 250 }} />
+                  <col style={{ width: 290 }} />
                 </colgroup>
                 <thead>
                   <tr>
@@ -227,7 +303,7 @@ export default function UnplacedInbox() {
                 </thead>
                 <tbody>
                   {docs.map((d) => (
-                    <Box component="tr" key={d.id} sx={rowSx(d)}>
+                    <Box component="tr" key={d.id} data-doc={d.id} sx={rowSx(d)}>
                       <Box component="td" sx={{ ...td, pl: '24px' }}>
                         {docCell(d)}
                       </Box>
@@ -255,5 +331,13 @@ export default function UnplacedInbox() {
       </Box>
       <UploadModal open={upload.open} initialFiles={upload.files} destination="Unplaced Inbox" onClose={() => setUpload({ open: false, files: null })} onCommit={commit} />
     </AppShell>
+  );
+}
+
+function NewPill() {
+  return (
+    <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', height: 17, px: '5px', borderRadius: '3px', bgcolor: '#B08A4E', color: '#fff', fontSize: 9.5, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', verticalAlign: 'middle' }}>
+      New
+    </Box>
   );
 }

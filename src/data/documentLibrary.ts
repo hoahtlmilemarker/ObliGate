@@ -4,7 +4,7 @@
  */
 
 export type DocTone = 'good' | 'warn' | 'risk' | 'proc';
-export type DocAction = 'reviewTwoPane' | 'review' | 'inspect' | 'reconcile' | 'requestSignature' | 'reviewPlain' | 'processing';
+export type DocAction = 'reviewTwoPane' | 'review' | 'inspect' | 'reconcile' | 'requestSignature' | 'reviewPlain' | 'processing' | 'fix' | 'confirmFolder' | 'view';
 export type DocLink = 'review' | 'importWizard' | 'crossCheck' | 'signature';
 
 export interface LibraryDoc {
@@ -31,6 +31,10 @@ export interface LibraryDoc {
   hot?: boolean;
   /** Freshly uploaded row (New pill, gold flash). */
   isNew?: boolean;
+  /** Filed from the user's upload on the Analysis Report (New pill, stays clickable). */
+  fromUpload?: boolean;
+  /** Target of the `fix` action (the finding's screen). */
+  actionTo?: string;
 }
 
 export const FILE_TYPE_COLORS: Record<string, string> = {

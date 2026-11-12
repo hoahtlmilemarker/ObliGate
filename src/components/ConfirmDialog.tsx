@@ -11,6 +11,8 @@ export interface OgDialogProps {
   /** Footer actions. Defaults to Cancel + confirm when `confirmLabel` is given. */
   actions?: ReactNode;
   confirmLabel?: string;
+  /** Label of the dismiss button (default "Cancel"). */
+  cancelLabel?: string;
   onConfirm?: () => void;
   confirmDisabled?: boolean;
   maxWidth?: number;
@@ -19,7 +21,7 @@ export interface OgDialogProps {
 }
 
 /** Standard ObliGate dialog: gold eyebrow, title, body, footer actions. */
-export function OgDialog({ open, onClose, eyebrow, title, children, actions, confirmLabel, onConfirm, confirmDisabled, maxWidth = 480, danger }: OgDialogProps) {
+export function OgDialog({ open, onClose, eyebrow, title, children, actions, confirmLabel, cancelLabel = 'Cancel', onConfirm, confirmDisabled, maxWidth = 480, danger }: OgDialogProps) {
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="og-dialog-title" slotProps={{ paper: { sx: { width: `min(${maxWidth}px, calc(100vw - 32px))`, m: 2, ...(danger && { borderTopColor: 'og.risk' }) } } }}>
       <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 3, p: '20px 24px 4px' }}>
@@ -42,7 +44,7 @@ export function OgDialog({ open, onClose, eyebrow, title, children, actions, con
         {actions ?? (
           <>
             <Button variant="outlined" onClick={onClose}>
-              Cancel
+              {cancelLabel}
             </Button>
             {confirmLabel && (
               <Button variant="contained" onClick={onConfirm} disabled={confirmDisabled} sx={danger ? { bgcolor: 'og.risk', borderColor: 'og.risk', '&:hover': { bgcolor: 'og.risk', filter: 'brightness(.92)' } } : undefined}>
