@@ -2975,7 +2975,7 @@ html.og-mac .og .gn-n{padding-bottom:.5px!important}html.og-mac .og section.ck3 
 .og .sg-back:hover{color:var(--blue);background:var(--blue-t)}
 </style>
 <script>
-document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.sg-back[data-hist]');if(!a)return;try{var r=document.referrer;if(r&&new URL(r).origin===location.origin&&r.split('#')[0]!==location.href.split('#')[0]&&history.length>1){e.preventDefault();history.back();}}catch(x){}});
+(function(){var K='og-trail',cur=location.href,T=[];try{T=JSON.parse(sessionStorage.getItem(K)||'[]');}catch(x){T=null;}if(T){var n=T.length;if(T[n-1]!==cur){if(n>1&&T[n-2]===cur)T.pop();else T.push(cur);}if(T.length>30)T=T.slice(-30);try{sessionStorage.setItem(K,JSON.stringify(T));}catch(x){}}addEventListener('hashchange',function(){if(!T)return;var h=location.href;T[T.length-1]=h;try{sessionStorage.setItem(K,JSON.stringify(T));}catch(x){}});document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.sg-back[data-hist]');if(!a||!T)return;var p=T[T.length-2];if(p&&p!==location.href){e.preventDefault();location.href=p;}});})();
 </script>
 <script>
 /* ===== project context: open any active project with its own identity ===== */
