@@ -3192,9 +3192,9 @@ function page(nav){
  [].forEach.call(app.querySelectorAll('[data-upload]'),function(b){b.setAttribute('data-upload',b.getAttribute('data-upload').replace(/PW-\d+/,cur));});
  var es=app.querySelector('.es2');if(!es)return;
  var art=es.querySelector('.es2-art');if(art&&!art.classList.contains('es3')){art.className='es2-art es3';art.innerHTML=window.ogArt?ogArt('docs','es3-svg'):ART;}
- var t=es.querySelector('.es-title');if(t)t.textContent='No documents in '+cur+' yet';
+ var t=es.querySelector('.es-title');if(t)t.textContent='No documents yet';
  var s=es.querySelector('.es3-sub');if(!s){s=document.createElement('p');s.className='es3-sub';if(t)t.insertAdjacentElement('afterend',s);}
- s.textContent=(name?name+' has':'This project has')+' no evidence filed yet. Upload timesheets, logs and receipts, or import a payroll export. Labor Cross-Check and Pre-Submission unlock once documents are filed.';
+ s.textContent='Upload timesheets, logs and receipts, or import a payroll export. ObliGate files them and checks them against FEMA rules.';
  try{document.title=cur+' · Documents · ObliGate';}catch(e){}
 }
 function run(){var nav=document.querySelector('.gnav');if(!nav)return false;setup(nav);page(nav);return true;}
@@ -3645,6 +3645,7 @@ setTimeout(mk,800);setTimeout(mk,2000);
 <style>html body .og .xq-es .xq-btn{height:38px!important;margin-top:12px}html body .og .xq-es .xq-es-row .xq-btn{margin-top:12px}</style>
 <style>/* steps live in the project bar now: no leftover divider under the open project */html body .og .gnav .gn-proj[open]{border-bottom:0!important;padding-bottom:0!important;margin-bottom:0!important;box-shadow:none!important}</style>
 <style>/* one scroller per card: tabs wrap instead of scrolling on their own */html body .og .lb-tabs{overflow:visible!important;flex-wrap:wrap!important;row-gap:4px;scrollbar-width:none}html body .og .lb-tabs::-webkit-scrollbar{display:none}html body .og .lb-tabs > *{white-space:nowrap!important;flex:none!important}</style>
+<style>html body .og .col-body:has(> .es-host > .es.es2){padding-top:28px!important}html body .og .es.es2{margin-top:0!important}html body .og .es2 .es3-sub{max-width:440px!important}</style>
 
 <div class="og" data-theme="light" style="min-height: 1550px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
