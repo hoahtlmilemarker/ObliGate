@@ -2676,8 +2676,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  function ago(h){return h<1?'Just now':h<24?h+' hour'+(h===1?'':'s')+' ago':Math.round(h/24)===1?'Yesterday':Math.round(h/24)+' days ago';}
  var ME='Rosa Keith';
  /* prototype-only: preview each table with data or empty (persisted per browser) */
- function demoEmpty(k){try{return localStorage.getItem('og-empty-'+k)==='1';}catch(e){return false;}}
- function setDemoEmpty(k,v){try{localStorage.setItem('og-empty-'+k,v?'1':'0');}catch(e){}}
+ var DM=window.__ogDM||(window.__ogDM={});function demoEmpty(k){if(k in DM)return DM[k];try{return localStorage.getItem('og-empty-'+k)==='1';}catch(e){return false;}}
+ function setDemoEmpty(k,v){DM[k]=!!v;try{localStorage.setItem('og-empty-'+k,v?'1':'0');}catch(e){}}
  function seg(k,on){return '<span class="xq-dm" title="Prototype only, not part of the product: preview the table with or without data"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype<span class="xq-seg" role="group" aria-label="Preview state"><button type="button" data-dm="'+k+'" data-v="0" aria-pressed="'+!on+'">With data</button><button type="button" data-dm="'+k+'" data-v="1" aria-pressed="'+on+'">Empty</button></span></span>';}
  var PPL={'Rosa Keith':['RK','#1E4F8F'],'Daniel Ortiz':['DO','#3F7FD9'],'Priya Natarajan':['PN','#7C4DB4'],'Marcus Hale':['MH','#2E7D4F']};
 
