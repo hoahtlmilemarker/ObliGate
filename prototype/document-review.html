@@ -2596,12 +2596,12 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .an-sample{color:var(--proto)!important;text-decoration-color:var(--proto-b)!important}
 .og .fm-opt{margin-left:8px;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--gray)}
 /* Import page fits one laptop screen */
-html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band .band-in{padding-top:16px!important;padding-bottom:18px!important}
+html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band .band-in{padding-top:12px!important;padding-bottom:14px!important}
 .og:has(.xq-imp) .band-in h1{margin-bottom:0!important}
 .og:has(.xq-imp) .band-in .sg-back{margin-bottom:0}
 .og:has(.xq-imp) .band-in h1{margin-top:-2px!important;margin-bottom:0!important}
 .og .xq-imp .xq-wz{position:relative;padding-top:4px}
-.og .xq-imp{margin-top:-8px}.og:has(.xq-imp) [data-hist][hidden]+*,.og:has(.xq-imp) .col{padding-bottom:0}
+.og .xq-imp{margin-top:0}.og .xq-imp + .xq-h2{margin-top:4px!important}.og:has(.xq-imp) [data-hist][hidden]+*,.og:has(.xq-imp) .col{padding-bottom:0}
 .og .xq-imp .xq-wzh{position:absolute;right:24px;top:50%;transform:translateY(-50%);width:auto;flex:none}
 .og .xq-imp .xq-wzh .lbl{display:none}
 .og .xq-imp .xq-st{padding:11px 0}
@@ -3244,8 +3244,8 @@ html.og-kbd .og a.brand:focus-visible{outline:2px solid rgba(255,255,255,.45)!im
 addEventListener('keydown',function(e){if(e.key==='Tab'||e.key==='F6')d.classList.add('og-kbd');},true);
 ['mousedown','pointerdown','touchstart'].forEach(function(t){addEventListener(t,function(){d.classList.remove('og-kbd');},true);});})();
 </script>
-<script src="review/config.js?v=2"></script><script>document.documentElement.classList.add('rv-on');</script><script src="review/review.js?v=11" defer></script>
-<style>@media (min-width:641px){body:has(.rv-rail),html.rv-on body{padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
+<script src="review/config.js?v=2"></script><script>try{if(localStorage.getItem('ree-review-hidden')!=='1')document.documentElement.classList.add('rv-on');}catch(e){}</script><script src="review/review.js?v=11" defer></script><style>@media (min-width:641px){body:has(.rv-rail),html.rv-on body:not(:has([data-review-ui])){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
+
 
 <div class="og rv-app" data-theme="light" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
