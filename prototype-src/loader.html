@@ -2768,7 +2768,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   drawHist();
   var ex=window.ogFm||{};
   var sT=q(root,'#im-t'),sP=q(root,'#im-p');
-  if(ex.select){ex.select(sT,{ph:'Detect automatically',icon:'doc',keepEmpty:true,row:function(v){var t=TY.filter(function(x){return x[0]===v;})[0];if(!t)return '<span class="fm-ot"><b>Detect automatically</b><small>ObliGate reads the column headers</small></span>';return '<span class="fm-ot"><b>'+t[1]+'</b><small>'+t[2]+'</small></span>';}});
+  if(ex.select){ex.select(sT,{ph:'Detect automatically',icon:'doc',row:function(v){var t=TY.filter(function(x){return x[0]===v;})[0];return '<span class="fm-ot"><b>'+t[1]+'</b><small>'+t[2]+'</small></span>';}});
    ex.select(sP,{ph:'Choose a project…',icon:'folder',fmt:function(v,t){return '<b>'+v+'</b> <span>· '+esc(t.split(' · ')[1])+'</span>';},row:function(v,t){return '<span class="fm-ot"><b>'+v+'</b><small>'+esc(t.split(' · ')[1])+' · DR-4683-CA</small></span>';}});}
   var fileBox=q(root,'[data-file]');
   function drawFile(){if(st.file){var e=(st.file.name.split('.').pop()||'').toUpperCase();fileBox.innerHTML='<div class="xq-file"><span class="ft">'+e.slice(0,4)+'</span><div><b title="'+esc(st.file.name)+'">'+esc(st.file.name)+'</b><small>'+(st.file.size>=1e6?(st.file.size/1e6).toFixed(1)+' MB':Math.max(1,Math.round(st.file.size/1e3))+' KB')+' · ready to analyze</small></div><button type="button" data-rmf aria-label="Remove file">'+S(I.x,14)+'</button></div>';}
