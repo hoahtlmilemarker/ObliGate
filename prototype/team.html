@@ -1091,7 +1091,7 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
  function vis(el){if(!el)return false;var r=el.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(el).visibility!=='hidden';}
  var UP='a.btn-w[href*="import"],a.btn-w[href*="upload"]';
  var STEPS=[
-  {t:UP,h:'Start by importing your data',p:'Bring in payroll exports, timekeeping and cost spreadsheets. ObliGate maps the columns, then checks every row against FEMA rules.',hint:'Click <b>Import Data</b> any time to begin.'},
+  {t:UP,h:'Start by uploading your documents',p:'Drop in timesheets, field logs, photos, contracts and payroll exports. ObliGate files each one under the right disaster and project, then checks it against FEMA rules.',hint:'Click <b>Upload Documents</b> any time to begin.'},
   {t:'.sb-rail',h:'Filter by lifecycle',p:'Switch between Active, Closeout, Appeals and Archived disasters. Counts update as your records are analyzed.'},
   {t:'.dtbl',h:'Open a disaster',p:'Each row is a declared disaster with its obligated amount and evidence health. Open one to see its projects, documents and findings.'}
  ];
@@ -1112,7 +1112,7 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
   pop.innerHTML='<div class="tr-ey"><span>'+(i===0?'Welcome to ObliGate · ':'')+'Step '+(i+1)+' of '+list.length+'</span><button class="tr-x" type="button" aria-label="Close tour">✕</button></div>'+
    '<h3 id="trH">'+st.h+'</h3><p>'+st.p+'</p>'+(st.hint?'<p class="tr-hint">'+st.hint+'</p>':'')+
    '<div class="tr-f">'+dots(i)+'<span class="tr-act">'+(i===0?'<button class="tr-skip" type="button" data-s>Skip tour</button>':'<button class="btn btn-sm btn-o" type="button" data-b>Back</button>')+
-   (last?'<button class="btn btn-sm btn-o" type="button" data-n>Done</button><button class="btn btn-sm btn-p" type="button" data-u>Import Data</button>':'<button class="btn btn-sm btn-p" type="button" data-n>Next</button>')+'</span></div>';
+   (last?'<button class="btn btn-sm btn-o" type="button" data-n>Done</button><button class="btn btn-sm btn-p" type="button" data-u>Upload Documents</button>':'<button class="btn btn-sm btn-p" type="button" data-n>Next</button>')+'</span></div>';
   wire();
   var mob=innerWidth<=640;tgt.style.scrollMarginTop=mob?'84px':'96px';tgt.style.scrollMarginBottom='24px';
   var r=tgt.getBoundingClientRect(),vh=innerHeight-(mob?pop.offsetHeight+40:0);
