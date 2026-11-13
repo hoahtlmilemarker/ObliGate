@@ -3645,6 +3645,16 @@ setTimeout(mk,800);setTimeout(mk,2000);
 <style>/* steps live in the project bar now: no leftover divider under the open project */html body .og .gnav .gn-proj[open]{border-bottom:0!important;padding-bottom:0!important;margin-bottom:0!important;box-shadow:none!important}</style>
 <style>/* one scroller per card: tabs wrap instead of scrolling on their own */html body .og .lb-tabs{overflow:visible!important;flex-wrap:wrap!important;row-gap:4px;scrollbar-width:none}html body .og .lb-tabs::-webkit-scrollbar{display:none}html body .og .lb-tabs > *{white-space:nowrap!important;flex:none!important}</style>
 <style>html body .og .col-body:has(> .es-host > .es.es2){padding-top:28px!important}html body .og .es.es2{margin-top:0!important}html body .og .es2 .es3-sub{max-width:440px!important}</style>
+<script>(function(){/* project pages: a change of project in the URL always reloads, so sidebar, cabinet, queues and marks never mix two projects */
+if(!/(project-overview|document-library|library-empty|unplaced-inbox|cross-check|pre-submission|analysis-report|project-overview|document-library|library-empty|unplaced-inbox|\/cross-check|pre-submission|analysis-report)(\.html)?$/.test(location.pathname)||/cross-check-projects/.test(location.pathname))return;
+function pw(){var m=/^#(PW-\d{5})/.exec(location.hash);return m?m[1]:'';}
+var start=pw();
+function hasData(c){return c==='PW-00428'||!!(window.OG_ACTIVE&&OG_ACTIVE[c]&&!OG_ACTIVE[c].empty);}
+addEventListener('hashchange',function(){var c=pw();if(c===start)return;
+ if(/library-empty/.test(location.pathname)&&c&&hasData(c)){location.replace(location.pathname.replace(/library-empty(\.html)?|library-empty/,function(m){return m.indexOf('03b')===0?'document-library':'document-library';})+location.hash);return;}
+ location.reload();});
+addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
+})();</script>
 
 <div class="og" data-theme="light" style="min-height: 1100px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
