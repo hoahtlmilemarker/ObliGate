@@ -3210,7 +3210,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .fm-sel.fm-sm{height:32px;padding:0 10px;gap:8px;font-size:13px;min-width:136px}
 .og .fm-sel.fm-sm .fm-car{width:13px;height:13px}
 .og .fm-sel:disabled{opacity:.55;cursor:not-allowed;background:var(--pale)}
-.og .an-scope{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;margin:0 0 16px}.og .an-scope .fm-f{margin:0;min-width:0}.og .an-scope-h{grid-column:1/-1;margin:6px 0 0!important}.og .an-scope-h b{color:var(--head);font-weight:700}@media (max-width:640px){.og .an-scope{grid-template-columns:1fr;gap:12px}.og .an-scope-h{margin-top:-4px!important}}.og .fm-pop.fm-sp{min-width:210px}.og .fm-pop.fm-sp .fm-ot b{white-space:nowrap}
+.og .an-scope{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;margin:0 0 16px}.og .an-scope .fm-f{margin:0;min-width:0}.og .an-scope-h{grid-column:1/-1;margin:6px 0 0!important}.og .an-scope-h b{color:var(--head);font-weight:700}@media (max-width:640px){.og .an-scope{grid-template-columns:1fr;gap:12px}.og .an-scope-h{margin-top:-4px!important}}.og .an-card-b > .an-empty{display:none!important}.og .fm-pop.fm-sp{min-width:210px}.og .fm-pop.fm-sp .fm-o .fm-sp2 b{white-space:normal;overflow:visible;line-height:1.4}.og .fm-sp2 b i,.og .fm-sel .fm-sub{font-style:normal;font-weight:500;color:var(--gray);margin-left:8px}.og .fm-o[aria-selected="true"] .fm-sp2 b i{color:var(--gray)}.og .fm-pop.fm-sp .fm-ot b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.og .fm-pop.fm-sp .fm-ot small{white-space:normal;overflow:visible}
 .og[data-theme="dark"] .fm-sel:hover{border-color:#3A4B5C}
 </style>
 <script>
@@ -3219,7 +3219,7 @@ function up(sel){if(!window.ogFm||sel.classList.contains('fm-native')||sel.multi
  if(!sel.isConnected||!sel.closest('.og'))return;
  var cs=getComputedStyle(sel),w=sel.getBoundingClientRect().width,pw=sel.parentElement?sel.parentElement.getBoundingClientRect().width:0;
  var first=sel.options[0];
- var b=ogFm.select(sel,{icon:false,keepEmpty:true,ph:first?first.text:'Select'});
+ var E=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');};var b=ogFm.select(sel,sel.hasAttribute('data-split')?{icon:false,keepEmpty:true,ph:first?first.text:'Select',row:function(v,t){var i=t.indexOf(' · ');return '<span class="fm-ot fm-sp2"><b>'+E(i>0?t.slice(0,i):t)+(i>0?'<i>'+E(t.slice(i+3))+'</i>':'')+'</b></span>';},fmt:function(v,t){var i=t.indexOf(' · ');return i>0?E(t.slice(0,i))+'<i class="fm-sub">'+E(t.slice(i+3))+'</i>':E(t);}}:{icon:false,keepEmpty:true,ph:first?first.text:'Select'});
  b.classList.add('fm-auto');
  var sm=!!sel.closest('td,.lb-tools,.ux-s')||parseFloat(cs.height)<36;if(sm)b.classList.add('fm-sm');
  if(sel.style.width)b.style.width=sel.style.width;else if(w&&pw&&w<pw*0.92)b.style.width=Math.max(120,Math.round(w+8))+'px';
