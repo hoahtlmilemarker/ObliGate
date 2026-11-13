@@ -3182,7 +3182,7 @@ function setup(nav){
 }
 function page(nav){
  if(!/library-empty|library-empty/.test(location.pathname))return;
- var cur=decodeURIComponent(location.hash.slice(1))||'PW-00429',name='';
+ var cur=decodeURIComponent(location.hash.slice(1))||'PW-00430',name='';
  [].forEach.call(nav.querySelectorAll('.gn-proj'),function(d){var c=code(d);
   [].forEach.call(d.querySelectorAll('.on,[aria-current]'),off);
   if(c===cur){d.open=true;var a=d.querySelector('.gn-st');if(a){a.classList.add('on');a.setAttribute('aria-current','page');}var nm=d.querySelector('.gn-name');name=nm?nm.textContent.trim():'';}
@@ -3218,7 +3218,7 @@ html.og-hold.og-hold-ctx .og .col,html.og-hold.og-hold-ctx .og .gnav .gn-proj,ht
 (function(){
 var EMP='library-empty',LIB='document-library';
 function id(d){var s=d.querySelector(':scope>summary .tr-id');return s?s.textContent.trim():'';}
-function cur(){var m=/^#(PW-\d{5})$/.exec(location.hash);if(m)return m[1];if(/library-empty|library-empty/.test(location.pathname))return 'PW-00429';return 'PW-00428';}
+function cur(){var m=/^#(PW-\d{5})$/.exec(location.hash);if(m)return m[1];if(/library-empty|library-empty/.test(location.pathname))return 'PW-00430';return 'PW-00428';}
 function scope(){var tree=document.querySelector('.tree');if(!tree)return false;if(tree.classList.contains('tr-scoped'))return true;
  var C=cur(),A=window.OG_ACTIVE||{},act=(!!A[C]&&!A[C].empty)||C==='PW-00428';
  var all=[].slice.call(tree.querySelectorAll('details.tr')),projs=all.filter(function(d){return /^PW-\d{5}$/.test(id(d));});
@@ -3641,6 +3641,8 @@ if(document.readyState==='complete')setTimeout(run,100);else addEventListener('l
 function mk(){[].forEach.call(document.querySelectorAll('.gn-mk.a'),function(m){m.title='Payroll required · not imported';m.setAttribute('aria-label','Payroll required · not imported');});}
 setTimeout(mk,800);setTimeout(mk,2000);
 })();</script>
+<style>html body .og .col-body:has(> .es-host > .es.es2){width:auto!important;max-width:none!important;margin-left:0!important;margin-right:0!important;align-self:stretch!important}html body .og .es-host:has(> .es.es2){width:100%!important;max-width:none!important;align-self:stretch!important}html body .og .es.es2{width:100%!important;max-width:none!important;align-self:stretch!important;box-sizing:border-box}</style>
+<style>html body .og .xq-es .xq-btn{height:38px!important;margin-top:12px}html body .og .xq-es .xq-es-row .xq-btn{margin-top:12px}</style>
 
 <div class="og gn" data-theme="light" style="min-height: 1300px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
