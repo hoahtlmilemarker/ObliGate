@@ -3612,6 +3612,24 @@ if(document.readyState==='complete')setTimeout(run,60);else addEventListener('lo
 <style>/* spread spare width equally across every column (no empty gap before Open) */html body .og .cq-t > * > tr > :first-child{width:24%!important}html body .og .cq-t > * > tr > :last-child{width:1%!important}html body .og .cq-t > * > tr > .r,html body .og .cq-t > * > tr > th.r{text-align:left!important}html body .og .cq-t .pj-lab{white-space:nowrap!important;max-width:none!important}html body .og .cq-t td:last-child{text-align:right}</style>
 <style>@media (min-width:1367px){html body .og .cq-t > * > tr > :first-child{width:1%!important;white-space:nowrap!important}html body .og .cq-t td:first-child *{white-space:nowrap!important}}</style>
 <style>html body .og .cq-chip.mute{color:var(--gray)!important;border-color:var(--line)!important;background:var(--pale)!important}</style>
+<style>/* project empty state = same pattern as list-page empty states */
+html body .og .es.es2{min-height:0!important;height:auto!important;margin:24px 0 0!important;padding:44px 20px 40px!important;border:1px solid var(--line)!important;border-radius:4px!important;background:var(--card)!important;box-shadow:none!important;outline:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;text-align:center}
+html body .og .es.es2::before,html body .og .es.es2::after{display:none!important}
+html body .og .es2 .es2-art{width:132px!important;height:auto!important;margin:0 0 6px!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;color:var(--head)}
+html body .og .es2 .es2-art svg{width:132px!important;height:auto!important;display:block}
+html body .og .es2 .es-title{font-size:16px!important;line-height:1.35!important;margin:0!important}
+html body .og .es2 .es3-sub{max-width:460px!important;margin:6px auto 0!important;font-size:13px!important;line-height:1.55!important}
+html body .og .es2 .es-acts{margin-top:18px!important;display:flex;flex-wrap:wrap;justify-content:center;gap:8px!important}
+html body .og .es2 .es-acts .btn{height:38px!important;min-height:0!important;padding:0 14px!important;font-size:13px!important}
+html body .og .es2 .es2-foot{margin:14px 0 0!important;font-size:12px!important;color:var(--gray)!important;display:inline-flex;align-items:center;gap:6px}
+html body .og .col:has(.es.es2) .band .btn{display:none!important}
+.og[data-theme=dark] .es2 .og-art [fill="#fff"]:not(.k){fill:var(--card)}
+</style>
+<script>(function(){var ART='<svg viewBox="0 0 120 96" fill="none" aria-hidden="true"><ellipse cx="60" cy="86" rx="38" ry="5" fill="currentColor" opacity=".08"/><rect x="30" y="26" width="46" height="56" rx="4" fill="var(--card)" stroke="#C9D7E5" stroke-width="1.3" transform="rotate(-8 53 54)"/><rect x="40" y="18" width="46" height="58" rx="4" fill="var(--card)" stroke="#9FB6CC" stroke-width="1.3"/><path d="M48 30h24M48 37h30M48 44h22M48 51h28M48 58h18" stroke="#C9D7E5" stroke-width="1.6" stroke-linecap="round"/><circle cx="84" cy="66" r="11.5" fill="#005A9C"/><path d="M84 71.5v-11M79.5 65l4.5-4.5 4.5 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="102" cy="20" r="1.8" fill="#B08A4E" opacity=".7"/><circle cx="18" cy="70" r="1.5" fill="#7FB8E6"/></svg>';
+function go(){[].forEach.call(document.querySelectorAll('.og .es.es2 .es2-art'),function(a){if(a.classList.contains('og-art'))return;a.classList.add('og-art');a.innerHTML=ART;});}
+if(document.readyState==='complete')setTimeout(go,50);else addEventListener('load',function(){setTimeout(go,50);});setTimeout(go,1200);})();</script>
+<style>html body .og .es.es2{flex:none!important}html body .og.sb-mini > .shell{background:var(--pale)!important}</style>
+<style>@media (max-width:1024px){html body .og .col:has(.es.es2) > .band{padding-bottom:0!important;min-height:0!important}html body .og .col:has(.es.es2) > .band .band-in{padding-bottom:28px!important}}</style>
 
 <div class="og rv-app" data-theme="light" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
