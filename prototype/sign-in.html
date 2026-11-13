@@ -3425,7 +3425,7 @@ function curProj(g){var P=[].slice.call(g.querySelectorAll('.gn-proj'));
  var c=P.filter(function(d){return d.querySelector('.gn-st.on,.gn-ov.on');})[0];if(c)return c;
  var h=/^#(PW-\d{5})/.exec(location.hash);if(h)c=P.filter(function(d){return txt(d.querySelector('.gn-code'))===h[1];})[0];
  return c||g.querySelector('.gn-proj[open]');}
-function mark(g){[].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var s=d.querySelector('summary');if(!s||s.querySelector('.gn-mk'))return;
+function mark(g){[].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var s=d.querySelector('summary');if(!s)return;var om=s.querySelector('.gn-mk');if(om)om.remove();
   if(!s.querySelector('.gn-tx')){var w=document.createElement('span');w.className='gn-tx';[].slice.call(s.querySelectorAll('.gn-code,.gn-name')).forEach(function(x){w.appendChild(x);});s.insertBefore(w,s.firstChild);}
   var st=d.querySelectorAll('.gn-st')[1],m='';if(st){var r=st.querySelector('.gn-c-r');if(r)m='<span class="gn-mk r" title="'+txt(r)+' labor findings to resolve">'+txt(r)+'</span>';else if(st.classList.contains('gn-req'))m='<span class="gn-mk a" title="Payroll required · not imported">!</span>';}
   if(m)s.insertAdjacentHTML('beforeend',m);
@@ -3463,7 +3463,7 @@ function addNew(g){var L=[];try{L=JSON.parse(sessionStorage.getItem('og-newpj')|
   if(st[1]){st[1].className='gn-st '+(n.nolab?'gn-na':'gn-req');st[1].querySelectorAll('small').forEach(function(x){x.remove();});var tt=st[1].querySelector('.gn-t');if(n.nolab){st[1].removeAttribute('href');tt.insertAdjacentHTML('beforeend','<small class="gn-nat">Not needed · no labor on the PW</small>');}else{st[1].setAttribute('href','import');tt.insertAdjacentHTML('beforeend','<small class="gn-rqt">Required · payroll missing</small>');}}
   ref.parentNode.insertBefore(c,ref);ref=c;});
  var pc=g.querySelector('.gn-pc');if(pc)pc.textContent=g.querySelectorAll('.gn-proj').length;}
-function run(){hnav();homeLinks();var g=document.querySelector('.og.gn > .gnav');if(g){addNew(g);mark(g);}pjb();}
+function run(){hnav();homeLinks();var g=document.querySelector('.og.gn > .gnav');if(g){addNew(g);mark(g);}pjb();}[300,900,1800,3000].forEach(function(t){setTimeout(function(){var g=document.querySelector('.og.gn > .gnav');if(g)mark(g);},t);});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',hnav);else hnav();
 if(document.readyState==='complete')setTimeout(run,0);else addEventListener('load',function(){setTimeout(run,0);});
 addEventListener('hashchange',function(){setTimeout(pjb,0);});
