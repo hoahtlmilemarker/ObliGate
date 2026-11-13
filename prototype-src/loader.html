@@ -3419,7 +3419,7 @@ function txt(e){return e?e.textContent.trim():'';}
 function hnav(){var hd=document.querySelector('.og .hd');if(!hd||hd.querySelector('.hnav'))return;var f=F(),org=hd.querySelector('.org'),tools=hd.querySelector('.tools');
  var n=document.createElement('nav');n.className='hnav';n.setAttribute('aria-label','Main');
  var L=[['01-disaster-portfolio.html','Disasters','<path d="M3 21h18M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/>',/(^01-|^disasters$)/.test(f),1],
-        ['24-projects.html','Projects','<rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9h17M9 9v10.5"/>',/(^|-)projects$/.test(f)&&!/cross-check/.test(f)],
+        ['24-projects.html','Projects','<rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9h17M9 9v10.5"/>',(/(^|-)projects$/.test(f)&&!/cross-check/.test(f))||/^(0[2-578]-|03[bc]-|14-|project-overview|document-library|library-empty|unplaced-inbox|document-review|cross-check$|pre-submission|supervisor-signature|analysis-report)/.test(f)],
         ['22-cross-check-projects.html','Labor check queue','<path d="M4 7h10M4 12h16M4 17h7"/><path d="m15.5 16 2 2 3.5-4"/>',/cross-check-projects$/.test(f)]];
  n.innerHTML=L.map(function(x){return '<a href="'+x[0]+'"'+(x[4]?' data-keep-dis':'')+(x[3]?' class="on" aria-current="page"':'')+'>'+S(x[2])+'<span>'+x[1]+'</span></a>';}).join('')+
   '<a class="hnav-up'+(/(^12-|^upload$)/.test(f)?' on':'')+'" href="12-upload-start.html" data-ctx>'+S('<path d="M7 18.5a4.5 4.5 0 0 1-.7-8.95A6 6 0 0 1 17.7 8.5 4 4 0 0 1 17 18.5"/><path d="M12 12v8M9 15l3-3 3 3"/>')+'<span>Upload</span></a>';
