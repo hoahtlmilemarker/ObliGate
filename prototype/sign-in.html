@@ -3072,7 +3072,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 <style>
 /* ===== project nav: projects without documents ===== */
-.og .gn-st.gn-na{cursor:default;color:var(--dim)!important;background:transparent!important}.og .gn-st.gn-na .gn-n{opacity:.55}.og .gn-st.gn-na .gn-t{opacity:.7}.og .gn-st.gn-na{height:auto!important;min-height:36px;padding-top:5px!important;padding-bottom:5px!important}.og .gn-st.gn-na .gn-t{white-space:normal;overflow:visible}.og .gn-nat{display:block;margin-top:1px;font-size:11px;font-weight:500;color:var(--gray)}.og .gn-st{padding-right:6px!important}.og .gn-st.gn-lock{cursor:not-allowed;color:var(--dim)!important;background:transparent!important}
+.og .gn-st.gn-na{cursor:default;color:var(--dim)!important;background:transparent!important}.og .gn-st.gn-na .gn-n{opacity:.55}.og .gn-st.gn-na .gn-t{opacity:.7}.og .gn-st.gn-req{height:auto!important;min-height:36px;padding-top:5px!important;padding-bottom:5px!important}.og .gn-st.gn-req .gn-t{white-space:normal;overflow:visible}.og .gn-rqt{display:block;margin-top:1px;font-size:11px;font-weight:600;color:var(--warn,#A8641B)}.og .gn-st.gn-req .gn-n{border-color:rgba(168,100,27,.55)}.og .gn-st.gn-na{height:auto!important;min-height:36px;padding-top:5px!important;padding-bottom:5px!important}.og .gn-st.gn-na .gn-t{white-space:normal;overflow:visible}.og .gn-nat{display:block;margin-top:1px;font-size:11px;font-weight:500;color:var(--gray)}.og .gn-st{padding-right:6px!important}.og .gn-st.gn-lock{cursor:not-allowed;color:var(--dim)!important;background:transparent!important}
 .og .gn-st.gn-lock .gn-n{opacity:.55}
 .og .gn-st.gn-lock .gn-t{opacity:.7}
 .og .gn-lk{margin-left:auto;flex:none;opacity:.7}
@@ -3094,7 +3094,8 @@ function setup(nav){
   var ov=d.querySelector('.gn-ov');if(ov){ov.href=EMP+'#'+c;off(ov);}
   [].forEach.call(d.querySelectorAll('.gn-st'),function(a,i){off(a);
    if(i===0){a.href=EMP+'#'+c;var n=a.querySelector('.gn-c');if(n)n.remove();}
-   else if(i===1&&NOLAB[c]){a.classList.add('gn-na');a.removeAttribute('href');a.setAttribute('role','link');a.setAttribute('aria-disabled','true');a.title='Not needed: this project has no force-account labor to check';a.querySelectorAll('.gn-c').forEach(function(x){x.remove();});var tt=a.querySelector('.gn-t');if(tt)tt.insertAdjacentHTML('beforeend','<small class="gn-nat">Not needed · no county labor</small>');}
+   else if(i===1&&NOLAB[c]){a.classList.add('gn-na');a.removeAttribute('href');a.setAttribute('role','link');a.setAttribute('aria-disabled','true');a.title='Not needed: the project worksheet has no Force Account Labor cost line';a.querySelectorAll('.gn-c').forEach(function(x){x.remove();});var tt=a.querySelector('.gn-t');if(tt)tt.insertAdjacentHTML('beforeend','<small class="gn-nat">Not needed · no labor on the PW</small>');}
+   else if(i===1){a.classList.add('gn-req');a.href='import';a.title='Required: the project worksheet includes Force Account Labor. Import the eCAPS payroll to run the check.';a.querySelectorAll('.gn-c').forEach(function(x){x.remove();});var t2=a.querySelector('.gn-t');if(t2)t2.insertAdjacentHTML('beforeend','<small class="gn-rqt">Required · payroll missing</small>');}
    else{a.classList.add('gn-lock');a.removeAttribute('href');a.setAttribute('role','link');a.setAttribute('aria-disabled','true');a.title='Available after documents are uploaded';a.querySelectorAll('.gn-c').forEach(function(x){x.remove();});a.insertAdjacentHTML('beforeend',LOCK);}
   });});
 }
