@@ -3212,7 +3212,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .fm-sel.fm-sm{height:32px;padding:0 10px;gap:8px;font-size:13px;min-width:136px}
 .og .fm-sel.fm-sm .fm-car{width:13px;height:13px}
 .og .fm-sel:disabled{opacity:.55;cursor:not-allowed;background:var(--pale)}
-.og .fm-pop.fm-sp{min-width:210px}.og .fm-pop.fm-sp .fm-ot b{white-space:nowrap}
+.og .an-scope{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;margin:0 0 16px}.og .an-scope .fm-f{margin:0;min-width:0}.og .an-scope-h{grid-column:1/-1;margin:6px 0 0!important}.og .an-scope-h b{color:var(--head);font-weight:700}@media (max-width:640px){.og .an-scope{grid-template-columns:1fr;gap:12px}.og .an-scope-h{margin-top:-4px!important}}.og .fm-pop.fm-sp{min-width:210px}.og .fm-pop.fm-sp .fm-ot b{white-space:nowrap}
 .og[data-theme="dark"] .fm-sel:hover{border-color:#3A4B5C}
 </style>
 <script>
@@ -3246,7 +3246,28 @@ addEventListener('keydown',function(e){if(e.key==='Tab'||e.key==='F6')d.classLis
 ['mousedown','pointerdown','touchstart'].forEach(function(t){addEventListener(t,function(){d.classList.remove('og-kbd');},true);});})();
 </script>
 <script src="review/config.js?v=2"></script><script>try{if(localStorage.getItem('ree-review-hidden')!=='1')document.documentElement.classList.add('rv-on');}catch(e){}</script><script src="review/review.js?v=11" defer></script><style>@media (min-width:641px){body:has(.rv-rail),body:has(.rv-panel),html.rv-on body:not(:has([data-review-ui])){padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd,body:has(.rv-panel) .og .hd{right:46px}}</style>
-
+<script>
+(function(){function init(){var d=document.getElementById('up-d'),p=document.getElementById('up-p');if(!d||!p)return;
+ var DR=[['DR-4683-CA','California Severe Winter Storms, Flooding, Landslides & Mudslides'],['DR-4758-CA','February 2024 Atmospheric River & High Winds'],['DR-4699-CA','Northern California Severe Storms & Flooding'],['DR-4558-CA','Bobcat Fire Complex Recovery']];
+ var P=window.OG_PROJ||[],h=document.querySelector('.an-scope-h');
+ function e(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+ d.innerHTML='<option value="">Detect automatically</option>'+DR.map(function(x){return '<option value="'+x[0]+'">'+x[0]+' · '+e(x[1])+'</option>';}).join('');
+ function fillP(){var dv=d.value,keep=p.value,html='<option value="">Detect automatically</option>';
+  DR.forEach(function(x){if(dv&&x[0]!==dv)return;var L=P.filter(function(q){return q.dr===x[0];});if(!L.length)return;
+   var o=L.map(function(q){return '<option value="'+q.pw+'">'+q.pw+' · '+e(q.name)+'</option>';}).join('');html+=dv?o:'<optgroup label="'+x[0]+'">'+o+'</optgroup>';});
+  p.innerHTML=html;var has=[].some.call(p.options,function(o){return o.value&&o.value===keep;});p.value=has?keep:'';
+  var none=dv&&p.options.length<2;p.disabled=!!none;if(none)p.options[0].text='No projects in this disaster yet';}
+ function hint(){if(!h)return;var q=P.filter(function(x){return x.pw===p.value;})[0];
+  if(q)h.innerHTML='Every file goes to <b>'+q.pw+' · '+e(q.name)+'</b>. A file that names a different project is flagged for you to confirm.';
+  else if(d.value)h.innerHTML='Every file goes to <b>'+d.value+'</b>. ObliGate finds the project from each document.';
+  else h.textContent='Leave blank and ObliGate detects the disaster and project from each document.';}
+ function ch(el){try{el.dispatchEvent(new Event('change'));}catch(x){}}
+ d.addEventListener('change',function(){fillP();ch(p);hint();});
+ p.addEventListener('change',function(){var q=P.filter(function(x){return x.pw===p.value;})[0];if(q&&d.value!==q.dr){d.value=q.dr;fillP();p.value=q.pw;ch(d);}hint();});
+ fillP();var m=/^#(PW-\d{5})$/.exec(location.hash),q=m&&P.filter(function(x){return x.pw===m[1];})[0];
+ if(q){d.value=q.dr;fillP();p.value=q.pw;}ch(d);ch(p);hint();}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
+</script>
 
 <div class="og" data-theme="light" style="min-height: 1100px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
