@@ -2704,8 +2704,8 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
  function ago(h){return h<1?'Just now':h<24?h+' hour'+(h===1?'':'s')+' ago':Math.round(h/24)===1?'Yesterday':Math.round(h/24)+' days ago';}
  var ME='Rosa Keith';
  /* prototype-only: preview each table with data or empty (persisted per browser) */
- var DM=window.__ogDM||(window.__ogDM={});function demoEmpty(k){if(k in DM)return DM[k];try{return localStorage.getItem('og-empty-'+k)==='1';}catch(e){return false;}}
- function setDemoEmpty(k,v){DM[k]=!!v;try{localStorage.setItem('og-empty-'+k,v?'1':'0');}catch(e){}}
+ var DM={};function demoEmpty(k){return !!DM[k];}
+ function setDemoEmpty(k,v){DM[k]=!!v;try{localStorage.removeItem('og-empty-'+k);}catch(e){}}
  function seg(k,on){return '<span class="xq-dm" title="Prototype only, not part of the product: preview '+(k==='imp'?'Import history':'the table')+' with or without data"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype'+(k==='imp'?' · History':'')+'<span class="xq-seg" role="group" aria-label="Preview state"><button type="button" data-dm="'+k+'" data-v="0" aria-pressed="'+!on+'">With data</button><button type="button" data-dm="'+k+'" data-v="1" aria-pressed="'+on+'">Empty</button></span></span>';}
  var PPL={'Rosa Keith':['RK','#1E4F8F'],'Daniel Ortiz':['DO','#3F7FD9'],'Priya Natarajan':['PN','#7C4DB4'],'Marcus Hale':['MH','#2E7D4F']};
 
@@ -3356,14 +3356,14 @@ window.ogCxRun=function(done){var r=document.querySelector('.cx-rs');if(!r)retur
  var og=res.closest('.og'),main=res.closest('main');if(!og||!main)return;
  [].forEach.call(res.querySelectorAll('button'),function(b){if(/^Accept Documented/.test(b.textContent.trim()))b.classList.add('cx-pil');});
  var ft=[].find.call(document.querySelectorAll('[aria-label="Compliance finding"] strong'),function(x){return /Overtime Difference/.test(x.textContent);});
- var on=false;try{on=localStorage.getItem('og-cx-pilot')==='1';}catch(e){on=!!window.__ogPil;}
+ var on=false;try{localStorage.removeItem('og-cx-pilot');}catch(e){}
  var w=document.createElement('div');w.className='cx-pv';
  w.innerHTML='<span class="xq-dm" title="Prototype only, not part of the product. Pilot features run only for pilot projects in production today; the cross-check ADR (OB-141) decides whether they ship for everyone or are dropped."><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype · Pilot features<span class="xq-seg" role="group" aria-label="Pilot features"><button type="button" data-v="0">Off</button><button type="button" data-v="1">On</button></span></span>';
  var fs=main.querySelector('[aria-label="Compliance finding"]');if(fs)fs.parentNode.insertBefore(w,fs);else main.insertBefore(w,main.firstChild);
  function apply(t){og.classList.toggle('cx-pilot-on',on);[].forEach.call(w.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String((b.getAttribute('data-v')==='1')===on));});
   if(ft)ft.textContent=ft.textContent.replace(/(Unsubstantiated Overtime Difference|Overtime Hours Difference)/,on?'Unsubstantiated Overtime Difference':'Overtime Hours Difference');
   if(t){var o=document.querySelector('.og-toast');if(o)o.remove();var d=document.createElement('div');d.className='og-toast og-proto';d.setAttribute('role','status');d.innerHTML='<span><span class="og-pt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype</span>'+(on?'<b>Pilot features on</b> · claim adjustment and OT substantiation shown as if enforced for everyone':'<b>Pilot features off</b> · only what production runs for every project')+'</span>';og.appendChild(d);setTimeout(function(){d.remove();},2800);}}
- w.addEventListener('click',function(e){var b=e.target.closest('button[data-v]');if(!b)return;on=b.getAttribute('data-v')==='1';try{localStorage.setItem('og-cx-pilot',on?'1':'0');}catch(x){window.__ogPil=on;}apply(true);});
+ w.addEventListener('click',function(e){var b=e.target.closest('button[data-v]');if(!b)return;on=b.getAttribute('data-v')==='1';apply(true);});
  apply(false);}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
 </script>
@@ -3372,7 +3372,7 @@ window.ogCxRun=function(done){var r=document.querySelector('.cx-rs');if(!r)retur
 .og .hd .org-sw.org-only b{display:none!important}.og .hd .org-sw.org-only{pointer-events:auto}.og .gnav .gn-dis{display:none!important}.og .gn-lbl-dr{margin-left:auto;white-space:nowrap;padding:1px 6px;border:1px solid var(--line);border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--blue);text-decoration:none;text-transform:none}.og .gn-lbl-dr:hover{background:var(--blue-t)}.og .gnav .gn-lbl{display:flex!important;align-items:center;gap:6px}.og .hnav{display:flex;align-items:stretch;align-self:stretch;gap:2px;margin-left:22px}
 .og .hnav a{display:inline-flex;align-items:center;gap:7px;padding:0 12px;font:600 13px/1 Manrope,Arial,sans-serif;color:rgba(255,255,255,.72);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
 .og .hnav a:hover{color:#fff;background:rgba(255,255,255,.06)}
-.og .hnav a.on{color:#fff;border-bottom-color:#B08A4E}
+.og .hnav a.on{color:#fff;font-weight:700;background:rgba(255,255,255,.08);border-bottom:3px solid #D9B26F}.og .hnav a.on svg{color:#E7C98B;opacity:1}.og .hnav a{border-bottom-width:3px}
 .og .hnav a svg{flex:none;opacity:.85}
 .og .hnav .hnav-up{margin:12px 0 12px 10px;padding:0 12px;border:1px solid rgba(255,255,255,.28);border-radius:4px;border-bottom-width:1px;color:#fff}
 .og .hnav .hnav-up:hover{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.08)}
