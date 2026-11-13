@@ -3197,5 +3197,16 @@ function init(){scan();try{new MutationObserver(sch).observe(document.body,{chil
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+<style>
+/* focus rings only for keyboard users */
+html:not(.og-kbd) .og :focus{outline:none!important}
+html:not(.og-kbd) .og a.brand:focus,html:not(.og-kbd) .og a.org-sw:focus,html:not(.og-kbd) .og .hd :focus{box-shadow:none!important}
+html.og-kbd .og a.brand:focus-visible{outline:2px solid rgba(255,255,255,.45)!important;outline-offset:3px;border-radius:4px}
+</style>
+<script>
+(function(){var d=document.documentElement;
+addEventListener('keydown',function(e){if(e.key==='Tab'||e.key==='F6')d.classList.add('og-kbd');},true);
+['mousedown','pointerdown','touchstart'].forEach(function(t){addEventListener(t,function(){d.classList.remove('og-kbd');},true);});})();
+</script>
 <script src="review/config.js?v=2"></script><script>document.documentElement.classList.add('rv-on');</script><script src="review/review.js?v=11" defer></script>
 <style>@media (min-width:641px){body:has(.rv-rail),html.rv-on body{padding-right:46px;box-sizing:border-box}body:has(.rv-rail) .og .hd{right:46px}}</style>
