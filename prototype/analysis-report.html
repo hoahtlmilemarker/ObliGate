@@ -583,7 +583,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </style>
 <script>
 (function(){function sk(){var h=document.querySelector('.og');if(!h||h.querySelector('.pg-sk'))return;
- var hd=document.querySelector('.hd, .rv-bar'),rail=document.querySelector('.sb-rail');
+ var hd=document.querySelector('.og > .pjb')||document.querySelector('.hd'),rail=document.querySelector('.og > .gnav');
  var top=hd?hd.getBoundingClientRect().bottom:0,left=rail&&rail.offsetParent?rail.getBoundingClientRect().right:0;
  var b=function(w,hh){return '<span class="b" style="display:block;width:'+w+';height:'+(hh||10)+'px"></span>';};
  var d=document.createElement('div');d.className='pg-sk';d.setAttribute('aria-hidden','true');d.style.top=Math.max(0,top)+'px';d.style.left=left+'px';
@@ -594,7 +594,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 document.addEventListener('click',function(e){if(e.defaultPrevented)return;var a=e.target.closest&&e.target.closest('a[href]');if(!a||e.metaKey||e.ctrlKey||e.shiftKey||a.target==='_blank')return;
  var h=a.getAttribute('href')||'';if(!h||h.charAt(0)==='#'||h.indexOf('://')>-1||/^(mailto|tel|javascript|data|blob):/i.test(h))return;
  var to=h.split('#')[0],cur=location.pathname.split('/').pop(),hs=(h.split('#')[1]||'');if(to===cur&&!/#signin/.test(h)&&!(/^PW-\d{5}$/.test(hs)&&'#'+hs!==location.hash))return;
- if(/sign-in/.test(to))return;setTimeout(sk,320);});
+ if(/sign-in/.test(to))return;setTimeout(sk,110);});
 window.addEventListener('pageshow',function(e){if(e.persisted){var s=document.querySelector('.pg-sk');if(s)s.remove();}});})();
 </script>
 
@@ -3506,6 +3506,7 @@ addEventListener('hashchange',function(){setTimeout(pjb,0);});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(setup,0);});else setTimeout(setup,0);addEventListener('load',setup);})();
 </script>
 <style>/* content max-width 1440 on wide screens */@media (min-width:1500px){.og .st-c:has(> [data-cxl]),.og .st-c:has(> [data-pjl]){max-width:1440px!important;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box}.og .col:has([data-cxl]) .band .band-in,.og .col:has([data-pjl]) .band .band-in,.og .col:has(.an-wrap) .band .band-in{max-width:1440px!important;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box}.og .an-wrap{max-width:1440px!important;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box}.og.gn .col > *:not(.band):not(.st-c){max-width:1440px;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box}.og.gn .col > .band > .band-in{max-width:1440px;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box}}</style>
+<style>/* one content frame for every top-level page */.og .col.solo > .band > .band-in,.og .col.solo .st-band > .band-in{max-width:1440px!important;margin-left:auto!important;margin-right:auto!important;padding-left:28px!important;padding-right:28px!important;box-sizing:border-box!important;width:100%!important}html body .og .col.solo > div.st-c:not(.band),html body .og .col.solo .st-c,html body .og .col.solo > div.an-wrap:not(.band),html body .og .col.solo .an-wrap{width:100%!important;max-width:1384px!important;margin-left:auto!important;margin-right:auto!important;padding-left:0!important;padding-right:0!important;box-sizing:border-box!important}.og .col.solo .st-c .st-c{padding-left:0!important;padding-right:0!important}@media (max-width:640px){html body .og .col.solo > .band > .band-in,html body .og .col.solo .st-band > .band-in{padding-left:16px!important;padding-right:16px!important}html body .og .col.solo > div.st-c:not(.band),html body .og .col.solo > div.an-wrap:not(.band){margin-left:-12px!important;margin-right:-12px!important;width:calc(100% + 24px)!important;max-width:none!important}}</style>
 
 <div class="og gn" data-theme="light" style="min-height: 1250px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
