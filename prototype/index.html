@@ -2585,6 +2585,21 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .an-demo{border:1px dashed var(--proto-b)!important;background:var(--proto-t)!important;color:var(--proto)!important}
 .og .an-sample{color:var(--proto)!important;text-decoration-color:var(--proto-b)!important}
 .og .fm-opt{margin-left:8px;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--gray)}
+/* Import page fits one laptop screen */
+html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band .band-in{padding-top:16px!important;padding-bottom:18px!important}
+.og:has(.xq-imp) .band-in .sg-back{margin-bottom:0}
+.og:has(.xq-imp) .band-in h1{margin-top:2px!important;margin-bottom:6px!important}
+.og .xq-imp .xq-wz{position:relative;padding-top:4px}
+.og .xq-imp{margin-top:-8px}.og:has(.xq-imp) [data-hist][hidden]+*,.og:has(.xq-imp) .col{padding-bottom:0}
+.og .xq-imp .xq-wzh{position:absolute;right:24px;top:50%;transform:translateY(-50%);width:auto;flex:none}
+.og .xq-imp .xq-wzh .lbl{display:none}
+.og .xq-imp .xq-st{padding:11px 0}
+.og .xq-imp .xq-ib{padding:16px 24px 2px}
+.og .xq-imp .xq-ib > .lbl,.og .xq-imp .xq-ib > p{display:none}
+.og .xq-imp .xq-ib h2{margin:0 0 12px;font-size:19px}
+.og .xq-imp .xq-drop{padding:11px 18px}
+.og .xq-imp .xq-if{padding:10px 24px;margin-top:4px}
+@media (max-width:760px){.og .xq-imp .xq-wzh{position:static;transform:none;order:-1;flex:1 1 100%;justify-content:flex-end;padding-top:8px}}
 .og .xq-es{display:flex;flex-direction:column;align-items:center;gap:6px;padding:44px 20px 46px;text-align:center}
 .og .xq-es-art{width:132px;height:auto;margin-bottom:6px;color:var(--head)}
 .og[data-theme="dark"] .xq-es-art [fill="#E7EFF7"]{fill:#1B2B3C}
@@ -2768,7 +2783,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    '<div class="xq-ib dlg-c" style="max-height:none;overflow:visible"><span class="lbl">Step 01 · Upload</span><h2>What are you bringing in?</h2><p>CSV, XLSX, or XLS. One file at a time. Nothing touches ObliGate until you confirm on the last step.</p>'+
    '<div class="fm-f"><label for="im-t" class="fm-l">Record type<span class="fm-opt">Optional</span></label><select id="im-t"><option value="">Detect automatically</option>'+TY.filter(function(t){return !t[3];}).map(function(t){return '<option value="'+t[0]+'"'+(st.type===t[0]?' selected':'')+'>'+t[1]+'</option>';}).join('')+'<optgroup label="Other records">'+TY.filter(function(t){return t[3];}).map(function(t){return '<option value="'+t[0]+'"'+(st.type===t[0]?' selected':'')+'>'+t[1]+'</option>';}).join('')+'</optgroup></select><p class="fm-h" data-tpl></p></div>'+
    '<div class="fm-f"><label for="im-p" class="fm-l">Project <i aria-hidden="true">*</i></label><div class="xq-row"><select id="im-p"><option value="">Choose a project…</option>'+PJ.map(function(p){return '<option value="'+p[0]+'">'+p[0]+' · '+p[1]+'</option>';}).join('')+'</select><button type="button" class="xq-btn xq-add" data-np>'+S('<path d="M3.5 7.5A1.5 1.5 0 0 1 5 6h4.2l2 2.2H19a1.5 1.5 0 0 1 1.5 1.5v8.3A1.5 1.5 0 0 1 19 19.5H5A1.5 1.5 0 0 1 3.5 18Z"'+F+'/><path d="M3.5 7.5A1.5 1.5 0 0 1 5 6h4.2l2 2.2H19a1.5 1.5 0 0 1 1.5 1.5v8.3A1.5 1.5 0 0 1 19 19.5H5A1.5 1.5 0 0 1 3.5 18Z"/><path d="M12 11v5.5M9.25 13.75h5.5"/>')+'New project</button><button type="button" class="xq-btn xq-add" data-nd>'+S('<path d="M7 16.5a4.5 4.5 0 0 1-.6-9 5.5 5.5 0 0 1 10.6 1.4A3.8 3.8 0 0 1 16.5 16.5Z"'+F+'/><path d="M7 16.5a4.5 4.5 0 0 1-.6-9 5.5 5.5 0 0 1 10.6 1.4A3.8 3.8 0 0 1 16.5 16.5"/><path d="m12.5 13-2 4h3l-2 4"/>')+'New disaster</button></div></div>'+
-   '<div class="fm-f"><span class="fm-l">File <i aria-hidden="true">*</i></span><div data-file></div><p class="fm-h">CSV, TSV, XLSX, or XLS. Excel exports work directly. Up to 50 MB.</p></div></div>'+
+   '<div class="fm-f"><span class="fm-l">File <i aria-hidden="true">*</i></span><div data-file></div></div></div>'+
    '<div class="xq-if"><small aria-live="polite" data-need></small><button type="button" class="xq-btn p" data-go disabled>Upload &amp; analyze'+S(I.r)+'</button></div></section>'+
    '<div class="xq-h2" data-hh><span class="lbl">Import history</span></div>'+
    '<section class="xq-card" aria-label="Import history" style="overflow:hidden" data-hist></section>';
@@ -2781,7 +2796,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    ex.select(sP,{ph:'Choose a project…',icon:'folder',fmt:function(v,t){return '<b>'+v+'</b> <span>· '+esc(t.split(' · ')[1])+'</span>';},row:function(v,t){return '<span class="fm-ot"><b>'+v+'</b><small>'+esc(t.split(' · ')[1])+' · DR-4683-CA</small></span>';}});}
   var fileBox=q(root,'[data-file]');
   function drawFile(){if(st.file){var e=(st.file.name.split('.').pop()||'').toUpperCase();fileBox.innerHTML='<div class="xq-file"><span class="ft">'+e.slice(0,4)+'</span><div><b title="'+esc(st.file.name)+'">'+esc(st.file.name)+'</b><small>'+(st.file.size>=1e6?(st.file.size/1e6).toFixed(1)+' MB':Math.max(1,Math.round(st.file.size/1e3))+' KB')+' · ready to analyze</small></div><button type="button" data-rmf aria-label="Remove file">'+S(I.x,14)+'</button></div>';}
-   else fileBox.innerHTML='<label class="xq-drop" tabindex="0">'+S(I.file)+'<span><b>Drop a spreadsheet here</b><small>or <u>browse your computer</u></small></span><input type="file" accept=".csv,.tsv,.xlsx,.xls"></label>';
+   else fileBox.innerHTML='<label class="xq-drop" tabindex="0">'+S(I.file)+'<span><b>Drop a spreadsheet here</b><small>or <u>browse your computer</u> · CSV, TSV, XLSX or XLS up to 50 MB</small></span><input type="file" accept=".csv,.tsv,.xlsx,.xls"></label>';
    var inp=q(fileBox,'input');if(inp){inp.onchange=function(){take(inp.files[0]);};var dz=q(fileBox,'.xq-drop');dz.onkeydown=function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();inp.click();}};['dragenter','dragover'].forEach(function(n){dz.addEventListener(n,function(ev){ev.preventDefault();dz.classList.add('over');});});['dragleave','drop'].forEach(function(n){dz.addEventListener(n,function(ev){ev.preventDefault();dz.classList.remove('over');});});dz.addEventListener('drop',function(ev){if(ev.dataTransfer.files.length>1){toast('One file at a time. Using <b>'+esc(ev.dataTransfer.files[0].name)+'</b>.');}take(ev.dataTransfer.files[0]);});}
    update();}
   function take(f){if(!f)return;var e=(f.name.split('.').pop()||'').toLowerCase();if(!/^(csv|tsv|xlsx|xls)$/.test(e)){toast('<b>'+esc(f.name)+'</b> is not a spreadsheet. Use CSV, TSV, XLSX or XLS.',false);return;}if(f.size>50e6){toast('<b>'+esc(f.name)+'</b> is over 50 MB.',false);return;}st.file={name:f.name,size:f.size};drawFile();}
