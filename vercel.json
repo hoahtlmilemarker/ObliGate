@@ -132,6 +132,11 @@
       "permanent": true
     },
     {
+      "source": "/24-projects(.html)?",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
       "source": "/my-profile",
       "destination": "/profile",
       "permanent": true
