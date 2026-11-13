@@ -3437,7 +3437,7 @@ function curProj(g){var P=[].slice.call(g.querySelectorAll('.gn-proj'));
  return c||g.querySelector('.gn-proj[open]');}
 function mark(g){[].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var s=d.querySelector('summary');if(!s||s.querySelector('.gn-mk'))return;
   if(!s.querySelector('.gn-tx')){var w=document.createElement('span');w.className='gn-tx';[].slice.call(s.querySelectorAll('.gn-code,.gn-name')).forEach(function(x){w.appendChild(x);});s.insertBefore(w,s.firstChild);}
-  var st=d.querySelectorAll('.gn-st')[1],m='';if(st){var r=st.querySelector('.gn-c-r');if(r)m='<span class="gn-mk r" title="'+txt(r)+' labor findings to resolve">'+txt(r)+'</span>';else if(st.classList.contains('gn-req'))m='<span class="gn-mk a" title="Labor Cross-Check required: payroll missing">!</span>';}
+  var st=d.querySelectorAll('.gn-st')[1],m='';if(st){var r=st.querySelector('.gn-c-r');if(r)m='<span class="gn-mk r" title="'+txt(r)+' labor findings to resolve">'+txt(r)+'</span>';else if(st.classList.contains('gn-req'))m='<span class="gn-mk a" title="Payroll required · not imported">!</span>';}
   if(m)s.insertAdjacentHTML('beforeend',m);
   s.addEventListener('click',function(e){e.preventDefault();var f=F(),steps=d.querySelectorAll('.gn-st'),ov=d.querySelector('.gn-ov'),to=null;
    var idx=/^03/.test(f)||/^14/.test(f)?0:/^05/.test(f)?1:/^07/.test(f)?2:-1;
@@ -3624,6 +3624,23 @@ if(document.readyState==='complete')setTimeout(go,50);else addEventListener('loa
 <style>html body .og.has-pjb .sbm{height:calc(100vh - var(--hd-h,57px) - 42px)!important;top:calc(var(--hd-h,57px) + 42px)!important}</style>
 <style>@media (min-width:1025px){html body .og.has-pjb > .shell{min-height:calc(100vh - var(--hd-h,57px) - 42px)!important}html body .og.has-pjb > .shell > .col{height:calc(100vh - var(--hd-h,57px) - 42px)!important}}</style>
 <style>html body .og .es.es2 .es2-art{display:block!important}</style>
+<style>.og .cnt-chip.z{background:var(--pale)!important;color:var(--gray)!important;box-shadow:none!important}.og .q-all{display:flex;flex-direction:column;align-items:flex-start;gap:1px;margin:2px 2px 0;padding:6px 4px;font:600 12px Manrope,Arial,sans-serif;color:var(--blue);text-decoration:none}.og .q-all small{font-weight:600;color:var(--gray)}.og .q-all:hover{text-decoration:underline}</style>
+<script>(function(){
+var Q={'PW-00428':[3,2],'PW-00429':[2,1]};
+function cur(){var m=/^#(PW-\d{5})/.exec(location.hash);if(m)return m[1];var c=document.querySelector('.pjb-id b');if(c){var t=(c.childNodes[0]||{}).nodeValue||'';t=t.trim();if(/^PW-\d{5}$/.test(t))return t;}return 'PW-00428';}
+function go(){var sec=[].filter.call(document.querySelectorAll('.og .sb-rail .sb-sec'),function(d){return /Processing Queues/i.test(d.textContent);})[0];if(!sec)return false;
+ var pw=cur(),q=Q[pw]||[0,0],sc=sec.querySelector('.sb-scope');var dr=(sc&&(sc.textContent.match(/DR-\d{4}-[A-Z]{2}/)||[''])[0])||'DR-4683-CA';
+ if(sc)sc.textContent='This project · '+pw;
+ var items=sec.querySelectorAll('.q-item');[['To Review','review'],['To File (Unplaced Inbox)','file']].forEach(function(x,i){var a=items[i];if(!a)return;var l=a.querySelector('.q-lbl');if(l){var tn=[].filter.call(l.childNodes,function(z){return z.nodeType===3&&z.nodeValue.trim();}).pop();if(tn)tn.nodeValue=x[0];}var c=a.querySelector('.cnt-chip');if(c){c.textContent=q[i];c.classList.toggle('z',!q[i]);}if(i===0)a.classList.toggle('q-warn',!!q[i]);a.setAttribute('href',(i===0?'document-review':'unplaced-inbox')+'#'+pw);});
+ var body=sec.querySelector('.sb-body');if(body&&!body.querySelector('.q-all')){var al=document.createElement('a');al.className='q-all';al.href='document-review';al.innerHTML='All projects in '+dr+' <small>14 to review · 6 to file</small>';body.appendChild(al);}
+ [].forEach.call(document.querySelectorAll('.og .sbm .sbm-b'),function(b){var lb=b.getAttribute('aria-label')||'',n=b.querySelector('.sbm-n'),i=/^To Review/.test(lb)?0:/^To File/.test(lb)?1:-1;if(i<0)return;var v=q[i];if(n){n.textContent=v;n.hidden=!v;}b.classList.toggle('is-warn',i===0&&!!v);var nm=i===0?'To Review · '+pw:'To File · suggested for '+pw;b.setAttribute('aria-label',nm+' ('+v+')');b.setAttribute('data-tip',nm);b.setAttribute('data-tip-s',v?v+' document'+(v>1?'s':''):'Nothing waiting');});
+ return true;}
+function run(){if(!/(02-project|03-document|03b-|03c-|04-document|05-cross|07-presub|14-analysis|library|review|cross-check|presubmission)/.test(location.pathname)||/cross-check-projects/.test(location.pathname))return;var n=0;(function t(){if(!go()&&n++<60)setTimeout(t,80);})();setTimeout(go,1600);}
+if(document.readyState==='complete')setTimeout(run,100);else addEventListener('load',function(){setTimeout(run,100);});addEventListener('hashchange',function(){setTimeout(go,120);});
+/* clearer "!" tooltip */
+function mk(){[].forEach.call(document.querySelectorAll('.gn-mk.a'),function(m){m.title='Payroll required · not imported';m.setAttribute('aria-label','Payroll required · not imported');});}
+setTimeout(mk,800);setTimeout(mk,2000);
+})();</script>
 
 <div class="og gn" data-theme="light" style="min-height: 1300px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
