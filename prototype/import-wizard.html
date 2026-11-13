@@ -2721,13 +2721,7 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
  function crossList(root){
   var R=[ /* sample data */
    {pw:'PW-00428',name:'Malibu Canyon',dr:'DR-4683-CA',dept:'Public Works',v:3240,open:8,res:4,rfi:1,who:'Daniel Ortiz',role:'Grants Analyst',due:dd(8),h:2,built:1},
-   {pw:'PW-00429',name:'Topanga Creek Debris',dr:'DR-4683-CA',dept:'Public Works',v:1180,open:3,res:9,rfi:0,who:'Rosa Keith',role:'Grants Manager',due:dd(2),h:26},
-   {pw:'PW-00433',name:'Big Tujunga Canyon Road Washout',dr:'DR-4683-CA',dept:'Public Works',v:12460,open:5,res:2,rfi:2,who:'',due:dd(-9),h:24*34},
-   {pw:'PW-00436',name:'San Gabriel Canyon Road Culvert',dr:'DR-4683-CA',dept:'Stormwater',v:0,open:0,res:6,rfi:0,who:'Priya Natarajan',role:'Department Liaison',due:null,h:3,ready:1},
-   {pw:'PW-00431',name:'Emergency Protective Measures',dr:'DR-4683-CA',dept:'Sheriff’s Emergency Ops',v:640,open:1,res:3,rfi:1,who:'Rosa Keith',role:'Grants Manager',due:dd(13),h:20,exc:1},
-   {pw:'PW-00434',name:'Pacific Coast Hwy Storm Drain Clearing',dr:'DR-4683-CA',dept:'Department of Beaches',v:2915,open:4,res:1,rfi:0,who:'Marcus Hale',role:'Finance',due:dd(-2),h:24*6},
-   {pw:'PW-01112',name:'Coastal Bluff Drainage',dr:'DR-4758-CA',dept:'Public Works',v:2050,open:2,res:0,rfi:1,who:'Marcus Hale',role:'Finance',due:dd(4),h:24*5},
-   {pw:'PW-01118',name:'Las Flores Creek Debris Basin',dr:'DR-4758-CA',dept:'Stormwater',v:7380,open:6,res:5,rfi:3,who:'',due:dd(-1),h:24*41}];
+   {pw:'PW-00429',name:'Topanga Creek Debris',dr:'DR-4683-CA',dept:'Public Works',v:1180,open:3,res:9,rfi:0,who:'Rosa Keith',role:'Grants Manager',due:dd(2),h:26}];
   var QS=[['all','All projects',function(){return true;}],['you','Assigned to you',function(r){return r.who===ME;}],['open','Your open items',function(r){return r.who===ME&&r.open>0;}],['ready','Ready for review',function(r){return !!r.ready;}]];
   var QF=[['week','Due this week',function(r){return r.due&&r.due>=T0&&r.due<=dd(7);}],['late','Late',function(r){return r.due&&r.due<T0&&r.open>0;}],['exc','Documented exceptions',function(r){return !!r.exc;}],['aging','Aging > 30 days',function(r){return r.h>=24*30;}]];
   var SO=[['v','Highest variance',function(a,b){return b.v-a.v;}],['open','Most open rows',function(a,b){return b.open-a.open;}],['due','Due soonest',function(a,b){return (a.due?a.due:9e15)-(b.due?b.due:9e15);}],['act','Recent activity',function(a,b){return a.h-b.h;}]];
@@ -2789,19 +2783,19 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
   var DI={'DR-4683-CA':['California Severe Winter Storms, Flooding, Landslides & Mudslides','Dec 27, 2022 – Jan 31, 2023',42180000,36800000,'Moderate'],'DR-4758-CA':['February 2024 Atmospheric River & High Winds','Feb 1 – Feb 10, 2024',28450000,19200000,'High risk']};
   var R=[ /* sample data */
    {pw:'PW-00428',name:'Malibu Canyon',dr:'DR-4683-CA',dept:'Public Works',docs:38,lab:8,pre:86,who:'Daniel Ortiz',h:2},
-   {pw:'PW-00429',name:'Topanga Creek Debris',dr:'DR-4683-CA',dept:'Public Works',docs:24,lab:3,pre:62,who:'Rosa Keith',h:26},
+   {pw:'PW-00429',name:'Topanga Creek Debris',dr:'DR-4683-CA',dept:'Public Works',docs:38,lab:3,pre:62,who:'Rosa Keith',h:26},
    {pw:'PW-00430',name:'Las Virgenes Road Slope Repair',dr:'DR-4683-CA',dept:'Public Works',docs:0,lab:'req',pre:0,who:'',h:24*3},
-   {pw:'PW-00431',name:'Emergency Protective Measures',dr:'DR-4683-CA',dept:'Sheriff’s Emergency Ops',docs:17,lab:1,pre:71,who:'Rosa Keith',h:20},
+   {pw:'PW-00431',name:'Emergency Protective Measures',dr:'DR-4683-CA',dept:'Sheriff’s Emergency Ops',docs:0,lab:'req',pre:0,who:'Rosa Keith',h:20},
    {pw:'PW-00432',name:'EOC Activation',dr:'DR-4683-CA',dept:'Office of Emergency Mgmt',docs:0,lab:'req',pre:0,who:'Priya Natarajan',h:24*5},
-   {pw:'PW-00433',name:'Big Tujunga Canyon Road Washout',dr:'DR-4683-CA',dept:'Public Works',docs:41,lab:5,pre:48,who:'',h:24*34},
-   {pw:'PW-00434',name:'Pacific Coast Hwy Storm Drain Clearing',dr:'DR-4683-CA',dept:'Department of Beaches',docs:29,lab:4,pre:55,who:'Marcus Hale',h:24*6},
+   {pw:'PW-00433',name:'Big Tujunga Canyon Road Washout',dr:'DR-4683-CA',dept:'Public Works',docs:0,lab:'req',pre:0,who:'',h:24*34},
+   {pw:'PW-00434',name:'Pacific Coast Hwy Storm Drain Clearing',dr:'DR-4683-CA',dept:'Department of Beaches',docs:0,lab:'req',pre:0,who:'Marcus Hale',h:24*6},
    {pw:'PW-00435',name:'Sepulveda Basin Debris Removal',dr:'DR-4683-CA',dept:'Public Works',docs:0,lab:'na',pre:0,who:'',h:24*9},
-   {pw:'PW-00436',name:'San Gabriel Canyon Road Culvert',dr:'DR-4683-CA',dept:'Stormwater',docs:52,lab:0,pre:94,who:'Priya Natarajan',h:3},
+   {pw:'PW-00436',name:'San Gabriel Canyon Road Culvert',dr:'DR-4683-CA',dept:'Stormwater',docs:0,lab:'req',pre:0,who:'Priya Natarajan',h:3},
    {pw:'PW-00437',name:'Swift-Water Rescue Operations',dr:'DR-4683-CA',dept:'Fire Department',docs:0,lab:'req',pre:0,who:'',h:24*12},
    {pw:'PW-00438',name:'Zuma Beach Parking Lot Repair',dr:'DR-4683-CA',dept:'Department of Beaches',docs:0,lab:'req',pre:0,who:'Marcus Hale',h:24*15},
    {pw:'PW-00439',name:'Marina del Rey Breakwater Debris',dr:'DR-4683-CA',dept:'Department of Beaches',docs:0,lab:'na',pre:0,who:'',h:24*20},
-   {pw:'PW-01112',name:'Coastal Bluff Drainage',dr:'DR-4758-CA',dept:'Public Works',docs:21,lab:2,pre:40,who:'Marcus Hale',h:24*5},
-   {pw:'PW-01118',name:'Las Flores Creek Debris Basin',dr:'DR-4758-CA',dept:'Stormwater',docs:33,lab:6,pre:33,who:'',h:24*41}];
+   {pw:'PW-01112',name:'Coastal Bluff Drainage',dr:'DR-4758-CA',dept:'Public Works',docs:0,lab:'req',pre:0,who:'Marcus Hale',h:24*5},
+   {pw:'PW-01118',name:'Las Flores Creek Debris Basin',dr:'DR-4758-CA',dept:'Stormwater',docs:0,lab:'req',pre:0,who:'',h:24*41}];
   function added(){var L=[];try{L=JSON.parse(sessionStorage.getItem('og-newpj')||'[]');}catch(x){L=window.__ogNewPj||[];}return L.map(function(p){return {pw:p.pw,name:p.name,dr:p.dr,dept:p.dept||'Public Works',docs:0,lab:p.nolab?'na':'req',pre:0,who:ME,h:0,isNew:1};});}
   var R0=R;R=added().concat(R0);if(demoEmpty('pj'))R=[];
   var QS=[['all','All projects',function(){return true;}],['you','Assigned to you',function(r){return r.who===ME;}],['att','Needs attention',function(r){return r.lab==='req'||(typeof r.lab==='number'&&r.lab>0);}],['new','Not started',function(r){return !r.docs;}]];
@@ -3065,17 +3059,14 @@ html.og-mac .og .gn-n{padding-bottom:.5px!important}html.og-mac .og section.ck3 
  if(/(document-library|library-empty|unplaced-inbox|document-library|library-empty|unplaced-inbox)(\.html)?$/.test(location.pathname))ogHold('cab');
 })();
 (function(){
-var P=window.OG_PROJ=[ /* sample data, same as the cross-check queue */
+var P=window.OG_PROJ=[ /* projects with data */
  {pw:'PW-00428',name:'Malibu Canyon',dr:'DR-4683-CA',dept:'Public Works',v:3240,open:8},
  {pw:'PW-00429',name:'Topanga Creek Debris',dr:'DR-4683-CA',dept:'Public Works',v:1180,open:3},
- {pw:'PW-00433',name:'Big Tujunga Canyon Road Washout',dr:'DR-4683-CA',dept:'Public Works',v:12460,open:5},
- {pw:'PW-00436',name:'San Gabriel Canyon Road Culvert',dr:'DR-4683-CA',dept:'Stormwater',v:0,open:0},
- {pw:'PW-00431',name:'Emergency Protective Measures',dr:'DR-4683-CA',dept:'Sheriff’s Emergency Ops',v:640,open:1},
- {pw:'PW-00434',name:'Pacific Coast Hwy Storm Drain Clearing',dr:'DR-4683-CA',dept:'Department of Beaches',v:2915,open:4},
- {pw:'PW-01112',name:'Coastal Bluff Drainage',dr:'DR-4758-CA',dept:'Public Works',v:2050,open:2},
- {pw:'PW-01118',name:'Las Flores Creek Debris Basin',dr:'DR-4758-CA',dept:'Stormwater',v:7380,open:6}];
+ {pw:'PW-01112',name:'Coastal Bluff Drainage',dr:'DR-4758-CA',dept:'Public Works',v:0,open:0,empty:1},
+ {pw:'PW-01118',name:'Las Flores Creek Debris Basin',dr:'DR-4758-CA',dept:'Stormwater',v:0,open:0,empty:1}];
 var DRN={'DR-4683-CA':'California Severe Winter Storms, Flooding, Landslides & Mudslides','DR-4758-CA':'February 2024 Atmospheric River & High Winds'};
 window.OG_ACTIVE={};P.forEach(function(p){OG_ACTIVE[p.pw]=p;});
+(function(){var m=/^#(PW-\d{5})$/.exec(location.hash);if(!m||m[1]==='PW-00428'||(OG_ACTIVE[m[1]]&&!OG_ACTIVE[m[1]].empty))return;if(/(project-overview|document-library|cross-check|pre-submission|project-overview|document-library|cross-check|presubmission)(\.html)?$/.test(location.pathname)&&!/library-empty|cross-check-projects/.test(location.pathname))location.replace('library-empty'+location.hash);})();
 var PG={'project-overview':'overview','document-library':'docs','cross-check':'cross','pre-submission':'pre'};
 var REV={};Object.keys(PG).forEach(function(k){REV[PG[k]]=k;});
 function key(h){h=(h||'').split('#')[0].split('?')[0];var f=h.split('/').pop();for(var k in PG){if(f===k||f===k.replace('.html',''))return PG[k];}return null;}
@@ -3097,13 +3088,13 @@ function walk(root){if(!root||(root.closest&&root.closest('.gnav,[data-review-ui
   if(e.tagName==='A'){var h=e.getAttribute('href');if(h&&key(h)&&h.indexOf('#')<0)e.setAttribute('href',h+'#'+C.pw);}});}
 function link(a,k,p){a.setAttribute('href',REV[k]+'#'+p);}
 function nav(){var g=document.querySelector('.gnav');if(!g||g.dataset.ctx)return !!g;g.dataset.ctx='1';
- var tpl=null;[].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var c=(d.querySelector('.gn-code')||{}).textContent;if(c==='PW-00428')tpl=d;});
+ var tpl=null;[].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var c=((d.querySelector('.gn-code')||{}).textContent||'').trim();if(c==='PW-00428')tpl=d;});
  if(C&&C.dr!=='DR-4683-CA'&&tpl){var dis=g.querySelector('.gn-dis');if(dis){dis.querySelector('b').textContent=C.dr;dis.querySelector('span:last-child').textContent=DRN[C.dr];}
   var mine=P.filter(function(p){return p.dr===C.dr;});var host=tpl.parentNode;
   [].slice.call(g.querySelectorAll('.gn-proj')).forEach(function(d){d.remove();});
   var pc=g.querySelector('.gn-pc');if(pc)pc.textContent=mine.length;
   mine.forEach(function(p){var d=tpl.cloneNode(true);d.querySelector('.gn-code').textContent=p.pw;var nm=d.querySelector('.gn-name');nm.textContent=p.name;nm.title=p.name;[].forEach.call(d.querySelectorAll('.gn-c'),function(x){x.remove();});host.appendChild(d);});}
- [].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var c=(d.querySelector('.gn-code')||{}).textContent.trim(),p=OG_ACTIVE[c];if(!p)return;d.dataset.empty='';d.dataset.active='1';
+ [].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var c=(d.querySelector('.gn-code')||{}).textContent.trim(),p=OG_ACTIVE[c];if(!p||p.empty)return;d.dataset.empty='';d.dataset.active='1';
   var ov=d.querySelector('.gn-ov');if(ov)link(ov,'overview',c);
   var st=d.querySelectorAll('.gn-st');['docs','cross','pre'].forEach(function(k,i){if(st[i])link(st[i],k,c);});
   if(c!=='PW-00428'&&st[0]&&tpl){var bd=tpl.querySelector('.gn-st .gn-c');var dc=st[0].querySelector('.gn-c');if(bd){if(!dc){dc=document.createElement('span');dc.className='gn-c';st[0].appendChild(dc);}dc.textContent=bd.textContent;}}
@@ -3180,7 +3171,7 @@ var ART='<svg class="es3-svg" viewBox="0 0 120 96" fill="none" aria-hidden="true
 function code(d){var c=d.querySelector('.gn-code');return c?c.textContent.trim():'';}
 function off(a){a.classList.remove('on');a.removeAttribute('aria-current');}
 function setup(nav){
- [].forEach.call(nav.querySelectorAll('.gn-proj'),function(d){var c=code(d);if(!c||c===BUILT||d.dataset.empty||(window.OG_ACTIVE&&OG_ACTIVE[c]))return;d.dataset.empty='1';
+ [].forEach.call(nav.querySelectorAll('.gn-proj'),function(d){var c=code(d);if(!c||c===BUILT||d.dataset.empty||(window.OG_ACTIVE&&OG_ACTIVE[c]&&!OG_ACTIVE[c].empty))return;d.dataset.empty='1';
   var ov=d.querySelector('.gn-ov');if(ov){ov.href=EMP+'#'+c;off(ov);}
   [].forEach.call(d.querySelectorAll('.gn-st'),function(a,i){off(a);
    if(i===0){a.href=EMP+'#'+c;var n=a.querySelector('.gn-c');if(n)n.remove();}
@@ -3208,7 +3199,7 @@ function page(nav){
 }
 function run(){var nav=document.querySelector('.gnav');if(!nav)return false;setup(nav);page(nav);return true;}
 var n=0;(function tick(){if(!run()&&n++<200)(n<20?requestAnimationFrame:function(f){setTimeout(f,60);})(tick);})();
-window.addEventListener('hashchange',function(){var nav=document.querySelector('.gnav');if(nav)page(nav);window.scrollTo(0,0);});
+window.addEventListener('hashchange',function(){var nav=document.querySelector('.gnav');if(nav)page(nav);window.scrollTo(0,0);});function late(){var nav=document.querySelector('.gnav');if(nav)page(nav);}if(document.readyState==='complete')setTimeout(late,200);else addEventListener('load',function(){setTimeout(late,200);});setTimeout(late,1500);
 })();
 </script>
 <style>
@@ -3229,7 +3220,7 @@ var EMP='library-empty',LIB='document-library';
 function id(d){var s=d.querySelector(':scope>summary .tr-id');return s?s.textContent.trim():'';}
 function cur(){var m=/^#(PW-\d{5})$/.exec(location.hash);if(m)return m[1];if(/library-empty|library-empty/.test(location.pathname))return 'PW-00429';return 'PW-00428';}
 function scope(){var tree=document.querySelector('.tree');if(!tree)return false;if(tree.classList.contains('tr-scoped'))return true;
- var C=cur(),A=window.OG_ACTIVE||{},act=!!A[C]||C==='PW-00428';
+ var C=cur(),A=window.OG_ACTIVE||{},act=(!!A[C]&&!A[C].empty)||C==='PW-00428';
  var all=[].slice.call(tree.querySelectorAll('details.tr')),projs=all.filter(function(d){return /^PW-\d{5}$/.test(id(d));});
  var base=projs.filter(function(d){return id(d)==='PW-00428';})[0],tgt=projs.filter(function(d){return id(d)===C;})[0];
  if(!base)return true;
@@ -3627,9 +3618,11 @@ html body .og .col:has(.es.es2) .band .btn{display:none!important}
 </style>
 <script>(function(){var ART='<svg viewBox="0 0 120 96" fill="none" aria-hidden="true"><ellipse cx="60" cy="86" rx="38" ry="5" fill="currentColor" opacity=".08"/><rect x="30" y="26" width="46" height="56" rx="4" fill="var(--card)" stroke="#C9D7E5" stroke-width="1.3" transform="rotate(-8 53 54)"/><rect x="40" y="18" width="46" height="58" rx="4" fill="var(--card)" stroke="#9FB6CC" stroke-width="1.3"/><path d="M48 30h24M48 37h30M48 44h22M48 51h28M48 58h18" stroke="#C9D7E5" stroke-width="1.6" stroke-linecap="round"/><circle cx="84" cy="66" r="11.5" fill="#005A9C"/><path d="M84 71.5v-11M79.5 65l4.5-4.5 4.5 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="102" cy="20" r="1.8" fill="#B08A4E" opacity=".7"/><circle cx="18" cy="70" r="1.5" fill="#7FB8E6"/></svg>';
 function go(){[].forEach.call(document.querySelectorAll('.og .es.es2 .es2-art'),function(a){if(a.classList.contains('og-art'))return;a.classList.add('og-art');a.innerHTML=ART;});}
-if(document.readyState==='complete')setTimeout(go,50);else addEventListener('load',function(){setTimeout(go,50);});setTimeout(go,1200);})();</script>
+if(document.readyState==='complete')setTimeout(go,50);else addEventListener('load',function(){setTimeout(go,50);});setTimeout(go,1200);var mo=new MutationObserver(function(){if(document.querySelector('.og .es.es2 .es2-art:not(.og-art)'))go();});function obs(){mo.observe(document.body,{childList:true,subtree:true});}if(document.body)obs();else document.addEventListener('DOMContentLoaded',obs);})();</script>
 <style>html body .og .es.es2{flex:none!important}html body .og.sb-mini > .shell{background:var(--pale)!important}</style>
 <style>@media (max-width:1024px){html body .og .col:has(.es.es2) > .band{padding-bottom:0!important;min-height:0!important}html body .og .col:has(.es.es2) > .band .band-in{padding-bottom:28px!important}}</style>
+<style>html body .og.has-pjb .sbm{height:calc(100vh - var(--hd-h,57px) - 42px)!important;top:calc(var(--hd-h,57px) + 42px)!important}</style>
+<style>@media (min-width:1025px){html body .og.has-pjb > .shell{min-height:calc(100vh - var(--hd-h,57px) - 42px)!important}html body .og.has-pjb > .shell > .col{height:calc(100vh - var(--hd-h,57px) - 42px)!important}}</style>
 
 <div class="og" data-theme="light" style="min-height: 1250px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
