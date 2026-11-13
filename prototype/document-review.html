@@ -3281,6 +3281,22 @@ window.ogCxRun=function(done){var r=document.querySelector('.cx-rs');if(!r)retur
  var d=new Date(),p=function(n){return (n<10?'0':'')+n;};r.classList.remove('is-run');s.textContent='Completed';t.textContent='Last run today at '+p(d.getHours())+':'+p(d.getMinutes())+' by Rosa Keith · 12 crew · 60 employee-days checked';};
 })();
 </script>
+<style>.og .cx-pv{display:flex;justify-content:flex-end;margin:0 0 -6px}.og .cx-pv .xq-dm{margin:0}.og:not(.cx-pilot-on) .cx-pil{display:none!important}</style><script>
+(function(){function init(){var res=document.querySelector('[aria-label="Resolution options"]');if(!res||document.querySelector('.cx-pv'))return;
+ var og=res.closest('.og'),main=res.closest('main');if(!og||!main)return;
+ [].forEach.call(res.querySelectorAll('button'),function(b){if(/^Accept Documented/.test(b.textContent.trim()))b.classList.add('cx-pil');});
+ var ft=[].find.call(document.querySelectorAll('[aria-label="Compliance finding"] strong'),function(x){return /Overtime Difference/.test(x.textContent);});
+ var on=false;try{on=localStorage.getItem('og-cx-pilot')==='1';}catch(e){on=!!window.__ogPil;}
+ var w=document.createElement('div');w.className='cx-pv';
+ w.innerHTML='<span class="xq-dm" title="Prototype only, not part of the product. Pilot features run only for pilot projects in production today; the cross-check ADR (OB-141) decides whether they ship for everyone or are dropped."><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype · Pilot features<span class="xq-seg" role="group" aria-label="Pilot features"><button type="button" data-v="0">Off</button><button type="button" data-v="1">On</button></span></span>';
+ main.insertBefore(w,main.firstChild);
+ function apply(t){og.classList.toggle('cx-pilot-on',on);[].forEach.call(w.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String((b.getAttribute('data-v')==='1')===on));});
+  if(ft)ft.textContent=ft.textContent.replace(/(Unsubstantiated Overtime Difference|Overtime Hours Difference)/,on?'Unsubstantiated Overtime Difference':'Overtime Hours Difference');
+  if(t){var o=document.querySelector('.og-toast');if(o)o.remove();var d=document.createElement('div');d.className='og-toast og-proto';d.setAttribute('role','status');d.innerHTML='<span><span class="og-pt"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Prototype</span>'+(on?'<b>Pilot features on</b> · claim adjustment and OT substantiation shown as if enforced for everyone':'<b>Pilot features off</b> · only what production runs for every project')+'</span>';og.appendChild(d);setTimeout(function(){d.remove();},2800);}}
+ w.addEventListener('click',function(e){var b=e.target.closest('button[data-v]');if(!b)return;on=b.getAttribute('data-v')==='1';try{localStorage.setItem('og-cx-pilot',on?'1':'0');}catch(x){window.__ogPil=on;}apply(true);});
+ apply(false);}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
+</script>
 
 <div class="og rv-app" data-theme="light" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
