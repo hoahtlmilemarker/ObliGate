@@ -1070,9 +1070,9 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
  function done(){try{return localStorage.getItem(KEY)==='1';}catch(e){return false;}}
  function setDone(){try{localStorage.setItem(KEY,'1');}catch(e){}}
  function vis(el){if(!el)return false;var r=el.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(el).visibility!=='hidden';}
- var UP='a.btn-w[href*="12-upload"]';
+ var UP='a.btn-w[href*="23-import"],a.btn-w[href*="12-upload"]';
  var STEPS=[
-  {t:UP,h:'Start by uploading your records',p:'Drop in timesheets, invoices, equipment logs and contracts. AI files each one under the right disaster and project, then checks it against FEMA rules.',hint:'Click <b>Upload Records</b> any time to begin.'},
+  {t:UP,h:'Start by importing your data',p:'Bring in payroll exports, timekeeping and cost spreadsheets. ObliGate maps the columns, then checks every row against FEMA rules.',hint:'Click <b>Import Data</b> any time to begin.'},
   {t:'.sb-rail',h:'Filter by lifecycle',p:'Switch between Active, Closeout, Appeals and Archived disasters. Counts update as your records are analyzed.'},
   {t:'.dtbl',h:'Open a disaster',p:'Each row is a declared disaster with its obligated amount and evidence health. Open one to see its projects, documents and findings.'}
  ];
