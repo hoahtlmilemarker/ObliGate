@@ -43,13 +43,14 @@ var A={
  +ln('M46 46h16M46 52h24')
  +badge(90,34,'<path d="M84.5 31.5a8 8 0 0 1 11 0M86.8 34.4a4.6 4.6 0 0 1 6.4 0" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><circle cx="90" cy="37.6" r="1.2" fill="#fff"/><path d="m84 28 12 12" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/>',OR)
  +dots([[18,32,2,1],[106,62,1.6],[22,80,1.4]]),
-'workspace':'<path d="M24 38 60 18l36 20Z" fill="'+P+'"'+S+'/><path d="M24 38h72"'+S+'/><circle cx="60" cy="30" r="3" fill="'+C+'" stroke="'+GD+'" stroke-width="1.4"/>'
- +'<rect x="26" y="38" width="68" height="5" fill="'+C+'"'+S+'/>'
- +(function(){var h='';[32,46,68,82].forEach(function(x){h+='<rect x="'+(x-3)+'" y="43" width="6" height="28" fill="'+C+'"'+S+'/>';});return h;})()
- +'<path d="M53 71V54a7 7 0 0 1 14 0v17" fill="'+P+'"'+S+'/>'
- +'<rect x="22" y="71" width="76" height="5" rx="1" fill="'+C+'"'+S+'/><rect x="18" y="76" width="84" height="5" rx="1" fill="'+C+'"'+S+'/>'
- +badge(94,66,'<path d="M98.6 64a5.3 5.3 0 1 0 .3 4.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/><path d="M99.2 59.8v4.4h-4.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>')
- +dots([[16,26,2,1],[106,30,1.6],[12,64,1.4]])
+'workspace':'<path d="M60 14V4" stroke="'+B+'" stroke-width="1.3" stroke-linecap="round"/><path d="M60 4.5h9l-2 2.5 2 2.5h-9Z" fill="'+GD+'" opacity=".9"/>'
+ +'<path d="M20 34 60 14l40 20Z" fill="'+P+'"'+S+'/><path d="M33 31.2 60 18l27 13.2Z" fill="'+C+'" stroke="'+B+'" stroke-width="1" stroke-linejoin="round"/><circle cx="60" cy="26.5" r="3.4" fill="'+C+'" stroke="'+GD+'" stroke-width="1.5"/><circle cx="60" cy="26.5" r="1" fill="'+GD+'"/>'
+ +'<rect x="18" y="34" width="84" height="4.5" rx=".8" fill="'+C+'"'+S+'/><rect x="21" y="38.5" width="78" height="4" fill="'+P+'"'+S+'/>'
+ +(function(){var h='';[29,42,78,91].forEach(function(x){h+='<rect x="'+(x-5)+'" y="42.5" width="10" height="2.4" rx=".6" fill="'+C+'"'+S+'/><rect x="'+(x-3.2)+'" y="44.9" width="6.4" height="21.2" fill="'+C+'"'+S+'/><path d="M'+x+' 47v17" stroke="'+LN+'" stroke-width="1.1" stroke-linecap="round"/><rect x="'+(x-5)+'" y="66.1" width="10" height="2.4" rx=".6" fill="'+C+'"'+S+'/>';});return h;})()
+ +'<path d="M51 68.5V55a9 9 0 0 1 18 0v13.5Z" fill="'+P+'"'+S+'/><path d="M60 46.5v8.5M60 60v8.5" stroke="'+B+'" stroke-width="1.1"/><circle cx="57.6" cy="62" r=".9" fill="'+B+'"/><circle cx="62.4" cy="62" r=".9" fill="'+B+'"/>'
+ +'<rect x="16" y="68.5" width="88" height="4" rx=".8" fill="'+C+'"'+S+'/><rect x="12" y="72.5" width="96" height="4" rx=".8" fill="'+C+'"'+S+'/><rect x="8" y="76.5" width="104" height="4.5" rx=".8" fill="'+P+'"'+S+'/>'
+ +badge(98,20,'<path d="M102.6 18a5.3 5.3 0 1 0 .3 4.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/><path d="M103.2 13.8v4.4h-4.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>')
+ +dots([[14,24,2,1],[110,48,1.6],[10,58,1.4]])
 };
 window.ogErArt=function(k){return W(A[k]||A['404']);};
 })();
