@@ -142,6 +142,11 @@
       "permanent": true
     },
     {
+      "source": "/26-toasts(.html)?",
+      "destination": "/toasts",
+      "permanent": true
+    },
+    {
       "source": "/my-profile",
       "destination": "/profile",
       "permanent": true

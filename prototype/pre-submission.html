@@ -4032,6 +4032,128 @@ window.ogErArt=function(k){return W(A[k]||A['404']);};
 <style>.og .er-ref{align-items:center!important;line-height:24px}.og .er-ref>*{line-height:24px}.og .er-ref button{font-size:12px!important;line-height:24px!important;height:24px;align-self:center}.og .er-ref button span{line-height:24px}</style>
 <style>.og .er-ref button{border:0!important;background:transparent!important;padding:0 6px!important;margin-left:-2px;gap:5px!important;border-radius:4px}.og .er-ref button:hover{background:var(--pale)!important;text-decoration:underline}.og .er-ref button svg{width:13px;height:13px}</style>
 <style>.og .er>.er-card{order:1}.og .er>.er-pv{order:2;margin:44px 0 0!important}@media (max-width:640px){.og .er>.er-pv{margin:32px 0 0!important}}</style>
+<style>
+.og .tst-stack{position:fixed;right:24px;bottom:24px;z-index:1000;display:flex;flex-direction:column;gap:10px;width:min(400px,calc(100vw - 32px));pointer-events:none}
+.og .tst{--tc:#1F7A4D;--tb:#E7F4EC;position:relative;pointer-events:auto;display:grid;grid-template-columns:auto 1fr auto;align-items:start;column-gap:12px;padding:14px 12px 14px 14px;background:var(--card);border:1px solid var(--line);border-radius:4px;box-shadow:0 12px 32px -14px rgba(0,30,60,.28),0 2px 6px -2px rgba(0,30,60,.08);font:500 13.5px/1.45 Manrope,Arial,sans-serif;color:var(--ink);overflow:hidden;animation:tstIn .32s cubic-bezier(.2,.9,.3,1.1)}
+.og .tst.out{animation:tstOut .2s ease-in forwards}
+@keyframes tstIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes tstOut{to{opacity:0;transform:translateX(16px)}}
+.og .tst.info{--tc:#005A9C;--tb:#E3EEF8}.og .tst.warn{--tc:#9A5B13;--tb:#FBF0DF}.og .tst.err{--tc:#B42318;--tb:#FCE9E7}.og .tst.load{--tc:#005A9C;--tb:#E3EEF8}
+.og[data-theme=dark] .tst{box-shadow:0 14px 34px -12px rgba(0,0,0,.6)}
+.og[data-theme=dark] .tst{--tb:rgba(76,167,122,.16);--tc:#7FD3A6}.og[data-theme=dark] .tst.info,.og[data-theme=dark] .tst.load{--tb:rgba(95,166,230,.16);--tc:#8EC3F0}.og[data-theme=dark] .tst.warn{--tb:rgba(232,166,82,.16);--tc:#F0B66A}.og[data-theme=dark] .tst.err{--tb:rgba(240,110,98,.16);--tc:#FF9A90}
+.og .tst-ic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--tb);color:var(--tc)}
+.og .tst-ic svg{width:16px;height:16px}
+.og .tst-tx{min-width:0;padding-top:4px}
+.og .tst-t{font-weight:700;color:var(--ink)}
+.og .tst-d{margin-top:2px;font-size:13px;color:var(--gray)}
+.og .tst-d b,.og .tst-t b{font-weight:700;color:var(--ink)}
+.og .tst-acts{display:flex;gap:6px;margin-top:10px}
+.og .tst-acts button,.og .tst-acts a{height:30px;padding:0 12px;display:inline-flex;align-items:center;border-radius:4px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 12.5px Manrope,Arial,sans-serif;text-decoration:none;cursor:pointer}
+.og .tst-acts .p{border-color:transparent;background:var(--blue,#005A9C);color:#fff}
+.og[data-theme=dark] .tst-acts .p{background:#2F7BC0}
+.og .tst-acts button:hover,.og .tst-acts a:hover{border-color:var(--blue)}
+.og .tst-x{width:28px;height:28px;display:grid;place-items:center;border:0;border-radius:4px;background:transparent;color:var(--gray);cursor:pointer}
+.og .tst-x:hover{background:var(--pale);color:var(--ink)}
+.og .tst-bar{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--tc);opacity:.55;transform-origin:left;animation:tstBar linear forwards}
+.og .tst:hover .tst-bar,.og .tst.hold .tst-bar{animation-play-state:paused}
+@keyframes tstBar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.og .tst-pg{margin-top:10px;height:4px;border-radius:2px;background:var(--pale);overflow:hidden}
+.og .tst-pg i{display:block;height:100%;width:0;background:var(--tc);border-radius:2px;transition:width .3s}
+.og .tst-spin{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:erSpin .7s linear infinite}
+@keyframes erSpin{to{transform:rotate(360deg)}}
+.og .tst.compact{grid-template-columns:auto 1fr auto;align-items:center;padding:10px 10px 10px 12px}.og .tst.compact .tst-tx{padding-top:0}
+.og .og-toast:not([data-v2]){visibility:hidden!important}
+@media (max-width:640px){.og .tst-stack{left:16px;right:16px;bottom:16px;width:auto}}
+@media (prefers-reduced-motion:reduce){.og .tst,.og .tst.out{animation:none}}
+</style>
+<script>(function(){
+var SV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+var IC={ok:SV+'<path d="m5.5 12.5 4 4 9-9.5"/></svg>',info:SV+'<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6h.01"/></svg>',warn:SV+'<path d="M12 4 2.8 19.5h18.4Z"/><path d="M12 10v4.2M12 17h.01"/></svg>',err:SV+'<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg>',load:'<span class="tst-spin"></span>',x:SV+'<path d="M6 6l12 12M18 6 6 18"/></svg>'};
+var DUR={ok:4500,info:5000,warn:6500,err:0,load:0};
+function host(){var r=document.querySelector('.og')||document.body,s=r.querySelector(':scope > .tst-stack');if(!s){s=document.createElement('div');s.className='tst-stack';s.setAttribute('aria-live','polite');r.appendChild(s);}return s;}
+function close(el){if(!el||el.__c)return;el.__c=1;clearTimeout(el.__t);el.classList.add('out');setTimeout(function(){el.remove();},200);if(el.__o&&el.__o.onClose)el.__o.onClose();}
+function api(el){return {el:el,close:function(){close(el);},update:function(o){fill(el,Object.assign({},el.__o,o));},progress:function(p){var i=el.querySelector('.tst-pg i');if(i)i.style.width=Math.max(0,Math.min(100,p))+'%';}};}
+function fill(el,o){el.__o=o;var t=o.type||'ok';el.className='tst '+t+(o.compact?' compact':'');el.setAttribute('role',t==='err'||t==='warn'?'alert':'status');
+ el.innerHTML='<span class="tst-ic">'+IC[t]+'</span><div class="tst-tx">'+(o.title?'<div class="tst-t">'+o.title+'</div>':'')+(o.desc?'<div class="tst-d">'+o.desc+'</div>':'')+(o.progress!=null?'<div class="tst-pg"><i style="width:'+o.progress+'%"></i></div>':'')+'<div class="tst-acts" hidden></div></div><button type="button" class="tst-x" aria-label="Dismiss">'+IC.x+'</button>';
+ var acts=el.querySelector('.tst-acts');(o.actions||[]).forEach(function(a){var b;if(a.node){b=a.node;}else{b=document.createElement(a.href?'a':'button');if(a.href)b.href=a.href;else b.type='button';b.textContent=a.label;if(a.primary)b.className='p';}b.addEventListener('click',function(){if(a.onClick)a.onClick(api(el));if(a.close!==false)close(el);});acts.appendChild(b);acts.hidden=false;});
+ el.querySelector('.tst-x').onclick=function(){close(el);};
+ clearTimeout(el.__t);var d=o.duration!=null?o.duration:DUR[t];var old=el.querySelector('.tst-bar');if(old)old.remove();
+ if(d>0){var bar=document.createElement('span');bar.className='tst-bar';bar.style.animationDuration=d+'ms';el.appendChild(bar);bar.addEventListener('animationend',function(){close(el);});}
+}
+window.ogToast=function(o){if(typeof o==='string')o={title:o};var s=host();var el=document.createElement('div');fill(el,o);
+ if(o.id){var ex=s.querySelector('[data-tid="'+o.id+'"]');if(ex)ex.remove();el.setAttribute('data-tid',o.id);}
+ s.appendChild(el);var all=s.querySelectorAll('.tst:not(.out)');if(all.length>3)close(all[0]);
+ el.addEventListener('focusin',function(){el.classList.add('hold');});el.addEventListener('focusout',function(){el.classList.remove('hold');});
+ return api(el);};
+ogToast.render=function(o){var el=document.createElement('div');fill(el,o);return el;};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){var s=document.querySelector('.tst-stack');var l=s&&s.querySelectorAll('.tst:not(.out)');if(l&&l.length)close(l[l.length-1]);}});
+/* convert legacy .og-toast calls into the new toast */
+var ERR=/(failed|couldn.t|could not|can.t |error|denied)/i,WARN=/^(use a |confirm |sign in step|nothing to|one file at a time|select |enter |choose |add at least|fill )/i,INFO=/(started|up to date|switched to|sent again|is hidden|signed out|removed|request sent|copied|re-scan requested|notified$)/i;
+function legacy(n){if(n.__done||n.hasAttribute('data-v2'))return;n.__done=1;
+ var sp=n.querySelector('span:not(.tbadge)')||n;var html=(sp.innerHTML||'').trim();var plain=(sp.textContent||'').trim();
+ var acts=[];n.querySelectorAll('button:not(.x),a').forEach(function(b){if(sp.contains(b))return;acts.push({node:b.cloneNode(true),close:true,orig:b});});
+ n.querySelectorAll('a[data-addp],span a').forEach(function(a){});
+ var t='ok';if(n.querySelector('.tbadge.w'))t='warn';if(WARN.test(plain))t='warn';else if(ERR.test(plain))t='err';else if(INFO.test(plain))t='info';
+ var title=html,desc='';var m=html.match(/^<b>([\s\S]*?)<\/b>\s*(?:·|—|-)?\s*([\s\S]*)$/);
+ if(m&&m[2]){title=m[1];desc=m[2].replace(/^·\s*/,'');}else if(html.indexOf(' · ')>0){var k=html.indexOf(' · ');title=html.slice(0,k);desc=html.slice(k+3);}
+ title=title.replace(/^Prototype:\s*/i,'');
+ acts.forEach(function(a){var o=a.orig;a.node.addEventListener('click',function(ev){ev.preventDefault();o.click();});});
+ var inline=sp.querySelectorAll('a,button');if(inline.length){/* keep inline links working: render desc with clones */}
+ n.remove();var r=ogToast({type:t,title:title,desc:desc,actions:acts.map(function(a){return {node:a.node,close:true};})});
+ inline.forEach(function(a){var c=r.el.querySelector(a.tagName.toLowerCase()+(a.getAttribute('data-addp')!=null?'[data-addp]':''));if(c&&c!==a){c.addEventListener('click',function(ev){ev.preventDefault();a.click();r.close();});}});
+}
+new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType!==1)return;if(n.classList&&n.classList.contains('og-toast'))setTimeout(function(){legacy(n);},0);else if(n.querySelectorAll){n.querySelectorAll('.og-toast').forEach(function(x){setTimeout(function(){legacy(x);},0);});}});});}).observe(document.documentElement,{childList:true,subtree:true});
+})();</script>
+<style>
+.og .tg{max-width:1120px;margin:0 auto;padding:40px 32px 64px}
+.og .tg-hd{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.og .tg-hd .lbl{color:var(--blue)}
+.og .tg-hd h1{margin:0;font:500 34px/1.15 'Cormorant Garamond',Georgia,serif;color:var(--head)}
+.og .tg-hd p{margin:0;max-width:680px;font-size:14px;line-height:1.6;color:var(--gray)}
+.og .tg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.og .tg-c{display:flex;flex-direction:column;gap:12px;padding:18px;border:1px solid var(--line);border-radius:4px;background:var(--pale)}
+.og .tg-ch{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.og .tg-ch h3{margin:0;font-size:14px;font-weight:700;color:var(--ink)}
+.og .tg-ch p{margin:3px 0 0;font-size:12.5px;line-height:1.5;color:var(--gray)}
+.og .tg-tag{display:inline-flex;height:20px;align-items:center;padding:0 7px;border-radius:4px;font-size:11px;font-weight:700;background:var(--card);border:1px solid var(--line);color:var(--gray);white-space:nowrap}
+.og .tg .tst{animation:none;box-shadow:0 6px 18px -12px rgba(0,30,60,.25)}
+.og .tg .tst-bar{animation:none!important;transform:scaleX(.62)}
+.og .tg-show{align-self:flex-start}
+.og .tg-rules{margin-top:28px;padding:18px 20px;border:1px solid var(--line);border-radius:4px;background:var(--card)}
+.og .tg-rules h2{margin:0 0 10px;font-size:15px;font-weight:700;color:var(--ink)}
+.og .tg-rules ul{margin:0;padding-left:18px;display:grid;grid-template-columns:1fr 1fr;gap:6px 28px;font-size:13px;line-height:1.55;color:var(--gray)}
+.og .tg-rules b{color:var(--ink)}
+@media (max-width:860px){.og .tg-grid,.og .tg-rules ul{grid-template-columns:1fr}.og .tg{padding:28px 16px 48px}}
+</style>
+<script>(function(){
+var FL='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/></svg>';
+function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
+var C=[
+ {n:'Success',w:'An action finished as expected. Closes after 4.5 s.',tag:'type: ok',o:{type:'ok',title:'Settings saved'}},
+ {n:'Success with next step',w:'The result needs follow-up. One primary action at most.',tag:'type: ok + action',o:{type:'ok',title:'Cross-check complete',desc:'2 findings need resolution on <b>PW-00428</b>.',actions:[{label:'View findings',primary:true}]}},
+ {n:'Info',w:'Something started or changed in the background. Closes after 5 s.',tag:'type: info',o:{type:'info',title:'Rescan started',desc:'12 projects in DR-4683-CA. We’ll notify you when it’s done.'}},
+ {n:'Warning · validation',w:'The user needs to fix something before continuing. Short, one line. Closes after 6.5 s.',tag:'type: warn · compact',o:{type:'warn',compact:true,title:'Use a PNG or JPG under 5 MB'}},
+ {n:'Error with retry',w:'An action failed. Stays until dismissed and always offers a way forward.',tag:'type: err · persistent',o:{type:'err',title:'Upload failed',desc:'<b>W-2_Batch_03.pdf</b> couldn’t be uploaded. Check your connection and try again.',actions:[{label:'Retry',primary:true},{label:'Details'}]}},
+ {n:'Undo',w:'A destructive or reversible action. Gives 8 s to undo before it’s final.',tag:'type: info + undo',o:{type:'info',title:'Document rejected',desc:'Reason saved to audit history.',duration:8000,actions:[{label:'Undo'}]},live:function(){ogToast({type:'info',title:'Document rejected',desc:'Reason saved to audit history.',duration:8000,actions:[{label:'Undo',onClick:function(){ogToast({type:'ok',compact:true,title:'Rejection undone'});}}]});}},
+ {n:'Loading → done',w:'A task that takes a few seconds. The same toast updates in place when it finishes.',tag:'type: load → ok',o:{type:'load',title:'Generating draft binder…',desc:'PW-00428 · this can take up to a minute.'},live:function(){var t=ogToast({type:'load',title:'Generating draft binder…',desc:'PW-00428 · this can take up to a minute.'});wait(2400).then(function(){t.update({type:'ok',title:'Draft binder ready',desc:'<b>PW-00428_binder.pdf</b> · 3 findings still open.',actions:[{label:'Download',primary:true}]});});}},
+ {n:'Progress',w:'Uploads and imports with a known size. Shows a bar, then turns into a success toast.',tag:'type: load + progress',o:{type:'load',title:'Uploading 3 files',desc:'2.4 MB of 5.1 MB',progress:47},live:function(){var t=ogToast({type:'load',title:'Uploading 3 files',desc:'0 MB of 5.1 MB',progress:0}),p=0;var iv=setInterval(function(){p+=12;t.progress(p);t.el.querySelector('.tst-d').textContent=(5.1*Math.min(p,100)/100).toFixed(1)+' MB of 5.1 MB';if(p>=100){clearInterval(iv);setTimeout(function(){t.update({type:'ok',title:'Upload complete',desc:'3 files added to the Unplaced inbox.',progress:null,actions:[{label:'Open inbox',href:'unplaced-inbox'}]});},300);}},280);}},
+ {n:'Copied',w:'Tiny confirmation for copy, toggle and save-as-you-type actions. Closes after 2.5 s.',tag:'type: ok · compact',o:{type:'ok',compact:true,title:'Reference ID copied',duration:2500}},
+ {n:'Session expiring',w:'Warns before sign-out so unsaved work isn’t lost. Stays until the user acts.',tag:'type: warn · persistent',o:{type:'warn',title:'Your session expires in 2 minutes',desc:'Unsaved changes will be lost.',duration:0,actions:[{label:'Stay signed in',primary:true},{label:'Sign out'}]}},
+ {n:'Offline → back online',w:'Connection status. Offline stays visible; it’s replaced when the connection returns.',tag:'type: err → ok',o:{type:'err',title:'You’re offline',desc:'Changes are saved on this device and will sync when you reconnect.'},live:function(){ogToast({id:'net',type:'err',title:'You’re offline',desc:'Changes are saved on this device and will sync when you reconnect.'});setTimeout(function(){ogToast({id:'net',type:'ok',compact:true,title:'Back online · changes synced'});},2600);}},
+ {n:'Stacking',w:'Up to 3 toasts at once, newest at the bottom. Older ones close first.',tag:'max 3',o:{type:'ok',title:'Profile saved'},live:function(){ogToast({type:'ok',title:'Profile saved'});setTimeout(function(){ogToast({type:'info',title:'Verification link sent',desc:'Check <b>rkeith@dpw.lacounty.gov</b>.'});},300);setTimeout(function(){ogToast({type:'warn',compact:true,title:'Confirm the attestation statement first'});},600);setTimeout(function(){ogToast({type:'ok',compact:true,title:'Seal ID copied'});},900);}}
+];
+function go(){var r=document.querySelector('.og [data-toasts]');if(!r||r.__t||!window.ogToast||!ogToast.render)return;r.__t=1;
+ document.title='Toasts · ObliGate';
+ r.innerHTML='<div class="tg-hd"><span class="lbl">Feedback</span><h1>Toast notifications</h1><p>Short, non-blocking messages that confirm an action, report progress or explain a problem. They appear at the bottom right (full width on mobile), pause while hovered or focused, and close with ✕ or Esc.</p></div><div class="tg-grid"></div>'+
+ '<div class="tg-rules"><h2>Rules</h2><ul><li><b>One message, one idea.</b> Bold title states the result; the optional second line adds detail.</li><li><b>At most 2 actions,</b> one primary. Never put the only way to do something in a toast.</li><li><b>Errors don’t auto-close.</b> They stay until the user dismisses them or retries.</li><li><b>Blocking problems aren’t toasts.</b> Use an inline error or the error page instead.</li><li><b>Undo beats confirm</b> for reversible actions like reject, dismiss or remove.</li><li><b>Screen readers:</b> success and info use <code>role=status</code>; warning and error use <code>role=alert</code>.</li></ul></div>';
+ var g=r.querySelector('.tg-grid');
+ C.forEach(function(c,i){var d=document.createElement('section');d.className='tg-c';d.innerHTML='<div class="tg-ch"><div><h3>'+c.n+'</h3><p>'+c.w+'</p></div><span class="tg-tag">'+c.tag+'</span></div>';
+  d.appendChild(ogToast.render(c.o));
+  var b=document.createElement('button');b.type='button';b.className='xq-dm tg-show';b.innerHTML=FL+'Show live';b.onclick=function(){if(c.live)c.live();else ogToast(JSON.parse(JSON.stringify(c.o)));};d.appendChild(b);g.appendChild(d);});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();setTimeout(go,300);setTimeout(go,1200);
+new MutationObserver(function(){var r=document.querySelector('.og [data-toasts]');if(r&&!r.querySelector('.tg-grid')){r.__t=0;go();}}).observe(document.documentElement,{childList:true,subtree:true});
+})();</script>
 
 <div class="og gn" data-theme="light" style="min-height: 1450px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
