@@ -182,7 +182,7 @@ function modal(href){var h=host(),m=h.querySelector('.imx');
   h.appendChild(m);
   var close=function(){m.hidden=true;};m.querySelector('.imx-x').onclick=close;m.querySelector('.imx-c').onclick=close;
   m.addEventListener('click',function(e){if(e.target===m)close();});document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
-  var go=function(name){try{sessionStorage.setItem('og-import',name);}catch(x){}location.href=m.dataset.href+'#detect';};
+  var go=function(name){try{sessionStorage.setItem('og-import',name);}catch(x){}location.href='06-import-wizard.html#detect';};
   m.querySelector('input').addEventListener('change',function(){if(this.files[0])go(this.files[0].name);});
   m.querySelector('.imx-sample').onclick=function(){go(SAMPLE);};
   var dz=m.querySelector('.imx-dz');['dragenter','dragover'].forEach(function(t){dz.addEventListener(t,function(e){e.preventDefault();e.stopPropagation();dz.classList.add('drag');});});
