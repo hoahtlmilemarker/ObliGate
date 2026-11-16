@@ -137,6 +137,11 @@
       "permanent": true
     },
     {
+      "source": "/25-errors(.html)?",
+      "destination": "/error",
+      "permanent": true
+    },
+    {
       "source": "/my-profile",
       "destination": "/profile",
       "permanent": true
