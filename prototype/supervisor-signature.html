@@ -3094,7 +3094,7 @@ function nav(){var g=document.querySelector('.gnav');if(!g||g.dataset.ctx)return
   [].slice.call(g.querySelectorAll('.gn-proj')).forEach(function(d){d.remove();});
   var pc=g.querySelector('.gn-pc');if(pc)pc.textContent=mine.length;
   mine.forEach(function(p){var d=tpl.cloneNode(true);d.querySelector('.gn-code').textContent=p.pw;var nm=d.querySelector('.gn-name');nm.textContent=p.name;nm.title=p.name;[].forEach.call(d.querySelectorAll('.gn-c'),function(x){x.remove();});host.appendChild(d);});}
- [].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var c=(d.querySelector('.gn-code')||{}).textContent.trim(),p=OG_ACTIVE[c];if(!p||p.empty)return;d.dataset.empty='';d.dataset.active='1';
+ [].forEach.call(g.querySelectorAll('.gn-proj'),function(d){var c=((d.querySelector('.gn-code')||{}).textContent||'').trim(),p=OG_ACTIVE[c];if(!p||p.empty)return;d.dataset.empty='';d.dataset.active='1';
   var ov=d.querySelector('.gn-ov');if(ov)link(ov,'overview',c);
   var st=d.querySelectorAll('.gn-st');['docs','cross','pre'].forEach(function(k,i){if(st[i])link(st[i],k,c);});
   if(c!=='PW-00428'&&st[0]&&tpl){var bd=tpl.querySelector('.gn-st .gn-c');var dc=st[0].querySelector('.gn-c');if(bd){if(!dc){dc=document.createElement('span');dc.className='gn-c';st[0].appendChild(dc);}dc.textContent=bd.textContent;}}
