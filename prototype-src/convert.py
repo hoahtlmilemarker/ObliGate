@@ -65,7 +65,7 @@ for f in sorted(glob.glob(os.path.join(src,'[012][0-9]*.dc.html'))):
         else: body=_v
     name = os.path.basename(f).replace('.dc.html', '.html')
     remember = "<script>try{sessionStorage.setItem('og-page','"+name+"');}catch(e){}</script>"
-    restore = "<script>document.documentElement.lang='en';try{var _p=sessionStorage.getItem('og-page');if(_p&&_p!=='09-auth-signin.html'&&location.hash!=='#signin'){location.replace(_p);}}catch(e){}</script>"
+    restore = "<script>document.documentElement.lang='en';try{var _p=sessionStorage.getItem('og-page');if(_p&&_p!=='09-auth-signin.html'&&!location.hash){location.replace(_p);}}catch(e){}</script>"
     inner = f"<title>{title}</title>\n<link rel=\"icon\" type=\"image/svg+xml\" href=\"favicon.svg\">\n{restore}\n{PRECONNECT}\n{helmet}\n<style>body{{background:#FFFFFF}}</style>\n{LOADER}\n{body}\n{JS}\n{PREFETCH}\n"
     if name == '09-auth-signin.html':
         open(os.path.join(out, name), 'w').write(inner)

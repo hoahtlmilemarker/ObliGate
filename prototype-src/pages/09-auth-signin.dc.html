@@ -223,7 +223,7 @@ html,body{margin:0;height:100%;overflow:hidden}
 .og .sb-rail::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
 </style>
 </helmet>
-<div class="og" data-theme="{{theme}}" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column">
+<div class="og au-pg" data-theme="{{theme}}" style="height: 100vh; overflow: auto; display: flex; flex-direction: column">
 
   <main class="band" style="flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 24px 16px; border-bottom: 0">
     <button class="btn btn-o theme-tg" type="button" onClick="{{toggleTheme}}" aria-label="Switch to {{nextTheme}} theme" style="position: absolute; top: 16px; right: clamp(16px, 3vw, 36px); z-index: 2; min-height: 40px; padding: 0 11px"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path></svg></button>
@@ -291,33 +291,12 @@ html,body{margin:0;height:100%;overflow:hidden}
 </g></svg>
 
 
-    <div style="position: relative; width: 100%; max-width: 460px; box-sizing: border-box; background: var(--card); border: 1px solid var(--line); box-shadow: var(--lift); padding: 32px 36px; display: flex; flex-direction: column; gap: 18px; border-radius: 4px">
+    <div class="au-card" style="position: relative; width: 100%; max-width: 460px; box-sizing: border-box; background: var(--card); border: 1px solid var(--line); box-shadow: var(--lift); padding: 32px 36px; display: flex; flex-direction: column; gap: 18px; border-radius: 4px">
       <div class="form-brand" style="display: flex; align-items: center; gap: 10px"><svg width="30" height="30" viewBox="0 0 48 48" fill="none" aria-hidden="true" style="color: var(--head)"><path d="M 24 6 A 18 18 0 1 1 6 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity="0.55"></path><path d="M 36 24 A 12 12 0 1 1 24 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity="0.7"></path><rect x="19" y="19" width="10" height="10" rx="1.5" fill="currentColor"></rect></svg><img class="wm wm-form" src="/_blob/8cfa11a04b8e7f1a0a8159c51c90be37" alt="ObliGate"></div>
-      <div style="display: flex; flex-direction: column; gap: 8px">
-        <span class="lbl" style="color: var(--blue)">FEMA Public Assistance Compliance &amp; Grant Audit Intelligence</span>
-        <h1 style="font-size: 36px; font-weight: 300; line-height: 1.1">Sign in to ObliGate</h1>
-      </div>
-
-      <a class="btn btn-p" href="01-disaster-portfolio.dc.html" style="width: 100%">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="1.5"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
-        Sign in with County SSO (Okta / Entra)
-      </a>
-
-      <div style="display: flex; align-items: center; gap: 12px"><span style="flex: 1; height: 1px; background: var(--line)"></span><span class="lbl" style="font-size: 10.5px">Or continue with credentials</span><span style="flex: 1; height: 1px; background: var(--line)"></span></div>
-
-      <form action="#" style="display: flex; flex-direction: column; gap: 14px">
-        <div style="display: flex; flex-direction: column; gap: 6px"><label for="signin-email" style="font-size: 14px; font-weight: 600">Official Email Address</label><input id="signin-email" class="inp" type="email" value="rkeith@dpw.lacounty.gov" placeholder="name@jurisdiction.gov"></div>
-        <div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; align-items: baseline"><label for="signin-password" style="font-size: 14px; font-weight: 600">Password</label><a href="#" style="font-size: 13px">Forgot password?</a></div><input id="signin-password" class="inp" type="password" value="supersecretpass" placeholder="Enter your password"></div>
-        <label style="display: flex; align-items: center; gap: 10px; min-height: 24px; font-size: 14px"><input type="checkbox" checked>Remember this device for 30 days</label>
-        <a class="btn btn-o" href="01-disaster-portfolio.dc.html" style="width: 100%">Sign In to Workspace<svg class="ba" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M9 4.5 12.5 8 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </form>
-
-      <p style="margin: 0; display: flex; gap: 10px; padding: 14px; background: var(--pale); font-size: 12.5px; line-height: 1.6; color: var(--gray); border-radius: 4px">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" style="flex: none; margin-top: 2px"><rect x="4" y="10" width="16" height="11" rx="1.5"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
-        <span><strong style="color: var(--ink)">Authorized System:</strong> Protected under FedRAMP Moderate &amp; CJIS data protection boundaries. Unauthorized access is subject to 18 U.S.C. § 1030.</span>
-      </p>
+      <div class="au" data-auth></div>
     </div>
-    <footer style="position: relative; text-align: center; font-size: 12px; color: var(--gray)">ObliGate Compliance Inc. · v3.8.2 · <a href="#">Privacy Policy</a> · <a href="#">Security Standards</a></footer>
+    <div class="au-below" data-auth-below></div>
+    <footer class="au-ft" style="position: relative; text-align: center; font-size: 12px; color: var(--gray)">ObliGate Compliance Inc. · <a href="#" data-noop>Privacy Policy</a></footer>
   </main>
 
 </div>

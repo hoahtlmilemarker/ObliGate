@@ -3734,9 +3734,9 @@ var S={
  '500':{code:'Error 500',t:'Something went wrong on our side',d:'Your work is saved. Try again in a moment. If it keeps happening, share the reference ID with your ObliGate administrator.',a:[['Try again','p','retry','#retry'],['Go to Projects','o','home','projects']],ref:true},
  '502':{code:'Error 502',t:'ObliGate can’t reach the server',d:'A gateway between you and ObliGate didn’t respond. This is usually brief.',note:'Retrying automatically in <b data-cd>30</b> s',a:[['Retry now','p','retry','#retry'],['Go to Projects','o','home','projects']],ref:true},
  '503':{code:'Error 503 · Maintenance',t:'ObliGate is down for maintenance',d:'We’re applying scheduled security updates. Your documents and findings are not affected.',note:'Expected back by <b>10:30 PM PST, Nov 16, 2026</b>',a:[['Try again','p','retry','#retry']],ref:false},
- 'session':{code:'Signed out',t:'Your session has expired',d:'For security, you were signed out after 30 minutes without activity. Sign in again to continue where you left off.',a:[['Sign in again','p','key','sign-in']],ref:false},
+ 'session':{code:'Signed out',t:'Your session has expired',d:'For security, you were signed out after 30 minutes without activity. Sign in again to continue where you left off.',a:[['Sign in again','p','key','./#signin']],ref:false},
  'offline':{code:'No connection',t:'You’re offline',d:'Check your network connection. Anything you were editing stays on this device and syncs when you’re back online.',a:[['Try again','p','retry','#retry']],ref:false},
- 'workspace':{code:'Access check failed',t:'Your workspace could not open',d:'We could not check your access right now. Retry to continue where you left off.',a:[['Retry','p','retry','#retry'],['Sign out','o','out','sign-in']],ref:true}
+ 'workspace':{code:'Access check failed',t:'Your workspace could not open',d:'We could not check your access right now. Retry to continue where you left off.',a:[['Retry','p','retry','#retry'],['Sign out','o','out','./#signin']],ref:true}
 };
 var ORDER=[['404','404'],['403','403'],['500','500'],['502','502'],['503','503'],['session','Session'],['offline','Offline'],['workspace','Workspace']];
 var FL='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>';
@@ -3761,6 +3761,219 @@ function go(){var root=document.querySelector('.og [data-err]');if(!root)return;
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 })();</script>
 <style>html body .og .col:has(.er)::before,html body .og .col:has(.er)::after{display:none!important}@media (max-width:640px){.og .er-pv{flex-wrap:wrap;height:auto!important;padding:4px 6px!important;max-width:100%;justify-content:center}.og .er-pv .xq-seg{flex-wrap:wrap;justify-content:center}.og .er-ref .er-when{flex-basis:100%;text-align:center}.og .er-ref .er-sep{display:none}}</style>
+<style>
+.og.au-pg main.band{justify-content:flex-start!important;padding-top:clamp(40px,9vh,96px)!important;min-height:100%;box-sizing:border-box;height:auto!important}
+.og .au-pv{position:relative;z-index:2;margin:0 0 4px;max-width:calc(100% - 64px)}
+.og .au-card{gap:20px!important}
+.og .au{display:flex;flex-direction:column;gap:20px}
+.og .au-hd{display:flex;flex-direction:column;gap:8px}
+.og .au-hd h1{margin:0;font-size:34px;font-weight:300;line-height:1.12;color:var(--head)}
+.og .au-hd p{margin:0;font-size:14.5px;line-height:1.6;color:var(--gray)}
+.og .au-hd p b{color:var(--ink);font-weight:700}
+.og .au-f{display:flex;flex-direction:column;gap:6px}
+.og .au-f label,.og .au-lb{font-size:14px;font-weight:600;color:var(--ink)}
+.og .au-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.og .au-row a,.og .au-lk{font-size:13px;font-weight:600;color:var(--blue);text-decoration:none;background:none;border:0;padding:0;cursor:pointer;font-family:inherit}
+.og .au-row a:hover,.og .au-lk:hover{text-decoration:underline}
+.og .au .inp{min-height:46px}
+.og .au .inp[aria-invalid=true]{border-color:#B42318;box-shadow:0 0 0 3px rgba(180,35,24,.12)}
+.og .au-err{display:flex;align-items:center;gap:6px;margin:2px 0 0;font-size:12.5px;font-weight:600;color:#B42318}
+.og[data-theme=dark] .au-err{color:#FF8A80}
+.og .au-hint{margin:0;font-size:12.5px;line-height:1.55;color:var(--gray)}
+.og .au .btn{width:100%;min-height:46px;justify-content:center}
+.og .au .btn[aria-busy=true]{pointer-events:none;opacity:.85}
+.og .au .btn:disabled{opacity:.5;pointer-events:none}
+.og .au-spin{width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:erSpin .7s linear infinite;flex:none}
+@keyframes erSpin{to{transform:rotate(360deg)}}
+.og .au-pw{position:relative}
+.og .au-pw .inp{padding-right:64px}
+.og .au-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);height:32px;padding:0 10px;border:0;border-radius:4px;background:transparent;color:var(--blue);font:700 12px Manrope,Arial,sans-serif;cursor:pointer}
+.og .au-eye:hover{background:var(--pale)}
+.og .au-who{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:4px;background:var(--pale)}
+.og .au-av{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#D9E7F4;color:#0B4A80;font:700 11.5px Manrope,Arial,sans-serif}
+.og[data-theme=dark] .au-av{background:#1F4A74;color:#BFE0FF}
+.og .au-who span{flex:1;min-width:0;font-size:14px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.og .au-otp{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.og .au-otp input{width:100%;min-width:0;height:52px;box-sizing:border-box;padding:0;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--ink);text-align:center;font:600 22px Manrope,Arial,sans-serif;font-variant-numeric:tabular-nums;caret-color:var(--blue)}
+.og .au-otp input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,90,156,.16)}
+.og .au-otp[aria-invalid=true] input{border-color:#B42318}
+.og .au-otp-g{display:flex;flex-direction:column;gap:8px}
+.og .au-qr{display:flex;align-items:center;gap:20px}
+.og .au-qr-b{flex:none;width:132px;height:132px;padding:10px;box-sizing:border-box;background:#fff;border:1px solid var(--line);border-radius:4px}
+.og .au-qr-b svg{display:block;width:100%;height:100%}
+.og .au-qr-t{display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.5;color:var(--gray)}
+.og .au-key{display:flex;align-items:center;gap:8px;margin-top:4px}
+.og .au-key code{padding:6px 8px;border:1px dashed var(--line);border-radius:4px;background:var(--pale);font:600 12.5px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;color:var(--ink);word-break:break-all}
+.og .au-key button{flex:none;height:28px;padding:0 8px;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--blue);font:600 11.5px Manrope,Arial,sans-serif;cursor:pointer}
+.og .au-steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:14px;counter-reset:s}
+.og .au-steps>li{display:flex;flex-direction:column;gap:10px}
+.og .au-sh{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--ink)}
+.og .au-sh::before{counter-increment:s;content:counter(s);flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#C6DCF1;color:#0B4A80;font-size:11px;font-weight:800}
+.og[data-theme=dark] .au-sh::before{background:#1F4A74;color:#BFE0FF}
+.og .au-sp{margin:0;font-size:13px;line-height:1.55;color:var(--gray)}
+.og .au-sp b{color:var(--ink);font-weight:600}
+.og .au-div{height:1px;background:var(--line-soft,var(--line))}
+.og .au-dl{margin:0;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:4px}
+.og .au-dl>div{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.og .au-dl>div+div{border-top:1px solid var(--line-soft,var(--line))}
+.og .au-dl svg{flex:none;color:var(--gray)}
+.og .au-dl dt{width:92px;flex:none;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray)}
+.og .au-dl dd{margin:0;min-width:0;font-size:14px;font-weight:600;color:var(--ink);overflow-wrap:anywhere}
+.og .au-acts{display:flex;flex-direction:column;gap:10px}
+.og .au-req{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 12px}
+.og .au-req li{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--gray)}
+.og .au-req li::before{content:"";flex:none;width:14px;height:14px;border-radius:50%;border:1.5px solid var(--line);box-sizing:border-box}
+.og .au-req li.ok{color:var(--ink)}
+.og .au-req li.ok::before{border:0;background:#1F7A4D url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='m4 7.2 2 2 4-4.4' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.og .au-note{margin:0;display:flex;gap:10px;padding:12px 14px;background:var(--pale);font-size:12.5px;line-height:1.6;color:var(--gray);border-radius:4px}
+.og .au-note svg{flex:none;margin-top:2px}
+.og .au-note strong{color:var(--ink)}
+.og .au-ok{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:4px;background:#E7F4EC;color:#14532D;font-size:13px;line-height:1.55}
+.og[data-theme=dark] .au-ok{background:#123524;color:#B7E4C7}
+.og .au-ok svg{flex:none;margin-top:2px}
+.og .au-mail{display:block;width:88px;height:auto;margin:0 0 2px}
+.og .au-inv{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:4px}
+.og .au-inv .au-av{width:36px;height:36px;font-size:12.5px}
+.og .au-inv p{margin:0;font-size:13.5px;line-height:1.5;color:var(--gray)}
+.og .au-inv b{color:var(--ink)}
+.og .au-role{display:inline-flex;align-items:center;height:20px;padding:0 7px;margin-left:2px;border-radius:4px;background:#C6DCF1;color:#0B4A80;font-size:11px;font-weight:700}
+.og[data-theme=dark] .au-role{background:#1F4A74;color:#BFE0FF}
+.og .au-below{min-height:22px;display:flex;justify-content:center}
+.og .au-back{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:var(--gray);text-decoration:none}
+.og .au-back:hover{color:var(--blue)}
+.og .au-ft{margin-top:-6px}
+@media (max-width:640px){
+ .og.au-pg main.band{padding-top:64px!important}
+ .og .au-card{padding:24px 20px!important}
+ .og .au-hd h1{font-size:28px}
+ .og .au-pv{flex-wrap:wrap;height:auto!important;padding:4px 6px!important;justify-content:center;max-width:100%}
+ .og .au-pv .xq-seg{flex-wrap:wrap;justify-content:center}
+ .og .au-otp{gap:6px}.og .au-otp input{height:46px;font-size:19px}
+ .og .au-qr{flex-direction:column;align-items:flex-start;gap:12px}
+ .og .au-req{grid-template-columns:1fr}
+ .og .au-dl dt{width:auto;min-width:82px}
+}
+</style>
+<script>(function(){
+var I='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+var IC={
+ arrow:'<svg class="ba" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M9 4.5 12.5 8 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+ back:'<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+ lock:I+'<rect x="4" y="10" width="16" height="11" rx="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>',
+ user:I+'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6.5 18.5a6.5 6.5 0 0 1 11 0"/></svg>',
+ org:I+'<path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16"/><path d="M15 10h4a1 1 0 0 1 1 1v10M3 21h18M8 8h3M8 12h3M8 16h3"/></svg>',
+ globe:I+'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
+ err:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg>',
+ ok:I+'<circle cx="12" cy="12" r="9"/><path d="m8 12.3 2.7 2.7L16 9.5"/></svg>'
+};
+var FL='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>';
+var ORDER=[['signin','Sign in'],['password','Password'],['mfa','Authenticator'],['mfa-setup','Set up MFA'],['verify','Verify'],['reset','Reset'],['reset-sent','Reset sent'],['new-password','New password'],['invite','Invitation']];
+var ST={};try{ST=JSON.parse(sessionStorage.getItem('og-auth')||'{}')||{};}catch(e){}
+function save(){try{sessionStorage.setItem('og-auth',JSON.stringify(ST));}catch(e){}}
+var DEF='rkeith@dpw.lacounty.gov';
+function email(){return ST.email||DEF;}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function ini(e){var n=e.split('@')[0].replace(/[^a-z]/gi,'');return (n.slice(0,2)||'OG').toUpperCase();}
+function hd(t,p){return '<div class="au-hd"><span class="lbl" style="color:var(--blue)">FEMA Public Assistance Compliance &amp; Grant Audit Intelligence</span><h1>'+t+'</h1>'+(p?'<p>'+p+'</p>':'')+'</div>';}
+function btn(lbl,act,cls,ic){return '<button type="submit" class="btn '+(cls||'btn-p')+'" data-go="'+act+'"><span>'+lbl+'</span>'+(ic||'')+'</button>';}
+function otp(id){var h='<div class="au-otp" role="group" aria-label="6-digit code" data-otp="'+id+'">';for(var i=0;i<6;i++)h+='<input inputmode="numeric" autocomplete="'+(i?'off':'one-time-code')+'" maxlength="1" aria-label="Digit '+(i+1)+'">';return h+'</div>';}
+function who(){var e=email();return '<div class="au-who"><span class="au-av" aria-hidden="true">'+ini(e)+'</span><span>'+esc(e)+'</span><a class="au-lk" href="#signin">Edit</a></div>';}
+function qr(){var N=25,m=[],x,y,s=20261116;function r(){s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff;}
+ for(y=0;y<N;y++){m[y]=[];for(x=0;x<N;x++)m[y][x]=r()<.5;}
+ function fp(ox,oy){for(y=-1;y<8;y++)for(x=-1;x<8;x++){var X=ox+x,Y=oy+y;if(X<0||Y<0||X>=N||Y>=N)continue;var on=(x>=0&&x<=6&&y>=0&&y<=6)&&(x===0||x===6||y===0||y===6||(x>=2&&x<=4&&y>=2&&y<=4));m[Y][X]=on;}}
+ fp(0,0);fp(N-7,0);fp(0,N-7);for(x=8;x<N-8;x++){m[6][x]=x%2===0;m[x][6]=x%2===0;}
+ for(y=-2;y<=2;y++)for(x=-2;x<=2;x++)m[18+y][18+x]=(Math.max(Math.abs(x),Math.abs(y))!==1);
+ var d='';for(y=0;y<N;y++)for(x=0;x<N;x++)if(m[y][x])d+='M'+x+' '+y+'h1v1h-1z';
+ return '<svg viewBox="0 0 25 25" shape-rendering="crispEdges" role="img" aria-label="QR code for authenticator setup"><path d="'+d+'" fill="#0B1620"/></svg>';}
+var NOTE='<p class="au-note">'+IC.lock+'<span><strong>Authorized System:</strong> Protected under FedRAMP Moderate &amp; CJIS data protection boundaries. Unauthorized access is subject to 18 U.S.C. § 1030.</span></p>';
+var MAIL='<svg class="au-mail" viewBox="0 0 120 80" fill="none" aria-hidden="true"><rect x="18" y="14" width="84" height="56" rx="4" fill="var(--card)" stroke="#9FB6CC" stroke-width="1.6"/><path d="m20 18 40 28 40-28" stroke="#9FB6CC" stroke-width="1.6" stroke-linejoin="round"/><circle cx="96" cy="20" r="11" fill="#005A9C"/><path d="m91.5 20.3 3 3 6-6.3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var V={
+ signin:function(){return hd('Sign in to ObliGate')+
+  '<form class="au" novalidate data-form="signin"><div class="au-f"><label for="au-email">Email</label><input id="au-email" class="inp" type="email" autocomplete="username" placeholder="name@agency.gov" value="'+esc(ST.email||'')+'"><p class="au-hint">If your organization uses single sign-on (Okta, Microsoft Entra ID), we’ll send you there to sign in.</p></div>'+btn('Continue with email','password','btn-p',IC.arrow)+'</form>'+NOTE;},
+ password:function(){return hd('Enter your password')+
+  '<form class="au" novalidate data-form="password">'+who()+'<div class="au-f"><div class="au-row"><label for="au-pass">Password</label><a href="#reset">Forgot password?</a></div><div class="au-pw"><input id="au-pass" class="inp" type="password" autocomplete="current-password" placeholder="Enter your password"><button type="button" class="au-eye" data-eye aria-label="Show password">Show</button></div></div>'+btn('Sign in','mfa','btn-p',IC.arrow)+'</form>';},
+ mfa:function(){return hd('Check your authenticator app','Enter the 6-digit code from your authenticator app for <b>'+esc(email())+'</b>.')+
+  '<form class="au" novalidate data-form="mfa"><div class="au-otp-g"><span class="au-lb">Verification code</span>'+otp('mfa')+'</div>'+btn('Verify','app','btn-p')+'<p class="au-hint" style="text-align:center">Lost access to your app? <a class="au-lk" href="#mfa" data-help>Contact your ObliGate administrator</a></p></form>';},
+ 'mfa-setup':function(){return hd('Set up an authenticator app','Your organization requires two-step verification for every ObliGate account.')+
+  '<form class="au" novalidate data-form="mfa-setup"><ol class="au-steps"><li><span class="au-sh">Scan the QR code</span><div class="au-qr"><div class="au-qr-b">'+qr()+'</div><div class="au-qr-t"><span>Use an authenticator app such as <b style="color:var(--ink)">1Password</b>, <b style="color:var(--ink)">Google Authenticator</b>, <b style="color:var(--ink)">Authy</b> or <b style="color:var(--ink)">Microsoft Authenticator</b>.</span><span>Can’t scan the code? <button type="button" class="au-lk" data-key>View the setup key</button></span><div class="au-key" data-keybox hidden><code>JBSW Y3DP EHPK 3PXP</code><button type="button" data-copy>Copy</button></div></div></div></li><li class="au-div" aria-hidden="true" style="list-style:none"></li><li><span class="au-sh">Enter the code from your app</span>'+otp('setup')+'</li></ol>'+btn('Turn on two-step verification','app','btn-p')+'</form>';},
+ verify:function(){return hd('Verify it’s you','For your security, confirm this sign-in. Check the details below before you continue.')+
+  '<div class="au"><dl class="au-dl"><div>'+IC.user+'<dt>Account</dt><dd>'+esc(email())+'</dd></div><div>'+IC.org+'<dt>Organization</dt><dd>Los Angeles County DPW</dd></div><div>'+IC.globe+'<dt>Origin</dt><dd>lacounty.okta.com</dd></div></dl><div class="au-acts"><button type="button" class="btn btn-p" data-go="app"><span>Approve sign-in</span></button><button type="button" class="btn btn-o" data-deny><span>I don’t recognize this account</span></button></div></div>';},
+ reset:function(){return hd('Reset your password','Enter the email you use for ObliGate. We’ll send you a link to set a new password.')+
+  '<form class="au" novalidate data-form="reset"><div class="au-f"><label for="au-email">Email</label><input id="au-email" class="inp" type="email" autocomplete="username" placeholder="name@agency.gov" value="'+esc(ST.email||'')+'"></div>'+btn('Send reset instructions','reset-sent','btn-p')+'</form>';},
+ 'reset-sent':function(){return '<div class="au-hd">'+MAIL+'<h1>Check your email</h1><p>If an ObliGate account exists for <b>'+esc(email())+'</b>, we sent a link to reset your password. The link expires in 15 minutes.</p></div>'+
+  '<div class="au"><a class="btn btn-o" href="#new-password"><span>Open reset link</span></a><p class="au-hint" style="text-align:center">Didn’t get it? Check your spam folder or <button type="button" class="au-lk" data-resend disabled>resend in <span data-cd>30</span> s</button></p></div>';},
+ 'new-password':function(){var inv=ST.from==='invite';return hd(inv?'Create your password':'Set a new password',inv?'Create a password for <b>'+esc(email())+'</b>. You’ll set up two-step verification next.':'Choose a new password for <b>'+esc(email())+'</b>.')+
+  '<form class="au" novalidate data-form="new-password"><div class="au-f"><label for="au-np">New password</label><div class="au-pw"><input id="au-np" class="inp" type="password" autocomplete="new-password" placeholder="Enter a new password"><button type="button" class="au-eye" data-eye aria-label="Show password">Show</button></div></div><ul class="au-req" data-req><li data-r="len">At least 12 characters</li><li data-r="case">Upper and lower case</li><li data-r="num">A number</li><li data-r="sym">A symbol</li></ul><div class="au-f"><label for="au-cp">Confirm password</label><input id="au-cp" class="inp" type="password" autocomplete="new-password" placeholder="Re-enter the password"></div>'+btn(inv?'Continue':'Save password',inv?'mfa-setup':'password','btn-p',IC.arrow)+'</form>';},
+ invite:function(){return hd('Accept invitation','You’ve been invited to join your organization’s ObliGate workspace.')+
+  '<form class="au" novalidate data-form="invite"><div class="au-inv"><span class="au-av" aria-hidden="true">MC</span><p><b>Maria Chen</b> invited you to <b>Los Angeles County DPW</b> as <span class="au-role">Grants Analyst</span></p></div><div class="au-f"><label for="au-email">Email</label><input id="au-email" class="inp" type="email" autocomplete="username" value="'+esc(ST.invEmail||'jlee@dpw.lacounty.gov')+'" readonly aria-readonly="true"><p class="au-hint">This invitation is for this email address and expires on Nov 23, 2026.</p></div>'+btn('Accept and continue','new-password','btn-p',IC.arrow)+'</form>';}
+};
+var timer=null;
+function key(){var k=decodeURIComponent(location.hash.slice(1));return V[k]?k:'signin';}
+function err(input,msg){var f=input.closest('.au-f')||input.parentNode;input.setAttribute('aria-invalid','true');var o=f.querySelector('.au-err');if(!o){o=document.createElement('p');o.className='au-err';f.appendChild(o);}o.innerHTML=IC.err+msg;input.focus();}
+function clr(f){f.querySelectorAll('[aria-invalid]').forEach(function(n){n.removeAttribute('aria-invalid');});f.querySelectorAll('.au-err').forEach(function(n){n.remove();});}
+function busy(b,t){b.setAttribute('aria-busy','true');b.innerHTML='<span class="au-spin"></span><span>'+t+'</span>';}
+function code(f){var g=f.querySelector('.au-otp');return g?Array.prototype.map.call(g.querySelectorAll('input'),function(i){return i.value;}).join(''):'';}
+function nav(t){if(t==='app'){ST={email:ST.email};save();location.href='disasters';return;}location.hash=t;}
+function render(){var card=document.querySelector('.og [data-auth]');if(!card)return;var k=key();if(timer){clearInterval(timer);timer=null;}
+ if(k==='invite'||k==='signin')ST.from=k==='invite'?'invite':'';if(k==='invite')ST.email=ST.invEmail||'jlee@dpw.lacounty.gov';save();
+ var T={signin:'Sign in',password:'Enter your password',mfa:'Two-step verification','mfa-setup':'Set up two-step verification',verify:'Verify it’s you',reset:'Reset your password','reset-sent':'Check your email','new-password':'Set a new password',invite:'Accept invitation'};
+ document.title=T[k]+' · ObliGate';
+ card.innerHTML=V[k]();
+ var pv=document.querySelector('.og [data-auth-pv]');
+ if(!pv){pv=document.createElement('div');pv.setAttribute('data-auth-pv','');var c=document.querySelector('.og .au-card');c.parentNode.insertBefore(pv,c);}
+ pv.innerHTML='<span class="xq-dm au-pv" title="Prototype only, not part of the product: preview each sign-in screen">'+FL+'Prototype · Screen<span class="xq-seg" role="group" aria-label="Sign-in screen">'+ORDER.map(function(o){return '<button type="button" data-st="'+o[0]+'" aria-pressed="'+(o[0]===k)+'">'+o[1]+'</button>';}).join('')+'</span></span>';
+ var below=document.querySelector('.og [data-auth-below]');if(below)below.innerHTML=(k==='signin'||k==='invite'||k==='verify')?'':'<a class="au-back" href="#signin">'+IC.back+'Back to sign-in</a>';
+ var first=card.querySelector('.au-otp input,input.inp:not([readonly])');if(first&&k!=='signin')setTimeout(function(){try{first.focus({preventScroll:true});}catch(e){}},30);
+ if(k==='reset-sent'){var n=30,b=card.querySelector('[data-resend]');timer=setInterval(function(){n--;if(n<=0){clearInterval(timer);timer=null;b.disabled=false;b.textContent='resend the email';return;}var c=b.querySelector('[data-cd]');if(c)c.textContent=n;},1000);}
+}
+function bind(){var root=document.querySelector('.og.au-pg');if(!root||root.__au)return;root.__au=1;
+ root.addEventListener('click',function(e){var t=e.target;
+  var s=t.closest('[data-st]');if(s){location.hash=s.getAttribute('data-st');return;}
+  if(t.closest('[data-noop]')||t.closest('[data-help]')){e.preventDefault();return;}
+  var ey=t.closest('[data-eye]');if(ey){var i=ey.previousElementSibling,sh=i.type==='password';i.type=sh?'text':'password';ey.textContent=sh?'Hide':'Show';ey.setAttribute('aria-label',(sh?'Hide':'Show')+' password');return;}
+  if(t.closest('[data-key]')){var kb=root.querySelector('[data-keybox]');kb.hidden=!kb.hidden;t.closest('[data-key]').textContent=kb.hidden?'View the setup key':'Hide the setup key';return;}
+  var cp=t.closest('[data-copy]');if(cp){try{navigator.clipboard.writeText('JBSWY3DPEHPK3PXP');}catch(x){}cp.textContent='Copied';setTimeout(function(){cp.textContent='Copy';},1500);return;}
+  var rs=t.closest('[data-resend]');if(rs){rs.outerHTML='<span style="color:var(--ink);font-weight:600">Email sent again.</span>';return;}
+  if(t.closest('[data-deny]')){ST={};save();location.hash='signin';setTimeout(function(){var c=document.querySelector('.og [data-auth] .au-hd');if(c)c.insertAdjacentHTML('afterend','<div class="au-ok" role="status">'+IC.ok+'<span>Sign-in cancelled. Nothing was shared with that account. If this keeps happening, tell your ObliGate administrator.</span></div>');},60);return;}
+  var g=t.closest('[data-go]');if(g&&g.type==='button'){busy(g,'Signing in…');setTimeout(function(){nav(g.getAttribute('data-go'));},700);}
+ });
+ root.addEventListener('submit',function(e){e.preventDefault();var f=e.target,k=f.getAttribute('data-form'),b=f.querySelector('[data-go]');clr(f);
+  var em=f.querySelector('#au-email');
+  if(em&&!em.readOnly){var v=em.value.trim();if(!v){err(em,'Enter your email address');return;}if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){err(em,'Enter a valid email address, like name@agency.gov');return;}ST.email=v;save();}
+  if(k==='invite'){ST.email=em.value;save();}
+  if(k==='password'){var p=f.querySelector('#au-pass');if(!p.value){err(p,'Enter your password');return;}}
+  if(k==='mfa'||k==='mfa-setup'){var c=code(f),g=f.querySelector('.au-otp');if(c.length<6){g.setAttribute('aria-invalid','true');var fe=g.parentNode.querySelector('.au-err')||document.createElement('p');fe.className='au-err';fe.innerHTML=IC.err+'Enter all 6 digits';g.after(fe);g.querySelector('input:not([value]),input').focus();return;}
+   if(c==='000000'){g.setAttribute('aria-invalid','true');var fe2=document.createElement('p');fe2.className='au-err';fe2.innerHTML=IC.err+'That code didn’t work. Codes change every 30 seconds — try the newest one.';g.after(fe2);g.querySelectorAll('input').forEach(function(i){i.value='';});g.querySelector('input').focus();return;}}
+  if(k==='new-password'){var np=f.querySelector('#au-np'),cp2=f.querySelector('#au-cp');if(!ok(np.value)){err(np,'Use a password that meets all 4 rules');return;}if(np.value!==cp2.value){err(cp2,'Passwords don’t match');return;}}
+  var L={signin:'Checking…',password:'Signing in…',mfa:'Verifying…','mfa-setup':'Verifying…',reset:'Sending…','new-password':'Saving…',invite:'Continuing…'};
+  busy(b,L[k]||'Please wait…');
+  var to=b.getAttribute('data-go');if(k==='new-password'&&ST.from!=='invite'){to='password';}
+  setTimeout(function(){nav(to);if(k==='new-password'&&ST.from!=='invite')setTimeout(function(){var c=document.querySelector('.og [data-auth] .au-hd');if(c)c.insertAdjacentHTML('afterend','<div class="au-ok" role="status">'+IC.ok+'<span>Your password was updated. Sign in with your new password.</span></div>');},60);},750);
+ });
+ function ok(v){return v.length>=12&&/[a-z]/.test(v)&&/[A-Z]/.test(v)&&/\d/.test(v)&&/[^A-Za-z0-9]/.test(v);}
+ root.addEventListener('input',function(e){var t=e.target;
+  if(t.id==='au-np'){var v=t.value,R={len:v.length>=12,'case':/[a-z]/.test(v)&&/[A-Z]/.test(v),num:/\d/.test(v),sym:/[^A-Za-z0-9]/.test(v)};root.querySelectorAll('[data-req] li').forEach(function(li){li.classList.toggle('ok',!!R[li.getAttribute('data-r')]);});}
+  if(t.closest('.au-f')&&t.getAttribute('aria-invalid')){t.removeAttribute('aria-invalid');var x=t.closest('.au-f').querySelector('.au-err');if(x)x.remove();}
+  var g=t.closest('.au-otp');if(g){var d=t.value.replace(/\D/g,'');if(d.length>1){var ins=g.querySelectorAll('input'),i0=Array.prototype.indexOf.call(ins,t);for(var j=0;j<d.length&&i0+j<6;j++)ins[i0+j].value=d[j];(ins[Math.min(i0+d.length,5)]).focus();}else{t.value=d;if(d&&t.nextElementSibling)t.nextElementSibling.focus();}
+   g.removeAttribute('aria-invalid');var fe=g.parentNode.querySelector('.au-err');if(fe)fe.remove();
+   var f=g.closest('form');if(code(f).length===6){var b=f.querySelector('[data-go]');setTimeout(function(){if(code(f).length===6&&!b.getAttribute('aria-busy'))f.requestSubmit?f.requestSubmit(b):b.click();},150);}}
+ });
+ root.addEventListener('keydown',function(e){var t=e.target;if(!t.closest||!t.closest('.au-otp'))return;
+  if(e.key==='Backspace'&&!t.value&&t.previousElementSibling){t.previousElementSibling.value='';t.previousElementSibling.focus();e.preventDefault();}
+  if(e.key==='ArrowLeft'&&t.previousElementSibling){t.previousElementSibling.focus();e.preventDefault();}
+  if(e.key==='ArrowRight'&&t.nextElementSibling){t.nextElementSibling.focus();e.preventDefault();}});
+ root.addEventListener('paste',function(e){var t=e.target;if(!t.closest||!t.closest('.au-otp'))return;var d=((e.clipboardData||window.clipboardData).getData('text')||'').replace(/\D/g,'').slice(0,6);if(!d)return;e.preventDefault();t.value=d;t.dispatchEvent(new Event('input',{bubbles:true}));});
+}
+function go(){if(go.d||!document.querySelector('.og [data-auth]'))return;go.d=1;bind();render();
+ new MutationObserver(function(){var c=document.querySelector('.og [data-auth]');if(c&&!c.firstChild){bind();render();}}).observe(document.body,{childList:true,subtree:true});
+ addEventListener('hashchange',render);}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
+setTimeout(go,400);
+})();</script>
+<style>.og .au-key[hidden]{display:none!important}.og .au-pv .xq-seg button{white-space:nowrap}.og .au-below:empty{display:none}.og .au-ft{margin-top:0}</style>
+<style>.og .au-below{position:relative;z-index:1}.og .au-who>span:not(.au-av){flex:1;min-width:0;font-size:14px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.og .au-who>.au-av{flex:none!important;font-size:11.5px!important;font-weight:700!important;color:#0B4A80!important;overflow:visible!important}.og[data-theme=dark] .au-who>.au-av{color:#BFE0FF!important}.og .au-pv{white-space:nowrap}.og .au-dl dt{width:112px}@media (max-width:640px){.og .au-pv{white-space:normal}.og .au-dl>div{flex-wrap:wrap;row-gap:2px}.og .au-dl dd{flex-basis:100%;padding-left:28px}}</style>
+<style>.og .au-pv{width:max-content;max-width:none}@media (max-width:640px){.og .au-pv{width:auto;max-width:100%}}</style>
+<style>.og .au-lk:disabled{color:var(--gray);cursor:default;text-decoration:none}</style>
 
 <div class="og" data-theme="light" style="min-height: 1100px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
