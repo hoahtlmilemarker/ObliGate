@@ -3893,7 +3893,7 @@ function err(input,msg){var f=input.closest('.au-f')||input.parentNode;input.set
 function clr(f){f.querySelectorAll('[aria-invalid]').forEach(function(n){n.removeAttribute('aria-invalid');});f.querySelectorAll('.au-err').forEach(function(n){n.remove();});}
 function busy(b,t){b.setAttribute('aria-busy','true');b.innerHTML='<span class="au-spin"></span><span>'+t+'</span>';}
 function code(f){var g=f.querySelector('.au-otp');return g?Array.prototype.map.call(g.querySelectorAll('input'),function(i){return i.value;}).join(''):'';}
-function nav(t){if(t==='app'){ST={email:ST.email};save();location.href='01-disaster-portfolio.html';return;}location.hash=t;}
+function nav(t){if(t==='app'){ST={email:ST.email};save();location.href='24-projects.html';return;}location.hash=t;}
 function render(){var card=document.querySelector('.og [data-auth]');if(!card)return;var k=key();if(timer){clearInterval(timer);timer=null;}
  if(k==='invite'||k==='signin')ST.from=k==='invite'?'invite':'';if(k==='invite')ST.email=ST.invEmail||'jlee@dpw.lacounty.gov';save();
  var T={signin:'Sign in',password:'Enter your password',mfa:'Two-step verification','mfa-setup':'Set up two-step verification',verify:'Verify it’s you',reset:'Reset your password','reset-sent':'Check your email','new-password':'Set a new password',invite:'Accept invitation'};
