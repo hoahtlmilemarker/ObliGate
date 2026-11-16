@@ -4067,7 +4067,7 @@ window.ogErArt=function(k){return W(A[k]||A['404']);};
 </style>
 <script>(function(){
 var SV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
-var IC={ok:SV+'<path d="m5.5 12.5 4 4 9-9.5"/></svg>',info:SV+'<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6h.01"/></svg>',warn:SV+'<path d="M12 4 2.8 19.5h18.4Z"/><path d="M12 10v4.2M12 17h.01"/></svg>',err:SV+'<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg>',load:'<span class="tst-spin"></span>',x:SV+'<path d="M6 6l12 12M18 6 6 18"/></svg>'};
+var IC={ok:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="currentColor"/><path d="m7.2 12.4 3.2 3.2 6.4-6.8" fill="none" stroke="var(--tg,#fff)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',info:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="currentColor"/><path d="M12 11v6" fill="none" stroke="var(--tg,#fff)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7.4" r="1.5" fill="var(--tg,#fff)"/></svg>',warn:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="currentColor"/><path d="M12 6.8v6.2" fill="none" stroke="var(--tg,#fff)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="16.8" r="1.5" fill="var(--tg,#fff)"/></svg>',err:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="currentColor"/><path d="m8.2 8.2 7.6 7.6M15.8 8.2l-7.6 7.6" fill="none" stroke="var(--tg,#fff)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',load:'<span class="tst-spin"></span>',x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'};
 var DUR={ok:4500,info:5000,warn:6500,err:0,load:0};
 function host(){var r=document.querySelector('.og')||document.body,s=r.querySelector(':scope > .tst-stack');if(!s){s=document.createElement('div');s.className='tst-stack';s.setAttribute('aria-live','polite');r.appendChild(s);}return s;}
 function close(el){if(!el||el.__c)return;el.__c=1;clearTimeout(el.__t);el.classList.add('out');setTimeout(function(){el.remove();},200);if(el.__o&&el.__o.onClose)el.__o.onClose();}
@@ -4160,6 +4160,10 @@ function duo(){document.querySelectorAll('.og .sx-nav a>svg:first-child:not([dat
 duo();document.addEventListener('DOMContentLoaded',duo);setTimeout(duo,500);setTimeout(duo,1500);
 new MutationObserver(function(){if(document.querySelector('.og .sx-nav a>svg:first-child:not([data-duo])'))duo();}).observe(document.documentElement,{childList:true,subtree:true});
 })();</script>
+<style>.og .tst-ic{width:22px;height:22px;margin:3px 2px 0;border-radius:50%;background:none;box-shadow:0 0 0 4px var(--tb);color:var(--tc)}.og .tst-ic svg{width:22px;height:22px;display:block}.og .tst.compact .tst-ic{margin-top:0}.og .tst-x svg{width:16px;height:16px}.og .tst-spin{width:18px;height:18px;border-width:2.4px}.og .tst.load .tst-ic{box-shadow:none}
+.og .tst{--tc:#1F8A57}.og .tst.info,.og .tst.load{--tc:#0B6BB8}.og .tst.warn{--tc:#D9822B;--tb:#FCEFDD}.og .tst.err{--tc:#C8372D}
+.og[data-theme=dark] .tst{--tg:#0E1A24}</style>
+<style>.og .tst-acts[hidden]{display:none!important}</style>
 
 <div class="og" data-theme="light" style="min-height: 1100px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
