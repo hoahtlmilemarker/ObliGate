@@ -4153,6 +4153,20 @@ function go(){var r=document.querySelector('.og [data-toasts]');if(!r||r.__t||!w
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();setTimeout(go,300);setTimeout(go,1200);
 new MutationObserver(function(){var r=document.querySelector('.og [data-toasts]');if(r&&!r.querySelector('.tg-grid')){r.__t=0;go();}}).observe(document.documentElement,{childList:true,subtree:true});
 })();</script>
+<style>
+.og .sx-nav a{height:42px;gap:12px}
+.og .sx-nav a>svg:first-child{flex:none;width:30px!important;height:30px!important;padding:7px;box-sizing:border-box;border-radius:4px;background:rgba(90,167,230,.14);color:var(--blue)!important;transition:background .15s,box-shadow .15s,color .15s}
+.og .sx-nav a:hover>svg:first-child{background:var(--card);box-shadow:0 0 0 1px rgba(0,90,156,.25)}
+.og .sx-nav a[aria-current="page"]>svg:first-child{background:var(--blue);color:#fff!important;box-shadow:none}
+.og[data-theme=dark] .sx-nav a[aria-current="page"]>svg:first-child{background:#2F7BC0}
+@media (max-width:1024px){.og .sx-nav a{height:40px;gap:8px}.og .sx-nav a>svg:first-child{width:26px!important;height:26px!important;padding:5px}}
+</style>
+<script>(function(){
+function duo(){document.querySelectorAll('.og .sx-nav a>svg:first-child:not([data-duo])').forEach(function(s){s.setAttribute('data-duo','');
+ [].slice.call(s.querySelectorAll('rect,circle,ellipse,path')).forEach(function(n){if(n.getAttribute('fill')&&n.getAttribute('fill')!=='none')return;var closed=n.tagName!=='path'||/z\s*$/i.test(n.getAttribute('d')||'');if(!closed)return;var f=n.cloneNode();f.setAttribute('fill','currentColor');f.setAttribute('fill-opacity','.18');f.setAttribute('stroke','none');n.parentNode.insertBefore(f,n);});});}
+duo();document.addEventListener('DOMContentLoaded',duo);setTimeout(duo,500);setTimeout(duo,1500);
+new MutationObserver(function(){if(document.querySelector('.og .sx-nav a>svg:first-child:not([data-duo])'))duo();}).observe(document.documentElement,{childList:true,subtree:true});
+})();</script>
 
 <div class="og" data-theme="light" style="min-height: 1100px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
