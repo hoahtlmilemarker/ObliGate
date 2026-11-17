@@ -31,7 +31,7 @@
 </style>
 <div class="ogk" role="dialog" aria-modal="true" aria-label="Search">
  <div class="ogk-box">
-  <div class="ogk-in"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="text" placeholder="Search documents, projects, disasters..." aria-label="Search"><span class="ogk-esc">ESC</span></div>
+  <div class="ogk-in"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Search documents, projects, disasters..." aria-label="Search"><span class="ogk-esc">ESC</span></div>
   <div class="ogk-list"></div>
   <div class="ogk-ft"><span><b>↑↓</b>Navigate</span><span><b>Enter</b>Open</span><span><b>Esc</b>Close</span></div>
  </div>
@@ -103,7 +103,7 @@
  function kind(name){var e=(name.split('.').pop()||'').toLowerCase();if(e==='pdf')return['PDF','#B4473A'];if(e==='xlsx'||e==='xls'||e==='csv')return['XLSX','#2F6FB0'];return[e.toUpperCase().slice(0,4)||'FILE','#60666C'];}
  function row(f){var k=kind(f.name);
   return '<tr class="just"><td class="lb-ck"><input type="checkbox" aria-label="Select document"></td>'+
-  '<td><div class="lb-doc"><span class="lb-ft" style="--ft:'+k[1]+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><b>'+k[0]+'</b></span>'+
+  '<td><div class="lb-doc"><span class="lb-ft" style="--ft:'+k[1]+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><b>'+k[0]+'</b></span>'+
   '<div class="lb-dt"><a href="#">'+esc(f.name)+'</a><span class="lb-meta"><span class="lb-kind"><span class="new-pill">New</span>Classifying…</span>Uploaded just now · '+size(f.size||0)+'</span></div></div></td>'+
   '<td class="lb-per"><span class="per-d">—</span></td><td><div class="lb-who"><div><span style="color:var(--gray);font-weight:500">Detecting…</span></div></div></td><td class="lb-val">—</td>'+
   '<td><span class="st2 st2-proc"><i></i>Extracting…</span></td><td class="lb-act"><span style="font-size:12px;color:var(--gray)">Processing</span></td></tr>';}
@@ -119,7 +119,7 @@
   var first=tb.querySelector('tr.just');first&&first.scrollIntoView({behavior:'smooth',block:'center'});
   toast(files.length);
   var rows=[].slice.call(tb.querySelectorAll('tr.just'));analyze(rows,files);}
- var AR='<svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M9 4.5 12.5 8 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+ var AR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
  function rules(name){var C=window.ogClassify&&window.ogClassify(name);
   if(C){var D={'No supervisor signature on timesheet':'FEMA requires a supervisor signature or attestation for force-account hours.','Field log is not signed':'FEMA requires the supervisor to sign daily field logs.','Payroll hours not yet matched to field logs':'Claimed hours must match daily activity logs before submission.','Procurement record not attached':'Contracts need the procurement record that shows how the vendor was chosen.'};
    return {kind:C.kind,meta:C.meta,f:C.f?[{sev:C.f.sev==='c'?'risk':'warn',st:C.f.st,t:C.f.t,r:C.f.r,d:D[C.f.t]||'',fix:C.f.fix,href:C.f.href}]:[]};}
@@ -215,7 +215,7 @@ function unhl(){tb.querySelectorAll('mark.qh').forEach(function(m){m.replaceWith
 function hl(){unhl();var re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
  tb.querySelectorAll('.lb-dt > a, .lb-kind, .lb-who > div > span, .lb-who small').forEach(function(el){if(el.children.length)return;var t=el.textContent;if(!re.test(t))return;re.lastIndex=0;el.innerHTML=t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(re,'<mark class="qh">$1</mark>');});}
 if(nav)nav.addEventListener('click',function(e){var b=e.target.closest('button');if(!b||b.disabled)return;if(b.dataset.pg)show(+b.dataset.pg);else if(b.classList.contains('pg-prev'))show(cur-1);else if(b.classList.contains('pg-next'))show(cur+1);var t=document.querySelector('.lb-head');t&&t.scrollIntoView({behavior:'smooth',block:'start'});});
-if(inp){var tm,wrap=inp.closest('.lb-srch'),cx=document.createElement('button');cx.type='button';cx.className='srch-x';cx.setAttribute('aria-label','Clear search');cx.innerHTML='<svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><path d="M1.5 1.5l5 5m0-5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';if(wrap)wrap.appendChild(cx);function sv(){if(wrap)wrap.classList.toggle('has-v',!!inp.value);}cx.addEventListener('click',function(){inp.value='';q='';sv();show(1);inp.focus();});inp.addEventListener('input',sv);inp.setAttribute('type','search');inp.addEventListener('input',function(){clearTimeout(tm);tm=setTimeout(function(){q=inp.value.trim().toLowerCase();show(1);},120);});
+if(inp){var tm,wrap=inp.closest('.lb-srch'),cx=document.createElement('button');cx.type='button';cx.className='srch-x';cx.setAttribute('aria-label','Clear search');cx.innerHTML='<svg width="8" height="8" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';if(wrap)wrap.appendChild(cx);function sv(){if(wrap)wrap.classList.toggle('has-v',!!inp.value);}cx.addEventListener('click',function(){inp.value='';q='';sv();show(1);inp.focus();});inp.addEventListener('input',sv);inp.setAttribute('type','search');inp.addEventListener('input',function(){clearTimeout(tm);tm=setTimeout(function(){q=inp.value.trim().toLowerCase();show(1);},120);});
  inp.addEventListener('keydown',function(e){if(e.key==='Escape'){inp.value='';q='';sv();show(1);}});}
 document.querySelectorAll('.lb-tab').forEach(function(t){t.addEventListener('click',function(){tab=key(t);show(1);});});
 window.ogLibRefresh=function(){show(cur);};
