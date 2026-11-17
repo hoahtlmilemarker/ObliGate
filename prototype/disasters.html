@@ -722,8 +722,8 @@ function cxResult(){var k=document.querySelector('section.kpis');if(!k)return;va
  s.innerHTML='<div class="cx-h"><div><span class="cx-eb">Cross-check results · Pay Period 02 · run at '+tm+'</span><h2 class="cx-t">2 employees have differences</h2><p class="cx-p">9 of 12 crew match between timesheets and activity logs. 1 entry is held for review. Check the rows below.</p></div>'+
   '<a class="btn btn-o btn-sm cx-next cx-pil" href="pre-submission">Continue to Pre-Submission'+ar+'</a></div>'+
   '<ol class="cx-list">'+
-  '<li><span class="cx-n">1</span><div class="cx-w"><b>Aguayo, Hector</b><span class="tag t-risk cx-tag">Difference</span><small>Timesheet 48h · Activity log 44h · +4.0 OT hrs</small></div><button class="btn btn-p btn-sm cx-go" type="button" data-cx="diff">View rows'+ar+'</button></li>'+
-  '<li><span class="cx-n">2</span><div class="cx-w"><b>Delgado, Marco</b><span class="tag t-warn cx-tag">Missing support</span><small>Timesheet 40h · Activity log missing for 5 days</small></div><button class="btn btn-o btn-sm" type="button" data-cx="miss">View rows'+ar+'</button></li>'+
+  '<li><span class="cx-n">1</span><div class="cx-w"><b>Aguayo, Hector</b><span class="tag t-risk cx-tag">Difference</span><small>Timesheet 48.0 hrs · Activity log 44.0 hrs · +4.0 OT hrs</small></div><button class="btn btn-p btn-sm cx-go" type="button" data-cx="diff">View rows'+ar+'</button></li>'+
+  '<li><span class="cx-n">2</span><div class="cx-w"><b>Delgado, Marco</b><span class="tag t-warn cx-tag">Missing support</span><small>Timesheet 40.0 hrs · Activity log missing for 5 days</small></div><button class="btn btn-o btn-sm" type="button" data-cx="miss">View rows'+ar+'</button></li>'+
   '</ol>';
  k.insertAdjacentElement('afterend',s);s.scrollIntoView({behavior:'smooth',block:'start'});
  s.addEventListener('click',function(e){var cb=e.target.closest('[data-cx]');if(cb&&window.ogCxAll){ogCxAll(cb.getAttribute('data-cx'));return;}var r=document.querySelector('[aria-label="Resolution options"]');if(r){r.scrollIntoView({behavior:'smooth',block:'center'});r.classList.add('cx-flash');setTimeout(function(){r.classList.remove('cx-flash');},1600);}});}
@@ -3378,7 +3378,7 @@ window.ogCxRun=function(done){var r=document.querySelector('.cx-rs');if(!r)retur
 </script>
 <style>
 .og .t-blue{background:var(--blue-t);color:var(--blue)}
-.og .cx-pay{display:inline-block;margin-top:4px;font-size:12px;color:var(--gray)}
+.og .cx-dt td.num,.og [aria-label="Source A"] .num,.og [aria-label="Source B"] .num{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;letter-spacing:0}.og .cx-dt td.num{text-align:right;font-size:13px}.og .kpis .num,.og .cx-tie,.og .sb-rail .wk .num{font-variant-numeric:tabular-nums}.og .cx-pay{display:inline-block;margin-top:4px;font-size:12px;color:var(--gray)}
 .og .cx-vw{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .og .cx-all{display:flex;flex-direction:column;gap:12px}
 .og .cx-fl{display:flex;flex-wrap:wrap;gap:6px}
