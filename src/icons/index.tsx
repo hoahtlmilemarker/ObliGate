@@ -90,8 +90,34 @@ export const SettingsIcon = make(<><circle cx="12" cy="12" r="3" fill="currentCo
 export const BellIcon = make(<><path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.5 2h-15z" fill="currentColor" fillOpacity=".18" /><path d="M10 21h4" /></>, 'BellIcon');
 export const KeyboardIcon = make(<><rect x="3" y="6" width="18" height="12" rx="2" fill="currentColor" fillOpacity=".18" /><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8" /></>, 'KeyboardIcon');
 export const HelpIcon = make(<><circle cx="12" cy="12" r="9" fill="currentColor" fillOpacity=".18" /><path d="M9.6 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.4M12 16.8h.01" /></>, 'HelpIcon');
+export const ImportIcon = make(
+  <>
+    <path d="M4 13.5h4.2l1.6 2.5h4.4l1.6-2.5H20v5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5Z" fill="currentColor" fillOpacity=".18" stroke="none" />
+    <path d="M4 13.5h4.2l1.6 2.5h4.4l1.6-2.5H20" />
+    <path d="M4 13.5v5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-5L17.6 6.2A1.5 1.5 0 0 0 16.2 5H15M9 5H7.8a1.5 1.5 0 0 0-1.4 1.2L4 13.5" />
+    <path d="M12 3v8.5M9 8.8l3 3 3-3" />
+  </>,
+  'ImportIcon',
+);
+export const GearIcon = make(
+  <>
+    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" fill="currentColor" fillOpacity=".18" />
+    <circle cx="12" cy="12" r="3" />
+  </>,
+  'GearIcon',
+);
+export const PrivateDeviceIcon = make(
+  <>
+    <path d="M12 3 4.5 6v5.5c0 4.6 3.1 8 7.5 9.5 4.4-1.5 7.5-4.9 7.5-9.5V6Z" fill="currentColor" fillOpacity=".18" />
+    <rect x="9" y="10.5" width="6" height="5" rx="1" />
+    <path d="M10.2 10.5V9.2a1.8 1.8 0 0 1 3.6 0v1.3" />
+  </>,
+  'PrivateDeviceIcon',
+);
+export const BuildingIcon = make(<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 10h.01M15 10h.01" />, 'BuildingIcon');
 export const SignOutIcon = make(
   <>
+    <path d="M10 4h7.5A1.5 1.5 0 0 1 19 5.5v13a1.5 1.5 0 0 1-1.5 1.5H10A1.5 1.5 0 0 1 8.5 18.5v-13A1.5 1.5 0 0 1 10 4Z" fill="currentColor" fillOpacity=".18" stroke="none" />
     <path d="M8.5 8V5.5A1.5 1.5 0 0 1 10 4h7.5A1.5 1.5 0 0 1 19 5.5v13a1.5 1.5 0 0 1-1.5 1.5H10a1.5 1.5 0 0 1-1.5-1.5V16" />
     <path d="M14 12H3.5M6.5 9 3.5 12l3 3" />
   </>,
