@@ -2959,11 +2959,11 @@ html.og-lock body{padding-right:var(--og-sbw,0px)}
 </style>
 <script>
 (function(){var SEL='.dlg,.imx,.upm';
- function sync(){var open=!!document.querySelector(SEL),h=document.documentElement;if(open===h.classList.contains('og-lock'))return;
+ function sync(){var open=!!document.querySelector('.dlg:not([hidden]),.imx:not([hidden]),.upm:not([hidden])'),h=document.documentElement;if(open===h.classList.contains('og-lock'))return;
   if(open){var w=innerWidth-h.clientWidth;h.style.setProperty('--og-sbw',(w>0?w:0)+'px');h.classList.add('og-lock');}else{h.classList.remove('og-lock');h.style.removeProperty('--og-sbw');}}
- new MutationObserver(sync).observe(document.documentElement,{childList:true,subtree:true});
+ new MutationObserver(sync).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
  /* belt and braces: wheel/touch on the dimmed backdrop never reaches the page */
- function block(e){var d=e.target.closest&&e.target.closest(SEL);if(!d)return;var sc=e.target.closest('.dlg-c,.fm-list,.um-list,[data-scroll]');if(sc&&d.contains(sc)&&sc.scrollHeight>sc.clientHeight)return;e.preventDefault();}
+ function block(e){var d=e.target.closest&&e.target.closest(SEL);if(!d)return;for(var n=e.target;n&&n!==d.parentNode;n=n.parentNode){if(n.nodeType!==1)continue;var oy=getComputedStyle(n).overflowY;if((oy==='auto'||oy==='scroll')&&n.scrollHeight>n.clientHeight+1)return;}e.preventDefault();}
  document.addEventListener('wheel',block,{passive:false});document.addEventListener('touchmove',block,{passive:false});
  sync();})();
 </script>
