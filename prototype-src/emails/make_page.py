@@ -8,5 +8,8 @@ old = '<div class="st-c"><div class="tg" data-toasts><div class="tm-loading">Loa
 assert s.count(old) == 1
 NEW = open(os.path.join(D, 'page_body.html')).read().strip()
 s = s.replace(old, NEW)
+# The preview mimics a mail app, so the page drops the ObliGate app header.
+s = re.sub(r'\s*<header class="hd">.*?</header>', '', s, count=1, flags=re.S)
+s = s.replace('style="min-height: 1100px"', '', 1)
 open(os.path.join(P, '27-emails.dc.html'), 'w').write(s)
 print('page written')

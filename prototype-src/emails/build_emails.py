@@ -39,7 +39,7 @@ def shell(subject, preheader, eyebrow, body):
 body{{margin:0;padding:0;-webkit-text-size-adjust:100%}}
 table{{border-collapse:collapse}}
 a{{color:{NAVY}}}
-@media (max-width:620px){{.em-wrap{{width:100% !important}}.em-pad{{padding-left:24px !important;padding-right:24px !important}}.em-card{{padding-top:32px !important}}.em-btnw{{width:100% !important}}.em-btnw a{{display:block !important;text-align:center !important}}.em-h1{{font-size:23px !important}}}}
+@media (max-width:620px){{.em-wrap{{width:100% !important}}.em-pad{{padding-left:24px !important;padding-right:24px !important}}.em-card{{padding-top:32px !important}}.em-btnw{{width:100% !important}}.em-btnw a{{display:block !important;text-align:center !important}}.em-h1{{font-size:23px !important}}.em-code{{font-size:28px !important;letter-spacing:6px !important;padding-left:6px !important}}}}
 </style>
 <style data-dark>
 {DARK}
@@ -85,7 +85,7 @@ E.append(dict(
   vars=['logo_url','logo_dark_url','first_name','code','email','organization_name','support_email'],
   body=h1('Enter this code to finish signing up') + p('Hi {{first_name}}, use the code below in ObliGate to confirm this is your email address.', mb=22) +
     f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="em-box" style="background:{TINT};border:1px solid {TINTLN};border-radius:4px;margin:0 0 22px"><tr><td align="center" style="padding:24px 16px 20px;text-align:center">'
-    f'<div class="em-code" style="font:700 34px/1 {MONO};letter-spacing:10px;color:{INK};padding-left:10px">{{{{code}}}}</div>'
+    f'<div class="em-code" style="font:700 34px/1 {MONO};letter-spacing:10px;color:{INK};padding-left:10px;white-space:nowrap">{{{{code}}}}</div>'
     f'<div class="em-m" style="margin-top:12px;font:600 12.5px/1 {FONT};color:{GRAY}">Expires in 10 minutes · Works once</div></td></tr></table>' +
     p('Didn’t try to create an account? You can ignore this email. No account is created until the code is entered, and ObliGate staff will never ask you for this code.', m=True, mb=0),
   text="""Enter this code to finish signing up
