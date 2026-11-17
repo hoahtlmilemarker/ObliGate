@@ -708,14 +708,14 @@ function cxResult(){var k=document.querySelector('section.kpis');if(!k)return;va
  var d=new Date(),p=function(n){return (n<10?'0':'')+n;},tm=p(d.getHours())+':'+p(d.getMinutes());
  var ar='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
  var s=document.createElement('section');s.className='cx-run';s.setAttribute('aria-label','Cross-check results');
- s.innerHTML='<div class="cx-h"><div><span class="cx-eb">Cross-check results · Pay Period 02 · run at '+tm+'</span><h2 class="cx-t">2 findings need resolution</h2><p class="cx-p">10 of 12 crew members match between the eCAPS payroll claim and the field logs. Resolve the two findings below, then continue to Pre-Submission.</p></div>'+
-  '<a class="btn btn-o btn-sm cx-next" href="pre-submission">Continue to Pre-Submission'+ar+'</a></div>'+
+ s.innerHTML='<div class="cx-h"><div><span class="cx-eb">Cross-check results · Pay Period 02 · run at '+tm+'</span><h2 class="cx-t">2 employees have differences</h2><p class="cx-p">9 of 12 crew match between timesheets and activity logs. 1 entry is held for review. Check the rows below.</p></div>'+
+  '<a class="btn btn-o btn-sm cx-next cx-pil" href="pre-submission">Continue to Pre-Submission'+ar+'</a></div>'+
   '<ol class="cx-list">'+
-  '<li><span class="cx-n">1</span><div class="cx-w"><b>Aguayo, Hector</b><span class="tag t-risk cx-tag">OT Mismatch</span><small>Claimed 48h · Documented 44h · +4.0 OT hrs</small></div><button class="btn btn-p btn-sm cx-go" type="button" data-cx="resolve">Resolve'+ar+'</button></li>'+
-  '<li><span class="cx-n">2</span><div class="cx-w"><b>Delgado, Marco</b><span class="tag t-warn cx-tag">Missing Log</span><small>Claimed 40h · Documented 0h · eligible for supervisor attestation</small></div><a class="btn btn-o btn-sm" href="supervisor-signature">Request Attestation'+ar+'</a></li>'+
+  '<li><span class="cx-n">1</span><div class="cx-w"><b>Aguayo, Hector</b><span class="tag t-risk cx-tag">OT Mismatch</span><small>Timesheet 48h · Activity log 44h · +4.0 OT hrs</small></div><button class="btn btn-p btn-sm cx-go" type="button" data-cx="diff">View rows'+ar+'</button></li>'+
+  '<li><span class="cx-n">2</span><div class="cx-w"><b>Delgado, Marco</b><span class="tag t-warn cx-tag">Missing Log</span><small>Timesheet 40h · Activity log missing for 5 days</small></div><button class="btn btn-o btn-sm" type="button" data-cx="miss">View rows'+ar+'</button></li>'+
   '</ol>';
  k.insertAdjacentElement('afterend',s);s.scrollIntoView({behavior:'smooth',block:'start'});
- s.querySelector('[data-cx=resolve]').addEventListener('click',function(){var r=document.querySelector('[aria-label="Resolution options"]');if(r){r.scrollIntoView({behavior:'smooth',block:'center'});r.classList.add('cx-flash');setTimeout(function(){r.classList.remove('cx-flash');},1600);}});}
+ s.addEventListener('click',function(e){var cb=e.target.closest('[data-cx]');if(cb&&window.ogCxAll){ogCxAll(cb.getAttribute('data-cx'));return;}var r=document.querySelector('[aria-label="Resolution options"]');if(r){r.scrollIntoView({behavior:'smooth',block:'center'});r.classList.add('cx-flash');setTimeout(function(){r.classList.remove('cx-flash');},1600);}});}
 function cxResolved(b,label,note,cut){var sec=b.closest('section');var ar='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
  if(sec){sec.classList.add('cx-solved');sec.innerHTML='<div class="cx-sv"><span class="cx-sv-ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><div><strong>'+label+' · Aguayo, Hector</strong><span>'+note+'. Recorded in the audit trail.</span></div></div>'+
   '<div class="cx-sv-next"><span>Next finding: <b>Delgado, Marco</b> · Missing Log</span><a class="btn btn-w" href="supervisor-signature">Request Attestation'+ar+'</a></div>';}
@@ -756,7 +756,7 @@ var A=[
   onOk:function(){var s=document.querySelector('.rv-st');if(s){s.className='tag rv-st t-risk';s.textContent='Rejected';}toast('<b>Document rejected</b> · reason saved to audit history');setTimeout(function(){var n=document.querySelector('.rv-next');if(n&&!n.disabled)n.click();},900);}});}],
  /* 05 */
  [/^(Prev Period|Next Period)/,function(b){toast('<b>'+txt(b)+'</b> · only Pay Period 02 is included in this prototype',false);}],
- [/^(Run Cross-Check Engine|Run Again)/,function(b){if(window.ogCxRun)ogCxRun(false);busy(b,'Running…',1600,function(){if(window.ogCxRun)ogCxRun(true);cxResult();toast('<b>Cross-check complete</b> · 2 findings need resolution');});}],
+ [/^(Run Cross-Check Engine|Run Reconciliation|Run Again)/,function(b){if(window.ogCxRun)ogCxRun(false);busy(b,'Running…',1600,function(){if(window.ogCxRun)ogCxRun(true);cxResult();toast('<b>Reconciliation complete</b> · 2 employees have differences · 1 entry held for review');});}],
  [/^Accept Documented/,function(b){dlg({eyebrow:'Resolve Finding',title:'Accept documented hours?',ok:'Accept Documented',body:'<p>Aguayo, Hector\'s Jan 12 overtime is set to <b>4.0 hours</b> to match the field log (payroll shows 8.0). This is recorded in the audit trail.</p>',
   onOk:function(){cxResolved(b,'Resolved','OT set to documented 4.0 hrs',1);toast('<b>Finding resolved</b> · OT set to documented 4.0 hrs · 1 finding left');}});}],
  [/^Dismiss Finding/,function(b){dlg({eyebrow:'Dismiss Finding',title:'Dismiss with an audit note',ok:'Dismiss Finding',body:'<p>Dismissing keeps the claimed hours. An auditor will see your note.</p><label>Audit note (required)<textarea data-req placeholder="Explain why the claimed hours are correct"></textarea></label>',
@@ -3335,7 +3335,7 @@ addEventListener('keydown',function(e){if(e.key==='Tab'||e.key==='F6')d.classLis
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.cx-s');if(!b){if(pop&&!e.target.closest('.cx-sp'))close();return;}
  e.preventDefault();if(own===b){close();return;}close();var a=(b.getAttribute('data-src')||'').split('|'),log=a[2]==='log';
  pop=document.createElement('div');pop.className='cx-sp';pop.setAttribute('role','dialog');pop.setAttribute('aria-label','Source of this number');
- pop.innerHTML='<small>'+(log?'Source B · Activity log':'Source A · Payroll export')+'</small><b>'+a[0]+'</b><span>'+a[1]+' · value '+b.textContent.trim()+'</span><a href="'+(log?'document-review':'document-library')+'">Open source document<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>';
+ pop.innerHTML='<small>'+(log?'Source B · Activity log':'Source A · Timesheet')+'</small><b>'+a[0]+'</b><span>'+a[1]+' · value '+b.textContent.trim()+'</span><a href="document-review">Open source document<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>';
  (b.closest('.og')||document.body).appendChild(pop);own=b;var r=b.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;
  var x=Math.max(12,Math.min(r.left,innerWidth-w-12)),y=r.bottom+6;if(y+h>innerHeight-12)y=Math.max(12,r.top-h-6);pop.style.left=x+'px';pop.style.top=y+'px';});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});addEventListener('scroll',close,true);
@@ -3359,6 +3359,104 @@ window.ogCxRun=function(done){var r=document.querySelector('.cx-rs');if(!r)retur
  w.addEventListener('click',function(e){var b=e.target.closest('button[data-v]');if(!b)return;on=b.getAttribute('data-v')==='1';apply(true);});
  apply(false);}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
+</script>
+<style>
+.og .t-blue{background:var(--blue-t);color:var(--blue)}
+.og .cx-pay{display:inline-block;margin-top:4px;font-size:12px;color:var(--gray)}
+.og .cx-vw{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.og .cx-all{display:flex;flex-direction:column;gap:12px}
+.og .cx-fl{display:flex;flex-wrap:wrap;gap:6px}
+.og .cx-fl button{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:var(--card);font:600 12.5px/1 Manrope,Arial,sans-serif;color:var(--ink);cursor:pointer}
+.og .cx-fl button em{font-style:normal;font-variant-numeric:tabular-nums;color:var(--gray);font-weight:700}
+.og .cx-fl button[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-t);color:var(--blue)}
+.og .cx-fl button[aria-pressed="true"] em{color:var(--blue)}
+.og .cx-all[hidden],.og .cx-days .cx-tw[hidden]{display:none!important}.og .cx-at th.r{text-align:right}.og .cx-at td.num{text-align:right;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:13px}
+.og .cx-at td.num{white-space:nowrap}
+.og .cx-at tr.is-diff td{background:var(--risk-t,rgba(180,71,58,.06))}
+.og .cx-at .cx-ms{font-family:Manrope,Arial,sans-serif;font-size:12px;font-weight:700;color:var(--warn)}
+.og .cx-at .cx-hd{font-family:Manrope,Arial,sans-serif;font-size:12px;font-weight:700;color:var(--blue)}
+.og .cx-at .cx-emp{font-weight:600;color:var(--head);white-space:nowrap}
+.og .cx-at .cx-src{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.og .cx-af{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:var(--gray)}
+.og .cx-af .xq-pg{display:inline-flex;gap:6px}
+.og .cx-af .xq-pg button{display:grid;place-items:center;width:30px;height:30px;padding:0;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--head);cursor:pointer}
+.og .cx-af .xq-pg button:disabled{opacity:.4;cursor:default}
+.og .cx-pv2{display:flex;justify-content:flex-end}
+.og .cx-stc{display:none;padding:40px 24px;text-align:center;flex-direction:column;align-items:center;gap:10px}
+.og .cx-stc h2{margin:0;font-size:20px;font-weight:600;color:var(--head)}
+.og .cx-stc p{margin:0;max-width:520px;font-size:14px;line-height:1.6;color:var(--gray)}
+.og .cx-stc .acts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:8px}
+.og .cx-stc .cx-ic{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:var(--blue-t);color:var(--blue)}
+.og .cx-stc.fail .cx-ic{background:var(--risk-t,rgba(180,71,58,.1));color:var(--risk)}
+.og .cx-stc .cx-pr{width:min(360px,100%);height:4px;border-radius:4px;background:var(--line-soft,var(--line));overflow:hidden}
+.og .cx-stc .cx-pr i{display:block;height:100%;width:40%;background:var(--blue);animation:cxpr 1.4s ease-in-out infinite}
+@keyframes cxpr{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+.og.cx-st-x .kpis,.og.cx-st-x main.content > :not(.cx-stc):not(.cx-pv2),.og.cx-st-x .cx-ttl .tag,.og.cx-st-x .sb-rail .wk,.og.cx-st-x .sb-rail .wk-more,.og.cx-st-x .cx-run{display:none!important}
+.og.cx-st-x main.content > .cx-stc{display:flex}
+.og .cx-sbn{display:none;font-size:13px;color:var(--gray);padding:8px 2px}
+.og.cx-st-x .cx-sbn{display:block}
+.og .cx-rs.is-none .cx-rs-d{background:#9AA6B2;box-shadow:0 0 0 3px rgba(154,166,178,.25)}
+.og .cx-rs.is-fail .cx-rs-d{background:#E0796C;box-shadow:0 0 0 3px rgba(224,121,108,.25)}
+</style><script>
+(function(){
+var EMP=['Aguayo, Hector','Delgado, Marco','Nguyen, Tam','Chen, Lawrence','Santos, Maria','Ruiz, Daniel','Ramirez, Luis','Okafor, Grace','Patel, Anil','Lopez, Sofia','Brooks, Jamal','Kim, Soo-ah'];
+var DAYS=['Mon Jan 09','Tue Jan 10','Wed Jan 11','Thu Jan 12','Fri Jan 13'];
+var ROWS=[];EMP.forEach(function(e){DAYS.forEach(function(d,di){var r={e:e,d:d,di:di,tr:8,to:0,lr:8,lo:0,st:'ok'};
+ if(e==='Aguayo, Hector'&&di===3){r.to=8;r.lo=4;r.st='diff';}
+ if(e==='Delgado, Marco'){r.lr=null;r.lo=null;r.st='miss';}
+ if(e==='Nguyen, Tam'&&di===2){r.lr=null;r.lo=null;r.st='hold';}
+ ROWS.push(r);});});
+var F=[['all','All'],['diff','Differences'],['miss','Missing support'],['hold','Held for review']];
+var st={f:'all',page:1,per:15},view='emp';
+function f1(v){return v.toFixed(1);}
+function last(e){return e.split(',')[0];}
+function ts(r,k,v){return '<button type="button" class="cx-s" data-src="Timesheet_'+last(r.e)+'_PayPeriod_02.pdf|Page 1 · '+r.d+' · '+k+'|ts">'+f1(v)+'</button>';}
+function lg(r,k,v){return '<button type="button" class="cx-s" data-src="Daily Activity Log Doc #428-PP02|Page '+(r.di+3)+' · '+r.d+' · '+k+'|log">'+f1(v)+'</button>';}
+var TAG={ok:'<span class="tag t-good">Matched</span>',diff:'<span class="tag t-risk">Difference</span>',miss:'<span class="tag t-warn">Missing support</span>',hold:'<span class="tag t-blue">Held for review</span>'};
+var ARR='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+function diffTxt(r){if(r.st!=='diff')return '<span style="color:var(--gray)">—</span>';var dr=r.tr-r.lr,dot=r.to-r.lo,p=[];if(dr)p.push((dr>0?'+':'−')+f1(Math.abs(dr))+' Reg');if(dot)p.push((dot>0?'+':'−')+f1(Math.abs(dot))+' OT');return '<b style="color:var(--risk)">'+p.join(' · ')+'</b>';}
+function logCell(r,k,v){if(r.st==='miss')return '<span class="cx-ms">Missing</span>';if(r.st==='hold')return '<span class="cx-hd">Held</span>';return lg(r,k,v);}
+function draw(box){var list=ROWS.filter(function(r){return st.f==='all'||r.st===st.f;}),n=list.length,pages=Math.max(1,Math.ceil(n/st.per));if(st.page>pages)st.page=pages;var vis=list.slice((st.page-1)*st.per,st.page*st.per);
+ box.querySelector('.cx-fl').innerHTML=F.map(function(f){var c=f[0]==='all'?ROWS.length:ROWS.filter(function(r){return r.st===f[0];}).length;return '<button type="button" data-f="'+f[0]+'" aria-pressed="'+(st.f===f[0])+'">'+f[1]+'<em>'+c+'</em></button>';}).join('');
+ box.querySelector('tbody').innerHTML=vis.map(function(r){return '<tr class="'+(r.st==='diff'?'is-diff':'')+'"><td class="cx-emp">'+r.e+'</td><td style="white-space:nowrap">'+r.d+'</td><td class="num">'+ts(r,'Regular',r.tr)+'</td><td class="num">'+ts(r,'Overtime',r.to)+'</td><td class="num">'+logCell(r,'Regular',r.lr)+'</td><td class="num">'+(r.st==='miss'||r.st==='hold'?'':lg(r,'Overtime',r.lo))+'</td><td class="num">'+diffTxt(r)+'</td><td>'+TAG[r.st]+'</td><td><a class="cx-src" href="document-review">Open'+ARR+'</a></td></tr>';}).join('')||'<tr><td colspan="9" style="padding:24px;text-align:center;color:var(--gray)">No employee-days in this filter.</td></tr>';
+ box.querySelector('.cx-af span').innerHTML='Showing <b>'+(n?((st.page-1)*st.per+1)+'–'+Math.min(n,st.page*st.per):0)+'</b> of <b>'+n+'</b> employee-days';
+ var pb=box.querySelectorAll('.xq-pg button');pb[0].disabled=st.page<=1;pb[1].disabled=st.page>=pages;}
+function init(){var sec=document.querySelector('.cx-days');if(!sec||sec.dataset.slice)return;sec.dataset.slice='1';var og=sec.closest('.og'),main=sec.closest('main');
+ var dh=sec.querySelector('.cx-dh'),strong=dh.querySelector('strong'),old=sec.querySelector('.cx-tw'),dn=dh.querySelector('.cx-dn');
+ var sw=document.createElement('div');sw.className='cx-vw';sw.innerHTML='<span class="xq-seg" role="group" aria-label="Rows to show"><button type="button" data-v="emp">This employee</button><button type="button" data-v="all">All employee-days</button></span>';
+ dh.appendChild(sw);
+ var box=document.createElement('div');box.className='cx-all';box.hidden=true;
+ box.innerHTML='<div class="cx-fl" role="group" aria-label="Filter rows"></div><div class="cx-tw"><table class="cx-dt cx-at"><thead><tr><th rowspan="2">Employee</th><th rowspan="2">Day</th><th colspan="2">Source A · Timesheet</th><th colspan="2">Source B · Activity log</th><th rowspan="2" class="r">Difference</th><th rowspan="2">Status</th><th rowspan="2">Source</th></tr><tr><th class="r">Reg</th><th class="r">OT</th><th class="r">Reg</th><th class="r">OT</th></tr></thead><tbody></tbody></table></div><div class="cx-af"><span></span><span class="xq-pg"><button type="button" data-pg="-1" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-pg="1" aria-label="Next page"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></div>';
+ old.parentNode.insertBefore(box,old.nextSibling);
+ var t0=strong.textContent;
+ function setView(v){view=v;var all=v==='all';box.hidden=!all;old.hidden=all;strong.textContent=all?'All crew · Pay Period 02':t0;if(dn)dn.textContent=all?'12 crew × 5 days · click any hours to see its source':'Click any hours to see where the number comes from';
+  [].forEach.call(sw.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-v')===v));});if(all)draw(box);}
+ sw.addEventListener('click',function(e){var b=e.target.closest('button[data-v]');if(b)setView(b.getAttribute('data-v'));});
+ box.addEventListener('click',function(e){var b=e.target.closest('button[data-f]');if(b){st.f=b.getAttribute('data-f');st.page=1;draw(box);return;}var g=e.target.closest('button[data-pg]');if(g&&!g.disabled){st.page+=+g.getAttribute('data-pg');draw(box);}});
+ window.ogCxAll=function(f){st.f=f||'all';st.page=1;setView('all');sec.scrollIntoView({behavior:'smooth',block:'start'});};
+ setView('emp');
+ /* run states (prototype preview) */
+ var rs=document.querySelector('.cx-rs'),rsS=rs&&rs.querySelector('.cx-rs-s'),rsT=rs&&rs.querySelector('.cx-rs-t'),T0=rsT?rsT.textContent:'';
+ var pv=document.createElement('div');pv.className='cx-pv2';pv.innerHTML='<span class="xq-dm" title="Prototype only, not part of the product: preview each state of the reconciliation run">'+'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/></svg>Prototype · Run state<span class="xq-seg" role="group" aria-label="Run state"><button type="button" data-s="done">Completed</button><button type="button" data-s="none">Not run</button><button type="button" data-s="run">Running</button><button type="button" data-s="fail">Failed</button></span></span>';
+ var card=document.createElement('section');card.className='panel cx-stc';card.setAttribute('aria-live','polite');
+ main.insertBefore(card,main.firstChild);main.insertBefore(pv,main.firstChild);
+ var sb=document.querySelector('.sb-rail');if(sb){var sn=document.createElement('div');sn.className='cx-sbn';sn.textContent='Crew results appear after the first completed run.';var lb=sb.querySelector('.lbl');if(lb)lb.insertAdjacentElement('afterend',sn);}
+ var IC={none:'<path d="M4 7h16M4 12h10M4 17h7"/>',run:'<path d="M12 3a9 9 0 1 0 9 9"/>',fail:'<path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/>'};
+ var C={none:['No reconciliation yet','Upload timesheets and activity logs for PW-00428, then run reconciliation to compare hours for every employee-day.','<button class="btn btn-p" type="button">Run Reconciliation</button><a class="btn btn-o" href="document-library">Go to Documents</a>'],
+  run:['Reconciling 60 employee-days…','12 crew · timesheets vs activity logs. Results replace this message when the run finishes.','<div class="cx-pr"><i></i></div>'],
+  fail:['Reconciliation failed','2 activity-log pages for Jan 12 could not be read, so the run stopped before any rows were compared. Review those pages, then run again.','<a class="btn btn-p" href="document-review">Review pages</a><button class="btn btn-o" type="button">Run Again</button>']};
+ function setState(k){var x=k!=='done';og.classList.toggle('cx-st-x',x);[].forEach.call(pv.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-s')===k));});
+  if(x){var c=C[k];card.className='panel cx-stc '+k;card.innerHTML='<span class="cx-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+IC[k]+'</svg></span><h2>'+c[0]+'</h2><p>'+c[1]+'</p><div class="acts">'+c[2]+'</div>';}
+  if(rs){rs.classList.toggle('is-run',k==='run');rs.classList.toggle('is-none',k==='none');rs.classList.toggle('is-fail',k==='fail');
+   if(k==='none'){rsS.textContent='Not run';rsT.textContent='No run yet for Pay Period 02';}
+   else if(k==='run'){rsS.textContent='Running';rsT.textContent='Checking 60 employee-days for 12 crew…';}
+   else if(k==='fail'){rsS.textContent='Failed';rsT.textContent='Run at 14:02 by Rosa Keith stopped · 2 pages unreadable';}
+   else if(rsS.textContent!=='Completed'){rsS.textContent='Completed';rsT.textContent=T0;}}}
+ pv.addEventListener('click',function(e){var b=e.target.closest('button[data-s]');if(b)setState(b.getAttribute('data-s'));});
+ if(window.ogCxRun){var orig=window.ogCxRun;window.ogCxRun=function(d){if(d){og.classList.remove('cx-st-x');[].forEach.call(pv.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-s')==='done'));});rs.classList.remove('is-none','is-fail');}orig(d);};}
+ setState('done');}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
 </script>
 <style>
 /* ===== 2-tier navigation: global header nav + project stepper ===== */
