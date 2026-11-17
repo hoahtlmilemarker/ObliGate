@@ -2,7 +2,7 @@ Subject: Welcome to ObliGate
 
 Your account is ready
 
-Hi {{first_name}}, you can now work in {{organization_name}} as {{role}}. Here is how a project goes:
+Hi {{first_name}}, you can now work in {{organization_name}} as {{role}}. A project takes four steps:
 
 1. Upload documents. Add timesheets and activity logs. Clean exports and scans both work.
 2. Check what ObliGate read. Review extracted hours against the originals. Unclear entries wait for you.
@@ -11,6 +11,6 @@ Hi {{first_name}}, you can now work in {{organization_name}} as {{role}}. Here i
 
 Open ObliGate: {{app_url}}
 
-Keep your account safe: turn on two-factor authentication in Settings > Security.
+Keep your account safe. Turn on two-factor authentication in Settings > Security.
 
-Sent to {{email}} by ObliGate for {{organization_name}}. Questions? Contact {{support_email}}.
+Sent to {{email}} by ObliGate for {{organization_name}}. Questions? {{support_email}}

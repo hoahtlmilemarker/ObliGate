@@ -11,39 +11,45 @@
 <style>
 body{margin:0;padding:0;-webkit-text-size-adjust:100%}
 table{border-collapse:collapse}
-a{color:#005A9C}
-@media (max-width:620px){.em-wrap{width:100% !important}.em-pad{padding-left:24px !important;padding-right:24px !important}}
+a{color:#00365D}
+@media (max-width:620px){.em-wrap{width:100% !important}.em-pad{padding-left:24px !important;padding-right:24px !important}.em-card{padding-top:32px !important}.em-btnw{width:100% !important}.em-btnw a{display:block !important;text-align:center !important}.em-h1{font-size:23px !important}}
 </style>
 <style data-dark>
 @media (prefers-color-scheme: dark){
 .em-bg{background:#0B131C !important}
-.em-card{background:#13202C !important;border-color:#263443 !important}
-.em-h{color:#DCEAF7 !important}
-.em-t{color:#E6EBF0 !important}
-.em-m{color:#9AA6B2 !important}
-.em-line{border-color:#263443 !important}
-.em-box{background:#101B26 !important;border-color:#263443 !important}
-.em-code{color:#DCEAF7 !important}
+.em-card{background:#121E2A !important;border-color:#233242 !important;border-top-color:#3B7BBF !important}
+.em-lg{display:none !important}
+.em-lgd{display:block !important;max-height:none !important;overflow:visible !important}
+.em-eb{color:#D9B977 !important}
+.em-h{color:#E3EDF6 !important}
+.em-t{color:#C9D3DC !important}
+.em-m{color:#8F9BA7 !important}
+.em-line{border-color:#233242 !important}
+.em-box{background:#0F1A24 !important;border-color:#233242 !important}
+.em-code{color:#E3EDF6 !important}
+.em-chip{background:#1B2C3D !important;color:#9CC5EC !important}
+.em-num{background:#1B2C3D !important;color:#9CC5EC !important}
+.em-tip{background:#1C1912 !important;border-color:#3A3122 !important}
 .em-link{color:#86C0EE !important}
-.em-btn{background:#2667A3 !important}
+.em-btn{background:#2B6CB0 !important}
 }
 </style>
 </head>
-<body class="em-bg" style="margin:0;padding:0;background:#F3F6F8">
+<body class="em-bg" style="margin:0;padding:0;background:#EEF2F5">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">Your code is {{code}}. It expires in 10 minutes.</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="em-bg" style="background:#F3F6F8">
-<tr><td align="center" style="padding:32px 12px">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" class="em-wrap" style="width:600px;max-width:600px">
-<tr><td style="background:#00365D;border-radius:4px 4px 0 0;padding:22px 40px" class="em-pad">
-<span style="font:600 22px/1 Georgia,'Times New Roman',serif;color:#FFFFFF;letter-spacing:.2px">ObliGate</span>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="em-bg" style="background:#EEF2F5">
+<tr><td align="center" style="padding:36px 12px 40px">
+<table role="presentation" width="560" cellpadding="0" cellspacing="0" class="em-wrap" style="width:560px;max-width:560px">
+<tr><td style="padding:0 4px 20px">
+<img class="em-lg" src="{{logo_url}}" width="117" height="24" alt="ObliGate" style="display:block;border:0;outline:none;width:117px;height:24px;font:700 20px/24px Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#00365D">
+<!--[if !mso]><!--><img class="em-lgd" src="{{logo_dark_url}}" width="117" height="24" alt="ObliGate" style="display:none;max-height:0;overflow:hidden;border:0;outline:none;width:117px;height:24px;font:700 20px/24px Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#FFFFFF"><!--<![endif]-->
 </td></tr>
-<tr><td style="height:3px;background:#C9A45C;line-height:3px;font-size:0">&nbsp;</td></tr>
-<tr><td class="em-card em-pad" style="background:#FFFFFF;border:1px solid #D5D9DC;border-top:0;border-radius:0 0 4px 4px;padding:36px 40px 32px">
-<h1 class="em-h" style="margin:0 0 12px;font:700 22px/1.3 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#00365D">Verify your email</h1><p class="em-t" style="margin:0px 0 16px;font:400 15px/1.6 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#24272B">Hi {{first_name}}, enter this code in ObliGate to finish creating your account.</p><table role="presentation" cellpadding="0" cellspacing="0" class="em-box" style="background:#F3F6F8;border:1px solid #D5D9DC;border-radius:4px;margin:4px 0 20px"><tr><td class="em-code" style="padding:16px 28px;font:700 30px/1 'SFMono-Regular',Menlo,Consolas,'Courier New',monospace;letter-spacing:8px;color:#00365D">{{code}}</td></tr></table><p class="em-t" style="margin:0px 0 16px;font:400 15px/1.6 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#24272B">The code expires in <b>10 minutes</b> and works once.</p><hr class="em-line" style="border:0;border-top:1px solid #D5D9DC;margin:24px 0"><p class="em-m" style="margin:0px 0 16px;font:400 14px/1.6 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#60666C">Did not try to create an account? You can ignore this email. No account is created until the code is entered, and ObliGate staff will never ask you for this code.</p>
+<tr><td class="em-card em-pad" style="background:#FFFFFF;border:1px solid #DCE3E9;border-top:3px solid #00365D;border-radius:4px;padding:40px 44px 36px">
+<p class="em-eb" style="margin:0 0 10px;font:700 11px/1 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:#8A6A2F">Verify your email</p>
+<h1 class="em-h em-h1" style="margin:0 0 14px;font:700 26px/1.25 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;letter-spacing:-.3px;color:#0B2540">Enter this code to finish signing up</h1><p class="em-t" style="margin:0px 0 22px;font:400 15px/1.65 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#3C444C">Hi {{first_name}}, use the code below in ObliGate to confirm this is your email address.</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="em-box" style="background:#F1F6FB;border:1px solid #D5E2EE;border-radius:4px;margin:0 0 22px"><tr><td align="center" style="padding:24px 16px 20px;text-align:center"><div class="em-code" style="font:700 34px/1 'SFMono-Regular',Menlo,Consolas,'Courier New',monospace;letter-spacing:10px;color:#0B2540;padding-left:10px">{{code}}</div><div class="em-m" style="margin-top:12px;font:600 12.5px/1 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#66707A">Expires in 10 minutes · Works once</div></td></tr></table><p class="em-m" style="margin:0px 0 0px;font:400 13.5px/1.65 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#66707A">Didn’t try to create an account? You can ignore this email. No account is created until the code is entered, and ObliGate staff will never ask you for this code.</p>
 </td></tr>
-<tr><td class="em-pad" style="padding:20px 40px 0;font:400 12px/1.6 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#60666C">
-<span class="em-m">This email was sent to {{email}} by ObliGate for {{organization_name}}. It is a service message about your account, so it has no unsubscribe link.</span><br>
-<span class="em-m">Questions? Contact {{support_email}}.</span>
+<tr><td class="em-pad" align="center" style="padding:24px 32px 0;font:400 12px/1.7 Manrope,'Segoe UI',Arial,Helvetica,sans-serif;color:#66707A;text-align:center">
+<span class="em-m">Sent to {{email}} by ObliGate for {{organization_name}}.<br>This is a service message about your account, so it has no unsubscribe link.<br>Questions? <a class="em-link" href="mailto:{{support_email}}" style="color:#66707A;text-decoration:underline">{{support_email}}</a></span>
 </td></tr>
 </table>
 </td></tr>

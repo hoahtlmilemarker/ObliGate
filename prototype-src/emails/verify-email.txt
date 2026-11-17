@@ -1,13 +1,13 @@
 Subject: Your ObliGate verification code
 
-Verify your email
+Enter this code to finish signing up
 
-Hi {{first_name}}, enter this code in ObliGate to finish creating your account.
+Hi {{first_name}}, use the code below in ObliGate to confirm this is your email address.
 
 {{code}}
 
-The code expires in 10 minutes and works once.
+Expires in 10 minutes. Works once.
 
-Did not try to create an account? You can ignore this email. No account is created until the code is entered, and ObliGate staff will never ask you for this code.
+Didn't try to create an account? You can ignore this email. No account is created until the code is entered, and ObliGate staff will never ask you for this code.
 
-Sent to {{email}} by ObliGate for {{organization_name}}. Questions? Contact {{support_email}}.
+Sent to {{email}} by ObliGate for {{organization_name}}. Questions? {{support_email}}
