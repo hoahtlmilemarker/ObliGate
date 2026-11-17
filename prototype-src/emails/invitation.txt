@@ -1,0 +1,16 @@
+Subject: {{inviter_name}} invited you to {{organization_name}} on ObliGate
+
+You are invited to {{organization_name}}
+
+{{inviter_name}} ({{inviter_email}}) invited you to work in ObliGate.
+
+Workspace: {{organization_name}}
+Your role: {{role}}
+Invited by: {{inviter_name}}
+Expires: {{expires_at}}
+
+Accept invitation: {{invite_url}}
+
+The invitation works only for {{email}} and expires after 7 days. Not expecting it? Ignore this email or let {{inviter_name}} know.
+
+Sent to {{email}} by ObliGate for {{organization_name}}. Questions? Contact {{support_email}}.

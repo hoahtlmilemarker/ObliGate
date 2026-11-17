@@ -147,6 +147,11 @@
       "permanent": true
     },
     {
+      "source": "/27-emails(.html)?",
+      "destination": "/emails",
+      "permanent": true
+    },
+    {
       "source": "/my-profile",
       "destination": "/profile",
       "permanent": true

@@ -1,0 +1,16 @@
+Subject: Welcome to ObliGate
+
+Your account is ready
+
+Hi {{first_name}}, you can now work in {{organization_name}} as {{role}}. Here is how a project goes:
+
+1. Upload documents. Add timesheets and activity logs. Clean exports and scans both work.
+2. Check what ObliGate read. Review extracted hours against the originals. Unclear entries wait for you.
+3. Run reconciliation. See each employee-day with its signed difference and any missing support.
+4. Download the workbook. Get the reconciliation workbook and the ZIP of source documents.
+
+Open ObliGate: {{app_url}}
+
+Keep your account safe: turn on two-factor authentication in Settings > Security.
+
+Sent to {{email}} by ObliGate for {{organization_name}}. Questions? Contact {{support_email}}.
