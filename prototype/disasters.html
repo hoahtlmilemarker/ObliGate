@@ -720,7 +720,7 @@ function cxResult(){var k=document.querySelector('section.kpis');if(!k)return;va
  s.innerHTML='<div class="cx-h"><div><span class="cx-eb">Cross-check results · Pay Period 02 · run at '+tm+'</span><h2 class="cx-t">2 findings need resolution</h2><p class="cx-p">10 of 12 crew members match between the eCAPS payroll claim and the field logs. Resolve the two findings below, then continue to Pre-Submission.</p></div>'+
   '<a class="btn btn-o btn-sm cx-next" href="pre-submission">Continue to Pre-Submission'+ar+'</a></div>'+
   '<ol class="cx-list">'+
-  '<li><span class="cx-n">1</span><div class="cx-w"><b>Aguayo, Hector</b><span class="tag t-risk cx-tag">OT Mismatch</span><small>Claimed 48h · Documented 44h · 4.0 OT hrs ($325.20)</small></div><button class="btn btn-p btn-sm cx-go" type="button" data-cx="resolve">Resolve'+ar+'</button></li>'+
+  '<li><span class="cx-n">1</span><div class="cx-w"><b>Aguayo, Hector</b><span class="tag t-risk cx-tag">OT Mismatch</span><small>Claimed 48h · Documented 44h · +4.0 OT hrs</small></div><button class="btn btn-p btn-sm cx-go" type="button" data-cx="resolve">Resolve'+ar+'</button></li>'+
   '<li><span class="cx-n">2</span><div class="cx-w"><b>Delgado, Marco</b><span class="tag t-warn cx-tag">Missing Log</span><small>Claimed 40h · Documented 0h · eligible for supervisor attestation</small></div><a class="btn btn-o btn-sm" href="supervisor-signature">Request Attestation'+ar+'</a></li>'+
   '</ol>';
  k.insertAdjacentElement('afterend',s);s.scrollIntoView({behavior:'smooth',block:'start'});
@@ -730,7 +730,7 @@ function cxResolved(b,label,note,cut){var sec=b.closest('section');var ar='<svg 
   '<div class="cx-sv-next"><span>Next finding: <b>Delgado, Marco</b> · Missing Log</span><a class="btn btn-w" href="supervisor-signature">Request Attestation'+ar+'</a></div>';}
  var tg=[].find.call(document.querySelectorAll('.tag'),function(x){return /Discrepancy Flagged/.test(x.textContent);});if(tg){tg.className='tag t-good';tg.innerHTML='<span class="dot"></span>'+label;}
  var wk=document.querySelector('.wk.wk-on');if(wk){var wt=wk.querySelector('.tag');if(wt){wt.className='tag t-good';wt.textContent=label;}var sp=wk.querySelectorAll(':scope > span');if(sp[2])sp[2].textContent=note;}
- if(cut){[].forEach.call(document.querySelectorAll('.kpis .big'),function(x){if(x.textContent.trim()==='$2,493.20'){x.textContent='$2,168.00';var s=x.nextElementSibling;if(s)s.textContent='$2,168.00 Delgado · Aguayo resolved';}});}
+ if(cut){[].forEach.call(document.querySelectorAll('.kpis .big'),function(x){if(x.textContent.trim()==='44.0 hrs'){x.textContent='40.0 hrs';var s=x.nextElementSibling;if(s)s.textContent='40.0 missing Delgado · Aguayo resolved';}});}
  [].forEach.call(document.querySelectorAll('.gn-c-r'),function(c){if(c.textContent.trim()==='8'){c.textContent='7';c.title='7 findings to resolve';}});
  var li=document.querySelector('.cx-list li');if(li){li.classList.add('cx-done');var bt=li.querySelector('.cx-go');if(bt)bt.outerHTML='<span class="tag t-good">'+label+'</span>';var t2=document.querySelector('.cx-t');if(t2)t2.textContent='1 finding needs resolution';var p2=document.querySelector('.cx-p');if(p2)p2.textContent='10 of 12 crew members match between the eCAPS payroll claim and the field logs. Resolve the remaining finding, then continue to Pre-Submission.';}}
 var A=[
@@ -766,8 +766,8 @@ var A=[
  /* 05 */
  [/^(Prev Period|Next Period)/,function(b){toast('<b>'+txt(b)+'</b> · only Pay Period 02 is included in this prototype',false);}],
  [/^(Run Cross-Check Engine|Run Again)/,function(b){if(window.ogCxRun)ogCxRun(false);busy(b,'Running…',1600,function(){if(window.ogCxRun)ogCxRun(true);cxResult();toast('<b>Cross-check complete</b> · 2 findings need resolution');});}],
- [/^Accept Documented/,function(b){dlg({eyebrow:'Resolve Finding',title:'Accept documented hours?',ok:'Reduce Claim',body:'<p>The claim for Aguayo, Hector is reduced by <b>$325.20</b> to match the 4.0 OT hours in the field log. This is recorded in the audit trail.</p>',
-  onOk:function(){cxResolved(b,'Resolved','Claim reduced by $325.20',325.2);toast('<b>Finding resolved</b> · claim reduced by $325.20 · 1 finding left');}});}],
+ [/^Accept Documented/,function(b){dlg({eyebrow:'Resolve Finding',title:'Accept documented hours?',ok:'Accept Documented',body:'<p>Aguayo, Hector\'s Jan 12 overtime is set to <b>4.0 hours</b> to match the field log (payroll shows 8.0). This is recorded in the audit trail.</p>',
+  onOk:function(){cxResolved(b,'Resolved','OT set to documented 4.0 hrs',1);toast('<b>Finding resolved</b> · OT set to documented 4.0 hrs · 1 finding left');}});}],
  [/^Dismiss Finding/,function(b){dlg({eyebrow:'Dismiss Finding',title:'Dismiss with an audit note',ok:'Dismiss Finding',body:'<p>Dismissing keeps the claimed hours. An auditor will see your note.</p><label>Audit note (required)<textarea data-req placeholder="Explain why the claimed hours are correct"></textarea></label>',
   onOk:function(){cxResolved(b,'Dismissed','Dismissed with audit note',0);toast('<b>Finding dismissed</b> · note saved · 1 finding left');}});}],
  /* 06 */
@@ -896,7 +896,7 @@ new MutationObserver(function(m){m.forEach(function(r){[].forEach.call(r.addedNo
  var F1='PW-00428 › 1. Force-Account Labor',F2='PW-00428 › 2. Equipment Records',F3='PW-00428 › 3. Contracts & Procurement',F4='PW-00428 › 4. Materials & Supplies';
  /* Simulated AI read: decided from the file name only (prototype). Confidence tiers: >=85 filed automatically, 60-84 filed + check placement, <60 needs a folder */
  var KN={
-  'Timesheet_Aguayo_PayPeriod_02.pdf':['Force-Account Timesheet',1,{sev:'c',st:'OT Mismatch',t:'8.0 OT hours claimed on Jan 12; the field log supports 4.0 ($325.20)',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Resolve in Cross-Check',href:'cross-check'},['Jan 01 – Jan 14','2023','Aguayo, Hector','Heavy Equip Op','HA','$4,820.00']],
+  'Timesheet_Aguayo_PayPeriod_02.pdf':['Force-Account Timesheet',1,{sev:'c',st:'OT Mismatch',t:'8.0 OT hours claimed on Jan 12; the field log supports 4.0 (+4.0 hrs)',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Resolve in Cross-Check',href:'cross-check'},['Jan 01 – Jan 14','2023','Aguayo, Hector','Heavy Equip Op','HA','$4,820.00']],
   'Timesheet_Delgado_PayPeriod_02.pdf':['Force-Account Timesheet',1,{sev:'c',st:'Missing Log',t:'40.0 hours claimed with no matching daily field log',r:'PAPPG v4.0 Ch. 2 § II.B',fix:'Request Attestation',href:'supervisor-signature'},['Jan 01 – Jan 14','2023','Delgado, Marco','Laborer','DM','$1,940.00']],
   'Timesheet_Chen_PayPeriod_02.pdf':['Force-Account Timesheet',1,null,['Jan 01 – Jan 14','2023','Chen, Lawrence','Equipment Op','CL','$2,168.00']],
   'Timesheet_Santos_PayPeriod_02.pdf':['Force-Account Timesheet',1,null,['Jan 01 – Jan 14','2023','Santos, Maria','Laborer','SM','$2,168.00']],
@@ -2547,7 +2547,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .cq-dr{font-weight:600;color:var(--head);white-space:nowrap}
 .og .cq-dept{color:var(--gray)}
 .og .cq-v{font-weight:700;color:var(--head);font-variant-numeric:tabular-nums;white-space:nowrap}
-.og .cq-v.z{color:var(--gray);font-weight:500}
+.og .cq-v.z{color:var(--gray);font-weight:500}.cq-vb{display:block;margin-top:2px;font-size:11.5px;font-weight:500;color:var(--gray);font-variant-numeric:tabular-nums;white-space:nowrap}
 .og .cq-st{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;white-space:nowrap}
 .og .cq-st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
 .og .cq-st.risk{color:#A3392D}.og .cq-st.warn{color:#9A6A1E}.og .cq-st.good{color:#2E7D4F}
@@ -2719,11 +2719,11 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
  /* ---------------- 22 · Cross-Check (all projects) ---------------- */
  function crossList(root){
   var R=[ /* sample data */
-   {pw:'PW-00428',name:'Malibu Canyon',dr:'DR-4683-CA',dept:'Public Works',v:3240,open:8,res:4,rfi:1,who:'Daniel Ortiz',role:'Grants Analyst',due:dd(8),h:2,built:1},
-   {pw:'PW-00429',name:'Topanga Creek Debris',dr:'DR-4683-CA',dept:'Public Works',v:1180,open:3,res:9,rfi:0,who:'Rosa Keith',role:'Grants Manager',due:dd(2),h:26}];
+   {pw:'PW-00428',name:'Malibu Canyon',dr:'DR-4683-CA',dept:'Public Works',v:44,d:4,ms:40,open:8,res:4,rfi:1,who:'Daniel Ortiz',role:'Grants Analyst',due:dd(8),h:2,built:1},
+   {pw:'PW-00429',name:'Topanga Creek Debris',dr:'DR-4683-CA',dept:'Public Works',v:11.5,d:-3.5,ms:8,open:3,res:9,rfi:0,who:'Rosa Keith',role:'Grants Manager',due:dd(2),h:26}];
   var QS=[['all','All projects',function(){return true;}],['you','Assigned to you',function(r){return r.who===ME;}],['open','Your open items',function(r){return r.who===ME&&r.open>0;}],['ready','Ready for review',function(r){return !!r.ready;}]];
   var QF=[['week','Due this week',function(r){return r.due&&r.due>=T0&&r.due<=dd(7);}],['late','Late',function(r){return r.due&&r.due<T0&&r.open>0;}],['exc','Documented exceptions',function(r){return !!r.exc;}],['aging','Aging > 30 days',function(r){return r.h>=24*30;}]];
-  var SO=[['v','Highest variance',function(a,b){return b.v-a.v;}],['open','Most open rows',function(a,b){return b.open-a.open;}],['due','Due soonest',function(a,b){return (a.due?a.due:9e15)-(b.due?b.due:9e15);}],['act','Recent activity',function(a,b){return a.h-b.h;}]];
+  var SO=[['v','Most unmatched hours',function(a,b){return b.v-a.v;}],['open','Most open rows',function(a,b){return b.open-a.open;}],['due','Due soonest',function(a,b){return (a.due?a.due:9e15)-(b.due?b.due:9e15);}],['act','Recent activity',function(a,b){return a.h-b.h;}]];
   var COLS=[['dept','Department'],['rfi','RFIs'],['who','Assignee'],['due','Due']];
   var st={q:'all',f:{},dis:[],dept:[],s:'v',term:'',cols:{dept:1,rfi:1,who:1,due:1},page:1,per:10};
   var R0=R;if(demoEmpty('cx'))R=[];
@@ -2740,17 +2740,17 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
    q(root,'.cq-rail').innerHTML=h;}
   function drawMain(){var all=rows(),n=all.length,pages=Math.max(1,Math.ceil(n/st.per));if(st.page>pages)st.page=pages;var vis=all.slice((st.page-1)*st.per,st.page*st.per),C=st.cols;
    var V=all.reduce(function(s,r){return s+r.v;},0),O=all.reduce(function(s,r){return s+r.open;},0),RS=all.reduce(function(s,r){return s+r.res;},0),RF=all.reduce(function(s,r){return s+r.rfi;},0),PD=all.filter(function(r){return r.due&&r.due<T0&&r.open>0;}).length,pct=O+RS?Math.round(RS/(O+RS)*100):100;
-   q(root,'.cq-ledger').innerHTML='<div class="cq-k"><span class="lbl">Active variance</span><b class="'+(V?'risk':'')+'">$'+V.toLocaleString('en-US')+'</b><small>across '+n+' visible project'+(n===1?'':'s')+'</small></div>'+
+   q(root,'.cq-ledger').innerHTML='<div class="cq-k"><span class="lbl">Unmatched hours</span><b class="'+(V?'risk':'')+'">'+V.toFixed(1)+' h</b><small>across '+n+' visible project'+(n===1?'':'s')+'</small></div>'+
     '<div class="cq-k"><span class="lbl">Open flagged rows</span><b>'+O+'</b>'+(O+RS?'<span class="cq-mt"><i><u style="width:'+pct+'%"></u></i><span>'+pct+'% resolved</span></span>':'<small>No flagged rows yet</small>')+'</div>'+
     '<div class="cq-k"><span class="lbl">Open RFIs</span><b>'+RF+'</b><small>awaiting a reply across visible projects</small></div>'+
     '<div class="cq-k"><span class="lbl">Past due</span><b class="'+(PD?'risk':'')+'">'+PD+'</b><span class="cq-chip'+(PD?'':' ok')+'">'+(PD?PD+' project'+(PD===1?' needs':'s need')+' attention':'Nothing past due')+'</span></div>';
    q(root,'.cq-meta').innerHTML='Showing <b>'+n+'</b> of '+R.length+' projects';
    var th=function(t,c){return '<th'+(c?' class="'+c+'"':'')+'>'+t+'</th>';};
-   q(root,'.cq-card').innerHTML='<div class="cq-tw"><table class="cq-t"><thead'+(R.length?'':' hidden')+'><tr>'+th('Project')+th('Disaster')+(C.dept?th('Department'):'')+th('Variance','r')+th('Flagged rows')+(C.rfi?th('RFIs','r'):'')+(C.who?th('Assignee'):'')+(C.due?th('Due'):'')+th('Action')+'</tr></thead><tbody>'+
+   q(root,'.cq-card').innerHTML='<div class="cq-tw"><table class="cq-t"><thead'+(R.length?'':' hidden')+'><tr>'+th('Project')+th('Disaster')+(C.dept?th('Department'):'')+th('Unmatched','r')+th('Flagged rows')+(C.rfi?th('RFIs','r'):'')+(C.who?th('Assignee'):'')+(C.due?th('Due'):'')+th('Action')+'</tr></thead><tbody>'+
     (vis.length?vis.map(function(r){var late=r.due&&r.due<T0&&r.open>0,soon=r.due&&!late&&r.due<=dd(7),p=r.open+r.res?Math.round(r.res/(r.open+r.res)*100):100,tone=r.open===0?'good':r.open>=5?'risk':'warn',days=r.due?Math.round((r.due-T0)/DAY):null;
       return '<tr><td><button type="button" class="cq-pw" data-open="'+r.pw+'">'+r.pw+'</button><span class="cq-nm">'+esc(r.name)+'</span><span class="cq-up">Updated '+ago(r.h).toLowerCase()+(r.ready?' · ready for review':'')+(r.exc?' · documented exception':'')+'</span></td>'+
        '<td><span class="cq-dr">'+r.dr+'</span></td>'+(C.dept?'<td class="cq-dept">'+esc(r.dept)+'</td>':'')+
-       '<td class="r"><span class="cq-v'+(r.v?'':' z')+'">$'+r.v.toLocaleString('en-US')+'</span></td>'+
+       '<td class="r"><span class="cq-v'+(r.v?'':' z')+'">'+r.v.toFixed(1)+' h</span>'+(r.v?'<small class="cq-vb">'+(r.d?(r.d>0?'+':'−')+Math.abs(r.d).toFixed(1)+' difference':'')+(r.d&&r.ms?'<br>':'')+(r.ms?r.ms.toFixed(1)+' missing':'')+'</small>':'')+'</td>'+
        '<td><span class="cq-st '+tone+'">'+(r.open?r.open+' open · '+r.res+' resolved':'All '+r.res+' resolved')+'</span><div class="cq-mtr"><u style="width:'+p+'%;background-color:'+(tone==='good'?'#2E7D4F':tone==='risk'?'#B4473A':'#B08A4E')+'"></u></div></td>'+
        (C.rfi?'<td class="r">'+(r.rfi?'<b style="color:var(--head)">'+r.rfi+'</b>':'<span style="color:var(--gray)">—</span>')+'</td>':'')+
        (C.who?'<td>'+(r.who?'<span class="cq-as"><span class="cq-av">'+(PPL[r.who]||['?'])[0]+'</span><span>'+esc(r.who)+(r.who===ME?' <span style="color:var(--gray)">(you)</span>':'')+'<small>'+esc(r.role||'')+'</small></span></span>':'<span class="cq-un">Unassigned</span>')+'</td>':'')+
@@ -2761,7 +2761,7 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
   function render(){drawRail();drawMain();}
   root.innerHTML='<section class="cq-ledger" aria-label="Cross-check totals"></section><div class="cq-body"><aside class="cq-rail" aria-label="Queues and filters"></aside><div class="cq-main"><div class="cq-tools"><label class="cq-srch">'+S('<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>')+'<input type="search" placeholder="Filter projects by name or PW…" aria-label="Filter projects"></label><span class="cq-meta"></span><span class="xq-acts">'+seg('cx',demoEmpty('cx'))+'<button type="button" class="xq-btn" data-cols aria-haspopup="true" aria-expanded="false">'+S('<rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M9.5 4.5v15M14.5 4.5v15"/>')+'Columns</button><button type="button" class="xq-btn" data-sort aria-haspopup="true" aria-expanded="false"></button><button type="button" class="xq-btn" data-export>'+S(I.dl)+'Export CSV</button></span></div><div class="cq-card"></div></div></div>';
   function openRow(pw){var r=R.filter(function(x){return x.pw===pw;})[0];if(!r)return;location.href='cross-check'+(r.pw==='PW-00428'?'':'#'+r.pw);}
-  function csv(list){var hd=['Project','Name','Disaster','Department','Variance','Open flagged','Resolved','RFIs','Assignee','Due'];return [hd].concat(list.map(function(r){return [r.pw,r.name,r.dr,r.dept,r.v,r.open,r.res,r.rfi,r.who||'Unassigned',r.due?r.due.toISOString().slice(0,10):''];})).map(function(a){return a.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');}
+  function csv(list){var hd=['Project','Name','Disaster','Department','Unmatched hours','Open flagged','Resolved','RFIs','Assignee','Due'];return [hd].concat(list.map(function(r){return [r.pw,r.name,r.dr,r.dept,r.v,r.open,r.res,r.rfi,r.who||'Unassigned',r.due?r.due.toISOString().slice(0,10):''];})).map(function(a){return a.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');}
   var inp=q(root,'.cq-srch input');inp.addEventListener('input',function(){st.term=inp.value;st.page=1;render();});
   root.addEventListener('change',function(e){var t=e.target;if(t.hasAttribute('data-f')){st.f[t.getAttribute('data-f')]=t.checked;}else if(t.hasAttribute('data-dis')){var d=t.getAttribute('data-dis');st.dis=t.checked?st.dis.concat(d):st.dis.filter(function(x){return x!==d;});}else if(t.hasAttribute('data-dept')){var d2=t.getAttribute('data-dept');st.dept=t.checked?st.dept.concat(d2):st.dept.filter(function(x){return x!==d2;});}else return;st.page=1;var sel=t.getAttribute('data-f')?'[data-f="'+t.getAttribute('data-f')+'"]':t.getAttribute('data-dis')?'[data-dis="'+t.getAttribute('data-dis')+'"]':'[data-dept="'+t.getAttribute('data-dept')+'"]';render();var nb=q(root,sel);if(nb)nb.focus();});
   root.addEventListener('click',function(e){var t=e.target.closest('button,a');if(!t)return;
