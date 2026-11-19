@@ -4539,11 +4539,13 @@ html body .og .cx-acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   var d=b.nextElementSibling&&b.nextElementSibling.classList.contains('ex-dlb')?b.nextElementSibling:null;
   if(L){if(!d){d=document.createElement('button');d.type='button';d.className=b.className.replace(/\b(btn-p|ex-btn|blk)\b/g,'').replace(/\bbtn-o\b/,'')+' btn-o ex-dlb';b.after(d);}
    d.innerHTML=(L.st==='current'?'':'<span class="ex-dot" aria-hidden="true"></span>')+S(I.dl)+'Download '+L.rv;d.classList.toggle('stale',L.st!=='current');d.title=L.st==='current'?'Workbook '+L.rv+' · matches the current reconciliation':'Workbook '+L.rv+' is out of date: '+(L.why==='docs'?'documents changed after it was made.':'a newer reconciliation exists.');}
-  else if(d)d.remove();
+  else if(d){d.remove();d=null;}
   var anchor=d||b;var h=anchor.nextElementSibling&&anchor.nextElementSibling.classList.contains('ex-hist')?anchor.nextElementSibling:null;
   if(o.h.length>1){if(!h){h=document.createElement('button');h.type='button';h.className=b.className.replace(/\b(btn-p|ex-btn|blk)\b/g,'').replace(/\bbtn-o\b/,'')+' btn-o ex-hist';h.setAttribute('aria-haspopup','dialog');anchor.after(h);}
    h.innerHTML=S(I.hist)+'<span>'+o.h.length+'</span>';h.setAttribute('aria-label','All workbook revisions ('+o.h.length+')');h.title='All workbook revisions';}
-  else if(h)h.remove();}
+  else if(h)h.remove();
+  /* stray revision buttons from an earlier paint */
+  var p=b.parentNode;if(p)[].forEach.call(p.querySelectorAll(':scope > .ex-hist, :scope > .ex-dlb'),function(x){if(x!==d&&x!==h)x.remove();});}
  function paintAll(){buttons().forEach(paint);var pv=document.querySelector('.og .ex-pv');if(pv)pv.outerHTML=seg();}
  function seg(){var o=get(),s=o.s==='building'?'idle':o.s;if(s==='idle'&&!o.h.length)s='none';return '<span class="xq-dm ex-pv" title="Prototype only, not part of the product: preview the export button in each state">'+S(I.fl,12)+'Prototype · Export<span class="xq-seg" role="group" aria-label="Export state">'+PV.map(function(p){return '<button type="button" data-exs="'+p[0]+'" aria-pressed="'+(s===p[0])+'">'+p[1]+'</button>';}).join('')+'</span></span>';}
  var pop=null,popB=null;
