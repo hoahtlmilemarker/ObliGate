@@ -4580,6 +4580,11 @@ html body .og .cx-acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 })();</script>
 <style>/* Project Detail on wide screens: the banner text lines up with the KPI cards and the content below (both 1440 wide inside the 28px gutter) */
 html body .og.gn .col:has(> .kpis) > .band > .band-in{max-width:1496px}</style>
+<script>/* Settings tabs under 1100px: scroll the active tab into view (same rule as the project steps bar) */
+(function(){function f(){document.querySelectorAll('.og .sx-nav').forEach(function(n){var a=n.querySelector('a[aria-current="page"]');if(!a||n.scrollWidth<=n.clientWidth)return;var x=a.getBoundingClientRect().left-n.getBoundingClientRect().left+n.scrollLeft-40;n.scrollLeft=Math.max(0,x);});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(f,0);});else setTimeout(f,0);
+window.addEventListener('load',f);
+new MutationObserver(function(){var n=document.querySelector('.og .sx-nav:not([data-sc])');if(n){n.setAttribute('data-sc','');f();}}).observe(document.documentElement,{childList:true,subtree:true});})();</script>
 
 <div class="og" data-theme="light" style="min-height: 1100px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
