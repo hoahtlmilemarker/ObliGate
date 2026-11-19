@@ -2862,7 +2862,7 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
    if(t.matches('[data-reset]')){e.preventDefault();st.q='all';st.dis=[];st.dept=[];st.term='';inp.value='';st.page=1;render();return;}
    if(t.matches('[data-np]')){if(window.ogAddProject)window.ogAddProject();return;}
    if(t.matches('[data-pmore]')){var pw=t.getAttribute('data-pmore'),pr=R.filter(function(x){return x.pw===pw;})[0];if(!pr)return;
-    var mh='<small class="h">'+pw+'</small>'+(pr.arch?'<button type="button" class="mi" data-pa="restore"><span class="mi-t">Restore project</span></button>':'<button type="button" class="mi" data-pa="archive"><span class="mi-t">Archive project<em>Keeps everything, read-only</em></span></button>')+(pr.docs?'<button type="button" class="mi mi-off" disabled aria-disabled="true"><span class="mi-t">Delete project<em>Has '+pr.docs+' documents. Archive it instead.</em></span></button>':'<button type="button" class="mi mi-risk" data-pa="delete"><span class="mi-t">Delete project<em>No documents yet</em></span></button>');
+    var mh='<small class="h">'+pw+'</small>'+(pr.arch?'<button type="button" class="mi" data-pa="restore"><span class="mi-t">Restore project</span></button>':'<button type="button" class="mi" data-pa="archive"><span class="mi-t">Archive project<em>Keeps everything, read-only</em></span></button>')+(pr.docs?'<div class="mi-note" role="note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>Can’t be deleted: it has '+pr.docs+' documents. Archive keeps them safe.</span></div>':'<button type="button" class="mi mi-risk" data-pa="delete"><span class="mi-t">Delete project<em>No documents yet</em></span></button>');
     var pp=openPop(t,mh,'r');pp.setAttribute('role','menu');pp.addEventListener('click',function(ev){var b=ev.target.closest('[data-pa]');if(!b)return;closePop();pjAct(b.getAttribute('data-pa'),pr);});return;}
    if(t.matches('[data-open]')){openRow(t.getAttribute('data-open'));return;}
    if(t.matches('[data-pg]')){st.page+=+t.getAttribute('data-pg');drawMain();return;}
@@ -4627,8 +4627,8 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 .og .xq-pop .mi.mi-risk{color:#A82E23}
 .og .xq-pop .mi.mi-risk:hover{background:rgba(168,46,35,.08);color:#A82E23}
 .og[data-theme="dark"] .xq-pop .mi.mi-risk,.og[data-theme="dark"] .xq-pop .mi.mi-risk:hover{color:#F07A6E}
-.og .xq-pop .mi.mi-off{cursor:not-allowed;color:var(--gray)}
-.og .xq-pop .mi.mi-off:hover{background:none;color:var(--gray)}
+.og .xq-pop .mi-note{display:flex;align-items:flex-start;gap:7px;margin:6px 4px 2px;padding:9px 6px 3px;border-top:1px solid var(--line-soft);font:500 11.5px/1.4 Manrope,Arial,sans-serif;color:var(--gray);cursor:default;max-width:236px}
+.og .xq-pop .mi-note svg{flex:none;margin-top:1px;opacity:.8}
 .og .pj-arc{display:inline-flex;align-items:center;height:20px;padding:0 7px;margin-left:6px;border-radius:4px;background:var(--pale);border:1px solid var(--line);color:var(--gray);font:800 10.5px/1 Manrope,Arial,sans-serif;letter-spacing:.04em;vertical-align:3px}
 .og tr.pj-arch .cq-pw,.og tr.pj-arch .cq-nm{opacity:.7}
 html body .og .btn.og-del{color:#A82E23!important}
