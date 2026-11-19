@@ -2450,11 +2450,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    body:sec('1','Project')+
     '<div class="fm-f">'+lbl('ap-d','Disaster',1)+'<select id="ap-d" data-need>'+opts+'</select>'+(DRS.length?'':'<p class="fm-h">Add a disaster first. <a href="#" data-add-dr>Add Disaster</a></p>')+'</div>'+
     '<div class="fm-f">'+lbl('ap-t','Title',1,'A short name your team will recognise, e.g. the site and the work.')+inp('ap-t','text','data-need maxlength="120" placeholder="e.g., Main Library Roof Repair" autocomplete="off"')+'</div>'+
-    '<div class="fm-f">'+lbl('ap-c','Work Category',1,'FEMA Category of Work A–G (plus Z for management costs).')+'<select id="ap-c" data-need><option value="">Select work category</option>'+C.map(function(c){return '<option value="'+c[0]+'">Category '+c[0]+' · '+c[1]+'</option>';}).join('')+'</select><p class="fm-h">From your FEMA paperwork or Damage Inventory. It decides which compliance checks run.</p></div>'+
-    '<div class="fm-f">'+lbl('ap-a','Owner',0,'Who leads this project. They see it under Assigned to you. You can change it later.')+'<select id="ap-a">'+window.ogAssigneeOpts('Rosa Keith')+'</select></div>'+
+    '<div class="row2 fm-row"><div class="fm-f">'+lbl('ap-c','Work Category',1,'FEMA Category of Work A–G (plus Z for management costs). From your FEMA paperwork or Damage Inventory; it decides which compliance checks run.')+'<select id="ap-c" data-need><option value="">Select work category</option>'+C.map(function(c){return '<option value="'+c[0]+'">Category '+c[0]+' · '+c[1]+'</option>';}).join('')+'</select></div>'+
+    '<div class="fm-f">'+lbl('ap-a','Owner',0,'Who leads this project. They see it under Assigned to you. You can change it later.')+'<select id="ap-a">'+window.ogAssigneeOpts('Rosa Keith')+'</select></div></div>'+
     sec('2','Identifiers & scope')+
-    '<div class="fm-box"><b>'+S(IC.id)+'Identifiers, if you have them</b><div class="row2"><div class="fm-f">'+lbl('ap-pw','PW #')+inp('ap-pw','hash','inputmode="numeric" placeholder="e.g., 1234" autocomplete="off"')+'</div><div class="fm-f">'+lbl('ap-ec','eCAPS project code')+inp('ap-ec','doc','placeholder="e.g., F7060865" autocomplete="off" spellcheck="false"')+'</div></div>'+
-     '<p class="fm-h">Both optional. Adding them early turns on duplicate and transfer detection once imports start.</p></div>'+
+    '<div class="row2 fm-row"><div class="fm-f">'+lbl('ap-pw','PW #')+inp('ap-pw','hash','inputmode="numeric" placeholder="e.g., 1234" autocomplete="off"')+'</div><div class="fm-f">'+lbl('ap-ec','eCAPS project code')+inp('ap-ec','doc','placeholder="e.g., F7060865" autocomplete="off" spellcheck="false"')+'</div></div>'+
+    '<p class="fm-h fm-h-row">Both optional. Adding them early turns on duplicate and transfer detection once imports start.</p>'+
     '<label class="fm-chk"><input id="ap-nf" type="checkbox"><span>This project will have no force-account labor<small>No agency crews’ time will be claimed. You can change this later.</small></span></label>'+
     '<div class="fm-f">'+lbl('ap-cost','Estimated Cost')+'<div class="fm-money"><span>$</span><input id="ap-cost" inputmode="decimal" placeholder="Leave blank if unknown" autocomplete="off"><em>USD</em></div><p class="fm-h" id="ap-costh"></p></div>',
    enhance:function(d){select(q(d,'#ap-d'),{ph:DRS.length?'Select a disaster':'No disasters yet',icon:'storm',fmt:function(v,t){var n=t.split(' · ').slice(1).join(' · ');return '<b>'+esc(v)+'</b> <span>· '+esc(n)+'</span>';},row:function(v,t){var n=t.split(' · ').slice(1).join(' · ');return S(IC.storm)+'<span class="fm-ot"><b>'+esc(v)+'</b><small>'+esc(n)+'</small></span>';}});
@@ -4741,6 +4741,11 @@ html.og-ro .og [data-ro-off]{opacity:.45!important;cursor:not-allowed!important;
 .fm-av{flex:none;display:inline-grid;place-items:center;width:24px;height:24px;margin-right:8px;border-radius:50%;background:linear-gradient(135deg,#E2C27E,#B08A4E);color:#06243F;font:800 9.5px/1 Manrope,Arial,sans-serif;letter-spacing:.02em;vertical-align:middle}
 .fm-av.fm-av-0{background:var(--pale);color:var(--gray);border:1px dashed var(--line)}
 .dlg-c .fm-sel .fm-av{width:22px;height:22px}</style>
+<style>/* Add Project: compact two-column rows so the form fits a 768px-high screen */
+.dlg .fm-row{margin:0 0 10px}
+.dlg .fm-row > .fm-f{margin:0}
+.dlg .fm-h-row{margin:-4px 0 10px}
+@media (max-width:640px){.dlg .fm-row{gap:10px}}</style>
 
 <div class="og" data-theme="light" style="min-height: 1550px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
