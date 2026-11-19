@@ -366,7 +366,7 @@ html.og-pending .og .col{visibility:hidden}
 <script>
 /* Upload modal: progress, duplicate detection, unsupported-format rejection */
 (function(){function ogWhy(n,sz){var e=(n.split('.').pop()||'').toLowerCase();if(e==='doc'||e==='docx')return 'Word file. Save as PDF and reupload.';if(e==='heic'||e==='heif')return 'HEIC photos are not supported yet. Export as JPG or PNG and reupload.';if(e==='xls')return 'Older XLS format. Save as XLSX and reupload.';if(!/^(pdf|tif|tiff|jpg|jpeg|png|xlsx|csv|tsv)$/.test(e))return 'Unsupported format (.'+e+'). Use PDF, TIFF, JPG, PNG, XLSX, CSV or TSV.';if(sz>100e6)return 'File is too large. Split it into smaller files and reupload.';return '';}window.ogWhy=ogWhy;
-var m=null,items=[],dest='';
+var m=null,items=[],dest='',undo=null,undoT=0;
 function host(){return document.querySelector('.og')||document.body;}
 function fmt(b){return b>=1048576?(b/1048576).toFixed(1)+' MB':Math.max(1,Math.round(b/1024))+' KB';}
 function ext(n){var i=n.lastIndexOf('.');return i>0?n.slice(i+1).toLowerCase():'';}
@@ -388,9 +388,9 @@ function build(){m=document.createElement('div');m.className='upm';m.setAttribut
  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&m&&!m.hidden)close();});
  m.querySelector('.upm-done').onclick=commit;
  m.querySelector('.upm-list').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var it=items[+b.closest('.upm-f').dataset.i];var a=b.dataset.a;
-  if(a==='skip'||a==='rm'){it.st='gone';}else if(a==='replace'){it.st='up';it.replace=true;run(it);}else if(a==='both'){var x=ext(it.name),base=it.name.slice(0,-(x.length+1)),k=2,ex=existing();while(ex.indexOf(base+' ('+k+').'+x)>-1)k++;it.name=base+' ('+k+').'+x;it.st='up';run(it);}
+  if(a==='rm'){if(it.st!=='bad'){undo={it:it,prev:it.st};clearTimeout(undoT);undoT=setTimeout(function(){undo=null;render();},6000);}it.st='gone';}else if(a==='skip'){it.st='gone';}else if(a==='replace'){it.st='up';it.replace=true;run(it);}else if(a==='both'){var x=ext(it.name),base=it.name.slice(0,-(x.length+1)),k=2,ex=existing();while(ex.indexOf(base+' ('+k+').'+x)>-1)k++;it.name=base+' ('+k+').'+x;it.st='up';run(it);}
   render();});}
-function open(files){if(!m)build();dest=window.ogDest||((document.querySelector('[data-upload]')||{}).getAttribute?((document.querySelector('[data-upload]').getAttribute('data-upload'))):'');
+function open(files){undo=null;clearTimeout(undoT);if(!m)build();dest=window.ogDest||((document.querySelector('[data-upload]')||{}).getAttribute?((document.querySelector('[data-upload]').getAttribute('data-upload'))):'');
  if(!dest)dest='PW-00428 › 1. Force-Account Labor';m.querySelector('.upm-dest').textContent=dest;items=[];render();m.hidden=false;if(files&&files.length)addFiles(files);}
 function close(){if(m)m.hidden=true;items=[];}
 function addFiles(fl){var ex=existing();[].slice.call(fl).forEach(function(f){var it={name:f.name,size:f.size||0,p:0,file:f};var x=ext(f.name);
@@ -403,11 +403,12 @@ function render(){if(!m)return;var L=m.querySelector('.upm-list');
   else if(it.st==='done')mid='<span class="upm-ok"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/></svg>Uploaded'+(it.replace?' · replaces existing file':'')+'</span><span style="margin-left:auto">AI classification starts on Done</span>';
   else if(it.st==='dup')mid='<span class="upm-warn">Already in this folder. Keep the existing file, replace it, or keep both?</span><span class="upm-acts"><button type="button" data-a="skip">Skip</button><button type="button" data-a="replace">Replace</button><button type="button" data-a="both">Keep both</button></span>';
   else if(it.st==='bad')mid='<span class="upm-err">'+it.why+'</span>';
-  return '<li class="upm-f'+cls+'" data-i="'+i+'"><span class="upm-ext">'+x.toUpperCase().slice(0,4)+'</span><span class="upm-n" title="'+it.name.replace(/"/g,'&quot;')+'">'+it.name.replace(/</g,'&lt;')+'</span><span class="upm-s">'+(it.size?fmt(it.size):'')+'</span><div class="upm-m">'+mid+'</div><button type="button" class="upm-rm" data-a="rm" title="'+(it.st==='up'?'Cancel upload':'Remove file')+'" aria-label="'+(it.st==='up'?'Cancel upload of ':'Remove ')+it.name.replace(/"/g,'&quot;')+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M6.2 7l.9 12.2a1.8 1.8 0 0 0 1.8 1.6h6.2a1.8 1.8 0 0 0 1.8-1.6L17.8 7M9.5 7V4.8a.8.8 0 0 1 .8-.8h3.4a.8.8 0 0 1 .8.8V7M10.3 11v5.5M13.7 11v5.5"/></svg></button></li>';}).join('');
+  return '<li class="upm-f'+cls+'" data-i="'+i+'"><span class="upm-ext">'+x.toUpperCase().slice(0,4)+'</span><span class="upm-n" title="'+it.name.replace(/"/g,'&quot;')+'">'+it.name.replace(/</g,'&lt;')+'</span><span class="upm-s">'+(it.size?fmt(it.size):'')+'</span><div class="upm-m">'+mid+'</div><button type="button" class="upm-rm" data-a="rm" title="'+(it.st==='up'?'Cancel upload':it.st==='bad'?'Dismiss':'Remove from this upload')+'" aria-label="'+(it.st==='up'?'Cancel upload of ':it.st==='bad'?'Dismiss ':'Remove from this upload: ')+it.name.replace(/"/g,'&quot;')+'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></li>';}).join('');
  var live=items.filter(function(i){return i.st!=='gone';}),done=live.filter(function(i){return i.st==='done';}).length,up=live.filter(function(i){return i.st==='up';}).length,dup=live.filter(function(i){return i.st==='dup';}).length,bad=live.filter(function(i){return i.st==='bad';}).length;
  var sum=m.querySelector('.upm-sum');
  if(!live.length)sum.innerHTML='<button type="button" class="upm-demo"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/></svg>Try sample files</button>';
  else sum.innerHTML=[done?'<b>'+done+'</b> uploaded':'',up?'<b>'+up+'</b> uploading':'',dup?'<b>'+dup+'</b> duplicate'+(dup>1?'s':'')+' need a decision':'',bad?'<b>'+bad+'</b> rejected':''].filter(Boolean).join(' · ');
+ if(undo){if(!live.length)sum.innerHTML='';sum.insertAdjacentHTML('beforeend',(live.length?' · ':'')+'<span class="upm-rmw">Removed <b class="upm-rmd" title="'+undo.it.name.replace(/"/g,'&quot;')+'">'+undo.it.name.replace(/</g,'&lt;')+'</b></span><button type="button" class="upm-undo">Undo</button>');sum.querySelector('.upm-undo').onclick=function(){var u=undo;undo=null;clearTimeout(undoT);if(!u)return;u.it.st=u.prev;if(u.prev==='up')run(u.it);render();};}
  var d=sum.querySelector('.upm-demo');if(d)d.onclick=demo;
  var btn=m.querySelector('.upm-done');btn.disabled=!(done>0&&!up&&!dup);btn.textContent=done?'Add '+done+' to folder':'Done';}
 function demo(){var ex=existing();var dupName=ex[4]||'Timesheet_Delgado_PayPeriod_02.pdf';
@@ -4586,6 +4587,15 @@ html body .og.gn .col:has(> .kpis) > .band > .band-in{max-width:1496px}</style>
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(f,0);});else setTimeout(f,0);
 window.addEventListener('load',f);
 new MutationObserver(function(){var n=document.querySelector('.og .sx-nav:not([data-sc])');if(n){n.setAttribute('data-sc','');f();}}).observe(document.documentElement,{childList:true,subtree:true});})();</script>
+<style>/* Upload modal: remove = take the file out of this upload (not a delete). Neutral ✕, Undo in the footer */
+html body .upm .upm-rm{border-radius:4px}
+html body .upm .upm-rm:hover,html body .upm[data-theme="dark"] .upm-rm:hover{color:var(--ink);background:var(--pale);border-color:var(--line)}
+.upm .upm-sum{display:flex;align-items:center;flex-wrap:wrap;gap:0 6px;min-width:0}
+.upm .upm-rmw{display:inline-flex;align-items:baseline;gap:4px;min-width:0;white-space:nowrap}
+.upm .upm-rmd{display:inline-block;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom;font-weight:700;color:var(--head)}
+.upm .upm-undo{border:0;background:none;padding:2px 4px;margin-left:2px;border-radius:4px;color:var(--blue);font:700 12.5px Manrope,Arial,sans-serif;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.upm .upm-undo:hover{background:var(--blue-t)}
+.upm .upm-undo:focus-visible{outline:2px solid var(--blue);outline-offset:1px}</style>
 
 <div class="og" data-theme="light" style="min-height: 1100px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   
