@@ -4508,8 +4508,8 @@ html body .og .cx-acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   failed:['The last reconciliation failed','It stopped while reading ActivityLog_PW00428_Jan13_Crew3.pdf, so there is no result to export. Run it again; if it fails twice, contact support with reference RUN-4C19.','','Run reconciliation again']};
  var PV=[['none','Not exported'],['done','Exported'],['changed','Docs changed'],['idle','Run again'],['norun','No run'],['running','Run in progress'],['failed','Run failed']];
  function now(){var d=new Date();return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+', '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});}
- /* F5 starts over (not exported); moving between prototype pages keeps the state */
- try{var nv=performance.getEntriesByType('navigation')[0];if(nv&&nv.type==='reload')sessionStorage.removeItem(K);}catch(e){}
+ /* Opening Project Detail (or F5 anywhere) starts over: nothing exported yet */
+ try{var nv=performance.getEntriesByType('navigation')[0];if((nv&&nv.type==='reload')||/project-overview|project-overview/.test(location.pathname))sessionStorage.removeItem(K);}catch(e){}
  function get(){var o=null;try{o=JSON.parse(sessionStorage.getItem(K));}catch(e){o=window.__ogEx;}return o||{s:'idle',h:[]};}
  function put(o){try{sessionStorage.setItem(K,JSON.stringify(o));}catch(e){}window.__ogEx=o;paintAll();}
  function cur(o){for(var i=0;i<o.h.length;i++)if(o.h[i].st==='current')return o.h[i];return null;}
