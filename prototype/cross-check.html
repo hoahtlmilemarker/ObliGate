@@ -4665,6 +4665,43 @@ html.og-ro .og.gn.has-pjb > .shell,html.og-ro .og.gn.has-pjb > .col{grid-row:4!i
 .og .og-ro-restore{flex:none}
 html.og-ro .og [data-ro-off]{opacity:.45!important;cursor:not-allowed!important;filter:saturate(.4)}
 @media (max-width:640px){.og .og-ro-bar{flex-wrap:wrap}.og .og-ro-restore{width:100%}}</style>
+<script>/* Disasters: every row = Open + ⋯ menu. Archive only when Closed (100%); Delete only when 0 projects; Restore when archived */
+(function(){var pop=null,popB=null;
+ function txt(n){return ((n&&n.textContent)||'').replace(/\s+/g,' ').trim();}
+ function close(){if(pop){pop.remove();pop=null;}if(popB){popB.setAttribute('aria-expanded','false');popB=null;}}
+ function info(r){var c=r.cells,n=parseInt(txt(c[2]),10)||0,st=txt(r.querySelector('.status'));return {id:txt(r.querySelector('.decl')),n:n,closed:/^Closed/.test(st),arch:r.getAttribute('data-lc')==='archived'};}
+ var DOTS='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
+ var LOCK='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+ function decorate(){var rows=[].filter.call(document.querySelectorAll('.og table tbody tr'),function(r){return r.querySelector('.decl');});if(!rows.length)return;
+  var tmpl=document.querySelector('.og table tbody tr a.cq-go');
+  rows.forEach(function(r){var cell=r.cells[r.cells.length-1];if(cell.querySelector('.dr-acts'))return;var id=txt(r.querySelector('.decl'));
+   var open=cell.querySelector('a.cq-go');if(!open&&tmpl){open=tmpl.cloneNode(true);}
+   if(open){open.setAttribute('href',(r.querySelector('.decl').getAttribute('href'))||open.getAttribute('href'));}
+   var w=document.createElement('span');w.className='dr-acts';if(open)w.appendChild(open);
+   var m=document.createElement('button');m.type='button';m.className='pj-more';m.setAttribute('data-dmore',id);m.setAttribute('aria-label','More actions for '+id);m.setAttribute('aria-haspopup','menu');m.setAttribute('aria-expanded','false');m.title='More actions';m.innerHTML=DOTS;w.appendChild(m);
+   cell.innerHTML='';cell.appendChild(w);});}
+ function menu(b){var r=b.closest('tr'),o=info(r),h='<small class="h">'+o.id+'</small>';
+  if(o.arch)h+='<button type="button" class="mi" data-da="restore"><span class="mi-t">Restore declaration<em>Back to its lifecycle list</em></span></button>';
+  else if(o.n===0)h+='<button type="button" class="mi mi-risk" data-da="delete"><span class="mi-t">Delete declaration<em>No projects yet</em></span></button>';
+  else if(o.closed)h+='<button type="button" class="mi" data-da="archive"><span class="mi-t">Archive declaration<em>Keeps everything, read-only</em></span></button><div class="mi-note" role="note">'+LOCK+'<span>Can’t be deleted: it has '+o.n+' project'+(o.n===1?'':'s')+'. Archive keeps them safe.</span></div>';
+  else h+='<div class="mi-note mi-note-top" role="note">'+LOCK+'<span>Archive is available once every project in '+o.id+' is closed (100%). Declarations with projects can’t be deleted.</span></div>';
+  close();var p=document.createElement('div');p.className='xq-pop';p.setAttribute('role','menu');p.innerHTML=h;(b.closest('.og')||document.body).appendChild(p);
+  var rc=b.getBoundingClientRect();p.style.left=Math.max(12,Math.min(rc.right-p.offsetWidth,innerWidth-p.offsetWidth-12))+'px';var y=rc.bottom+6;if(y+p.offsetHeight>innerHeight-12)y=Math.max(12,rc.top-p.offsetHeight-6);p.style.top=y+'px';
+  pop=p;popB=b;b.setAttribute('aria-expanded','true');
+  p.addEventListener('click',function(e){var a=e.target.closest('[data-da]');if(!a)return;var k=a.getAttribute('data-da');close();act(k,r,o);});}
+ function act(k,r,o){var D=window.ogDialog,T=window.ogToast2||function(){},A=window.ogLcApply||function(){};
+  if(k==='restore'){r.setAttribute('data-lc',r.getAttribute('data-lc0')||'active');r.removeAttribute('data-lc0');A();T('<b>'+o.id+' restored</b> · back in its lifecycle list');return;}
+  if(k==='archive'&&D){D({eyebrow:'Archive declaration',title:'Archive '+o.id+'?',ok:'Archive Declaration',body:'<p>It moves to Archived Disasters. Its '+o.n+' projects, documents and audit log stay available read-only, and you can restore it at any time.</p>',onOk:function(){r.setAttribute('data-lc0',r.getAttribute('data-lc'));r.setAttribute('data-lc','archived');A();T('<b>'+o.id+' archived</b> · moved to Archived Disasters');}});return;}
+  if(k==='delete'&&D){var d=D({danger:true,eyebrow:'Delete declaration',title:'Delete '+o.id+'?',ok:'Delete Declaration',body:'<p>This declaration has no projects or documents, so it can be deleted for good. This can’t be undone. The deletion is kept in the audit log.</p><label>Type '+o.id+' to confirm<input type="text" class="dlg-in" data-req autocomplete="off" spellcheck="false" placeholder="'+o.id+'"></label>',onOk:function(){r.remove();A();T('<b>'+o.id+' deleted</b> · recorded in the audit log');}});if(window.ogTypeConfirm)window.ogTypeConfirm(d,o.id);}}
+ window.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-dmore]');if(b){e.preventDefault();e.stopImmediatePropagation();if(pop&&popB===b){close();return;}menu(b);return;}if(pop&&!(e.target.closest&&e.target.closest('.xq-pop')))close();},true);
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pop){var b=popB;close();if(b)b.focus();}});
+ window.addEventListener('scroll',close,true);
+ function go(){decorate();}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,120);});else setTimeout(go,120);
+ window.addEventListener('load',function(){setTimeout(go,300);});
+ var tm=0;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(go,80);}).observe(document.documentElement,{childList:true,subtree:true});})();</script>
+<style>.og .dr-acts{display:inline-flex;align-items:center;gap:6px}
+.og .xq-pop .mi-note.mi-note-top{border-top:0;margin-top:0;padding-top:2px}</style>
 
 <div class="og gn" data-theme="light" style="min-height: 1400px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
