@@ -721,7 +721,7 @@ function cxResult(){var k=document.querySelector('section.kpis');if(!k)return;va
  var ar='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
  var s=document.createElement('section');s.className='cx-run';s.setAttribute('aria-label','Cross-check results');
  s.innerHTML='<div class="cx-h"><div><span class="cx-eb">Cross-check results · Pay Period 02 · run at '+tm+'</span><h2 class="cx-t">2 employees have differences</h2><p class="cx-p">9 of 12 crew match between timesheets and activity logs. 1 entry is held for review. Check the rows below.</p></div>'+
-  '<a class="btn btn-o btn-sm cx-next cx-pil" href="pre-submission">Continue to Pre-Submission'+ar+'</a></div>'+
+  '<span class="cx-acts"><button type="button" class="btn btn-p btn-sm" data-export>Export workbook</button><a class="btn btn-o btn-sm cx-next cx-pil" href="pre-submission">Continue to Pre-Submission'+ar+'</a></span></div>'+
   '<ol class="cx-list">'+
   '<li><span class="cx-n">1</span><div class="cx-w"><b>Aguayo, Hector</b><span class="tag t-risk cx-tag">Difference</span><small>Timesheet 48.0 hrs · Activity log 44.0 hrs · +4.0 OT hrs</small></div><button class="btn btn-p btn-sm cx-go" type="button" data-cx="diff">View rows'+ar+'</button></li>'+
   '<li><span class="cx-n">2</span><div class="cx-w"><b>Delgado, Marco</b><span class="tag t-warn cx-tag">Missing support</span><small>Timesheet 40.0 hrs · Activity log missing for 5 days</small></div><button class="btn btn-o btn-sm" type="button" data-cx="miss">View rows'+ar+'</button></li>'+
@@ -759,7 +759,7 @@ var A=[
    if(n==='Highest Risk'&&b._orig)rows=b._orig.slice();if(!b._orig)b._orig=[].slice.call(t.children);rows.forEach(function(r){t.appendChild(r);});}
   var sv=b.querySelector('svg');b.innerHTML='';if(sv)b.appendChild(sv);b.appendChild(document.createTextNode('Sort: '+n));}],
  /* 02 */
- [/^Export workbook/,function(b){busy(b,'Preparing…',1200,function(){toast('<b>Workbook exported</b> · PW-00428 reconciliation workbook and source documents (ZIP)');});}],
+ [/^Export workbook/,function(b){if(window.ogExport)window.ogExport();}],
  [/^(View|Inspect)$/,function(){location.href='document-library';}],
  /* 04 */
  [/^Request Re-Scan/,function(){dlg({eyebrow:'Re-Scan',title:'Request a new scan',ok:'Send Request',body:'<p>The uploader is asked to scan the original again. The document stays in the queue as <b>Re-scan requested</b>.</p><label>Reason<select><option>Handwriting unreadable</option><option>Page cut off at the edge</option><option>Pages missing</option><option>Low resolution</option></select></label><label>Note to uploader (optional)<textarea placeholder="Add details for the uploader"></textarea></label>',
@@ -4463,6 +4463,114 @@ html body .og:has(.pj-zero) .lr-rail{display:none!important}
 html body .og:has(.pj-zero) .lr-shell{grid-template-columns:minmax(0,1fr)!important}
 html body .og:has(.pj-zero) .lr-shell > .col{grid-column:1/-1!important;grid-row:1/-1!important}
 html body .og [data-pjl].pj-zero .lr-open{display:none!important}</style>
+<style>/* Export workbook dialog (OB-165 / OB-169): generate and download, gated on a current reconciliation */
+html body .og .dlg.ex .dlg-b{width:min(640px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column}
+html body .og .dlg.ex .dlg-c{overflow:auto;padding:4px 22px 6px;display:flex;flex-direction:column;gap:16px;color:var(--ink)}
+html body .og .ex-pv{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+html body .og .ex-pv .xq-dm{margin:0;max-width:100%;height:auto!important;min-height:26px;flex-wrap:wrap;white-space:normal;padding-top:2px!important;padding-bottom:2px!important}
+html body .og .ex-pv .xq-seg{flex-wrap:wrap}
+html body .og .dlg.ex .dlg-b{min-width:0;box-sizing:border-box}
+html body .og .dlg.ex .ex-t{table-layout:auto}
+@media (max-width:560px){html body .og .dlg.ex .dlg-c{padding:4px 16px 6px}html body .og .dlg.ex .dlg-h{padding:16px 16px 6px}html body .og .dlg.ex .dlg-f{padding:12px 16px 16px}html body .og .ex-dl span{display:none}}
+html body .og .ex-st{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 12px;padding:14px 16px;border:1px solid var(--line);border-radius:4px;background:var(--pale)}
+html body .og .ex-st .ic{grid-row:span 3;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--blue-t);color:var(--blue)}
+html body .og .ex-st .ic svg{width:16px;height:16px}
+html body .og .ex-st b{font-size:14.5px;color:var(--head);line-height:1.4}
+html body .og .ex-st p{margin:0;font-size:13.5px;line-height:1.55;color:var(--gray)}
+html body .og .ex-st.ok{border-color:color-mix(in srgb,var(--good) 30%,var(--line));background:var(--good-t)}html body .og .ex-st.ok .ic{background:var(--good);color:#fff}
+html body .og .ex-st.warn{border-color:color-mix(in srgb,var(--warn) 30%,var(--line));background:var(--warn-t)}html body .og .ex-st.warn .ic{background:var(--warn);color:#fff}
+html body .og .ex-st.risk{border-color:color-mix(in srgb,var(--risk) 30%,var(--line));background:var(--risk-t)}html body .og .ex-st.risk .ic{background:var(--risk);color:#fff}
+html body .og .ex-chg{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink)}
+html body .og .ex-chg li{display:flex;gap:8px}html body .og .ex-chg li::before{content:"";flex:none;width:5px;height:5px;margin-top:8px;border-radius:50%;background:var(--warn)}
+html body .og .ex-steps{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+html body .og .ex-steps li{display:flex;align-items:center;gap:10px;color:var(--gray)}
+html body .og .ex-steps li i{flex:none;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line)}
+html body .og .ex-steps li.done{color:var(--ink)}html body .og .ex-steps li.done i{border-color:var(--good);background:var(--good);color:#fff}
+html body .og .ex-steps li.now{color:var(--head);font-weight:600}html body .og .ex-steps li.now i{border-color:var(--blue);border-right-color:transparent;animation:exSpin .8s linear infinite}
+@keyframes exSpin{to{transform:rotate(360deg)}}
+html body .og .ex-file{display:flex;align-items:center;gap:12px;margin-top:8px;padding:10px 12px;border:1px solid var(--line);border-radius:4px;background:var(--card)}
+html body .og .ex-file .x{flex:none;display:grid;place-items:center;width:34px;height:40px;border-radius:4px;background:#1D6F42;color:#fff;font:800 10px/1 Manrope,Arial,sans-serif;letter-spacing:.04em}
+html body .og .ex-file .n{flex:1;min-width:0}html body .og .ex-file .n b{display:block;font-size:13.5px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}html body .og .ex-file .n small{font-size:12px;color:var(--gray)}
+html body .og .ex-sec>span.lbl{display:block;margin-bottom:8px}
+html body .og .ex-inc{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+html body .og .ex-inc div{padding:10px 12px;border:1px solid var(--line-soft);border-radius:4px;font-size:12.5px;line-height:1.5;color:var(--gray)}
+html body .og .ex-inc b{display:block;font-size:13px;color:var(--ink)}
+html body .og .ex-t{width:100%;border-collapse:collapse;font-size:13px}
+html body .og .ex-t th{padding:0 8px 6px;text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);border-bottom:1px solid var(--line)}
+html body .og .ex-t td{padding:9px 8px;border-bottom:1px solid var(--line-soft);color:var(--ink);vertical-align:middle}
+html body .og .ex-t td:first-child,html body .og .ex-t th:first-child{padding-left:0}html body .og .ex-t td:last-child,html body .og .ex-t th:last-child{padding-right:0;text-align:right}
+html body .og .ex-t .rv{font-weight:700;color:var(--head)}
+html body .og .ex-t small{display:block;font-size:12px;color:var(--gray)}
+html body .og .ex-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 7px;border-radius:4px;font-size:11.5px;font-weight:700;white-space:nowrap;background:var(--pale);color:var(--gray)}
+html body .og .ex-chip.ok{background:var(--good-t);color:var(--good)}html body .og .ex-chip.warn{background:var(--warn-t);color:var(--warn)}html body .og .ex-chip.run{background:var(--blue-t);color:var(--blue)}html body .og .ex-chip.risk{background:var(--risk-t);color:var(--risk)}
+html body .og .ex-dl{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12.5px;color:var(--blue);text-decoration:none;white-space:nowrap}
+html body .og .ex-dl:hover{text-decoration:underline}
+html body .og .ex-dl svg{width:13px;height:13px}
+html body .og .dlg.ex .dlg-f{flex-wrap:wrap;align-items:center;border-top:1px solid var(--line-soft);margin-top:6px}
+html body .og .dlg.ex .dlg-f .note{margin-right:auto;font-size:12px;color:var(--gray)}
+html body .og .dlg.ex .dlg-f .btn{display:inline-flex;align-items:center;gap:6px}
+html body .og .dlg.ex .dlg-f .btn[aria-disabled=true]{opacity:.55;pointer-events:none}
+html body .og .cx-acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+@media (max-width:560px){html body .og .ex-inc{grid-template-columns:1fr}html body .og .ex-t .hide-s{display:none}html body .og .dlg.ex .dlg-f .note{flex-basis:100%}}
+</style>
+<script>/* Export workbook dialog — prototype of OB-169 (generate + download), gated as OB-165 says */
+(function(){
+ var FILE='PW-00428_daily-hours_R3.xlsx';
+ var I={ok:'<path d="m5 12.5 4.2 4.2L19 7"/>',warn:'<path d="M12 8v5"/><path d="M12 16.5v.01"/>',x:'<path d="M7 7l10 10M17 7 7 17"/>',doc:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/>',dl:'<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>',ref:'<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/>',ar:'<path d="M5 12h14M13 6l6 6-6 6"/>',fl:'<path d="M9 3h6M10 3v6.5L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.5 15h9" opacity=".6"/>'};
+ function S(p,w){return '<svg width="'+(w||14)+'" height="'+(w||14)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';}
+ var RUN='Jan 16, 2026, 2:40 PM';
+ var BL={
+  changed:['Documents changed after the last reconciliation','The workbook can only be built from a reconciliation of the documents in this project now. Run the reconciliation again, then export.','<ul class="ex-chg"><li>2 timesheets added: Timesheet_Reyes_PayPeriod_02.pdf, Timesheet_Kim_PayPeriod_02.pdf</li><li>1 activity log re-read: ActivityLog_PW00428_Jan12_Crew2.pdf</li></ul>','Run reconciliation again','cross-check'],
+  norun:['No reconciliation has been run yet','Run the reconciliation to compare timesheets with activity logs. You can export once it finishes.','','Run reconciliation','cross-check'],
+  running:['The reconciliation is still running','It started at 2:51 PM. You can export as soon as it finishes; this usually takes a minute or two.','','View progress','cross-check'],
+  failed:['The last reconciliation failed','It stopped while reading ActivityLog_PW00428_Jan13_Crew3.pdf, so there is no result to export. Run it again; if it fails twice, contact support with reference RUN-4C19.','','Run reconciliation again','cross-check'],
+  docs:['2 documents are still being read','Exports use every document in the project. Wait until reading finishes, or remove the files you don’t need, then run the reconciliation.','','Open documents','document-library'],
+  role:['Your role can’t create exports','Grants Managers, Grants Analysts and Department Liaisons can create a workbook. You can still download the revisions below.','','','']};
+ var BLO=[['changed','Inputs changed'],['norun','No run'],['running','Run in progress'],['failed','Run failed'],['docs','Docs still reading'],['role','No permission']];
+ var st={s:'ready',b:'changed',made:0,t:null};
+ function rows(){var r=[];
+  if(st.s==='done'||st.made)r.push({rv:'R3',when:'Jan 16, 2026, 2:46 PM',by:'Rosa Keith (you)',chip:'<span class="ex-chip ok">Current</span>',dl:1});
+  if(st.s==='running')r.push({rv:'R3',when:'Just now',by:'Rosa Keith (you)',chip:'<span class="ex-chip run">Building…</span>'});
+  if(st.s==='failed')r.push({rv:'R3',when:'Just now',by:'Rosa Keith (you)',chip:'<span class="ex-chip risk">Failed</span>'});
+  r.push({rv:'R2',when:'Jan 14, 2026, 4:12 PM',by:'Rosa Keith',chip:'<span class="ex-chip warn" data-og-tip="Documents changed after this export. Its numbers no longer match the project." tabindex="0">Out of date</span>',dl:1});
+  r.push({rv:'R1',when:'Jan 12, 2026, 10:30 AM',by:'Daniel Ortiz',chip:'<span class="ex-chip">Replaced by R2</span>',dl:1});
+  return r;}
+ function status(){
+  if(st.s==='ready')return '<div class="ex-st ok"><span class="ic">'+S(I.ok,16)+'</span><b>Ready to export</b><p>Built from the reconciliation run of '+RUN+'. It matches the documents in this project now: 60 employee-days, 3 need attention.</p></div>';
+  if(st.s==='blocked'){var b=BL[st.b];return '<div class="ex-st warn" role="alert"><span class="ic">'+S(I.warn,16)+'</span><b>Can’t export yet · '+b[0]+'</b><p>'+b[1]+'</p>'+(b[2]?'<div>'+b[2]+'</div>':'')+'</div>';}
+  if(st.s==='running')return '<div class="ex-st" role="status" aria-live="polite"><span class="ic">'+S(I.doc,16)+'</span><b>Building R3…</b><p>You can close this window. The new revision appears in the list when it’s ready.</p><ol class="ex-steps"><li class="done"><i>'+S(I.ok,10)+'</i>Read the stored reconciliation run</li><li class="'+(st.p>=1?'done':'now')+'"><i>'+(st.p>=1?S(I.ok,10):'')+'</i>Write the Summary and Reconciliation sheets</li><li class="'+(st.p>=2?'done':st.p===1?'now':'')+'"><i>'+(st.p>=2?S(I.ok,10):'')+'</i>Save the workbook</li></ol></div>';
+  if(st.s==='done')return '<div class="ex-st ok" role="status"><span class="ic">'+S(I.ok,16)+'</span><b>R3 is ready</b><p>Built from the reconciliation run of '+RUN+'.</p><div class="ex-file"><span class="x">XLSX</span><span class="n"><b>'+FILE+'</b><small>Excel workbook · Summary and Reconciliation sheets · 11 KB</small></span><a class="btn btn-p btn-sm" href="'+FILE+'" download>'+S(I.dl)+'Download</a></div></div>';
+  return '<div class="ex-st risk" role="alert"><span class="ic">'+S(I.x,16)+'</span><b>R3 couldn’t be built</b><p>The export stopped while writing the Reconciliation sheet, so no file was saved. Try again. If it fails again, contact support with reference EXP-7F3A2C.</p></div>';}
+ function body(){
+  var pv='<div class="ex-pv"><span class="xq-dm" title="Prototype only, not part of the product: preview each export state">'+S(I.fl,12)+'Prototype<span class="xq-seg" role="group" aria-label="Export state">'+[['ready','Ready'],['blocked','Blocked'],['running','Building'],['done','Done'],['failed','Failed']].map(function(o){return '<button type="button" data-exs="'+o[0]+'" aria-pressed="'+(st.s===o[0])+'">'+o[1]+'</button>';}).join('')+'</span></span>'+
+   (st.s==='blocked'?'<span class="xq-dm" title="Prototype only: why the export is blocked">Reason<span class="xq-seg" role="group" aria-label="Blocked reason">'+BLO.map(function(o){return '<button type="button" data-exb="'+o[0]+'" aria-pressed="'+(st.b===o[0])+'">'+o[1]+'</button>';}).join('')+'</span></span>':'')+'</div>';
+  var inc='<div class="ex-sec"><span class="lbl">In the workbook</span><div class="ex-inc"><div><b>Summary</b>Hours per source, the differences between daily totals, and hours kept separate.</div><div><b>Reconciliation</b>One row per employee and day, with signed differences and the source file and page.</div></div></div>';
+  var tb='<div class="ex-sec"><span class="lbl">Revisions</span><table class="ex-t"><thead><tr><th>Revision</th><th class="hide-s">Created by</th><th>Status</th><th aria-label="File"></th></tr></thead><tbody>'+rows().map(function(r){return '<tr><td><span class="rv">'+r.rv+'</span><small>'+r.when+'</small></td><td class="hide-s">'+r.by+'</td><td>'+r.chip+'</td><td>'+(r.dl?'<a class="ex-dl" href="'+FILE+'" download="PW-00428_daily-hours_'+r.rv+'.xlsx">'+S(I.dl)+'Download</a>':'')+'</td></tr>';}).join('')+'</tbody></table></div>';
+  return pv+status()+inc+tb;}
+ function foot(){var b=BL[st.b],L;
+  if(st.s==='ready')L='<span class="note">Creates revision R3 for PW-00428.</span><button type="button" class="btn btn-o btn-sm" data-exc>Cancel</button><button type="button" class="btn btn-p btn-sm" data-exgo>'+S(I.doc)+'Generate workbook</button>';
+  else if(st.s==='blocked')L='<button type="button" class="btn btn-o btn-sm" data-exc>Close</button>'+(b[3]?'<a class="btn btn-p btn-sm" href="'+b[4]+'">'+b[3]+S(I.ar)+'</a>':'');
+  else if(st.s==='running')L='<span class="note">Only one export can run for a project at a time.</span><button type="button" class="btn btn-o btn-sm" data-exc>Close</button><button type="button" class="btn btn-p btn-sm" aria-disabled="true">Building…</button>';
+  else if(st.s==='done')L='<button type="button" class="btn btn-o btn-sm" data-exc>Close</button><a class="btn btn-p btn-sm" href="'+FILE+'" download>'+S(I.dl)+'Download R3</a>';
+  else L='<button type="button" class="btn btn-o btn-sm" data-exc>Close</button><button type="button" class="btn btn-p btn-sm" data-exgo>'+S(I.ref)+'Try again</button>';
+  return L;}
+ var d=null;
+ function draw(){if(!d)return;d.querySelector('.dlg-c').innerHTML=body();d.querySelector('.dlg-f').innerHTML=foot();}
+ function run(){clearTimeout(st.t);st.s='running';st.p=0;draw();st.t=setTimeout(function(){st.p=1;draw();st.t=setTimeout(function(){st.p=2;draw();st.t=setTimeout(function(){st.s='done';st.made=1;draw();
+   if(!d&&window.ogToast)window.ogToast({type:'ok',title:'Workbook R3 is ready',desc:'PW-00428 · Download it from Export workbook.'});},600);},1100);},1100);}
+ function close(){if(!d)return;d.remove();d=null;document.removeEventListener('keydown',key);}
+ function key(e){if(e.key==='Escape')close();}
+ window.ogExport=function(){if(d)return;var host=document.querySelector('.og')||document.body;d=document.createElement('div');d.className='dlg ex';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-labelledby','ex-ttl');
+  if(st.s==='done')st.s='done';
+  d.innerHTML='<div class="dlg-b"><div class="dlg-h"><div><small>Export · PW-00428 Malibu Canyon</small><h3 id="ex-ttl">Reconciliation workbook</h3></div><button type="button" class="dlg-x" aria-label="Close">'+S(I.x)+'</button></div><div class="dlg-c"></div><div class="dlg-f"></div></div>';
+  host.appendChild(d);draw();document.addEventListener('keydown',key);
+  d.addEventListener('click',function(e){var t=e.target;if(t===d||t.closest('.dlg-x')||t.closest('[data-exc]')){close();return;}
+   var s=t.closest('[data-exs]');if(s){clearTimeout(st.t);st.s=s.getAttribute('data-exs');st.p=st.s==='running'?1:0;st.made=st.s==='done'?1:0;draw();return;}
+   var b=t.closest('[data-exb]');if(b){st.b=b.getAttribute('data-exb');draw();return;}
+   if(t.closest('[data-exgo]')){run();return;}});
+  var f=d.querySelector('[data-exgo],.dlg-f a,.dlg-x');if(f)setTimeout(function(){try{f.focus();}catch(x){}},30);};
+ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-export]');if(!b||b.getAttribute('aria-disabled')==='true')return;e.preventDefault();window.ogExport();},true);
+})();</script>
 
 <div class="og gn" data-theme="light" style="min-height: 1250px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
