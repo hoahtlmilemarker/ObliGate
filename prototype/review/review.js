@@ -321,7 +321,7 @@
     css += '.rv .rv-keys{flex:none;display:flex;align-items:center;gap:12px;padding:11px 16px;border-top:1px solid #E3EAF2;background:#F6F9FC;font-size:11.5px;color:#5B6B7A}.rv .rv-keys>span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}.rv .rv-keys>span:first-child{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#7A8896}.rv .rv-kbd{display:inline-flex;align-items:center;justify-content:center;min-width:18px;box-sizing:border-box;height:18px;padding:0 6px;border:1px solid #DCE5EF;border-bottom-width:2px;border-radius:4px;background:#fff;font-family:inherit;font-size:10.5px;font-weight:700;line-height:1;letter-spacing:.04em;color:#5B6B7A;vertical-align:middle}@media (hover:none){.rv .rv-keys{display:none}}';
   var root = document.createElement('div'); root.className = 'rv'; root.setAttribute('data-review-ui', '');
   root.innerHTML = '<style>' + css + '</style><div class="rv-layer" id="rvLayer"></div><div id="rvUi"></div>';
-  function mount() { if (NOCOM) return; document.body.appendChild(root); renderAll(); }
+  function mount() { if (NOCOM) { var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st); return; } document.body.appendChild(root); renderAll(); }
   var layer = root.querySelector('#rvLayer'), ui = root.querySelector('#rvUi');
   var fileIn = document.createElement('input'); fileIn.type = 'file'; fileIn.accept = 'image/*'; fileIn.multiple = true; fileIn.hidden = true; root.appendChild(fileIn);
 
