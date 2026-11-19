@@ -4758,7 +4758,7 @@ html.og-ro .og [data-ro-off]{opacity:.45!important;cursor:not-allowed!important;
  window.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.lb-more');
   if(b){e.preventDefault();e.stopImmediatePropagation();if(pop&&popB===b){close();return;}close();if(document.documentElement.classList.contains('og-ro')){if(window.ogToast2)window.ogToast2('<b>This project is archived</b> · restore it to make changes');return;}var r=b.closest('tr'),a=r.querySelector('.lb-dt > a'),nm=a?a.textContent.trim():'';
    var p=document.createElement('div');p.className='xq-pop';p.setAttribute('role','menu');
-   p.innerHTML='<small class="h lb-h">'+nm.replace(/</g,'&lt;')+'</small><button type="button" class="mi" data-la="move"><span class="mi-t">Move to folder…</span></button><button type="button" class="mi mi-risk" data-la="delete"><span class="mi-t">Delete document<em>You can undo right after</em></span></button>';
+   p.setAttribute('aria-label',nm);p.innerHTML='<button type="button" class="mi" data-la="move"><span class="mi-t">Move to folder…</span></button><button type="button" class="mi mi-risk" data-la="delete"><span class="mi-t">Delete document<em>You can undo right after</em></span></button>';
    (b.closest('.og')||document.body).appendChild(p);var rc=b.getBoundingClientRect();p.style.left=Math.max(12,Math.min(rc.right-p.offsetWidth,innerWidth-p.offsetWidth-12))+'px';var y=rc.bottom+6;if(y+p.offsetHeight>innerHeight-12)y=Math.max(12,rc.top-p.offsetHeight-6);p.style.top=y+'px';pop=p;popB=b;b.setAttribute('aria-expanded','true');
    p.addEventListener('click',function(ev){var it=ev.target.closest('[data-la]');if(!it)return;var k=it.getAttribute('data-la');close();run(k,r);});return;}
   if(pop&&!(e.target.closest&&e.target.closest('.xq-pop')))close();},true);
@@ -4766,8 +4766,7 @@ html.og-ro .og [data-ro-off]{opacity:.45!important;cursor:not-allowed!important;
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(deco,150);});else setTimeout(deco,150);
  var tm=0;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(deco,80);}).observe(document.documentElement,{childList:true,subtree:true});})();</script>
 <style>.og .lb-acts{display:inline-flex;align-items:center;gap:6px;justify-content:flex-end}
-.og .lb-more{width:30px;height:30px}
-.og .xq-pop small.h.lb-h{text-transform:none;letter-spacing:0;font:700 12px/1.3 Manrope,Arial,sans-serif;color:var(--head);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}</style>
+.og .lb-more{width:30px;height:30px}</style>
 
 <div class="og" data-theme="light" style="min-height: 1550px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
