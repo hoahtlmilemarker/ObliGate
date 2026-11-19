@@ -3515,12 +3515,13 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 <style>
-.og-tip{position:fixed;z-index:2147482500;left:0;top:0;max-width:220px;padding:5px 8px;border:1px solid rgba(255,255,255,.16);border-radius:4px;background:#14212E;color:#FFFFFF;font:500 11.5px/1.4 Manrope,Arial,sans-serif;letter-spacing:0;text-transform:none;white-space:normal;box-shadow:0 6px 16px -8px rgba(0,20,40,.45);pointer-events:none;opacity:0;transform:translateY(3px);transition:opacity .12s ease,transform .12s ease}
+.og-tip{position:fixed;z-index:2147483640;left:0;top:0;max-width:220px;padding:5px 8px;border:1px solid rgba(255,255,255,.16);border-radius:4px;background:#14212E;color:#FFFFFF;font:500 11.5px/1.4 Manrope,Arial,sans-serif;letter-spacing:0;text-transform:none;white-space:normal;box-shadow:0 6px 16px -8px rgba(0,20,40,.45);pointer-events:none;opacity:0;transform:translateY(3px);transition:opacity .12s ease,transform .12s ease}
 .og-tip.show{opacity:1;transform:none}
 .og-tip::after{content:"";position:absolute;left:var(--ax,50%);width:6px;height:6px;margin-left:-3px;background:#14212E;border:1px solid rgba(255,255,255,.16);transform:rotate(45deg)}
 .og-tip.up::after{bottom:-4px;border-top:0;border-left:0}
 .og-tip.down::after{top:-4px;border-bottom:0;border-right:0}
-[data-og-tip]{cursor:help}
+[data-og-tip]:not([data-og-tip-auto]){cursor:help}
+.og .fm-l .fm-q::after,.og .fm-l .fm-q::before{display:none!important}
 [data-og-tip]:focus-visible{outline:2px solid var(--blue,#005A9C);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.og-tip{transition:none}}
 </style><script>
@@ -3528,10 +3529,16 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 function hide(){if(tip){tip.classList.remove('show');}if(own){own.removeAttribute('aria-describedby');own=null;}}
 function show(el){var t=el.getAttribute('data-og-tip');if(!t)return;if(!tip){tip=document.createElement('div');tip.className='og-tip';tip.id='og-tip';tip.setAttribute('role','tooltip');document.body.appendChild(tip);}
  tip.textContent=t;own=el;el.setAttribute('aria-describedby','og-tip');tip.classList.remove('up','down');tip.style.left='0px';tip.style.top='0px';
- var r=el.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight,x=Math.max(8,Math.min(r.left+r.width/2-w/2,innerWidth-w-8)),up=r.top-h-8>8,y=up?r.top-h-8:r.bottom+8;
- tip.style.left=x+'px';tip.style.top=y+'px';tip.style.setProperty('--ax',Math.max(10,Math.min(w-10,r.left+r.width/2-x))+'px');tip.classList.add(up?'up':'down');requestAnimationFrame(function(){tip.classList.add('show');});}
-document.addEventListener('mouseover',function(e){var el=e.target.closest&&e.target.closest('[data-og-tip]');if(el===own)return;if(el)show(el);else hide();});
-document.addEventListener('focusin',function(e){var el=e.target.closest&&e.target.closest('[data-og-tip]');if(el)show(el);else hide();});
+ pos(el);requestAnimationFrame(function(){tip.classList.add('show');});setTimeout(function(){if(own===el)pos(el);},260);setTimeout(function(){if(own===el)pos(el);},520);}
+function pos(el){tip.classList.remove('up','down');var r=el.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight,x=Math.max(8,Math.min(r.left+r.width/2-w/2,innerWidth-w-8)),up=r.top-h-8>8,y=up?r.top-h-8:r.bottom+8;
+ tip.style.left=x+'px';tip.style.top=y+'px';tip.style.setProperty('--ax',Math.max(10,Math.min(w-10,r.left+r.width/2-x))+'px');tip.classList.add(up?'up':'down');}
+/* One tooltip style everywhere: native title="" and the form "?" hints are turned into data-og-tip on first hover/focus */
+function find(n){if(!n||!n.closest)return null;var el=n.closest('[data-og-tip],[title],.fm-q[data-tip]');if(!el||el.closest('[data-review-ui],.sbm,.og-tip'))return null;
+ if(el.hasAttribute('title')||!el.hasAttribute('data-og-tip')){var v=el.getAttribute('title')||el.getAttribute('data-tip')||'';v=v.trim();if(el.hasAttribute('title')){if(v&&!el.getAttribute('aria-label')&&!(el.textContent||'').trim())el.setAttribute('aria-label',v);el.removeAttribute('title');}if(!v)return el.hasAttribute('data-og-tip')?el:null;el.setAttribute('data-og-tip',v);el.setAttribute('data-og-tip-auto','');}
+ return el;}
+document.addEventListener('mouseover',function(e){var el=find(e.target);if(el===own)return;if(el)show(el);else hide();});
+document.addEventListener('focusin',function(e){var el=find(e.target);if(el&&el.matches(':focus-visible'))show(el);else hide();});
+document.addEventListener('mousedown',hide,true);
 document.addEventListener('focusout',hide);addEventListener('scroll',hide,true);document.addEventListener('keydown',function(e){if(e.key==='Escape')hide();});
 })();
 </script>
@@ -4665,7 +4672,7 @@ html body .og[data-theme="dark"] .btn.og-del,html body .og[data-theme="dark"] .b
    bar.innerHTML='<span class="og-ro-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v13H3zM2 4h20v3H2zM10 11h4"/></svg></span><span class="og-ro-t"><b>Archived · read-only.</b> '+pw+' and its documents, findings and audit log can be viewed but not changed.</span><button type="button" class="btn btn-o btn-sm og-ro-restore">Restore project</button>';
    pj.parentNode.insertBefore(bar,pj.nextSibling);}
   if(!on&&bar)bar.remove();
-  document.querySelectorAll('.og button,.og a.btn,.og label.lb-up,.og [data-upload],.og [data-export]').forEach(function(b){if(on&&act(b)){b.setAttribute('data-ro-off','');b.setAttribute('aria-disabled','true');b.title='Archived project. Restore it to make changes.';}else if(b.hasAttribute('data-ro-off')){b.removeAttribute('data-ro-off');b.removeAttribute('aria-disabled');b.removeAttribute('title');}});}
+  document.querySelectorAll('.og button,.og a.btn,.og label.lb-up,.og [data-upload],.og [data-export]').forEach(function(b){if(on&&act(b)){b.setAttribute('data-ro-off','');b.setAttribute('aria-disabled','true');b.title='Archived project. Restore it to make changes.';}else if(b.hasAttribute('data-ro-off')){b.removeAttribute('data-ro-off');b.removeAttribute('aria-disabled');b.removeAttribute('title');if(b.hasAttribute('data-og-tip-auto')){b.removeAttribute('data-og-tip');b.removeAttribute('data-og-tip-auto');}}});}
  window.addEventListener('click',function(e){var r=e.target.closest&&e.target.closest('.og-ro-restore');if(r){var pw=pwNow(),L=list().filter(function(x){return x!==pw;});try{sessionStorage.setItem(K,JSON.stringify(L));}catch(x){}paint();if(window.ogToast2)window.ogToast2('<b>'+pw+' restored</b> · you can make changes again');return;}
   if(!document.documentElement.classList.contains('og-ro'))return;var b=e.target.closest&&e.target.closest('[data-ro-off]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();if(window.ogToast2)window.ogToast2('<b>This project is archived</b> · restore it to make changes');},true);
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(paint,80);});else setTimeout(paint,80);
