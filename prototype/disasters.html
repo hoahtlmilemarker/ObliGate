@@ -4702,6 +4702,23 @@ html.og-ro .og [data-ro-off]{opacity:.45!important;cursor:not-allowed!important;
  var tm=0;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(go,80);}).observe(document.documentElement,{childList:true,subtree:true});})();</script>
 <style>.og .dr-acts{display:inline-flex;align-items:center;gap:6px}
 .og .xq-pop .mi-note.mi-note-top{border-top:0;margin-top:0;padding-top:2px}</style>
+<script>/* Project Overview · Contracts & Procurement: "Add SAM.gov proof" opens the upload for that category; once added the row turns Ready + View */
+(function(){var pending=null;
+ window.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-sam]');if(!b||!window.ogUploadModal)return;if(document.documentElement.classList.contains('og-ro'))return;
+  e.preventDefault();e.stopImmediatePropagation();var who=b.getAttribute('data-sam');pending=b;
+  var prev=window.ogDest;window.ogDest='PW-00428 › Contracts & Procurement';window.ogUploadModal();window.ogDest=prev;
+  var m=document.querySelector('.upm');if(m){var o=m.querySelector('.upm-hint');if(o)o.remove();var to=m.querySelector('.upm-to');if(to){var h=document.createElement('div');h.className='upm-hint';h.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg><span>Upload the SAM.gov search printout for <b>'+who+'</b>. It shows the contractor is not excluded from federal awards.</span>';to.parentNode.insertBefore(h,to.nextSibling);}}
+ },true);
+ window.addEventListener('click',function(e){if(!pending)return;var m=document.querySelector('.upm');if(!m||m.hidden)return;
+  if(e.target.closest&&e.target.closest('.upm-x,.upm-cancel,.upm-ft .btn-o')&&!e.target.closest('.upm-done')){var h=m.querySelector('.upm-hint');if(h)h.remove();pending=null;return;}
+  var d=e.target.closest&&e.target.closest('.upm-done');if(!d||d.disabled||!/^Add \d+/.test(d.textContent))return;var b=pending;pending=null;
+  setTimeout(function(){var h=document.querySelector('.upm .upm-hint');if(h)h.remove();var tr=b.closest('tr');if(!tr)return;var tag=tr.querySelector('.tag');if(tag){tag.className='tag t-good';tag.innerHTML='<span class="dot"></span>Ready';}
+   var sv=b.querySelector('svg');b.className='btn btn-o btn-sm';b.removeAttribute('data-sam');b.textContent='View';if(sv)b.appendChild(sv);
+   if(window.ogToast2)window.ogToast2('<b>SAM.gov proof added</b> · Contracts & Procurement is ready');},60);},true);
+})();</script>
+<style>.upm .upm-hint{display:flex;align-items:flex-start;gap:8px;margin-top:10px;padding:9px 12px;border-radius:4px;background:var(--blue-t);color:var(--ink);font:500 12.5px/1.45 Manrope,Arial,sans-serif;max-width:520px}
+.upm .upm-hint svg{flex:none;margin-top:2px;color:var(--blue)}
+.upm .upm-hint b{color:var(--head)}</style>
 
 <div class="og" data-theme="light" style="min-height: 1100px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <header class="hd">
