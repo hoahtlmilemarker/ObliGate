@@ -4072,9 +4072,11 @@ function bind(){var root=document.querySelector('.og.au-pg');if(!root||root.__au
   if(k==='mfa'||k==='mfa-setup'){var c=code(f),g=f.querySelector('.au-otp');if(c.length<6){g.setAttribute('aria-invalid','true');var fe=g.parentNode.querySelector('.au-err')||document.createElement('p');fe.className='au-err';fe.innerHTML=IC.err+'Enter all 6 digits';g.after(fe);g.querySelector('input:not([value]),input').focus();return;}
    if(c==='000000'){g.setAttribute('aria-invalid','true');var fe2=document.createElement('p');fe2.className='au-err';fe2.innerHTML=IC.err+'That code didn’t work. Codes change every 30 seconds — try the newest one.';g.after(fe2);g.querySelectorAll('input').forEach(function(i){i.value='';});g.querySelector('input').focus();return;}}
   if(k==='new-password'){var np=f.querySelector('#au-np'),cp2=f.querySelector('#au-cp');if(!ok(np.value)){err(np,'Use a password that meets all 4 rules');return;}if(np.value!==cp2.value){err(cp2,'Passwords don’t match');return;}}
-  var L={signin:'Checking…',password:'Signing in…',mfa:'Verifying…','mfa-setup':'Verifying…',reset:'Sending…','new-password':'Saving…',invite:'Continuing…'};
+  var L={signin:'Signing in…',password:'Signing in…',mfa:'Verifying…','mfa-setup':'Verifying…',reset:'Sending…','new-password':'Saving…',invite:'Continuing…'};
   busy(b,L[k]||'Please wait…');
   var to=b.getAttribute('data-go');if(k==='new-password'&&ST.from!=='invite'){to='password';}
+  /* prototype: the email step goes straight into the app; the password, two-step and reset screens stay reachable from the Screen switcher */
+  if(k==='signin')to='app';
   setTimeout(function(){nav(to);if(k==='new-password'&&ST.from!=='invite')setTimeout(function(){var c=document.querySelector('.og [data-auth] .au-hd');if(c)c.insertAdjacentHTML('afterend','<div class="au-ok" role="status">'+IC.ok+'<span>Your password was updated. Sign in with your new password.</span></div>');},60);},750);
  });
  function ok(v){return v.length>=12&&/[a-z]/.test(v)&&/[A-Z]/.test(v)&&/\d/.test(v)&&/[^A-Za-z0-9]/.test(v);}
