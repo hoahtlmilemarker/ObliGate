@@ -4496,7 +4496,7 @@ html body .og .cx-acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   norun:['No reconciliation has been run yet','Run the reconciliation to compare timesheets with activity logs. You can export once it finishes.','','Run reconciliation'],
   running:['The reconciliation is still running','It started at 2:51 PM. You can export as soon as it finishes.','','View progress'],
   failed:['The last reconciliation failed','It stopped while reading ActivityLog_PW00428_Jan13_Crew3.pdf, so there is no result to export. Run it again; if it fails twice, contact support with reference RUN-4C19.','','Run reconciliation again']};
- var PV=[['idle','Ready'],['done','Exported'],['changed','Docs changed'],['norun','No run'],['running','Run in progress'],['failed','Run failed']];
+ var PV=[['none','Not exported'],['done','Exported'],['changed','Docs changed'],['idle','Run again'],['norun','No run'],['running','Run in progress'],['failed','Run failed']];
  function now(){var d=new Date();return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+', '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});}
  function get(){var o=null;try{o=JSON.parse(sessionStorage.getItem(K));}catch(e){o=window.__ogEx;}return o||{s:'idle',h:[]};}
  function put(o){try{sessionStorage.setItem(K,JSON.stringify(o));}catch(e){}window.__ogEx=o;paintAll();}
@@ -4504,7 +4504,8 @@ html body .og .cx-acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
  function next(o){return 'R'+(o.h.length+1);}
  function staleAll(o,by){o.h.forEach(function(r){if(r.st==='current'){r.st='stale';r.why=by;}});}
  function setState(s){var o=get();closePop();
-  if(s==='idle'){staleAll(o,'run');o.s='idle';}
+  if(s==='none'){o={s:'idle',h:[]};}
+  else if(s==='idle'){staleAll(o,'run');o.s='idle';}
   else if(s==='done'){if(!cur(o)){staleAll(o,'new');o.h.unshift({rv:next(o),when:now(),by:ME,st:'current'});}o.s='done';}
   else{if(s==='changed')staleAll(o,'docs');o.s=s;}
   put(o);}
@@ -4530,7 +4531,7 @@ html body .og .cx-acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
    h.innerHTML=S(I.hist)+'<span>'+o.h.length+'</span>';h.setAttribute('aria-label','All workbook revisions ('+o.h.length+')');h.title='All workbook revisions';}
   else if(h)h.remove();}
  function paintAll(){buttons().forEach(paint);var pv=document.querySelector('.og .ex-pv');if(pv)pv.outerHTML=seg();}
- function seg(){var o=get(),s=o.s==='building'?'idle':o.s;return '<span class="xq-dm ex-pv" title="Prototype only, not part of the product: preview the export button in each state">'+S(I.fl,12)+'Prototype · Export<span class="xq-seg" role="group" aria-label="Export state">'+PV.map(function(p){return '<button type="button" data-exs="'+p[0]+'" aria-pressed="'+(s===p[0])+'">'+p[1]+'</button>';}).join('')+'</span></span>';}
+ function seg(){var o=get(),s=o.s==='building'?'idle':o.s;if(s==='idle'&&!o.h.length)s='none';return '<span class="xq-dm ex-pv" title="Prototype only, not part of the product: preview the export button in each state">'+S(I.fl,12)+'Prototype · Export<span class="xq-seg" role="group" aria-label="Export state">'+PV.map(function(p){return '<button type="button" data-exs="'+p[0]+'" aria-pressed="'+(s===p[0])+'">'+p[1]+'</button>';}).join('')+'</span></span>';}
  var pop=null,popB=null;
  function closePop(){if(pop){pop.remove();pop=null;if(popB)popB.setAttribute('aria-expanded','false');popB=null;}}
  function openPop(b,html){closePop();var p=document.createElement('div');p.className='ex-pop';p.setAttribute('role','dialog');p.innerHTML=html;(b.closest('.og')||document.body).appendChild(p);
