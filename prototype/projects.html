@@ -4639,7 +4639,7 @@ html body .og .btn.og-del{color:#A82E23!important}
 html body .og .btn.og-del:hover{border-color:#A82E23!important;color:#A82E23!important;background:rgba(168,46,35,.06)!important}
 html body .og[data-theme="dark"] .btn.og-del,html body .og[data-theme="dark"] .btn.og-del:hover{color:#F07A6E!important;border-color:rgba(240,122,110,.45)!important}</style>
 <script>/* Archived project: read-only banner on its pages, actions locked until restored */
-(function(){var K='og-pj-arch',ACT=/^(Upload|Assemble|Run |Run$|Run Reconciliation|Export workbook|Request|Batch Actions|Add |Confirm|Review \d|Reject|Lock|Seal|New |Import|Replace|Delete|Accept|Dismiss Finding)/;
+(function(){var K='og-pj-arch',ACT=/^(Upload|Assemble|Run |Run$|Run Reconciliation|Export workbook|Request|Batch Actions|Add |Confirm|Review \d|Reject|Lock|Seal|New |Import|Replace|Delete|Accept|Dismiss Finding|Resolve$)/;
  function list(){try{return JSON.parse(sessionStorage.getItem(K)||'[]');}catch(e){return [];}}
  function pwNow(){var p=document.querySelector('.og .pjb');if(!p)return '';var h=decodeURIComponent((location.hash||'').slice(1));if(/^PW-\d{5}$/.test(h))return h;var m=p.textContent.match(/PW-\d{5}/);return m?m[0]:'';}
  function act(el){if(el.closest('.xq-dm,.og-ro-bar,[data-review-ui],.hd'))return false;if(el.matches('[data-upload],label.lb-up,[data-export]'))return true;return ACT.test((el.textContent||'').replace(/\s+/g,' ').trim());}
