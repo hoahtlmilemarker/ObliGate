@@ -758,7 +758,7 @@ var A=[
    if(n==='Highest Risk'&&b._orig)rows=b._orig.slice();if(!b._orig)b._orig=[].slice.call(t.children);rows.forEach(function(r){t.appendChild(r);});}
   var sv=b.querySelector('svg');b.innerHTML='';if(sv)b.appendChild(sv);b.appendChild(document.createTextNode('Sort: '+n));}],
  /* 02 */
- [/^Export Binder/,function(b){busy(b,'Assembling…',1200,function(){toast('<b>Draft binder</b> for PW-00428 generated · 3 findings still open');});}],
+ [/^Export workbook/,function(b){busy(b,'Preparing…',1200,function(){toast('<b>Workbook exported</b> · PW-00428 reconciliation workbook and source documents (ZIP)');});}],
  [/^(View|Inspect)$/,function(){location.href='document-library';}],
  /* 04 */
  [/^Request Re-Scan/,function(){dlg({eyebrow:'Re-Scan',title:'Request a new scan',ok:'Send Request',body:'<p>The uploader is asked to scan the original again. The document stays in the queue as <b>Re-scan requested</b>.</p><label>Reason<select><option>Handwriting unreadable</option><option>Page cut off at the edge</option><option>Pages missing</option><option>Low resolution</option></select></label><label>Note to uploader (optional)<textarea placeholder="Add details for the uploader"></textarea></label>',
@@ -4408,7 +4408,7 @@ html.og-sk-in .og .col,html.og-sk-in .og.rv-app .rv-panes{animation:skIn2 .28s e
   var M=[null,['$0','Nothing claimed yet'],['$0','No documents verified yet'],['$0','Nothing flagged']];
   [].slice.call(document.querySelectorAll('.og .kpis .kpi')).forEach(function(k,i){if(!M[i])return;var b=k.querySelector('.big');if(b)b.textContent=M[i][0];[].slice.call(k.children).forEach(function(c){if(c!==b&&!c.classList.contains('lbl')&&!/lbl/.test(c.className))c.remove();});var m=document.createElement('span');m.style.cssText='font-size:13px;color:var(--gray)';m.textContent=M[i][1];k.appendChild(m);});
   [].slice.call(document.querySelectorAll('.og .band .tag')).forEach(function(t){if(/Audit In Progress/.test(t.textContent)){t.className='tag';t.innerHTML='<span class="dot"></span>No records yet';}});
-  [].slice.call(document.querySelectorAll('.og .band a.btn, .og .band button.btn')).forEach(function(b){if(/Assemble FEMA Package|Export Binder/.test(b.textContent)){b.setAttribute('aria-disabled','true');b.setAttribute('tabindex','-1');b.title='Upload records first';}});
+  [].slice.call(document.querySelectorAll('.og .band a.btn, .og .band button.btn')).forEach(function(b){if(/Assemble FEMA Package|Export workbook/.test(b.textContent)){b.setAttribute('aria-disabled','true');b.setAttribute('tabindex','-1');b.title='Upload records first';}});
   var mk=document.querySelector('.og .gn-proj.is-cur .gn-mk');if(mk)mk.remove();
   var c=document.querySelector('.pjb'),cs=c?c.querySelectorAll('.gn-c'):[];[].slice.call(cs).forEach(function(x,i){if(i===0)x.textContent='0';else x.remove();});
   var wrap=tb.parentElement,sec=wrap.parentElement,hd=sec.firstElementChild;var a=hd&&hd.querySelector('a');if(a)a.remove();
