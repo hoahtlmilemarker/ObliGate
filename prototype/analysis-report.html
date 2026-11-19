@@ -684,6 +684,7 @@ function lcInit(t){if(t._lc)return;t._lc=1;var tb=t.tBodies[0],rs=[].slice.call(
  [['closeout','DR-4605-CA','Late Winter Storms & Debris Flows','Jan 05, 2021 – Feb 28, 2021','6 Projects','$7,840,000','$7,610,000','97%','s-good','Closeout review (97%)',97,'var(--good)','Open Projects',[0,0,0]],
   ['closeout','DR-4569-CA','August 2020 Lightning Complex Fires','Aug 14, 2020 – Sep 26, 2020','5 Projects','$6,210,000','$6,050,000','97%','s-good','Closeout review (97%)',97,'var(--good)','Open Projects',[0,1,0]],
   ['appeals','DR-4482-CA','Pandemic Emergency Protective Measures','Jan 20, 2020 – May 11, 2023','3 Projects','$2,980,000','$2,410,000','81%','s-warn','First appeal filed (81%)',81,'var(--warn)','Open Projects',[1,0,0]],
+  ['active','DR-4801-CA','January 2025 Windstorm & Wildfires','Jan 07, 2025 – Jan 31, 2025','0 Projects','$0','$0','0%','','No projects yet',0,'var(--dim)','Delete',[0,0,0]],
   ['archived','DR-4407-CA','Woolsey & Hill Fires','Nov 08, 2018 – Nov 25, 2018','9 Projects','$11,400,000','$11,400,000','100%','','Closed (100%)',100,'var(--dim)','Restore',[0,0,1]],
   ['archived','DR-4353-CA','Thomas Fire & Montecito Debris Flows','Dec 04, 2017 – Jan 31, 2018','7 Projects','$8,900,000','$8,900,000','100%','','Closed (100%)',100,'var(--dim)','Restore',[0,0,1]]
  ].forEach(function(d){var r=tpl.cloneNode(true),c=r.cells;r.setAttribute('data-lc',d[0]);r.setAttribute('data-flag',d[13][0]);r.setAttribute('data-match',d[13][1]);r.setAttribute('data-rec',d[13][2]);r.setAttribute('data-sample','1');
@@ -691,7 +692,7 @@ function lcInit(t){if(t._lc)return;t._lc=1;var tb=t.tBodies[0],rs=[].slice.call(
   var st=c[5].querySelector('.status');st.className='status'+(d[8]?' '+d[8]:'');st.textContent=d[9];var mt=c[5].querySelector('.meter div');if(mt){mt.style.width=d[10]+'%';mt.style.background=d[11];}
   var a=c[6].querySelector('a,button');if(a){var sv=a.querySelector('svg');a.textContent=d[12];if(sv)a.appendChild(sv);}
   tb.appendChild(r);});
- [].forEach.call(tb.rows,function(r){var a=r.cells[r.cells.length-1]&&r.cells[r.cells.length-1].querySelector('a');if(a&&/^(Archive|Restore)$/.test(txt(a))){var bt=document.createElement('button');bt.type='button';bt.className=a.className;bt.textContent=txt(a);a.replaceWith(bt);}});}
+ [].forEach.call(tb.rows,function(r){var a=r.cells[r.cells.length-1]&&r.cells[r.cells.length-1].querySelector('a');if(a&&/^(Archive|Restore|Delete)$/.test(txt(a))){var bt=document.createElement('button');bt.type='button';bt.className=a.className;bt.textContent=txt(a);if(txt(a)==='Delete'){bt.setAttribute('data-del-decl','');bt.classList.add('og-del');}a.replaceWith(bt);}});}
 function sealDone(){var app=document.querySelector('.og');if(!app)return;try{sessionStorage.setItem('og-sealed',String(Date.now()));}catch(e){}
  var tag=[].find.call(app.querySelectorAll('.tag'),function(x){return /Action Required/.test(x.textContent);});if(tag){tag.className='tag t-good';tag.innerHTML='<span class="dot"></span>Sealed';}
  var ck=app.querySelector('.att-ck input');if(ck){ck.disabled=true;ck.closest('.att-ck').style.cursor='default';}
@@ -2767,8 +2768,8 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
   function openRow(pw){var r=R.filter(function(x){return x.pw===pw;})[0];if(!r)return;location.href='cross-check'+(r.pw==='PW-00428'?'':'#'+r.pw);}
   function csv(list){var hd=['Project','Name','Disaster','Department','Unmatched hours','Open flagged','Resolved','RFIs','Assignee','Due'];return [hd].concat(list.map(function(r){return [r.pw,r.name,r.dr,r.dept,r.v,r.open,r.res,r.rfi,r.who||'Unassigned',r.due?r.due.toISOString().slice(0,10):''];})).map(function(a){return a.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');}
   var inp=q(root,'.cq-srch input');inp.addEventListener('input',function(){st.term=inp.value;st.page=1;render();});
-  root.addEventListener('change',function(e){var t=e.target;if(t.hasAttribute('data-f')){st.f[t.getAttribute('data-f')]=t.checked;}else if(t.hasAttribute('data-dis')){var d=t.getAttribute('data-dis');st.dis=t.checked?st.dis.concat(d):st.dis.filter(function(x){return x!==d;});}else if(t.hasAttribute('data-dept')){var d2=t.getAttribute('data-dept');st.dept=t.checked?st.dept.concat(d2):st.dept.filter(function(x){return x!==d2;});}else return;st.page=1;var sel=t.getAttribute('data-f')?'[data-f="'+t.getAttribute('data-f')+'"]':t.getAttribute('data-dis')?'[data-dis="'+t.getAttribute('data-dis')+'"]':'[data-dept="'+t.getAttribute('data-dept')+'"]';render();var nb=q(root,sel);if(nb)nb.focus();});
-  root.addEventListener('click',function(e){var t=e.target.closest('button,a');if(!t)return;
+  (root.closest('.og')||document).addEventListener('change',ogScoped(root,function(e){var t=e.target;if(t.hasAttribute('data-f')){st.f[t.getAttribute('data-f')]=t.checked;}else if(t.hasAttribute('data-dis')){var d=t.getAttribute('data-dis');st.dis=t.checked?st.dis.concat(d):st.dis.filter(function(x){return x!==d;});}else if(t.hasAttribute('data-dept')){var d2=t.getAttribute('data-dept');st.dept=t.checked?st.dept.concat(d2):st.dept.filter(function(x){return x!==d2;});}else return;st.page=1;var sel=t.getAttribute('data-f')?'[data-f="'+t.getAttribute('data-f')+'"]':t.getAttribute('data-dis')?'[data-dis="'+t.getAttribute('data-dis')+'"]':'[data-dept="'+t.getAttribute('data-dept')+'"]';render();var nb=q(root,sel);if(nb)nb.focus();}));
+  (root.closest('.og')||document).addEventListener('click',ogScoped(root,function(e){var t=e.target.closest('button,a');if(!t)return;
    if(t.matches('[data-dm]')){var v=t.getAttribute('data-v')==='1';setDemoEmpty('cx',v);R=v?[]:R0;DRS=[...new Set(R.map(function(r){return r.dr;}))];DPS=[...new Set(R.map(function(r){return r.dept;}))];st.q='all';st.f={};st.dis=[];st.dept=[];st.term='';inp.value='';st.page=1;q(root,'.xq-acts .xq-dm').outerHTML=seg('cx',v);render();var nb=q(root,'[data-dm][data-v="'+(v?1:0)+'"]');if(nb)nb.focus();return;}
    if(t.matches('[data-q]')){st.q=t.getAttribute('data-q');st.page=1;render();var b=q(root,'[data-q="'+st.q+'"]');if(b)b.focus();return;}
    if(t.matches('[data-reset]')){e.preventDefault();st.q='all';st.f={};st.dis=[];st.dept=[];st.term='';inp.value='';st.page=1;render();return;}
@@ -2776,10 +2777,12 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
    if(t.matches('[data-pg]')){st.page+=+t.getAttribute('data-pg');drawMain();return;}
    if(t.matches('[data-export]')){if(!R.length){toast('Nothing to export yet.');return;}download('cross-check-projects.csv',csv(rows()));toast('<b>cross-check-projects.csv</b> · '+rows().length+' projects (sample data)');return;}
    if(t.matches('[data-sort]')){var p=openPop(t,'<small class="h">Sort by</small>'+SO.map(function(s){return '<button type="button" class="mi'+(st.s===s[0]?' on':'')+'" data-so="'+s[0]+'" aria-checked="'+(st.s===s[0])+'" role="menuitemradio"><span class="mi-t">'+s[1]+'</span>'+(st.s===s[0]?S(I.check):'')+'</button>';}).join(''),'r');p.addEventListener('click',function(ev){var b=ev.target.closest('[data-so]');if(!b)return;st.s=b.getAttribute('data-so');closePop();drawMain();var nb=q(root,'[data-sort]');if(nb)nb.focus();});return;}
-   if(t.matches('[data-cols]')){var p3=openPop(t,'<small class="h">Columns</small>'+COLS.map(function(c){return '<label><input type="checkbox" data-col="'+c[0]+'"'+(st.cols[c[0]]?' checked':'')+'>'+c[1]+'</label>';}).join(''),'r');p3.addEventListener('change',function(ev){st.cols[ev.target.getAttribute('data-col')]=ev.target.checked;drawMain();});return;}});
+   if(t.matches('[data-cols]')){var p3=openPop(t,'<small class="h">Columns</small>'+COLS.map(function(c){return '<label><input type="checkbox" data-col="'+c[0]+'"'+(st.cols[c[0]]?' checked':'')+'>'+c[1]+'</label>';}).join(''),'r');p3.addEventListener('change',function(ev){st.cols[ev.target.getAttribute('data-col')]=ev.target.checked;drawMain();});return;}}));
   render();}
 
 
+ /* List pages: the filter rail is moved into the left sidebar, so list handlers listen on the app and accept clicks from the list or the sidebar */
+ function ogScoped(root,fn){return function(e){var t=e.target;if(!t||!t.closest)return;if(!root.contains(t)&&!t.closest('.sidebar,.lr-rail'))return;fn.call(this,e);};}
  /* ---------------- 24 · Projects (home) ---------------- */
  function projList(root){
   var D={'DR-4683-CA':'California Severe Winter Storms','DR-4758-CA':'February 2024 Atmospheric River'};
@@ -2799,9 +2802,14 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
    {pw:'PW-00439',name:'Marina del Rey Breakwater Debris',dr:'DR-4683-CA',dept:'Department of Beaches',docs:0,lab:'na',pre:0,who:'',h:24*20},
    {pw:'PW-01112',name:'Coastal Bluff Drainage',dr:'DR-4758-CA',dept:'Public Works',docs:0,lab:'req',pre:0,who:'Marcus Hale',h:24*5},
    {pw:'PW-01118',name:'Las Flores Creek Debris Basin',dr:'DR-4758-CA',dept:'Stormwater',docs:0,lab:'req',pre:0,who:'',h:24*41}];
+  function pjAct(a,r){var D=window.ogDialog;if(!D)return;
+   if(a==='restore'){r.arch=0;render();toast('<b>'+r.pw+' restored</b> to active projects');return;}
+   if(a==='archive'){D({eyebrow:'Archive project',title:'Archive '+r.pw+'?',ok:'Archive Project',body:'<p><b>'+esc(r.name)+'</b> moves to Archived. Its documents, findings and audit log stay available read-only, and you can restore it at any time.</p>',onOk:function(){r.arch=1;render();toast('<b>'+r.pw+' archived</b> · find it under Archived');}});return;}
+   if(a==='delete'){var d=D({danger:true,eyebrow:'Delete project',title:'Delete '+r.pw+'?',ok:'Delete Project',body:'<p><b>'+esc(r.name)+'</b> has no documents, so it can be deleted for good. This can’t be undone. The deletion is kept in the audit log.</p><label>Type '+r.pw+' to confirm<input type="text" class="dlg-in" data-req autocomplete="off" spellcheck="false" placeholder="'+r.pw+'"></label>',onOk:function(){R=R.filter(function(x){return x!==r;});R0=R0.filter(function(x){return x!==r;});render();toast('<b>'+r.pw+' deleted</b> · recorded in the audit log');}});if(window.ogTypeConfirm)window.ogTypeConfirm(d,r.pw);}}
   function added(){var L=[];try{L=JSON.parse(sessionStorage.getItem('og-newpj')||'[]');}catch(x){L=window.__ogNewPj||[];}return L.map(function(p){return {pw:p.pw,name:p.name,dr:p.dr,dept:p.dept||'Public Works',docs:0,lab:p.nolab?'na':'req',pre:0,who:ME,h:0,isNew:1};});}
   var R0=R;R=added().concat(R0);if(demoEmpty('pj'))R=[];
   var QS=[['all','All projects',function(){return true;}],['you','Assigned to you',function(r){return r.who===ME;}],['att','Needs attention',function(r){return r.lab==='req'||(typeof r.lab==='number'&&r.lab>0);}],['new','Not started',function(r){return !r.docs;}]];
+  QS=QS.map(function(x){var f=x[2];return [x[0],x[1],function(r){return !r.arch&&f(r);}];});QS.push(['arc','Archived',function(r){return !!r.arch;}]);
   var SO=[['act','Recent activity',function(a,b){return ((a.docs||a.isNew)?0:1)-((b.docs||b.isNew)?0:1)||a.h-b.h;}],['lab','Most labor findings',function(a,b){return (typeof b.lab==='number'?b.lab:-1)-(typeof a.lab==='number'?a.lab:-1);}],['pre','Closest to submission',function(a,b){return b.pre-a.pre;}],['name','Name A–Z',function(a,b){return a.name.localeCompare(b.name);}],['pw','PW number',function(a,b){return a.pw.localeCompare(b.pw);}]];
   var st={q:'all',dis:[],dept:[],s:(function(){try{var v=localStorage.getItem('og-pj-sort');return /^(act|lab|pre|name|pw)$/.test(v||'')?v:'act';}catch(x){return 'act';}})(),term:'',page:1,per:10};
   var hd=decodeURIComponent((location.hash||'').slice(1));if(/^DR-\d{4}-[A-Z]{2}$/.test(hd))st.dis=[hd];
@@ -2810,7 +2818,7 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
   function rows(){return R.filter(pass).sort(SO.filter(function(x){return x[0]===st.s;})[0][2]);}
   function filtered(){return st.q!=='all'||st.dis.length||st.dept.length||st.term.trim();}
   function cnt(fn){return R.filter(fn).length;}
-  function drawRail(){var L=lists();var h='<div><span class="lbl">View</span>'+QS.map(function(x){return '<button type="button" class="cq-q" data-q="'+x[0]+'" aria-pressed="'+(st.q===x[0])+'">'+x[1]+'<span>'+cnt(x[2])+'</span></button>';}).join('')+'</div>'+
+  function drawRail(){var L=lists();var h='<div><span class="lbl">View</span>'+QS.filter(function(x){return x[0]!=='arc'||st.q==='arc'||cnt(x[2]);}).map(function(x){return '<button type="button" class="cq-q" data-q="'+x[0]+'" aria-pressed="'+(st.q===x[0])+'">'+x[1]+'<span>'+cnt(x[2])+'</span></button>';}).join('')+'</div>'+
    (L.DRS.length?'<div><span class="lbl">Disaster</span>'+L.DRS.map(function(d){return '<label class="cq-ck"><input type="checkbox" data-dis="'+d+'"'+(st.dis.indexOf(d)>-1?' checked':'')+'><span>'+d+'</span><em>'+cnt(function(r){return r.dr===d;})+'</em></label>';}).join('')+'</div>':'')+
    (L.DPS.length?'<div><span class="lbl">Department</span>'+L.DPS.map(function(d){return '<label class="cq-ck"><input type="checkbox" data-dept="'+esc(d)+'"'+(st.dept.indexOf(d)>-1?' checked':'')+'><span>'+esc(d)+'</span><em>'+cnt(function(r){return r.dept===d;})+'</em></label>';}).join('')+'</div>':'')+
    (filtered()?'<button type="button" class="cq-reset" data-reset>Reset filters</button>':'');
@@ -2828,13 +2836,13 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
    var th=function(t,c){return '<th'+(c?' class="'+c+'"':'')+'>'+t+'</th>';};
    q(root,'.cq-card').innerHTML='<div class="cq-tw"><table class="cq-t"><thead'+(R.length?'':' hidden')+'><tr>'+th('Project')+th('Disaster')+th('Docs','r')+th('Labor check')+th('Submission')+th('Owner')+th('')+'</tr></thead><tbody>'+
     (vis.length?vis.map(function(r){
-      return '<tr><td><button type="button" class="cq-pw" data-open="'+r.pw+'">'+esc(r.pw)+'</button>'+(r.isNew?' <span class="pj-new">New</span>':'')+'<span class="cq-nm">'+esc(r.name)+'</span><span class="cq-up">'+esc(r.dept)+' · '+(r.isNew?'created just now':(r.docs?'updated ':'created ')+ago(r.h).toLowerCase())+'</span></td>'+
+      return '<tr'+(r.arch?' class="pj-arch"':'')+'><td><button type="button" class="cq-pw" data-open="'+r.pw+'">'+esc(r.pw)+'</button>'+(r.isNew?' <span class="pj-new">New</span>':'')+(r.arch?' <span class="pj-arc">Archived</span>':'')+'<span class="cq-nm">'+esc(r.name)+'</span><span class="cq-up">'+esc(r.dept)+' · '+(r.isNew?'created just now':(r.docs?'updated ':'created ')+ago(r.h).toLowerCase())+'</span></td>'+
        '<td><span class="cq-dr" title="'+esc(D[r.dr]||r.dr)+'">'+r.dr+'</span></td>'+
        '<td class="r">'+(r.docs?'<b style="color:var(--head)">'+r.docs+'</b>':'<span style="color:var(--gray)" title="No documents yet">0</span>')+'</td>'+
        '<td>'+labCell(r)+'</td>'+
        '<td>'+(r.docs?'<span class="pj-pre"><i><u style="width:'+r.pre+'%"></u></i>'+r.pre+'%</span>':'<span style="color:var(--gray)">Locked</span>')+'</td>'+
        '<td>'+(r.who?'<span class="cq-as" title="'+esc(r.who)+'"><span class="cq-av">'+(PPL[r.who]||['?'])[0]+'</span><span>'+esc(r.who.split(' ')[0])+(r.who===ME?' <span style="color:var(--gray)">(you)</span>':'')+'</span></span>':'<span class="cq-un" title="Unassigned">—</span>')+'</td>'+
-       '<td><button type="button" class="cq-go" data-open="'+r.pw+'">Open'+S(I.r)+'</button></td></tr>';}).join(''):
+       '<td><span class="pj-acts"><button type="button" class="cq-go" data-open="'+r.pw+'">Open'+S(I.r)+'</button><button type="button" class="pj-more" data-pmore="'+r.pw+'" aria-label="More actions for '+r.pw+'" aria-haspopup="menu" aria-expanded="false" title="More actions"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></button></span></td></tr>';}).join(''):
      (R.length?'<tr><td colspan="7"><div class="cq-empty"><b>No projects match</b>Try another view or remove a filter.<br><button type="button" class="xq-btn" data-reset>Reset filters</button></div></td></tr>':
       '<tr><td colspan="7"><div class="xq-es"><svg class="xq-es-art" viewBox="0 0 120 96" fill="none" aria-hidden="true"><ellipse cx="60" cy="86" rx="38" ry="5" fill="currentColor" opacity=".08"/><path d="M14 30a4 4 0 0 1 4-4h12l4 5h18a4 4 0 0 1 4 4v29a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4Z" fill="var(--card)" stroke="#9FB6CC" stroke-width="1.3"/><path d="M20 44h28M20 51h22" stroke="#C9D7E5" stroke-width="1.6" stroke-linecap="round"/><path d="M64 36a4 4 0 0 1 4-4h12l4 5h18a4 4 0 0 1 4 4v29a4 4 0 0 1-4 4H68a4 4 0 0 1-4-4Z" fill="var(--card)" stroke="#9FB6CC" stroke-width="1.3"/><path d="M70 50h28M70 57h22" stroke="#C9D7E5" stroke-width="1.6" stroke-linecap="round"/><circle cx="60" cy="47" r="11.5" fill="#005A9C"/><path d="M60 41.5v11M54.5 47h11" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="104" cy="20" r="1.8" fill="#B08A4E" opacity=".7"/><circle cx="14" cy="72" r="1.5" fill="#7FB8E6"/></svg><b>No projects yet</b><p>Create your first project, then upload its records. ObliGate checks them against FEMA rules.</p><span class="xq-es-row"><button type="button" class="xq-btn p" data-np>'+S('<path d="M12 5v14M5 12h14"/>')+'New project</button><a class="xq-btn" href="import">Import data</a></span></div></td></tr>'))+
     '</tbody></table></div><div class="cq-foot"><span>Showing <b>'+(n?((st.page-1)*st.per+1)+'–'+Math.min(n,st.page*st.per):0)+'</b> of <b>'+n+'</b> projects</span><span class="xq-pg"><button type="button" data-pg="-1" aria-label="Previous page"'+(st.page<=1?' disabled':'')+'>'+S(I.l)+'</button><button type="button" data-pg="1" aria-label="Next page"'+(st.page>=pages?' disabled':'')+'>'+S(I.r)+'</button></span></div>';
@@ -2844,16 +2852,19 @@ html body .og:has(.xq-imp) .col .band .band-in,html body .og:has(.xq-imp) .band 
   root.innerHTML='<section class="cq-ledger" aria-label="Project totals"></section><section class="pj-dis" aria-label="Disaster summary" hidden></section><div class="cq-body"><aside class="cq-rail" aria-label="Views and filters"></aside><div class="cq-main"><div class="cq-tools"><label class="cq-srch">'+S('<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>')+'<input type="search" placeholder="Filter projects by name, PW or department…" aria-label="Filter projects"></label><span class="cq-meta"></span><span class="xq-acts">'+seg('pj',demoEmpty('pj'))+'<button type="button" class="xq-btn" data-sort aria-haspopup="true"></button><button type="button" class="xq-btn p" data-np>'+S('<path d="M12 5v14M5 12h14"/>')+'New project</button></span></div><div class="cq-card"></div></div></div>';
   function openRow(pw){var r=R.filter(function(x){return x.pw===pw;})[0];if(!r)return;if(r.isNew||!r.docs){location.href='library-empty#'+r.pw;return;}location.href='project-overview'+(r.pw==='PW-00428'?'':'#'+r.pw);}
   var inp=q(root,'.cq-srch input');inp.addEventListener('input',function(){st.term=inp.value;st.page=1;render();});
-  root.addEventListener('change',function(e){var t=e.target;if(t.hasAttribute('data-dis')){var d=t.getAttribute('data-dis');st.dis=t.checked?st.dis.concat(d):st.dis.filter(function(x){return x!==d;});}else if(t.hasAttribute('data-dept')){var d2=t.getAttribute('data-dept');st.dept=t.checked?st.dept.concat(d2):st.dept.filter(function(x){return x!==d2;});}else return;st.page=1;render();});
-  root.addEventListener('click',function(e){var t=e.target.closest('button,a');if(!t)return;
+  (root.closest('.og')||document).addEventListener('change',ogScoped(root,function(e){var t=e.target;if(t.hasAttribute('data-dis')){var d=t.getAttribute('data-dis');st.dis=t.checked?st.dis.concat(d):st.dis.filter(function(x){return x!==d;});}else if(t.hasAttribute('data-dept')){var d2=t.getAttribute('data-dept');st.dept=t.checked?st.dept.concat(d2):st.dept.filter(function(x){return x!==d2;});}else return;st.page=1;render();}));
+  (root.closest('.og')||document).addEventListener('click',ogScoped(root,function(e){var t=e.target.closest('button,a');if(!t)return;
    if(t.matches('[data-clr-dis]')){st.dis=[];st.page=1;render();return;}
    if(t.matches('[data-dm]')){var v=t.getAttribute('data-v')==='1';setDemoEmpty('pj',v);R=v?[]:added().concat(R0);st={q:'all',dis:[],dept:[],s:st.s,term:'',page:1,per:10};inp.value='';q(root,'.xq-acts .xq-dm').outerHTML=seg('pj',v);render();return;}
    if(t.matches('[data-q]')){st.q=t.getAttribute('data-q');st.page=1;render();return;}
    if(t.matches('[data-reset]')){e.preventDefault();st.q='all';st.dis=[];st.dept=[];st.term='';inp.value='';st.page=1;render();return;}
    if(t.matches('[data-np]')){if(window.ogAddProject)window.ogAddProject();return;}
+   if(t.matches('[data-pmore]')){var pw=t.getAttribute('data-pmore'),pr=R.filter(function(x){return x.pw===pw;})[0];if(!pr)return;
+    var mh='<small class="h">'+pw+'</small>'+(pr.arch?'<button type="button" class="mi" data-pa="restore"><span class="mi-t">Restore project</span></button>':'<button type="button" class="mi" data-pa="archive"><span class="mi-t">Archive project<em>Keeps everything, read-only</em></span></button>')+(pr.docs?'<button type="button" class="mi mi-off" disabled aria-disabled="true"><span class="mi-t">Delete project<em>Has '+pr.docs+' documents. Archive it instead.</em></span></button>':'<button type="button" class="mi mi-risk" data-pa="delete"><span class="mi-t">Delete project<em>No documents yet</em></span></button>');
+    var pp=openPop(t,mh,'r');pp.setAttribute('role','menu');pp.addEventListener('click',function(ev){var b=ev.target.closest('[data-pa]');if(!b)return;closePop();pjAct(b.getAttribute('data-pa'),pr);});return;}
    if(t.matches('[data-open]')){openRow(t.getAttribute('data-open'));return;}
    if(t.matches('[data-pg]')){st.page+=+t.getAttribute('data-pg');drawMain();return;}
-   if(t.matches('[data-sort]')){var p=openPop(t,'<small class="h">Sort by</small>'+SO.map(function(s){return '<button type="button" class="mi'+(st.s===s[0]?' on':'')+'" data-so="'+s[0]+'" aria-checked="'+(st.s===s[0])+'" role="menuitemradio"><span class="mi-t">'+s[1]+'</span>'+(st.s===s[0]?S(I.check):'')+'</button>';}).join(''),'r');p.addEventListener('click',function(ev){var b=ev.target.closest('[data-so]');if(!b)return;st.s=b.getAttribute('data-so');try{localStorage.setItem('og-pj-sort',st.s);}catch(x){}closePop();drawMain();});return;}});
+   if(t.matches('[data-sort]')){var p=openPop(t,'<small class="h">Sort by</small>'+SO.map(function(s){return '<button type="button" class="mi'+(st.s===s[0]?' on':'')+'" data-so="'+s[0]+'" aria-checked="'+(st.s===s[0])+'" role="menuitemradio"><span class="mi-t">'+s[1]+'</span>'+(st.s===s[0]?S(I.check):'')+'</button>';}).join(''),'r');p.addEventListener('click',function(ev){var b=ev.target.closest('[data-so]');if(!b)return;st.s=b.getAttribute('data-so');try{localStorage.setItem('og-pj-sort',st.s);}catch(x){}closePop();drawMain();});return;}}));
   document.addEventListener('og:pj-added',function(){if(demoEmpty('pj'))return;R=added().concat(R0);st.page=1;render();});
   render();}
  /* ---------------- 23 · Import (step 1) ---------------- */
@@ -4596,6 +4607,31 @@ html body .upm .upm-rm:hover,html body .upm[data-theme="dark"] .upm-rm:hover{col
 .upm .upm-undo{border:0;background:none;padding:2px 4px;margin-left:2px;border-radius:4px;color:var(--blue);font:700 12.5px Manrope,Arial,sans-serif;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .upm .upm-undo:hover{background:var(--blue-t)}
 .upm .upm-undo:focus-visible{outline:2px solid var(--blue);outline-offset:1px}</style>
+<script>/* Delete for good: type the ID to confirm (only for disasters/projects with nothing inside) */
+window.ogTypeConfirm=function(d,code){if(!d)return;var i=d.querySelector('.dlg-in'),ok=d.querySelector('.dlg-ok');if(!i||!ok)return;function f(){ok.disabled=i.value.trim().toUpperCase()!==code.toUpperCase();}i.addEventListener('input',f);i.addEventListener('change',f);f();};
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-del-decl]');if(!b||!window.ogDialog)return;e.preventDefault();e.stopPropagation();var r=b.closest('tr'),id=((r&&r.querySelector('.decl'))||{}).textContent||'';id=id.trim();
+ var d=window.ogDialog({danger:true,eyebrow:'Delete declaration',title:'Delete '+id+'?',ok:'Delete Declaration',body:'<p>This declaration has no projects or documents, so it can be deleted for good. This can’t be undone. The deletion is kept in the audit log.</p><p style="color:var(--gray);font-size:13px">Declarations with projects can only be archived.</p><label>Type '+id+' to confirm<input type="text" class="dlg-in" data-req autocomplete="off" spellcheck="false" placeholder="'+id+'"></label>',
+  onOk:function(){if(r)r.remove();if(window.ogLcApply)window.ogLcApply();if(window.ogToast2)window.ogToast2('<b>'+id+' deleted</b> · recorded in the audit log');}});
+ window.ogTypeConfirm(d,id);},true);</script>
+<style>/* Archive / delete affordances */
+.dlg-c input.dlg-in{height:38px;box-sizing:border-box;padding:0 12px;border:1px solid var(--line);border-radius:4px;background:var(--card);font:600 14px Manrope,Arial,sans-serif;letter-spacing:.04em;text-transform:none;color:var(--ink)}
+.dlg-c input.dlg-in:focus{outline:2px solid var(--blue);outline-offset:-1px;border-color:transparent}
+.og .pj-acts{display:inline-flex;align-items:center;gap:6px}
+.og .pj-more{display:grid;place-items:center;width:32px;height:32px;padding:0;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--gray);cursor:pointer}
+.og .pj-more:hover,.og .pj-more[aria-expanded="true"]{border-color:var(--blue);color:var(--blue)}
+.og .pj-more:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.og .xq-pop .mi .mi-t em{display:block;margin-top:2px;font:500 11.5px/1.3 Manrope,Arial,sans-serif;font-style:normal;color:var(--gray)}
+.og .xq-pop .mi:has(em){min-height:46px;padding-top:6px;padding-bottom:6px}
+.og .xq-pop .mi.mi-risk{color:#A82E23}
+.og .xq-pop .mi.mi-risk:hover{background:rgba(168,46,35,.08);color:#A82E23}
+.og[data-theme="dark"] .xq-pop .mi.mi-risk,.og[data-theme="dark"] .xq-pop .mi.mi-risk:hover{color:#F07A6E}
+.og .xq-pop .mi.mi-off{cursor:not-allowed;color:var(--gray)}
+.og .xq-pop .mi.mi-off:hover{background:none;color:var(--gray)}
+.og .pj-arc{display:inline-flex;align-items:center;height:20px;padding:0 7px;margin-left:6px;border-radius:4px;background:var(--pale);border:1px solid var(--line);color:var(--gray);font:800 10.5px/1 Manrope,Arial,sans-serif;letter-spacing:.04em;vertical-align:3px}
+.og tr.pj-arch .cq-pw,.og tr.pj-arch .cq-nm{opacity:.7}
+html body .og .btn.og-del{color:#A82E23!important}
+html body .og .btn.og-del:hover{border-color:#A82E23!important;color:#A82E23!important;background:rgba(168,46,35,.06)!important}
+html body .og[data-theme="dark"] .btn.og-del,html body .og[data-theme="dark"] .btn.og-del:hover{color:#F07A6E!important;border-color:rgba(240,122,110,.45)!important}</style>
 
 <div class="og gn" data-theme="light" style="min-height: 1250px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
