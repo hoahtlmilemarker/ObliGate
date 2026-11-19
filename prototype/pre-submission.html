@@ -4746,6 +4746,28 @@ html.og-ro .og [data-ro-off]{opacity:.45!important;cursor:not-allowed!important;
 .dlg .fm-row > .fm-f{margin:0}
 .dlg .fm-h-row{margin:-4px 0 10px}
 @media (max-width:640px){.dlg .fm-row{gap:10px}}</style>
+<script>/* Document Library: ⋯ on every row → Move to folder / Delete (runs the Batch Actions flow for that one row) */
+(function(){var pop=null,popB=null;
+ var DOTS='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
+ function close(){if(pop){pop.remove();pop=null;}if(popB){popB.setAttribute('aria-expanded','false');popB=null;}}
+ function deco(){document.querySelectorAll('.og .lb-tbl tbody tr').forEach(function(r){var c=r.querySelector('td.lb-act');if(!c||c.querySelector('.lb-more'))return;var a=r.querySelector('.lb-dt > a');var nm=a?a.textContent.trim():'document';
+  var b=document.createElement('button');b.type='button';b.className='pj-more lb-more';b.setAttribute('aria-label','More actions for '+nm);b.setAttribute('aria-haspopup','menu');b.setAttribute('aria-expanded','false');b.title='More actions';b.innerHTML=DOTS;
+  var w=document.createElement('span');w.className='lb-acts';while(c.firstChild)w.appendChild(c.firstChild);w.appendChild(b);c.appendChild(w);});}
+ function only(r){document.querySelectorAll('.og .lb-tbl tbody tr input[type=checkbox]').forEach(function(x){if(x.checked&&!r.contains(x))x.click();});var c=r.querySelector('input[type=checkbox]');if(c&&!c.checked)c.click();}
+ function run(act,r){only(r);var bt=document.querySelector('.og .lb-batch');if(bt&&bt.getAttribute('aria-expanded')!=='true')bt.click();setTimeout(function(){var it=document.querySelector('#bmenu [data-act="'+act+'"]');if(it)it.click();},30);}
+ window.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.lb-more');
+  if(b){e.preventDefault();e.stopImmediatePropagation();if(pop&&popB===b){close();return;}close();if(document.documentElement.classList.contains('og-ro')){if(window.ogToast2)window.ogToast2('<b>This project is archived</b> · restore it to make changes');return;}var r=b.closest('tr'),a=r.querySelector('.lb-dt > a'),nm=a?a.textContent.trim():'';
+   var p=document.createElement('div');p.className='xq-pop';p.setAttribute('role','menu');
+   p.innerHTML='<small class="h lb-h">'+nm.replace(/</g,'&lt;')+'</small><button type="button" class="mi" data-la="move"><span class="mi-t">Move to folder…</span></button><button type="button" class="mi mi-risk" data-la="delete"><span class="mi-t">Delete document<em>You can undo right after</em></span></button>';
+   (b.closest('.og')||document.body).appendChild(p);var rc=b.getBoundingClientRect();p.style.left=Math.max(12,Math.min(rc.right-p.offsetWidth,innerWidth-p.offsetWidth-12))+'px';var y=rc.bottom+6;if(y+p.offsetHeight>innerHeight-12)y=Math.max(12,rc.top-p.offsetHeight-6);p.style.top=y+'px';pop=p;popB=b;b.setAttribute('aria-expanded','true');
+   p.addEventListener('click',function(ev){var it=ev.target.closest('[data-la]');if(!it)return;var k=it.getAttribute('data-la');close();run(k,r);});return;}
+  if(pop&&!(e.target.closest&&e.target.closest('.xq-pop')))close();},true);
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pop){var b=popB;close();if(b)b.focus();}});
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(deco,150);});else setTimeout(deco,150);
+ var tm=0;new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(deco,80);}).observe(document.documentElement,{childList:true,subtree:true});})();</script>
+<style>.og .lb-acts{display:inline-flex;align-items:center;gap:6px;justify-content:flex-end}
+.og .lb-more{width:30px;height:30px}
+.og .xq-pop small.h.lb-h{text-transform:none;letter-spacing:0;font:700 12px/1.3 Manrope,Arial,sans-serif;color:var(--head);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}</style>
 
 <div class="og gn" data-theme="light" style="min-height: 1450px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
   <input type="checkbox" id="gn-tg" class="gn-tg" aria-hidden="true" tabindex="-1">
@@ -5100,16 +5122,19 @@ document.addEventListener('change',function(e){var t=e.target;if(!t.matches||!t.
  setTimeout(sync,0);});
 function docs(n){return n+' document'+(n===1?'':'s');}
 function note(h){if(window.ogToast2){window.ogToast2(h);return;}var o=document.querySelector('.og-toast');if(o)o.remove();var t=document.createElement('div');t.className='og-toast';t.setAttribute('role','status');t.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.6 2.6L16 9.7"/></svg><span>'+h+'</span><button type="button" class="x" aria-label="Dismiss">✕</button>';document.body.appendChild(t);t.querySelector('.x').onclick=function(){t.remove();};setTimeout(function(){t.remove();},4500);}
-function del(rs){var n=rs.length;rs.forEach(function(tr){tr.remove();});
- var dl=document.querySelector('.dl-count');if(dl){var k=dl.textContent.match(/\d+/);if(k)dl.textContent=Math.max(0,+k[0]-n)+' Documents';}
- var h1=document.querySelector('.band h1');if(h1)h1.textContent=h1.textContent.replace(/\((\d+) Documents\)/,function(_,x){return '('+Math.max(0,+x-n)+' Documents)';});
- if(window.ogLibClearSel)window.ogLibClearSel();if(window.ogLibRefresh)window.ogLibRefresh();sync();
- note('<b>'+docs(n)+' deleted</b> · recorded in audit log');}
+function bump(d){var dl=document.querySelector('.dl-count');if(dl){var k=dl.textContent.match(/\d+/);if(k)dl.textContent=Math.max(0,+k[0]+d)+' Documents';}
+ var h1=document.querySelector('.band h1');if(h1)h1.textContent=h1.textContent.replace(/\((\d+) Documents\)/,function(_,x){return '('+Math.max(0,+x+d)+' Documents)';});
+ if(window.ogLibClearSel)window.ogLibClearSel();if(window.ogLibRefresh)window.ogLibRefresh();sync();}
+/* Delete = soft delete: rows leave the list and the FEMA package, stay in the audit history, Undo for 8 s */
+function del(rs){var n=rs.length,keep=rs.map(function(tr){return {tr:tr,p:tr.parentNode,nx:tr.nextSibling};});rs.forEach(function(tr){tr.remove();});bump(-n);
+ function undo(){keep.slice().reverse().forEach(function(k){if(k.nx&&k.nx.parentNode===k.p)k.p.insertBefore(k.tr,k.nx);else k.p.appendChild(k.tr);var c=k.tr.querySelector('input[type=checkbox]');if(c)c.checked=false;});bump(n);note('<b>'+docs(n)+' restored</b>');}
+ if(window.ogToast)window.ogToast({type:'ok',title:docs(n)+' deleted',desc:'Kept in the audit history',duration:8000,actions:[{label:'Undo',primary:true,onClick:undo}]});
+ else note('<b>'+docs(n)+' deleted</b> · kept in the audit history');}
 m.addEventListener('click',function(e){var i=e.target.closest('.bm-i');if(!i||i.disabled)return;open(false);
  var rs=applies(i),n=rs.length,lab=base(i);
  if(i.dataset.act==='delete'){var where=window.ogDest||'PW-00428 › Force-Account Labor';
   var go=function(){del(rs);};
-  if(window.ogDialog)window.ogDialog({danger:1,eyebrow:'Delete documents',title:'Delete '+docs(n)+'?',ok:'Delete',body:'<p>They will be removed from '+where+' and from the FEMA package. This can\'t be undone. The deletion is recorded in the audit log.</p>',onOk:go});
+  if(window.ogDialog)window.ogDialog({danger:1,eyebrow:'Delete documents',title:'Delete '+docs(n)+'?',ok:'Delete',body:'<p>They will be removed from '+where+' and from the FEMA package. They stay in the audit history, and you can undo right after.</p>',onOk:go});
   else if(confirm('Delete '+docs(n)+'?'))go();
   return;}
  note('<b>'+lab+'</b> · '+docs(n));});

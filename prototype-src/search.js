@@ -265,16 +265,19 @@ document.addEventListener('change',function(e){var t=e.target;if(!t.matches||!t.
  setTimeout(sync,0);});
 function docs(n){return n+' document'+(n===1?'':'s');}
 function note(h){if(window.ogToast2){window.ogToast2(h);return;}var o=document.querySelector('.og-toast');if(o)o.remove();var t=document.createElement('div');t.className='og-toast';t.setAttribute('role','status');t.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.6 2.6L16 9.7"/></svg><span>'+h+'</span><button type="button" class="x" aria-label="Dismiss">✕</button>';document.body.appendChild(t);t.querySelector('.x').onclick=function(){t.remove();};setTimeout(function(){t.remove();},4500);}
-function del(rs){var n=rs.length;rs.forEach(function(tr){tr.remove();});
- var dl=document.querySelector('.dl-count');if(dl){var k=dl.textContent.match(/\d+/);if(k)dl.textContent=Math.max(0,+k[0]-n)+' Documents';}
- var h1=document.querySelector('.band h1');if(h1)h1.textContent=h1.textContent.replace(/\((\d+) Documents\)/,function(_,x){return '('+Math.max(0,+x-n)+' Documents)';});
- if(window.ogLibClearSel)window.ogLibClearSel();if(window.ogLibRefresh)window.ogLibRefresh();sync();
- note('<b>'+docs(n)+' deleted</b> · recorded in audit log');}
+function bump(d){var dl=document.querySelector('.dl-count');if(dl){var k=dl.textContent.match(/\d+/);if(k)dl.textContent=Math.max(0,+k[0]+d)+' Documents';}
+ var h1=document.querySelector('.band h1');if(h1)h1.textContent=h1.textContent.replace(/\((\d+) Documents\)/,function(_,x){return '('+Math.max(0,+x+d)+' Documents)';});
+ if(window.ogLibClearSel)window.ogLibClearSel();if(window.ogLibRefresh)window.ogLibRefresh();sync();}
+/* Delete = soft delete: rows leave the list and the FEMA package, stay in the audit history, Undo for 8 s */
+function del(rs){var n=rs.length,keep=rs.map(function(tr){return {tr:tr,p:tr.parentNode,nx:tr.nextSibling};});rs.forEach(function(tr){tr.remove();});bump(-n);
+ function undo(){keep.slice().reverse().forEach(function(k){if(k.nx&&k.nx.parentNode===k.p)k.p.insertBefore(k.tr,k.nx);else k.p.appendChild(k.tr);var c=k.tr.querySelector('input[type=checkbox]');if(c)c.checked=false;});bump(n);note('<b>'+docs(n)+' restored</b>');}
+ if(window.ogToast)window.ogToast({type:'ok',title:docs(n)+' deleted',desc:'Kept in the audit history',duration:8000,actions:[{label:'Undo',primary:true,onClick:undo}]});
+ else note('<b>'+docs(n)+' deleted</b> · kept in the audit history');}
 m.addEventListener('click',function(e){var i=e.target.closest('.bm-i');if(!i||i.disabled)return;open(false);
  var rs=applies(i),n=rs.length,lab=base(i);
  if(i.dataset.act==='delete'){var where=window.ogDest||'PW-00428 › Force-Account Labor';
   var go=function(){del(rs);};
-  if(window.ogDialog)window.ogDialog({danger:1,eyebrow:'Delete documents',title:'Delete '+docs(n)+'?',ok:'Delete',body:'<p>They will be removed from '+where+' and from the FEMA package. This can\'t be undone. The deletion is recorded in the audit log.</p>',onOk:go});
+  if(window.ogDialog)window.ogDialog({danger:1,eyebrow:'Delete documents',title:'Delete '+docs(n)+'?',ok:'Delete',body:'<p>They will be removed from '+where+' and from the FEMA package. They stay in the audit history, and you can undo right after.</p>',onOk:go});
   else if(confirm('Delete '+docs(n)+'?'))go();
   return;}
  note('<b>'+lab+'</b> · '+docs(n));});
