@@ -801,7 +801,7 @@
   function findFloaters(doc, win) {
     var out = [], all = doc.body ? doc.body.getElementsByTagName('*') : [];
     for (var i = 0; i < all.length; i++) {
-      var el = all[i]; if (el.closest && el.closest('[data-review-ui]')) continue;
+      var el = all[i]; if (el.closest && el.closest('[data-review-ui]')) continue; if (el.classList && el.classList.contains('og-sbi')) continue;   // page scroll thumb must stay on the edge
       var cs = win.getComputedStyle(el); if (cs.position !== 'fixed' || cs.display === 'none') continue;
       var r = el.getBoundingClientRect(); if (!r.width || r.width > 260) continue;     // skip full-width bars like the header
       if (r.right < win.innerWidth - 140) continue;                                       // only things hugging the right edge
@@ -817,7 +817,7 @@
       fixedCache = []; docs.forEach(function (d) { try { fixedCache = fixedCache.concat(findFloaters(d[0], d[1])); } catch (e) {} });
       fixedAt = Date.now(); fixedDocs = key;
     }
-    var hidden = root.style.display === 'none' || S.hidden, mobile = innerWidth <= 640;
+    var hidden = NOCOM || root.style.display === 'none' || S.hidden, mobile = innerWidth <= 640;
     var off = hidden ? 0 : S.open ? (mobile ? 0 : Math.min(370, innerWidth)) : (mobile ? 0 : 54);
     fixedCache.forEach(function (el) {
       if (!el.__rvT) { el.__rvT = 1; el.style.transition = (el.style.transition ? el.style.transition + ',' : '') + 'translate .25s ease'; }
