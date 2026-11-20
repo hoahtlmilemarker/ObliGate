@@ -5293,7 +5293,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  function title(e){if(e.hasAttribute('data-sh-t'))return;var t=e.getAttribute('aria-label');if(!t){var c=e.classList;if(c.contains('addm-menu'))t='Add';else if(c.contains('um'))t='';}
   if(t&&!/^(show columns|columns)$/i.test(t)&&!e.querySelector('.lbl,.um-h,.fm-h,.bm-h'))e.setAttribute('data-sh-t',t);}
  function scan(){raf=0;var els=[].slice.call(document.querySelectorAll(SEL)),now=[];
-  els.forEach(function(e){var on=mq.matches&&vis(e),has=e.classList.contains('og-sh');if(on){if(!has){e.classList.add('og-sh');e.removeAttribute('data-sh-t');e._ogT=Date.now();}if(e.style.maxWidth||e.style.width){e.style.removeProperty('max-width');e.style.removeProperty('width');}now.push(e);}else if(has)e.classList.remove('og-sh');});
+  els.forEach(function(e){var on=mq.matches&&vis(e),has=e.classList.contains('og-sh');if(on){if(!has){e.classList.add('og-sh');e.removeAttribute('data-sh-t');e._ogT=Date.now();}['max-width','width','left','right','top','bottom','inset'].forEach(function(k){if(e.style.getPropertyPriority(k)==='important'||k==='max-width'||k==='width')e.style.removeProperty(k);});now.push(e);}else if(has)e.classList.remove('og-sh');});
   open=now;var h=document.documentElement;if(h.classList.contains('og-sheet-open')!==(now.length>0))h.classList.toggle('og-sheet-open',now.length>0);}
  var tq=[];function q(){if(!raf)raf=requestAnimationFrame(scan);tq.forEach(clearTimeout);tq=[80,220,450].map(function(t){return setTimeout(function(){if(!raf)raf=requestAnimationFrame(scan);},t);});}
  ['transitionend','animationend'].forEach(function(n){document.addEventListener(n,function(e){if(e.target&&e.target.matches&&e.target.matches(SEL))q();},true);});
@@ -5534,7 +5534,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script>
 /* Add menu: keep the dropdown inside the viewport on narrow screens */
 document.addEventListener('toggle',function(e){var d=e.target;if(!d.classList||!d.classList.contains('addm')||!d.open)return;var m=d.querySelector('.addm-menu');if(!m)return;
- m.style.removeProperty('right');m.style.removeProperty('max-width');var vw=document.documentElement.clientWidth,g=16;m.style.setProperty('max-width',(vw-2*g)+'px','important');
+ m.style.removeProperty('right');m.style.removeProperty('max-width');if(matchMedia('(max-width:640px)').matches)return;/* phones: bottom sheet */var vw=document.documentElement.clientWidth,g=16;m.style.setProperty('max-width',(vw-2*g)+'px','important');
  var r=m.getBoundingClientRect();if(r.left<g){m.style.setProperty('right',(-(g-r.left))+'px','important');}},true);
 </script>
 
