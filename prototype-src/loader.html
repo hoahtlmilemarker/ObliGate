@@ -3459,12 +3459,7 @@ function draw(box){var list=ROWS.filter(function(r){return st.f==='all'||r.st===
   var dr=0,dot=0;list.forEach(function(r){if(r.st==='diff'){dr+=r.tr-r.lr;dot+=r.to-r.lo;}});var dp=[];if(dr)dp.push((dr>0?'+':'−')+f1(Math.abs(dr))+' Reg');if(dot)dp.push((dot>0?'+':'−')+f1(Math.abs(dot))+' OT');
   var nt=[];if(ms)nt.push(ms+' missing');if(hd)nt.push(hd+' held');
   box.querySelector('tfoot').innerHTML=n?'<tr><td colspan="2">Source totals<small>'+n+' employee-day'+(n===1?'':'s')+(st.f==='all'?'':' in this filter')+(nt.length?' · log excludes '+nt.join(', '):'')+'</small></td><td class="num gl">'+f1(T.tr)+'</td><td class="num">'+f1(T.to)+'</td><td class="num gl">'+((ms+hd)===n?'—':f1(T.lr))+'</td><td class="num">'+((ms+hd)===n?'—':f1(T.lo))+'</td><td class="num gl">'+(dp.length?dp.join(' · '):'—')+'</td><td class="gl" colspan="2"></td></tr>':'';})();
- (function(){var nb=box.querySelector('.cx-mn');var M=ROWS.filter(function(r){return r.st==='miss';});
-  if(!M.length||(st.f!=='all'&&st.f!=='miss')){if(nb)nb.remove();return;}
-  var by={};M.forEach(function(r){(by[r.e]=by[r.e]||[]).push(r.d.replace(/^\w+ /,''));});
-  var who=Object.keys(by).map(function(e){return '<b>'+e+'</b> · '+(by[e].length>2?by[e][0]+' – '+by[e][by[e].length-1]:by[e].join(', '));}).join('; ');
-  if(!nb){nb=document.createElement('div');nb.className='cx-mn';box.insertBefore(nb,box.querySelector('.cx-tw'));}
-  nb.innerHTML='<div><b>'+M.length+' employee-day'+(M.length>1?'s have':' has')+' no activity log to compare</b><span>'+who+'. The timesheet has hours for these days, but no uploaded log covers them, so there is nothing to mark on a document. Upload the missing logs, then run reconciliation again.</span></div><a class="btn btn-o btn-sm" href="12-upload-start.html">Upload activity logs</a>';})();
+ (function(){var nb=box.querySelector('.cx-mn');if(nb)nb.remove();})();
  box.querySelector('.cx-af span').innerHTML='Showing <b>'+(n?((st.page-1)*st.per+1)+'–'+Math.min(n,st.page*st.per):0)+'</b> of <b>'+n+'</b> employee-days';
  var pb=box.querySelectorAll('.xq-pg button');pb[0].disabled=st.page<=1;pb[1].disabled=st.page>=pages;}
 function init(){var sec=document.querySelector('.cx-days');if(!sec||sec.dataset.slice)return;sec.dataset.slice='1';var og=sec.closest('.og'),main=sec.closest('main');
