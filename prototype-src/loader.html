@@ -4931,6 +4931,10 @@ html body .og table.dtbl td .pct{margin-left:6px}
 html body .og table.dtbl td > div[style*="width: 140px"]{width:auto!important;max-width:170px}
 html body .og table:is(.dtbl,.cq-t) > tbody > tr:hover > td{background:none!important}
 html body .og table.cq-t td :is(.cq-st,.cq-dr,.cq-as,.pj-lab){white-space:normal!important}
+@media (min-width:641px){html body .og table.cq-t > tbody > tr{grid-template-columns:repeat(var(--meta-n,4),minmax(0,1fr))}}
+@media (min-width:641px) and (max-width:1100px){html body .og table.cq-t[style*="--meta-n: 6"] > tbody > tr,html body .og table.cq-t[style*="--meta-n: 7"] > tbody > tr,html body .og table.cq-t[style*="--meta-n: 8"] > tbody > tr{grid-template-columns:repeat(4,minmax(0,1fr))}}
+html body .og table.cq-t > tbody > tr > td{overflow-wrap:anywhere}
+html body .og table.cq-t > tbody > tr > td *{max-width:100%}
 }
 @media (min-width:641px) and (max-width:1280px){
 html body .og table.dtbl > tbody > tr{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1.15fr) minmax(0,1.15fr) minmax(0,1.25fr)}
@@ -5245,7 +5249,8 @@ html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :nth-child(-n
 <script>/* label table cells with their column header so card rows can show it */
 (function(){
  function lab(){document.querySelectorAll('.og table.dtbl, .og table.cq-t').forEach(function(t){var hs=[].map.call(t.querySelectorAll('thead th'),function(th){return th.textContent.replace(/\s+/g,' ').trim();});
-  t.querySelectorAll('tbody tr').forEach(function(tr){[].forEach.call(tr.children,function(td,i){var h=hs[i];if(h&&td.getAttribute('data-l')!==h)td.setAttribute('data-l',h);});});});}
+  t.querySelectorAll('tbody tr').forEach(function(tr){[].forEach.call(tr.children,function(td,i){var h=hs[i];if(h&&td.getAttribute('data-l')!==h)td.setAttribute('data-l',h);});});
+  var r=t.querySelector('tbody tr');if(r){var n=[].filter.call(r.children,function(td){return td.style.display!=='none'&&!td.hasAttribute('colspan');}).length-2;if(n>0&&t.style.getPropertyValue('--meta-n')!==String(n))t.style.setProperty('--meta-n',n);}});}
  var q=0;function sch(){if(q)return;q=requestAnimationFrame(function(){q=0;lab();});}
  function go(){lab();new MutationObserver(sch).observe(document.body,{childList:true,subtree:true});}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
