@@ -968,11 +968,10 @@
       '.rv-devstage{flex:1;min-height:0;display:flex;justify-content:center;padding:12px 12px 14px;overflow:auto}' +
       '.rv-devstage iframe{height:100%;max-width:100%;border:8px solid #1e293b;border-radius:28px;background:#fff;box-shadow:0 20px 50px rgba(15,40,90,.25)}' +
       '@media (max-width:1024px){.rv-dev{padding:4px;gap:4px;left:8px;bottom:10px}.rv-dev button,.rv-devbar button{height:28px;padding:0 11px;font-size:12px}.rv-devbar{height:46px;gap:6px}}' +
-      '.rv-dev{left:auto;right:12px}.rv-dev .ic{display:none}.rv-dev .ic svg{width:16px;height:16px;display:block}' +
-      'html:has(.rv-rail) .rv-dev{right:4px;bottom:14px;flex-direction:column;gap:4px;padding:4px;z-index:2147482660;border-radius:14px}' +
-      'html:has(.rv-rail) .rv-dev button{width:38px;height:38px!important;padding:0!important;border-radius:10px!important;display:grid;place-items:center}' +
-      'html:has(.rv-rail) .rv-dev .ic{display:block}html:has(.rv-rail) .rv-dev .tx{display:none}' +
-      '@media (max-width:1024px){.rv-dev{left:auto;right:8px}html:has(.rv-rail) .rv-dev{right:3px;bottom:10px}html:has(.rv-rail) .rv-dev button{width:34px;height:34px!important}}' +
+      '.rv-dev{left:auto!important;right:4px!important;bottom:14px!important;flex-direction:column;gap:4px!important;padding:4px!important;z-index:2147483200;border-radius:14px}' +
+      '.rv-dev button{width:38px;height:38px!important;padding:0!important;border-radius:10px!important;display:grid;place-items:center}' +
+      '.rv-dev .ic svg{width:16px;height:16px;display:block}.rv-dev .tx{display:none}' +
+      '.rv-devbar{display:none!important}.rv-devstage{padding-right:62px!important}' +
       '@media (max-width:768px){.rv-dev{display:none}}';
     var st = document.createElement('style'); st.textContent = dcss; document.head.appendChild(st);
     var bar = document.createElement('div'); bar.className = 'rv rv-dev'; bar.setAttribute('data-review-ui', '');
@@ -994,7 +993,7 @@
         frame = box.querySelector('iframe');
         frame.src = location.pathname + location.search + location.hash;
         document.body.appendChild(box);
-        document.documentElement.style.overflow = 'hidden'; root.style.display = 'none'; bar.style.display = 'none';
+        document.documentElement.style.overflow = 'hidden'; root.style.display = 'none';
         S.mode = false; S.draft = null; unbindDocs();
       }
       frame.style.width = W[m] + 'px';
