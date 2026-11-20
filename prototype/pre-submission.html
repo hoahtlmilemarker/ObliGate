@@ -5090,9 +5090,10 @@ html body .og .tst-acts button{white-space:nowrap}
 /* ===== Projects list on phones: compact card rows + full-width toolbar ===== */
 @media (hover:none){html body .og table:is(.dtbl,.cq-t) > tbody > tr:hover{background:none!important}}
 @media (max-width:640px){
- html body .og [data-pjl] .cq-tools .xq-acts{flex:1 1 100%;display:flex;flex-wrap:wrap;gap:10px;margin:0}
- html body .og [data-pjl] .cq-tools .xq-acts > .xq-dm{flex:1 1 100%!important}
- html body .og [data-pjl] .cq-tools .xq-acts > *{flex:1 1 0;min-width:0;justify-content:center}
+ html body .og [data-pjl] .cq-tools .xq-acts{flex:1 1 100%;display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:10px;margin:0}
+ html body .og [data-pjl] .cq-tools .xq-acts > .xq-dm{grid-column:1 / -1}
+ html body .og [data-pjl] .cq-tools .xq-acts > *{flex:1 1 auto;min-width:0;justify-content:center;padding-left:12px!important;padding-right:12px!important;gap:6px!important;white-space:nowrap}
+ html body .og .xq-btn > svg,html body .og .btn > svg{flex:none}
  html body .og [data-pjl] .cq-tools .xq-acts > [data-sort],html body .og [data-pjl] .cq-tools .xq-acts > * > [data-sort]{width:100%}
  html body .og [data-pjl] .cq-t > tbody > tr{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0!important;padding:14px 16px 14px!important;cursor:pointer}
  html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(1){grid-column:1 / -1;padding-right:84px!important;padding-bottom:12px!important}
