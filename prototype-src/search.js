@@ -31,7 +31,7 @@
 </style>
 <div class="ogk" role="dialog" aria-modal="true" aria-label="Search">
  <div class="ogk-box">
-  <div class="ogk-in"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Search documents, projects, disasters..." aria-label="Search"><span class="ogk-esc">ESC</span></div>
+  <div class="ogk-in"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Search documents, projects…" aria-label="Search"><span class="ogk-esc">ESC</span></div>
   <div class="ogk-list"></div>
   <div class="ogk-ft"><span><b>↑↓</b>Navigate</span><span><b>Enter</b>Open</span><span><b>Esc</b>Close</span></div>
  </div>

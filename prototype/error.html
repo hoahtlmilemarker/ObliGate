@@ -2000,7 +2000,7 @@ html:has(.og[data-theme="dark"]),html.og-dk,.og[data-theme="dark"]{--sb:rgba(255
 .og .sx-ch h2{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0;font-size:21px;font-weight:300;color:var(--head)}
 .og .sx-ch p{margin:6px 0 0;max-width:620px;font-size:13px;line-height:1.55;color:var(--gray)}
 .og .sx-cb{padding:20px 24px}
-.og .sx-tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:4px;background:var(--pale);border:1px solid var(--line);font:700 10.5px Manrope,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--gray)}
+.og .sx-tag{display:inline-flex;align-items:center;min-height:22px;box-sizing:border-box;padding:3px 8px;line-height:1.35;border-radius:4px;background:var(--pale);border:1px solid var(--line);font:700 10.5px Manrope,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--gray)}
 .og .sx-lbl{display:block;margin-bottom:8px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gray)}
 .og .sx-g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .og .sx-f{display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -2134,7 +2134,7 @@ html:has(.og[data-theme="dark"]),html.og-dk,.og[data-theme="dark"]{--sb:rgba(255
  if(K==='patterns'){var VD=[['Granite Construction','Debris removal · 6 projects','trusted','0 findings in 24 months'],['Pacific Rock Supply','Aggregate & materials · 4 projects','trusted','1 advisory, resolved'],['Westside Hauling LLC','Hauling · 3 projects','risk','2 procurement findings returned by FEMA'],['Coastal Equipment Rental','Equipment rental · 2 projects','neutral','Not enough history yet'],['Summit Traffic Control','Traffic control · 1 project','neutral','Not enough history yet']],q='';
   function vt(){var l=VD.filter(function(v){return !q||(v[0]+' '+v[1]).toLowerCase().indexOf(q)>-1;});return l.length?'<table class="sx-vt"><thead><tr><th>Vendor</th><th>Standing</th><th>History</th></tr></thead><tbody>'+l.map(function(v){return '<tr><td><b>'+v[0]+'</b><small>'+v[1]+'</small></td><td>'+(v[2]==='trusted'?'<span class="sx-pill good"><i></i>Trusted</span>':v[2]==='risk'?'<span class="sx-pill risk"><i></i>Compliance risk</span>':'<span class="sx-pill mid"><i></i>Neutral</span>')+'</td><td>'+v[3]+'</td></tr>';}).join('')+'</tbody></table>':'<div class="sx-empty" style="padding:28px"><b>No vendors match</b></div>';}
   B='<div class="sx-card top"><div class="sx-empty" style="text-align:left;padding:26px 28px"><span class="ic">'+I('<path d="M3 17l5-6 4 4 4-7 5 9"/><circle cx="8" cy="11" r="1"/><circle cx="16" cy="8" r="1"/>',22)+'</span><b>No patterns recorded yet</b><p style="margin-left:0">ObliGate learns from FEMA return events on your submitted projects. When FEMA returns findings on the same rule across multiple projects, that rule will appear here and receive higher prominence in future pre-submission reviews.</p><p style="margin:12px 0 0;font-size:12px">Patterns are specific to your organization — they are never shared with or influenced by data from other organizations.</p></div></div>'+
-   '<div class="sx-card"><div class="sx-ch"><div><h2>Vendor familiarity</h2><p>What ObliGate has learned from your org’s vendor compliance history. Trusted vendors surface advisory framing on procurement findings; compliance-risk vendors surface a closer-review prompt. Per-org only — no data crosses organizations.</p></div><button type="button" class="btn btn-o btn-sm sx-rf">Refresh</button></div><div class="sx-tools"><input class="inp sx-vq" type="search" placeholder="Filter vendors…" aria-label="Filter vendors"><span class="sx-tag" style="align-self:center">Sample data</span></div><div class="sx-vl">'+vt()+'</div></div>';
+   '<div class="sx-card"><div class="sx-ch"><div><h2>Vendor familiarity</h2><p>What ObliGate has learned from your org’s vendor compliance history. Trusted vendors surface advisory framing on procurement findings; compliance-risk vendors surface a closer-review prompt. Per-org only — no data crosses organizations.</p></div><button type="button" class="btn btn-o btn-sm sx-rf">Refresh</button></div><div class="sx-tools"><input class="inp sx-vq" type="search" placeholder="Filter vendors…" aria-label="Filter vendors"></div><div class="sx-vl">'+vt()+'</div></div>';
   root.addEventListener('input',function(e){if(e.target.classList.contains('sx-vq')){q=e.target.value.toLowerCase();root.querySelector('.sx-vl').innerHTML=vt();}});
   root.addEventListener('click',function(e){var b=e.target.closest('.sx-rf');if(!b)return;b.disabled=true;b.textContent='Refreshing…';setTimeout(function(){b.disabled=false;b.textContent='Refresh';toast('Vendor history is up to date');},800);});}
  root.innerHTML=nav+'<div class="sx-body">'+B+'</div>';
@@ -2586,7 +2586,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .og .cq-empty button{margin-top:12px}
 @media (max-width:1180px){.og .cq-ledger{grid-template-columns:repeat(2,minmax(0,1fr))}.og .cq-k:nth-child(2){border-right:0}.og .cq-k:nth-child(-n+2){border-bottom:1px solid var(--line-soft)}}
 @media (max-width:1024px){.og .cq-body{grid-template-columns:minmax(0,1fr)}.og .cq-rail{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px}}
-@media (max-width:640px){.og .cq-ledger{grid-template-columns:minmax(0,1fr)}.og .cq-k{border-right:0!important;border-bottom:1px solid var(--line-soft)}.og .cq-rail{grid-template-columns:minmax(0,1fr)}.og .cq-tools .xq-acts{margin-left:0}.og .cq-srch{flex:1 1 100%}}
+@media (max-width:640px){.og .cq-ledger{grid-template-columns:repeat(2,minmax(0,1fr))}.og .cq-k{padding:14px 16px;gap:4px}.og .cq-k:nth-child(odd){border-right:1px solid var(--line-soft)!important}.og .cq-k:nth-child(even){border-right:0!important}.og .cq-k:nth-child(-n+2){border-bottom:1px solid var(--line-soft)}.og .cq-k:nth-child(n+3){border-bottom:0}.og .cq-k .lbl{font-size:9.5px;letter-spacing:.12em}.og .cq-k b{font-size:26px}.og .cq-k small{font-size:11.5px;line-height:1.35}.og .cq-rail{grid-template-columns:minmax(0,1fr)}.og .cq-tools .xq-acts{margin-left:0}.og .cq-srch{flex:1 1 100%}}
 .og .xq-pg{display:flex;align-items:center;gap:8px}
 .og .xq-pg button{display:grid;place-items:center;width:32px;height:32px;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--head);cursor:pointer}
 .og .xq-pg button:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
@@ -3536,7 +3536,8 @@ function pos(el){tip.classList.remove('up','down');var r=el.getBoundingClientRec
 function find(n){if(!n||!n.closest)return null;var el=n.closest('[data-og-tip],[title],.fm-q[data-tip]');if(!el||el.closest('[data-review-ui],.sbm,.og-tip'))return null;
  if(el.hasAttribute('title')||!el.hasAttribute('data-og-tip')){var v=el.getAttribute('title')||el.getAttribute('data-tip')||'';v=v.trim();if(el.hasAttribute('title')){if(v&&!el.getAttribute('aria-label')&&!(el.textContent||'').trim())el.setAttribute('aria-label',v);el.removeAttribute('title');}if(!v)return el.hasAttribute('data-og-tip')?el:null;el.setAttribute('data-og-tip',v);el.setAttribute('data-og-tip-auto','');}
  return el;}
-document.addEventListener('mouseover',function(e){var el=find(e.target);if(el===own)return;if(el)show(el);else hide();});
+var tchT=0;document.addEventListener('touchstart',function(){tchT=Date.now();hide();},{passive:true,capture:true});
+document.addEventListener('mouseover',function(e){if(Date.now()-tchT<900)return;var el=find(e.target);if(el===own)return;if(el)show(el);else hide();});
 document.addEventListener('focusin',function(e){var el=find(e.target);if(el&&el.matches(':focus-visible'))show(el);else hide();});
 document.addEventListener('mousedown',hide,true);
 document.addEventListener('focusout',hide);addEventListener('scroll',hide,true);document.addEventListener('keydown',function(e){if(e.key==='Escape')hide();});
@@ -5067,6 +5068,26 @@ html body .og .sh2-t col:first-child{width:44px!important}
 html body .og .sh2-t :is(th,td).rn{position:sticky;left:0;z-index:1;background:var(--card,#fff)}
 html body .og .sh2-t tr.sh-g td > span{position:sticky;left:12px}
 }
+
+/* ===== mobile pass 2 (≤640px) ===== */
+html body .og .tst-acts button{white-space:nowrap}
+@media (hover:none){.ogk-ft,.ogk-esc{display:none!important}}
+@media (max-width:640px){
+ /* prototype-only toggles: one tidy full-width row that scrolls sideways instead of wrapping over itself */
+ html body .og .xq-dm:not(.au-pv){flex:1 1 100%;max-width:100%;min-width:0;height:30px!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;white-space:nowrap;margin:0!important}
+ html body .og .xq-dm:not(.au-pv)::-webkit-scrollbar{display:none}
+ html body .og .xq-dm:not(.au-pv) .xq-seg{flex-wrap:nowrap!important;flex:none}
+ html body .og .cx-pv2{flex-direction:column;align-items:stretch;gap:6px}
+ /* Import: project picker gets its own row, the two create buttons share the next */
+ html body .og .xq-row > .fm-sel,html body .og .xq-row > select{flex:1 1 100%}
+ /* Supervisor attestation: three hour cells fit at 360px */
+ html body .og .sga-hrs{width:100%!important;align-self:stretch}
+ html body .og .sga-hrs > div{flex:1 1 0;padding:10px 8px 10px 10px}
+ html body .og .sga-hrs span{font-size:9.5px;letter-spacing:.06em}
+ html body .og .sga-hrs b{font-size:18px}
+ /* search overlay: shorter placeholder room, no keyboard hints */
+ .ogk-in input{min-width:0;text-overflow:ellipsis}
+}
 </style>
 <script>/* mobile/tablet helpers: scroll rows (active item into view + edge fades), labels for compact tables, document full-screen viewer */
 (function(){
@@ -5239,7 +5260,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </style>
 <div class="ogk" role="dialog" aria-modal="true" aria-label="Search">
  <div class="ogk-box">
-  <div class="ogk-in"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Search documents, projects, disasters..." aria-label="Search"><span class="ogk-esc">ESC</span></div>
+  <div class="ogk-in"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Search documents, projects…" aria-label="Search"><span class="ogk-esc">ESC</span></div>
   <div class="ogk-list"></div>
   <div class="ogk-ft"><span><b>↑↓</b>Navigate</span><span><b>Enter</b>Open</span><span><b>Esc</b>Close</span></div>
  </div>
