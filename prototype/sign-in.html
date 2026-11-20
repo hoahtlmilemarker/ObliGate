@@ -5077,7 +5077,42 @@ html body .og .tst-acts button{white-space:nowrap}
  /* search overlay: shorter placeholder room, no keyboard hints */
  .ogk-in input{min-width:0;text-overflow:ellipsis}
 }
-</style>
+
+/* ===== Projects list on phones: compact card rows + full-width toolbar ===== */
+@media (hover:none){html body .og table:is(.dtbl,.cq-t) > tbody > tr:hover{background:none!important}}
+@media (max-width:640px){
+ html body .og [data-pjl] .cq-tools .xq-acts{flex:1 1 100%;display:flex;flex-wrap:wrap;gap:10px;margin:0}
+ html body .og [data-pjl] .cq-tools .xq-acts > .xq-dm{flex:1 1 100%!important}
+ html body .og [data-pjl] .cq-tools .xq-acts > *{flex:1 1 0;min-width:0;justify-content:center}
+ html body .og [data-pjl] .cq-tools .xq-acts > [data-sort],html body .og [data-pjl] .cq-tools .xq-acts > * > [data-sort]{width:100%}
+ html body .og [data-pjl] .cq-t > tbody > tr{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0!important;padding:14px 16px 14px!important;cursor:pointer}
+ html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(1){grid-column:1 / -1;padding-right:84px!important;padding-bottom:12px!important}
+ html body .og [data-pjl] .cq-t td:nth-child(1) .cq-pw{font-size:13px}
+ html body .og [data-pjl] .cq-t td:nth-child(1) .cq-nm{font-size:15px;font-weight:700;color:var(--head)}
+ html body .og [data-pjl] .cq-t td:nth-child(1) .cq-up{font-size:12px}
+ /* stat strip: Disaster | Docs | Labor check */
+ html body .og [data-pjl] .cq-t > tbody > tr > td:is(:nth-child(2),:nth-child(3),:nth-child(4)){padding:10px 0 10px 12px!important;border-top:1px solid var(--line-soft)!important;font-size:13px!important}
+ html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(2){padding-left:0!important}
+ html body .og [data-pjl] .cq-t > tbody > tr > td:is(:nth-child(3),:nth-child(4)){border-left:1px solid var(--line-soft)!important}
+ html body .og [data-pjl] .cq-t > tbody > tr > td[data-l]:not(:first-child):not(:last-child)::before{margin-bottom:4px;font-size:9px;letter-spacing:.1em}
+ /* submission: one line, label · bar · % */
+ html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(5){grid-column:1 / -1;display:flex!important;align-items:center;gap:10px;padding-top:10px!important;border-top:1px solid var(--line-soft)!important}
+ html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(5)::before{margin:0!important;flex:none}
+ html body .og [data-pjl] .cq-t td:nth-child(5) .pj-pre{flex:1;justify-content:flex-end}
+ html body .og [data-pjl] .cq-t td:nth-child(5) .pj-pre i{flex:1;width:auto;max-width:none}
+ html body .og [data-pjl] .cq-t td:nth-child(5) .pj-lab{margin-left:auto}
+ /* owner avatar + more menu sit top-right; the whole card opens the project */
+ html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(6){position:absolute!important;top:14px;right:56px}
+ html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(6)::before{display:none!important}
+ html body .og [data-pjl] .cq-t td:nth-child(6) .cq-as > span:not(.cq-av){display:none}
+ html body .og [data-pjl] .cq-t td:nth-child(6) .cq-av{width:30px;height:30px}
+ html body .og [data-pjl] .cq-t > tbody > tr > td:last-child:not(:first-child){position:absolute!important;top:13px;right:14px;grid-column:auto}
+ html body .og [data-pjl] .cq-t td:last-child .cq-go{display:none!important}
+ html body .og [data-pjl] .cq-t > tbody > tr:active{background:var(--pale)}
+}
+</style><script>/* phones: tapping a project card opens it (the Open button is folded into the card) */
+document.addEventListener('click',function(e){if(!matchMedia('(max-width:640px)').matches)return;var tr=e.target.closest&&e.target.closest('[data-pjl] table.cq-t > tbody > tr');if(!tr||e.target.closest('a,button,input,select,label,[role=menu],.xq-pop'))return;var go=tr.querySelector('.cq-go');if(go)go.click();});</script>
+
 <script>/* mobile/tablet helpers: scroll rows (active item into view + edge fades), labels for compact tables, document full-screen viewer */
 (function(){
  var SEL='.og .pjb-steps,.og .sx-nav,.og .lb-tabs,.og .sh2-wrap,.og .cx-tw';
