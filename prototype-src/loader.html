@@ -5090,14 +5090,11 @@ html body .og .sh2-t tr.sh-g td > span{position:sticky;left:12px}
 <style>/* ===== tablet summary strips: one compact row of four instead of a tall 2×2 block ===== */
 @media (min-width:641px) and (max-width:1280px){
 html body .og.og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)):not(:has(> :nth-child(5))){grid-template-columns:repeat(4,minmax(0,1fr))!important}
-html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > *{padding:12px 16px 13px!important;border-bottom:0!important;border-right:1px solid var(--line-soft)!important;min-width:0}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > *{gap:0!important;justify-content:flex-start!important;padding:12px 16px 13px!important;border-bottom:0!important;border-right:1px solid var(--line-soft)!important;min-width:0}
 html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :last-child{border-right:0!important}
-html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) :is(.big,.cq-k > b){font-size:23px!important;line-height:1.15!important;margin:5px 0 3px!important;white-space:nowrap}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) :is(.big,.cq-k > b){font-size:23px!important;line-height:1.1!important;margin:6px 0 4px!important;white-space:nowrap}
 html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) .lbl{font-size:9.5px!important;line-height:1.35!important;display:block;white-space:normal!important}
 html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > * > :not(.lbl):not(.big):not(b){font-size:11.5px!important;line-height:1.35;max-width:100%;white-space:normal!important;box-sizing:border-box}
-}
-@media (min-width:641px) and (max-width:940px){
-html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) .lbl{min-height:2.7em}
 }
 @media (min-width:641px) and (max-width:767px){
 html body .og.og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)):not(:has(> :nth-child(5))){grid-template-columns:repeat(2,minmax(0,1fr))!important}
@@ -5105,6 +5102,11 @@ html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :nth-child(2n
 html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :nth-child(-n+2){border-bottom:1px solid var(--line-soft)!important}
 }
 </style>
+<script>/* tablet KPI strips: labels in one strip share the height of the tallest, so the numbers line up without reserving empty space */
+(function(){var S='.og .kpis,.og .ledger,.og .cq-ledger';
+ function fit(){var on=innerWidth>640&&innerWidth<=1280;document.querySelectorAll(S).forEach(function(g){if(g.children.length!==4)return;var ls=[].map.call(g.children,function(c){return c.querySelector('.lbl');}).filter(Boolean);ls.forEach(function(l){l.style.minHeight='';});if(!on)return;var m=Math.max.apply(null,ls.map(function(l){return l.offsetHeight;}));ls.forEach(function(l){l.style.minHeight=m+'px';});});}
+ var T;function sch(){clearTimeout(T);T=setTimeout(fit,60);}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fit);else fit();addEventListener('load',fit);addEventListener('resize',sch);if(document.fonts)document.fonts.ready.then(fit);})();</script>
 <script>/* label table cells with their column header so card rows can show it */
 (function(){
  function lab(){document.querySelectorAll('.og table.dtbl, .og table.cq-t').forEach(function(t){var hs=[].map.call(t.querySelectorAll('thead th'),function(th){return th.textContent.replace(/\s+/g,' ').trim();});
