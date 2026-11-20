@@ -3713,7 +3713,7 @@ html body .og .tbl.dtbl .decl,html body .og a.decl,html body .og .decl,html body
 .og.lr .col > .mast,.og.lr .mast .hero{min-height:0!important}
 .og.lr .mast .hero{padding-bottom:84px!important}
 .og.lr .dl-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.og.lr .dl-r .addm{position:relative}
+.og.lr .dl-r .addm{position:relative;display:inline-flex}.addm > summary{box-sizing:border-box}
 .og.lr .dl-r .addm > summary{list-style:none}
 .og.lr .dl-r .addm > summary::-webkit-details-marker{display:none}
 .og.lr .dl-r .addm-menu{left:auto!important;right:0!important;top:calc(100% + 6px)!important;z-index:30}
@@ -5335,6 +5335,13 @@ window.ogThumbs=function(paper){if(!paper)return;var sec=paper.parentElement,old
 function init(){var p=document.querySelector('.rv-app .paper.pdf-doc');if(p)ogThumbs(p);}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
+</script>
+
+<script>
+/* Add menu: keep the dropdown inside the viewport on narrow screens */
+document.addEventListener('toggle',function(e){var d=e.target;if(!d.classList||!d.classList.contains('addm')||!d.open)return;var m=d.querySelector('.addm-menu');if(!m)return;
+ m.style.removeProperty('right');m.style.removeProperty('max-width');var vw=document.documentElement.clientWidth,g=16;m.style.setProperty('max-width',(vw-2*g)+'px','important');
+ var r=m.getBoundingClientRect();if(r.left<g){m.style.setProperty('right',(-(g-r.left))+'px','important');}},true);
 </script>
 
 <div class="og" data-theme="light" style="min-height: 1100px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
