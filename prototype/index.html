@@ -5271,6 +5271,15 @@ html body .og .mnav .mnav-me small{display:block;font:500 12px/1.3 Manrope,Arial
 html body .og .mnav .mnav-up{margin:0 16px 16px!important;height:48px!important;border-radius:12px!important;background:linear-gradient(160deg,#E9D6AE 0%,#D2AE68 55%,#C09A52 100%)!important;color:#06243F!important;font:700 15px/1 Manrope,Arial,sans-serif!important;box-shadow:0 10px 24px -12px rgba(201,164,92,.7),inset 0 1px 0 rgba(255,255,255,.4)!important}
 html body .og .mnav .mnav-up:active{filter:brightness(.96)}
 html body .og .mnav-bd{background:rgba(2,12,24,.5)!important;-webkit-backdrop-filter:blur(3px)!important;backdrop-filter:blur(3px)!important;transition:opacity .3s ease!important}
+
+/* Filters drawer (≤1024): full height from the top edge, over the header — no seam to misalign — with the same slide as the Menu drawer */
+@keyframes ogDrIn{from{translate:-100% 0}to{translate:0 0}}
+@keyframes ogBdIn{from{opacity:0}to{opacity:1}}
+@media (max-width:1024px){
+ html body .og.lr.lr-dr .shell > .sb-rail{top:0!important;bottom:0!important;height:auto!important;z-index:2147481600!important;padding-top:env(safe-area-inset-top)!important;border-right:1px solid var(--line)!important;box-shadow:24px 0 60px -20px rgba(2,12,24,.45)!important;animation:ogDrIn .34s cubic-bezier(.32,.72,0,1) both!important;will-change:translate}
+ html body .og.lr.lr-dr .shell > .sb-rail > .dr-hd{top:0!important;padding-top:18px!important;padding-bottom:14px!important}
+ html body .og.lr.lr-dr::after{inset:0!important;z-index:2147481500!important;background:rgba(2,12,24,.5)!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:ogBdIn .3s ease both!important}
+}
 /* ===== Phone toolbars (Disasters, Projects): search + icon tools / Sort + primary / count ===== */
 @media (max-width:640px){
  html body .og .dl-bar{display:grid!important;grid-template-columns:minmax(0,1fr) 38px 38px 38px;gap:10px!important;align-items:center}
