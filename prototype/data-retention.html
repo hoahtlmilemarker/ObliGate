@@ -5323,7 +5323,7 @@ window.ogThumbs=function(paper){if(!paper)return;var sec=paper.parentElement,old
   var nf=pg.querySelectorAll('[data-dfpin]').length;
   b.innerHTML='<span class="tb"><div></div>'+(nf?'<span class="fc" title="'+nf+' field'+(nf>1?'s':'')+' to review on this page">'+nf+'</span>':'')+'</span><span>'+(i+1)+'</span>';
   b.querySelector('.tb > div').appendChild(c);
-  b.addEventListener('click',function(){sec.scrollTo({top:pg.offsetTop*(parseFloat(paper.style.zoom)||1)-16+(paper.offsetTop),behavior:'smooth'});set(i);});
+  b.addEventListener('click',function(){sec.scrollTo({top:Math.max(0,sec.scrollTop+pg.getBoundingClientRect().top-sec.getBoundingClientRect().top-16),behavior:'smooth'});set(i);});
   nav.appendChild(b);});
  sec.insertBefore(nav,sec.firstChild);try{window.dispatchEvent(new Event('resize'));}catch(e){}
  function set(k){[].forEach.call(nav.querySelectorAll('button'),function(b,j){b.setAttribute('aria-current',String(j===k));});show(k);}
@@ -5331,8 +5331,8 @@ window.ogThumbs=function(paper){if(!paper)return;var sec=paper.parentElement,old
  sec._thShow=show;
  function fit(){if(getComputedStyle(nav).flexDirection==='column'){var cs=getComputedStyle(sec);if(lab){lab.style.background=cs.backgroundColor;lab.style.paddingBottom='8px';lab.style.marginBottom='-2px';}nav.style.maxHeight=(sec.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom))+'px';}else nav.style.maxHeight='';}fit();window.addEventListener('resize',fit);
  set(0);
- if(!sec._thS){sec._thS=1;sec.addEventListener('scroll',function(){var n=sec.querySelector(':scope > .pdf-th');if(!n)return;var z=parseFloat(paper.style.zoom)||1,y=sec.scrollTop+sec.clientHeight*.35,k=0;
-  [].forEach.call(paper.querySelectorAll(':scope > .pdf-pg'),function(pg,j){if(pg.offsetTop*z+paper.offsetTop<=y)k=j;});
+ if(!sec._thS){sec._thS=1;sec.addEventListener('scroll',function(){var n=sec.querySelector(':scope > .pdf-th');if(!n)return;var st=sec.getBoundingClientRect().top,y=sec.clientHeight*.35,k=0;
+  [].forEach.call(paper.querySelectorAll(':scope > .pdf-pg'),function(pg,j){if(pg.getBoundingClientRect().top-st<=y)k=j;});
   var bs=n.querySelectorAll('button');if(bs[k]&&bs[k].getAttribute('aria-current')==='true')return;[].forEach.call(bs,function(b,j){b.setAttribute('aria-current',String(j===k));});if(sec._thShow)sec._thShow(k);},{passive:true});}
 };
 function init(){var p=document.querySelector('.rv-app .paper.pdf-doc');if(p)ogThumbs(p);}
