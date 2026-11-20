@@ -959,14 +959,16 @@
   /* ---------- Desktop / Tablet / Mobile preview (review only) ---------- */
   (function deviceSwitcher() {
     if (window.name === 'ree-device') return;           // already inside the device frame
-    var W = { tablet: 820, mobile: 390 }, mode = 'desktop', box = null, frame = null;
+    /* real CSS viewport sizes: iPad Air / iPad 10th gen portrait 820×1180, iPhone 15 390×844 */
+    var W = { tablet: [820, 1180], mobile: [390, 844] }, NAME = { tablet: 'iPad · 820 × 1180', mobile: 'iPhone · 390 × 844' }, mode = 'desktop', box = null, frame = null, fitBox = null;
     var dcss = '.rv-dev{position:fixed;left:12px;bottom:14px;z-index:2147482600;display:flex;gap:6px;padding:6px;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 4px 16px rgba(0,0,0,.18);backdrop-filter:blur(8px)}' +
       '.rv-dev button,.rv-devbar button{height:32px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;color:#1e293b;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);white-space:nowrap}' +
       '.rv-dev button:hover,.rv-devbar button:hover{background:#f8fafc}.rv-dev button.on,.rv-devbar button.on{background:#8CC0F1;color:#06243F}' +
       '.rv-devwrap{position:fixed;inset:0;z-index:2147483100;background:#e6ebf3;display:flex;flex-direction:column}' +
       '.rv-devbar{flex:none;height:56px;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.8);backdrop-filter:blur(8px);box-shadow:0 1px 0 rgba(15,23,42,.06)}' +
       '.rv-devstage{flex:1;min-height:0;display:flex;justify-content:center;padding:12px 12px 14px;overflow:auto}' +
-      '.rv-devstage iframe{height:100%;max-width:100%;border:8px solid #1e293b;border-radius:28px;background:#fff;box-shadow:0 20px 50px rgba(15,40,90,.25)}' +
+      '.rv-devstage{align-items:flex-start}.rv-devfit{flex:none;position:relative}.rv-devstage iframe{position:absolute;left:0;top:0;box-sizing:content-box;border:8px solid #1e293b;border-radius:28px;background:#fff;box-shadow:0 20px 50px rgba(15,40,90,.25);transform-origin:0 0}' +
+      '.rv-devsz{position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);font:600 11px/1 system-ui,sans-serif;color:#64748b;white-space:nowrap}' +
       '@media (max-width:1024px){.rv-dev{padding:4px;gap:4px;left:8px;bottom:10px}.rv-dev button,.rv-devbar button{height:28px;padding:0 11px;font-size:12px}.rv-devbar{height:46px;gap:6px}}' +
       '.rv-dev{left:auto!important;right:4px!important;bottom:14px!important;flex-direction:column;gap:4px!important;padding:4px!important;z-index:2147483200;border-radius:14px}' +
       '.rv-dev button{width:38px;height:38px!important;padding:0!important;border-radius:10px!important;display:grid;place-items:center}' +
@@ -989,16 +991,26 @@
       }
       if (!box) {
         box = document.createElement('div'); box.className = 'rv rv-devwrap'; box.setAttribute('data-review-ui', '');
-        box.innerHTML = '<div class="rv-devbar"></div><div class="rv-devstage"><iframe name="ree-device" title="Device preview"></iframe></div>';
-        frame = box.querySelector('iframe');
+        box.innerHTML = '<div class="rv-devbar"></div><div class="rv-devstage"><div class="rv-devfit"><iframe name="ree-device" title="Device preview"></iframe><span class="rv-devsz"></span></div></div>';
+        frame = box.querySelector('iframe'); fitBox = box.querySelector('.rv-devfit');
         frame.src = location.pathname + location.search + location.hash;
         document.body.appendChild(box);
         document.documentElement.style.overflow = 'hidden'; root.style.display = 'none';
         S.mode = false; S.draft = null; unbindDocs();
       }
-      frame.style.width = W[m] + 'px';
-      mode = m; draw();
+      mode = m; fit(); draw();
     }
+    /* the frame keeps the device's real viewport (so breakpoints match the device) and is scaled down only when the window is smaller than the device */
+    function fit() {
+      if (!box || !frame || mode === 'desktop') return;
+      var d = W[mode], w = d[0], h = d[1], b = 16, st = box.querySelector('.rv-devstage'), cs = getComputedStyle(st);
+      var aw = st.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), ah = st.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 26;
+      var s = Math.min(1, aw / (w + b), ah / (h + b)); if (!(s > 0)) s = 1;
+      frame.style.width = w + 'px'; frame.style.height = h + 'px'; frame.style.transform = s < 1 ? 'scale(' + s + ')' : '';
+      fitBox.style.width = Math.round((w + b) * s) + 'px'; fitBox.style.height = Math.round((h + b) * s) + 'px';
+      fitBox.querySelector('.rv-devsz').textContent = NAME[mode] + (s < 1 ? ' · shown at ' + Math.round(s * 100) + '%' : '');
+    }
+    addEventListener('resize', function () { fit(); });
     document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-dev]'); if (b) pick(b.getAttribute('data-dev')); });
     draw();
     var add = function () { document.body.appendChild(bar); };
