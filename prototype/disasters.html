@@ -774,7 +774,7 @@ var A=[
   var O=[['Highest Risk','Needs attention first'],['Newest','Latest incident first'],['Oldest','Earliest incident first'],['Name A–Z','By declaration ID'],['Obligated amount','Largest first']],cur=txt(b).replace('Sort: ','');
   var CK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   var p=document.createElement('div');p.className='xq-pop srtpop';p.setAttribute('role','menu');p.setAttribute('aria-label','Sort by');
-  p.innerHTML='<small class="h">Sort by</small>'+O.map(function(o){var on=o[0]===cur;return '<button type="button" role="menuitemradio" class="mi'+(on?' on':'')+'" aria-checked="'+on+'" data-so="'+o[0]+'"><span class="mi-t">'+o[0]+'<em>'+o[1]+'</em></span>'+(on?CK:'')+'</button>';}).join('');
+  p.innerHTML='<small class="h">Sort by</small>'+O.map(function(o){var on=o[0]===cur;return '<button type="button" role="menuitemradio" class="mi'+(on?' on':'')+'" aria-checked="'+on+'" data-so="'+o[0]+'"><span class="mi-t">'+o[0]+'</span>'+(on?CK:'')+'</button>';}).join('');
   host().appendChild(p);var r=b.getBoundingClientRect();p.style.top=(r.bottom+6)+'px';p.style.left=Math.max(12,Math.min(r.right-p.offsetWidth,innerWidth-p.offsetWidth-12))+'px';b.setAttribute('aria-expanded','true');
   var f0=p.querySelector('.mi.on')||p.querySelector('.mi');if(f0)f0.focus();
   function close(back){p.remove();b.setAttribute('aria-expanded','false');document.removeEventListener('mousedown',out,true);if(back)b.focus();}
