@@ -4930,7 +4930,7 @@ html body .og .sheet:has(> table.dtbl),html body .og .cq-tw{overflow:visible!imp
 html body .og table:is(.dtbl,.cq-t){display:block!important;width:100%!important;min-width:0!important;table-layout:auto!important}
 html body .og table:is(.dtbl,.cq-t) > colgroup,html body .og table:is(.dtbl,.cq-t) > thead{display:none!important}
 html body .og table:is(.dtbl,.cq-t) > tbody{display:block!important}
-html body .og table:is(.dtbl,.cq-t) > tbody > tr{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:14px 20px;align-items:start;position:relative;padding:18px 20px!important;border-bottom:1px solid var(--line-soft)!important;flex-wrap:nowrap}
+html body .og table:is(.dtbl,.cq-t) > tbody > tr{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:14px 20px;align-items:start;position:relative;padding:18px 20px!important;border-bottom:1px solid var(--line-soft,var(--hair,var(--line)))!important;flex-wrap:nowrap}
 html body .og table:is(.dtbl,.cq-t) > tbody > tr:last-child{border-bottom:0!important}
 html body .og table:is(.dtbl,.cq-t) > tbody > tr > td:not([style*="display: none"]){display:block!important;width:auto!important;max-width:none!important;min-width:0!important;padding:0!important;border:0!important;text-align:left!important;background:none!important;font-size:13.5px!important;white-space:normal!important}
 html body .og table:is(.dtbl,.cq-t) > tbody > tr > td:first-child{grid-column:1 / -1;padding-right:170px!important}
@@ -5033,7 +5033,7 @@ html body .og .tm-tbl td.tm-x{display:flex!important;gap:2px;width:auto!importan
 html body .og .tm-scroll:has(> .tm-mx){overflow:visible!important}
 html body .og table.tm-mx,html body .og table.tm-mx tbody{display:block;width:100%!important;min-width:0!important}
 html body .og table.tm-mx thead{display:none}
-html body .og table.tm-mx tbody tr{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px;border-top:1px solid var(--line-soft)}
+html body .og table.tm-mx tbody tr{display:flex;flex-wrap:wrap;gap:6px;padding:14px 16px;border-top:1px solid var(--line-soft,var(--hair,var(--line)))}
 html body .og table.tm-mx tbody tr:first-child{border-top:0}
 html body .og table.tm-mx td{display:inline-flex!important;align-items:center;gap:6px;padding:0!important;border:0!important;background:none!important;width:auto!important;text-align:left!important}
 html body .og table.tm-mx td:first-child{flex:1 1 100%;margin-bottom:4px}
@@ -5046,7 +5046,7 @@ html body .og table.tm-mx tr.tm-none::after{content:"View only";font-size:12px;c
 html body .og .cx-tw:has(> table.cx-dt){overflow:visible!important}
 html body .og table.cx-dt,html body .og table.cx-dt :is(tbody,tfoot){display:block;width:100%!important;min-width:0!important}
 html body .og table.cx-dt thead{display:none}
-html body .og table.cx-dt :is(tbody,tfoot) tr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 8px;padding:14px 16px;border-bottom:1px solid var(--line-soft)}
+html body .og table.cx-dt :is(tbody,tfoot) tr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 8px;padding:14px 16px;border-bottom:1px solid var(--line-soft,var(--hair,var(--line)))}
 html body .og table.cx-dt tfoot tr{background:var(--pale);border-bottom:0}
 html body .og table.cx-dt td{display:block!important;padding:0!important;border:0!important;text-align:left!important;min-width:0;background:none!important}
 html body .og table.cx-dt td:nth-child(1){grid-column:1 / 4;align-self:center;font-weight:700;color:var(--ink)}
@@ -5102,12 +5102,12 @@ html body .og .tst-acts button{white-space:nowrap}
  html body .og [data-pjl] .cq-t td:nth-child(1) .cq-nm{font-size:15px;font-weight:700;color:var(--head)}
  html body .og [data-pjl] .cq-t td:nth-child(1) .cq-up{font-size:12px}
  /* stat strip: Disaster | Docs | Labor check */
- html body .og [data-pjl] .cq-t > tbody > tr > td:is(:nth-child(2),:nth-child(3),:nth-child(4)){padding:10px 0 10px 12px!important;border-top:1px solid var(--line-soft)!important;font-size:13px!important}
+ html body .og [data-pjl] .cq-t > tbody > tr > td:is(:nth-child(2),:nth-child(3),:nth-child(4)){padding:10px 0 10px 12px!important;border-top:1px solid var(--line-soft,var(--hair,var(--line)))!important;font-size:13px!important}
  html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(2){padding-left:0!important}
- html body .og [data-pjl] .cq-t > tbody > tr > td:is(:nth-child(3),:nth-child(4)){border-left:1px solid var(--line-soft)!important}
+ html body .og [data-pjl] .cq-t > tbody > tr > td:is(:nth-child(3),:nth-child(4)){border-left:1px solid var(--line-soft,var(--hair,var(--line)))!important}
  html body .og [data-pjl] .cq-t > tbody > tr > td[data-l]:not(:first-child):not(:last-child)::before{margin-bottom:4px;font-size:9px;letter-spacing:.1em}
  /* submission: one line, label · bar · % */
- html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(5){grid-column:1 / -1;display:flex!important;align-items:center;gap:10px;padding-top:10px!important;border-top:1px solid var(--line-soft)!important}
+ html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(5){grid-column:1 / -1;display:flex!important;align-items:center;gap:10px;padding-top:10px!important;border-top:1px solid var(--line-soft,var(--hair,var(--line)))!important}
  html body .og [data-pjl] .cq-t > tbody > tr > td:nth-child(5)::before{margin:0!important;flex:none}
  html body .og [data-pjl] .cq-t td:nth-child(5) .pj-pre{flex:1;justify-content:flex-end}
  html body .og [data-pjl] .cq-t td:nth-child(5) .pj-pre i{flex:1;width:auto;max-width:none}
@@ -5165,7 +5165,7 @@ document.addEventListener('click',function(e){if(!matchMedia('(max-width:640px)'
 <style>/* ===== tablet summary strips: one compact row of four instead of a tall 2×2 block ===== */
 @media (min-width:641px) and (max-width:1280px){
 html body .og.og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)):not(:has(> :nth-child(5))){grid-template-columns:repeat(4,minmax(0,1fr))!important}
-html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > *{gap:0!important;justify-content:flex-start!important;padding:12px 16px 13px!important;border-bottom:0!important;border-right:1px solid var(--line-soft)!important;min-width:0}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > *{gap:0!important;justify-content:flex-start!important;padding:12px 16px 13px!important;border-bottom:0!important;border-right:1px solid var(--line-soft,var(--hair,var(--line)))!important;min-width:0}
 html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :last-child{border-right:0!important}
 html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) :is(.big,.cq-k > b){font-size:23px!important;line-height:1.1!important;margin:6px 0 4px!important;white-space:nowrap}
 html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) .lbl{font-size:9.5px!important;line-height:1.35!important;display:block;white-space:normal!important}
@@ -5174,7 +5174,7 @@ html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > * > :not(.lbl
 @media (min-width:641px) and (max-width:767px){
 html body .og.og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)):not(:has(> :nth-child(5))){grid-template-columns:repeat(2,minmax(0,1fr))!important}
 html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :nth-child(2n){border-right:0!important}
-html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :nth-child(-n+2){border-bottom:1px solid var(--line-soft)!important}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :nth-child(-n+2){border-bottom:1px solid var(--line-soft,var(--hair,var(--line)))!important}
 }
 </style>
 <script>/* tablet KPI strips: labels in one strip share the height of the tallest, so the numbers line up without reserving empty space */
