@@ -5253,13 +5253,35 @@ html body .og .tst-acts button{white-space:nowrap}
 html body .og img.wm{aspect-ratio:1909/392;flex:none;object-fit:contain}
 html body .og img.wm.wm-w{filter:none!important}
 
-/* ☰ Menu drawer: light header like the Filters drawer, so it stands apart from the navy page header behind it */
-html body .og .mnav .mnav-h{height:auto;min-height:0;padding:16px!important;background:var(--card)!important;color:var(--head)!important;border-bottom:1px solid var(--line)!important}
-html body .og .mnav .mnav-h b{font:500 19px/1.1 "Cormorant Garamond",Georgia,serif!important;letter-spacing:0!important;color:var(--head)}
-html body .og .mnav .mnav-x{width:32px!important;height:32px!important;border:1px solid var(--line)!important;border-radius:4px!important;background:var(--card)!important;color:var(--head)!important}
-html body .og .mnav .mnav-x svg{width:16px;height:16px}
-html body .og .mnav .mnav-x:active{background:var(--pale)!important}
-@media (min-width:641px){html body .og .mnav .mnav-h b{font-size:22px!important}html body .og .mnav .mnav-x{width:36px!important;height:36px!important}}
+/* ☰ Menu drawer — premium navy panel: wordmark, glass organization card, icon tiles, brass accents */
+html body .og .mnav{width:min(328px,86vw)!important;background:radial-gradient(120% 60% at 100% 0%,rgba(140,192,241,.10),transparent 60%),linear-gradient(180deg,#0A2E50 0%,#06243F 45%,#041A2E 100%)!important;color:#fff;border-right:1px solid rgba(255,255,255,.06);box-shadow:24px 0 60px -20px rgba(2,12,24,.6)!important;transition:transform .34s cubic-bezier(.32,.72,0,1)!important;padding-bottom:env(safe-area-inset-bottom);overflow:hidden}
+html body .og .mnav::before{content:'';position:absolute;top:0;right:0;width:220px;height:200px;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.16) 1px,transparent 1.4px);background-size:14px 14px;-webkit-mask-image:radial-gradient(ellipse 80% 80% at 100% 0%,#000 0%,transparent 70%);mask-image:radial-gradient(ellipse 80% 80% at 100% 0%,#000 0%,transparent 70%)}
+html body .og .mnav > *{position:relative}
+html body .og .mnav .mnav-h{height:auto!important;min-height:0;padding:18px 16px 14px 20px!important;background:transparent!important;border:0!important;color:#fff!important}
+html body .og .mnav .mnav-h b{display:block;width:104px;height:22px;font-size:0!important;background:url(obligate-wordmark-white.svg) left center/contain no-repeat}
+html body .og .mnav .mnav-x{width:36px!important;height:36px!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:10px!important;background:rgba(255,255,255,.04)!important;color:#fff!important}
+html body .og .mnav .mnav-x:active{background:rgba(255,255,255,.12)!important}
+html body .og .mnav .mnav-org{margin:6px 16px 0!important;padding:12px 14px!important;gap:12px!important;border:1px solid rgba(255,255,255,.10)!important;border-radius:12px!important;background:rgba(255,255,255,.05)!important;color:#fff!important;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+html body .og .mnav .mnav-org::before{content:attr(data-ini);flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:linear-gradient(160deg,#E9D6AE,#C9A45C);color:#3D2C0E;font:800 12px/1 Manrope,Arial,sans-serif;letter-spacing:.04em}
+html body .og .mnav .mnav-org small{color:#D9B877!important;font-size:9.5px!important;letter-spacing:.16em!important}
+html body .og .mnav .mnav-org strong{color:#fff!important;font-size:14.5px!important;font-weight:700!important}
+html body .og .mnav .mnav-org svg{color:rgba(255,255,255,.55)!important}
+html body .og .mnav .mnav-l{gap:4px!important;padding:22px 16px 8px!important}
+html body .og .mnav .mnav-l::before{content:'Navigate';display:block;padding:0 4px 10px;font:800 9.5px/1 Manrope,Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.42)}
+html body .og .mnav .mnav-l a{height:52px!important;padding:0 10px!important;gap:14px!important;border-radius:12px!important;background:transparent!important;color:rgba(255,255,255,.78)!important;font:600 15px/1 Manrope,Arial,sans-serif!important;border:0!important;box-shadow:none!important}
+html body .og .mnav .mnav-l a::before,html body .og .mnav .mnav-l a::after{display:none!important}
+html body .og .mnav .mnav-l a svg{box-sizing:content-box;flex:none;width:18px!important;height:18px!important;padding:9px;border-radius:10px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+html body .og .mnav .mnav-l a:active{background:rgba(255,255,255,.06)!important}
+html body .og .mnav .mnav-l a.on{background:rgba(255,255,255,.08)!important;color:#fff!important}
+html body .og .mnav .mnav-l a.on svg{background:linear-gradient(160deg,#E9D6AE,#C9A45C);color:#06243F}
+html body .og .mnav .mnav-l a.on span::after{content:'';display:inline-block;width:6px;height:6px;margin-left:10px;border-radius:50%;background:#D9B877;vertical-align:middle}
+html body .og .mnav .mnav-me{display:flex;align-items:center;gap:12px;margin:auto 16px 12px;padding:14px 4px 0;border-top:1px solid rgba(255,255,255,.08)}
+html body .og .mnav .mnav-me i{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(160deg,#E9D6AE,#C9A45C);color:#3D2C0E;font:800 11px/1 Manrope,Arial,sans-serif;font-style:normal}
+html body .og .mnav .mnav-me b{display:block;font:700 14px/1.25 Manrope,Arial,sans-serif;color:#fff}
+html body .og .mnav .mnav-me small{display:block;font:500 12px/1.3 Manrope,Arial,sans-serif;color:rgba(255,255,255,.55)}
+html body .og .mnav .mnav-up{margin:0 16px 16px!important;height:48px!important;border-radius:12px!important;background:linear-gradient(160deg,#E9D6AE 0%,#D2AE68 55%,#C09A52 100%)!important;color:#06243F!important;font:700 15px/1 Manrope,Arial,sans-serif!important;box-shadow:0 10px 24px -12px rgba(201,164,92,.7),inset 0 1px 0 rgba(255,255,255,.4)!important}
+html body .og .mnav .mnav-up:active{filter:brightness(.96)}
+html body .og .mnav-bd{background:rgba(2,12,24,.5)!important;-webkit-backdrop-filter:blur(3px)!important;backdrop-filter:blur(3px)!important;transition:opacity .3s ease!important}
 /* ===== Phone toolbars (Disasters, Projects): search + icon tools / Sort + primary / count ===== */
 @media (max-width:640px){
  html body .og .dl-bar{display:grid!important;grid-template-columns:minmax(0,1fr) 38px 38px 38px;gap:10px!important;align-items:center}
@@ -5282,7 +5304,16 @@ html body .og .mnav .mnav-x:active{background:var(--pale)!important}
  html body .og [data-pjl] .cq-tools .xq-acts{grid-row:2;grid-column:1 / -1}
  html body .og [data-pjl] .cq-tools .cq-meta{grid-row:3;grid-column:1 / -1;font-size:12.5px}
 }
-</style><script>/* swap the CSS-inverted navy wordmark for the white file */
+</style><script>/* ☰ Menu: organization initials + signed-in user row */
+(function(){function ini(t){return (t||'').replace(/[^A-Za-z ]/g,' ').split(/\s+/).filter(function(w){return w&&!/^(of|the|and|public|works|county)$/i.test(w)||false;}).slice(0,2).map(function(w){return w[0].toUpperCase();}).join('')||(t||'?').slice(0,2).toUpperCase();}
+ function orgIni(t){var w=(t||'').split(/\s+/);if(/county/i.test(t)){return (w[0][0]+(/county/i.test(w[1]||'')?'C':(w[1]||'')[0]||'')).toUpperCase();}if(/^city of/i.test(t))return ('C'+((w[2]||'')[0]||'')).toUpperCase();return ini(t);}
+ function go(){var n=document.querySelector('.og .mnav');if(!n)return;var o=n.querySelector('.mnav-org strong');if(o){var org=n.querySelector('.mnav-org');var nm0=o.textContent.trim(),M={'LA County Public Works':'LA','Ventura County Public Works':'VC','City of Malibu':'MB'},v=M[nm0]||orgIni(nm0);if(org.getAttribute('data-ini')!==v)org.setAttribute('data-ini',v);}
+  if(!n.querySelector('.mnav-me')){var av=document.querySelector('.og .hd .av'),um=document.querySelector('.og .um');var nm='',rl='';if(um){var b=um.querySelector('.um-nm b'),r=um.querySelector('.um-role');nm=b?b.textContent.trim():'';rl=r?r.textContent.trim():'';}
+   if(!nm&&av){var l=av.getAttribute('aria-label')||'';var m=l.match(/for (.+)$/);nm=m?m[1]:'';}
+   var up=n.querySelector('.mnav-up');if(up){var d=document.createElement('div');d.className='mnav-me';d.innerHTML='<i>'+(av?av.textContent.trim():'')+'</i><span><b></b><small></small></span>';d.querySelector('b').textContent=nm||'Signed in';d.querySelector('small').textContent=rl||'';n.insertBefore(d,up);}}}
+ new MutationObserver(function(){go();}).observe(document.documentElement,{subtree:true,childList:true});
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();})();</script>
+<script>/* swap the CSS-inverted navy wordmark for the white file */
 (function(){function go(){[].forEach.call(document.querySelectorAll('img.wm'),function(m){if(m.classList.contains('wm-w'))return;var f=getComputedStyle(m).filter||'';if(/invert\(1\)/.test(f)){m.src=m.getAttribute('src').replace(/obligate-wordmark\.svg/,'obligate-wordmark-white.svg');m.classList.add('wm-w');}});}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();addEventListener('load',go);})();</script>
 <script>/* Phones: dropdowns → bottom sheets. Marks open popups with .og-sh, locks scroll, eats taps outside and closes. */
