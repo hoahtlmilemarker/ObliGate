@@ -169,7 +169,7 @@
   '.rv-seg button.on{background:#8CC0F1;color:#06243F;box-shadow:0 6px 16px -6px rgba(140,192,241,.8)}.rv-seg svg{width:18px;height:18px}' +
   '.rv-rail{position:fixed;top:0;right:0;bottom:0;z-index:2147482650;width:54px;background:#f5f5f5;border-left:1px solid #e0e0e0;border-radius:0 0 0 16px;display:flex;flex-direction:column;align-items:center;padding-top:30px;box-shadow:-10px 0 30px -18px rgba(0,0,0,.3)}' +
   '.rv-rail .rv-side{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#334155}.rv-rail .rv-side:hover{background:rgba(0,0,0,.06)}' +
-  '.rv-rail-list{flex:1;width:100%;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0 90px}.rv-rail-list::-webkit-scrollbar{display:none}' +
+  '.rv-rail-list{flex:1;width:100%;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0 150px}.rv-rail-list::-webkit-scrollbar{display:none}' +
   '.rv-dot{flex:none;width:22px;height:22px;border-radius:50%;color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;text-transform:uppercase;transition:transform .15s,box-shadow .15s}' +
   '.rv-dot:hover{transform:scale(1.15)}.rv-dot.on{box-shadow:0 0 0 3px #fff,0 0 0 5px currentColor}.rv-dot.done{opacity:.45}' +
   '.rv-panel{position:fixed;top:0;right:0;bottom:0;z-index:2147482650;width:370px;max-width:100vw;background:#f3f4f6;color:#0f172a;display:flex;flex-direction:column;box-shadow:-20px 0 50px -20px rgba(0,0,0,.35)}' +
@@ -968,10 +968,15 @@
       '.rv-devstage{flex:1;min-height:0;display:flex;justify-content:center;padding:12px 12px 14px;overflow:auto}' +
       '.rv-devstage iframe{height:100%;max-width:100%;border:8px solid #1e293b;border-radius:28px;background:#fff;box-shadow:0 20px 50px rgba(15,40,90,.25)}' +
       '@media (max-width:1024px){.rv-dev{padding:4px;gap:4px;left:8px;bottom:10px}.rv-dev button,.rv-devbar button{height:28px;padding:0 11px;font-size:12px}.rv-devbar{height:46px;gap:6px}}' +
+      '.rv-dev{left:auto;right:12px}.rv-dev .ic{display:none}.rv-dev .ic svg{width:16px;height:16px;display:block}' +
+      'html:has(.rv-rail) .rv-dev{right:4px;bottom:14px;flex-direction:column;gap:4px;padding:4px;z-index:2147482660;border-radius:14px}' +
+      'html:has(.rv-rail) .rv-dev button{width:38px;height:38px!important;padding:0!important;border-radius:10px!important;display:grid;place-items:center}' +
+      'html:has(.rv-rail) .rv-dev .ic{display:block}html:has(.rv-rail) .rv-dev .tx{display:none}' +
+      '@media (max-width:1024px){.rv-dev{left:auto;right:8px}html:has(.rv-rail) .rv-dev{right:3px;bottom:10px}html:has(.rv-rail) .rv-dev button{width:34px;height:34px!important}}' +
       '@media (max-width:768px){.rv-dev{display:none}}';
     var st = document.createElement('style'); st.textContent = dcss; document.head.appendChild(st);
     var bar = document.createElement('div'); bar.className = 'rv rv-dev'; bar.setAttribute('data-review-ui', '');
-    var tabs = function () { return [['desktop', 'Desktop'], ['tablet', 'Tablet'], ['mobile', 'Mobile']].map(function (t) { return '<button type="button" data-dev="' + t[0] + '" class="' + (mode === t[0] ? 'on' : '') + '" aria-pressed="' + (mode === t[0]) + '">' + t[1] + '</button>'; }).join(''); };
+    var tabs = function () { return [['desktop', 'Desktop'], ['tablet', 'Tablet'], ['mobile', 'Mobile']].map(function (t) { var IC = { desktop: '<rect x="2.5" y="3.5" width="15" height="10" rx="1.5"/><path d="M7 17h6M10 13.5V17"/>', tablet: '<rect x="4.5" y="2.5" width="11" height="15" rx="1.8"/><path d="M9 15h2"/>', mobile: '<rect x="6" y="2.5" width="8" height="15" rx="1.6"/><path d="M9.2 15h1.6"/>' }; return '<button type="button" data-dev="' + t[0] + '" class="' + (mode === t[0] ? 'on' : '') + '" aria-pressed="' + (mode === t[0]) + '" title="' + t[1] + ' preview" aria-label="' + t[1] + '"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + IC[t[0]] + '</svg></span><span class="tx">' + t[1] + '</span></button>'; }).join(''); };
     function draw() { bar.innerHTML = tabs(); if (box) box.querySelector('.rv-devbar').innerHTML = tabs(); }
     function pick(m) {
       if (m === mode) return;
