@@ -5203,23 +5203,35 @@ html body .og .tst-acts button{white-space:nowrap}
 }
 
 /* ===== Phones: every dropdown opens as an app-style bottom sheet ===== */
-@keyframes ogShUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes ogShUp{from{translate:0 100%;box-shadow:0 0 0 100vmax rgba(4,18,33,0),0 -12px 30px -12px rgba(4,18,33,0)}to{translate:0 0;box-shadow:0 0 0 100vmax rgba(4,18,33,.42),0 -12px 30px -12px rgba(4,18,33,.3)}}
 @media (max-width:640px){
  html.og-sheet-open,html.og-sheet-open body{overflow:hidden!important;overscroll-behavior:none}
- html body .og-sh.og-sh.og-sh,html body .og .og-sh.og-sh.og-sh{position:fixed!important;inset:auto 0 0 0!important;top:auto!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;min-width:0!important;max-width:none!important;max-height:min(78vh,620px)!important;margin:0!important;transform:none!important;translate:none!important;overflow-y:auto!important;overscroll-behavior:contain;box-sizing:border-box!important;padding:28px 8px calc(12px + env(safe-area-inset-bottom))!important;border:0!important;border-top:1px solid var(--line,#E3EAF2)!important;border-radius:16px 16px 0 0!important;background:var(--card,#fff)!important;box-shadow:0 0 0 100vmax rgba(4,18,33,.48),0 -12px 30px -12px rgba(4,18,33,.35)!important;z-index:2147480000!important;animation:ogShUp .22s cubic-bezier(.2,.8,.2,1)!important;text-align:left}
- html body .og-sh::before{content:'';position:absolute;top:10px;left:50%;width:40px;height:4px;margin-left:-20px;border-radius:4px;background:var(--line,#D5DEE8)}
- html body .og-sh[data-sh-t]::after{content:attr(data-sh-t);position:absolute;top:22px;left:20px;right:20px;font:800 10px/1.2 Manrope,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gray,#6B7A8C)}
- html body .og-sh[data-sh-t]{padding-top:46px!important}
- html body .og-sh :is(button,a,[role=menuitem],[role=option],label):not([disabled]){min-height:48px}
- html body .og-sh :is([role=menuitem],[role=option],.mi,.addm-i,.um-i,.fm-o){border-radius:8px!important;font-size:15px}
- html body .og-sh hr,html body .og-sh [role=separator]{margin-left:12px!important;margin-right:12px!important}
- /* the header row in a sheet stays put while the list scrolls */
- html body .og-sh.og-sh.og-sh > *{max-width:none!important}
- html body .og-sh.og-sh .addm-i{padding:12px!important;gap:3px}
- html body .og-sh.og-sh .addm-i b{font-size:15px}
- html body .og-sh.og-sh .addm-i small{font-size:12.5px;line-height:1.4}
- html body .og-sh.og-sh :is(.mi,.addm-i,[role=menuitem],[role=option]){width:100%!important;max-width:none!important;box-sizing:border-box}
- html body .og-sh.og-sh :is(.mi-t,.mi-s,small,b){max-width:none!important}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b){position:fixed!important;inset:auto 0 0 0!important;top:auto!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;min-width:0!important;max-width:none!important;max-height:min(78vh,620px)!important;margin:0!important;transform:none!important;transition:none!important;overflow-y:auto!important;overscroll-behavior:contain;box-sizing:border-box!important;padding:26px 12px calc(12px + env(safe-area-inset-bottom))!important;border:0!important;border-top:1px solid var(--line,#E3EAF2)!important;border-radius:18px 18px 0 0!important;background:var(--card,#fff)!important;box-shadow:0 0 0 100vmax rgba(4,18,33,.42),0 -12px 30px -12px rgba(4,18,33,.3);z-index:2147480000!important;text-align:left;will-change:translate;animation:ogShUp .38s cubic-bezier(.32,.72,0,1) both!important}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b)::before{content:'';position:absolute;top:9px;left:50%;width:36px;height:4px;margin-left:-18px;border-radius:4px;background:var(--line,#D5DEE8);opacity:.9}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > *{max-width:none!important}
+ /* items: same weight as desktop menus, 44px tap rows, 2px apart */
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) :is([role=menuitem],[role=option],[role=menuitemradio],[role=menuitemcheckbox],.mi,.addm-i,.fm-o):not(#og-sh-c){min-height:44px!important;padding-top:9px!important;padding-bottom:9px!important;padding-left:12px!important;padding-right:12px!important;font-size:14px!important;border-radius:8px!important;width:100%!important;max-width:none!important;box-sizing:border-box;margin:0!important}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) :is([role=menuitem],[role=option],[role=menuitemradio],[role=menuitemcheckbox],.mi,.addm-i,.fm-o) + :is([role=menuitem],[role=option],[role=menuitemradio],[role=menuitemcheckbox],.mi,.addm-i,.fm-o){margin-top:2px!important}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) :is(.mi-t,.addm-i b){font-size:14px!important}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) :is(.mi-s,.addm-i small,.fm-o small){font-size:12px!important;line-height:1.4}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) hr,html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) [role=separator]{margin-left:12px!important;margin-right:12px!important}
+ /* section heading inside a sheet (SHOW COLUMNS, SORT BY, COLUMNS…) lines up with the rows */
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > :is(small:first-child,small.h,.lbl,.mh):not(#og-sh-c){display:block;padding:2px 12px 10px!important;margin:0!important;font:800 10px/1.2 Manrope,Arial,sans-serif!important;letter-spacing:.14em!important;text-transform:uppercase;color:var(--gray,#6B7A8C)!important}
+ /* checkbox rows (Columns) */
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > label:not(#og-sh-c){display:flex!important;align-items:center;gap:12px;min-height:44px!important;padding:0 12px!important;margin:0!important;border-radius:8px;font-size:14px!important;font-weight:600;color:var(--head,#06243F);cursor:pointer;box-sizing:border-box}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > label + label{margin-top:2px!important}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > label input[type=checkbox]{width:18px!important;height:18px!important;margin:0!important;flex:none}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > label em{margin-left:auto;font-style:normal;font-size:11.5px!important;font-weight:600;color:var(--gray,#6B7A8C)}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > label.cp-lock{opacity:.75}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > label:active{background:var(--pale,#F2F6FA)}
+ /* footer row (7 of 7 columns shown · Show all) sits on the sheet edge */
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > .cp-f:not(#og-sh-c){position:sticky;bottom:calc(-12px - env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;margin:10px -12px calc(-12px - env(safe-area-inset-bottom))!important;padding:12px 24px calc(12px + env(safe-area-inset-bottom))!important;background:var(--card,#fff)!important;border-top:1px solid var(--line,#E3EAF2)!important;font-size:12.5px!important;color:var(--gray,#6B7A8C)}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > .cp-f button{min-height:32px!important;padding:0 4px;font-size:13px!important;font-weight:700;color:var(--blue,#005A9C)}
+ html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) > .cp-f button[disabled]{color:var(--gray,#6B7A8C);opacity:.6}
+ /* no sticky hover tint on touch: only the pressed row tints */
+ @media (hover:none){html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) :is([role=menuitem],[role=option],.mi,.addm-i,.fm-o,label):hover:not([aria-selected=true]):not([aria-checked=true]):not(.on):not(.sel){background:transparent!important}
+  html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop):not(#og-sh-a):not(#og-sh-b) :is([role=menuitem],[role=option],.mi,.addm-i,.fm-o):active{background:var(--pale,#F2F6FA)!important}}
+
 }
 /* ===== Phone toolbars (Disasters, Projects): search + icon tools / Sort + primary / count ===== */
 @media (max-width:640px){
@@ -5251,7 +5263,7 @@ html body .og .tst-acts button{white-space:nowrap}
  function title(e){if(e.hasAttribute('data-sh-t'))return;var t=e.getAttribute('aria-label');if(!t){var c=e.classList;if(c.contains('addm-menu'))t='Add';else if(c.contains('um'))t='';}
   if(t&&!/^(show columns|columns)$/i.test(t)&&!e.querySelector('.lbl,.um-h,.fm-h,.bm-h'))e.setAttribute('data-sh-t',t);}
  function scan(){raf=0;var els=[].slice.call(document.querySelectorAll(SEL)),now=[];
-  els.forEach(function(e){var on=mq.matches&&vis(e),has=e.classList.contains('og-sh');if(on){if(!has){e.classList.add('og-sh');title(e);}if(e.style.maxWidth||e.style.width){e.style.removeProperty('max-width');e.style.removeProperty('width');}now.push(e);}else if(has)e.classList.remove('og-sh');});
+  els.forEach(function(e){var on=mq.matches&&vis(e),has=e.classList.contains('og-sh');if(on){if(!has){e.classList.add('og-sh');e.removeAttribute('data-sh-t');e._ogT=Date.now();}if(e.style.maxWidth||e.style.width){e.style.removeProperty('max-width');e.style.removeProperty('width');}now.push(e);}else if(has)e.classList.remove('og-sh');});
   open=now;var h=document.documentElement;if(h.classList.contains('og-sheet-open')!==(now.length>0))h.classList.toggle('og-sheet-open',now.length>0);}
  var tq=[];function q(){if(!raf)raf=requestAnimationFrame(scan);tq.forEach(clearTimeout);tq=[80,220,450].map(function(t){return setTimeout(function(){if(!raf)raf=requestAnimationFrame(scan);},t);});}
  ['transitionend','animationend'].forEach(function(n){document.addEventListener(n,function(e){if(e.target&&e.target.matches&&e.target.matches(SEL))q();},true);});
@@ -5266,6 +5278,8 @@ html body .og .tst-acts button{white-space:nowrap}
   bypass=false;
   setTimeout(function(){scan();open.forEach(function(e){if(e.classList.contains('xq-pop')||e.classList.contains('fm-pop'))e.remove();else e.style.display='none';});scan();},60);}
  ['pointerdown','mousedown','touchstart'].forEach(function(n){window.addEventListener(n,function(e){if(bypass||!open.length||inside(e.target))return;e.stopPropagation();if(n!=='touchstart')e.preventDefault();},{capture:true,passive:false});});
+ /* the tap that opened a sheet must not land on the item that slides in under the finger */
+ ['click','pointerup','mouseup'].forEach(function(n){window.addEventListener(n,function(e){var sh=e.target.closest&&e.target.closest('.og-sh');if(sh&&sh._ogT&&Date.now()-sh._ogT<380){e.stopPropagation();e.preventDefault();}},true);});
  window.addEventListener('click',function(e){if(bypass||!open.length||inside(e.target))return;e.stopPropagation();e.preventDefault();closeAll();},true);
  /* choosing an item in a sheet: let the page handle it, then re-check */
  document.addEventListener('click',function(){if(open.length)setTimeout(q,30);});
