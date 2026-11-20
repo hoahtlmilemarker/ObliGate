@@ -959,8 +959,8 @@
   /* ---------- Desktop / Tablet / Mobile preview (review only) ---------- */
   (function deviceSwitcher() {
     if (window.name === 'ree-device') return;           // already inside the device frame
-    /* real CSS viewport sizes: iPad Air / iPad 10th gen portrait 820×1180, iPhone 15 390×844 */
-    var W = { tablet: [820, 1180], mobile: [390, 844] }, NAME = { tablet: 'iPad · 820 × 1180', mobile: 'iPhone · 390 × 844' }, mode = 'desktop', box = null, frame = null, fitBox = null, real = false, zs = 1, zsf = 1;
+    /* real CSS viewport sizes: iPad Mini portrait 768×1024 (Chrome DevTools preset), iPhone 15 390×844 */
+    var W = { tablet: [768, 1024], mobile: [390, 844] }, NAME = { tablet: 'iPad Mini · 768 × 1024', mobile: 'iPhone · 390 × 844' }, mode = 'desktop', box = null, frame = null, fitBox = null, real = false, zs = 1, zsf = 1;
     try { real = localStorage.getItem('rv-dev-real') === '1'; } catch (e) {}
     var dcss = '.rv-dev{position:fixed;left:12px;bottom:14px;z-index:2147482600;display:flex;gap:6px;padding:6px;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 4px 16px rgba(0,0,0,.18);backdrop-filter:blur(8px)}' +
       '.rv-dev button,.rv-devbar button{height:32px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;color:#1e293b;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);white-space:nowrap}' +
