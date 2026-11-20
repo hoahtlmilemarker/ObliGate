@@ -5439,6 +5439,16 @@ html body .og main.content{row-gap:16px!important}
 html body .og main.content > .og-dm-row{margin-bottom:0!important}
 html body .og :is(.dl-bar,.cq-tools){row-gap:10px!important}
 }
+/* ===== Project Overview on tablet/mobile: cost rows align with the section heading; checklist panel tighter ===== */
+@media (max-width:820px){
+html body .og .ctbl tbody tr{padding:12px 0!important;gap:6px 12px!important}
+html body .og .ctbl tbody tr > td:first-child{padding-left:0!important}
+}
+@media (max-width:1280px){
+html body .og section.panel:has(> .panel-h) > .panel-h{padding:12px 16px!important}
+html body .og section.panel:has(> .panel-h) > .panel-h + div{padding:0 16px 4px!important}
+html body .og section.panel:has(> .panel-h) > .panel-h + div > div{padding:12px 0!important;gap:12px!important}
+}
 /* ===== tablet summary strips: one compact row of four instead of a tall 2×2 block ===== */
 @media (min-width:641px) and (max-width:1280px){
 html body .og.og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)):not(:has(> :nth-child(5))){grid-template-columns:repeat(4,minmax(0,1fr))!important}
