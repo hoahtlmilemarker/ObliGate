@@ -5109,7 +5109,70 @@ html body .og .tst-acts button{white-space:nowrap}
  html body .og [data-pjl] .cq-t td:last-child .cq-go{display:none!important}
  html body .og [data-pjl] .cq-t > tbody > tr:active{background:var(--pale)}
 }
-</style><script>/* phones: tapping a project card opens it (the Open button is folded into the card) */
+
+/* ===== Filters drawer (≤1024) — list rows like the desktop rail, title + close ===== */
+@media (max-width:1024px){
+ html body .og.lr .shell > .sb-rail .dr-hd{display:flex}
+ html body .og.lr.lr-dr .shell > .sb-rail{gap:22px!important;padding:0 16px 24px!important}
+ html body .og.lr.lr-dr .shell > .sb-rail > .dr-hd{position:sticky;top:0;z-index:2;flex-direction:row!important;align-self:stretch!important;width:auto!important;align-items:center;justify-content:space-between;margin:0 -16px!important;padding:14px 16px 12px!important;background:var(--card)!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;box-sizing:border-box}
+ html body .og.lr.lr-dr .shell > .sb-rail > .dr-hd b{font:500 22px/1.1 "Cormorant Garamond",Georgia,serif;color:var(--head)}
+ html body .og.lr.lr-dr .shell > .sb-rail > .dr-hd button{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--head);cursor:pointer}
+ html body .og.lr.lr-dr .sb-rail:has(.side) > div:first-child{display:flex!important;flex-direction:column;gap:0!important}
+ html body .og.lr.lr-dr .sb-rail:has(.side) > div:first-child > .lbl{padding-bottom:10px!important}
+ html body .og.lr.lr-dr .sb-rail:has(.side) .side{flex-direction:row!important;align-items:center!important;justify-content:space-between!important;min-height:44px!important;gap:10px;padding:0 12px 0 15px!important;border:0!important;border-left:1px solid var(--line)!important;border-radius:0!important;background:transparent;box-shadow:none!important;font-size:14px}
+ html body .og.lr.lr-dr .sb-rail:has(.side) .side span:first-child{font-size:14px;font-weight:500;color:var(--ink)}
+ html body .og.lr.lr-dr .sb-rail:has(.side) .side .n-pill{order:0!important;font:700 12px/1 Manrope,Arial,sans-serif!important;color:var(--gray);min-width:24px;text-align:right}
+ html body .og.lr.lr-dr .sb-rail:has(.side) .side.side-on{background:var(--blue-t)!important;border-left:3px solid var(--blue)!important;padding-left:13px!important;border-radius:0 4px 4px 0!important}
+ html body .og.lr.lr-dr .sb-rail:has(.side) .side.side-on span:first-child,html body .og.lr.lr-dr .sb-rail:has(.side) .side.side-on .n-pill{color:var(--blue)!important;font-weight:700}
+ html body .og.lr.lr-dr .sb-rail:has(.side) .side:active{background:var(--pale)}
+ html body .og.lr.lr-dr .sb-rail .ck{min-height:40px}
+ html body .og.lr.lr-dr .sb-rail .pol{width:100%!important;max-width:none!important;margin:0!important;box-sizing:border-box}
+}
+.og .sb-rail .dr-hd{display:none}
+
+/* phones: Filters drawer is tighter than on tablet — 16px all round, smaller type */
+@media (max-width:640px){
+ html body .og.lr.lr-dr .shell > .sb-rail{padding:0 16px 16px!important;gap:16px!important;width:288px!important}
+ html body .og.lr.lr-dr .shell > .sb-rail > .dr-hd{margin:0 -16px!important;padding:16px!important;min-height:0}
+ html body .og.lr.lr-dr .shell > .sb-rail > .dr-hd b{font-size:19px}
+ html body .og.lr.lr-dr .shell > .sb-rail > .dr-hd button{width:32px;height:32px}
+ html body .og.lr.lr-dr .sb-rail :is(.lbl,legend.lbl){font-size:9.5px!important;letter-spacing:.12em!important}
+ html body .og.lr.lr-dr .sb-rail:has(.side) > div:first-child > .lbl{padding-bottom:8px!important}
+ html body .og.lr.lr-dr .sb-rail:has(.side) .side{min-height:38px!important}
+ html body .og.lr.lr-dr .sb-rail:has(.side) .side span:first-child{font-size:13px!important}
+ html body .og.lr.lr-dr .sb-rail:has(.side) .side .n-pill{font-size:11px!important}
+ html body .og.lr.lr-dr .sb-rail .ck{min-height:34px;font-size:13px!important}
+ html body .og.lr.lr-dr .sb-rail .pol{padding:12px!important}
+ html body .og.lr.lr-dr .sb-rail .pol .pol-k{font-size:9.5px!important}
+ html body .og.lr.lr-dr .sb-rail .pol .pol-v{font-size:13px!important}
+ html body .og.lr.lr-dr .sb-rail .pol .pol-s{font-size:11.5px!important}
+}
+/* ===== Phone toolbars (Disasters, Projects): search + icon tools / Sort + primary / count ===== */
+@media (max-width:640px){
+ html body .og .dl-bar{display:grid!important;grid-template-columns:minmax(0,1fr) 38px 38px 38px;gap:10px!important;align-items:center}
+ html body .og .dl-bar > .dl-l,html body .og .dl-bar > .dl-r{display:contents!important}
+ html body .og .dl-bar .dl-srch{grid-row:1;grid-column:1;width:auto!important;min-width:0;max-width:none!important}
+ html body .og .dl-bar .dl-srch .inp{width:100%!important}
+ html body .og .dl-bar .lr-open{grid-row:1;grid-column:2}
+ html body .og .dl-bar .dl-r > .xq-btn:nth-child(2){grid-row:1;grid-column:3}
+ html body .og .dl-bar .dl-r > .xq-btn:nth-child(1){grid-row:1;grid-column:4}
+ html body .og :is(.dl-bar,.cq-tools) .lr-open,html body .og .dl-bar .dl-r > .xq-btn:is(:nth-child(1),:nth-child(2)){width:38px!important;height:38px!important;min-width:0;padding:0!important;justify-content:center;font-size:0!important;gap:0!important}
+ html body .og :is(.dl-bar,.cq-tools) .lr-open span{display:none!important}
+ html body .og .dl-bar .dl-r > .xq-btn:nth-child(3){grid-row:2;grid-column:1;justify-content:center;width:100%;margin:0!important}
+ html body .og .dl-bar .dl-r > .addm{grid-row:2;grid-column:2 / -1;margin:0!important}
+ html body .og .dl-bar .dl-r > .addm > summary{width:100%;justify-content:center;box-sizing:border-box}
+ html body .og .dl-bar .addm-menu{right:0;left:auto}
+ html body .og .dl-bar .meta{grid-row:3;grid-column:1 / -1;margin:0!important;font-size:12.5px}
+ html body .og [data-pjl] .cq-tools{display:grid!important;grid-template-columns:minmax(0,1fr) 38px;gap:10px!important}
+ html body .og [data-pjl] .cq-tools .cq-srch{grid-row:1;grid-column:1;width:auto!important;max-width:none!important}
+ html body .og [data-pjl] .cq-tools .lr-open{grid-row:1;grid-column:2}
+ html body .og [data-pjl] .cq-tools .xq-acts{grid-row:2;grid-column:1 / -1}
+ html body .og [data-pjl] .cq-tools .cq-meta{grid-row:3;grid-column:1 / -1;font-size:12.5px}
+}
+</style><script>/* Filters drawer: title + close button (shown ≤1024 only) */
+(function(){function go(){var og=document.querySelector('.og.lr'),rail=og&&og.querySelector('.shell > .sb-rail');if(!rail||rail.querySelector('.dr-hd'))return;var h=document.createElement('div');h.className='dr-hd';h.innerHTML='<b>Filters</b><button type="button" aria-label="Close filters"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>';rail.insertBefore(h,rail.firstChild);h.querySelector('button').addEventListener('click',function(e){e.stopPropagation();og.classList.remove('lr-dr');var o=document.querySelector('.og .lr-open');if(o)o.focus();});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,0)});else setTimeout(go,0);})();</script>
+<script>/* phones: tapping a project card opens it (the Open button is folded into the card) */
 document.addEventListener('click',function(e){if(!matchMedia('(max-width:640px)').matches)return;var tr=e.target.closest&&e.target.closest('[data-pjl] table.cq-t > tbody > tr');if(!tr||e.target.closest('a,button,input,select,label,[role=menu],.xq-pop'))return;var go=tr.querySelector('.cq-go');if(go)go.click();});</script>
 
 <script>/* mobile/tablet helpers: scroll rows (active item into view + edge fades), labels for compact tables, document full-screen viewer */
