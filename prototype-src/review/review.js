@@ -970,7 +970,7 @@
       '.rv-devstage{flex:1;min-height:0;display:flex;justify-content:center;padding:12px 12px 14px;overflow:auto}' +
       '.rv-devstage{align-items:flex-start}.rv-devfit{flex:none;position:relative}.rv-devstage iframe{position:absolute;left:0;top:0;box-sizing:content-box;border:8px solid #1e293b;border-radius:28px;background:#fff;box-shadow:0 20px 50px rgba(15,40,90,.25);transform-origin:0 0}' +
       '.rv-dev .rv-zm{width:38px;height:auto!important;min-height:38px;padding:6px 0!important;margin-top:2px;border-top:1px solid rgba(255,255,255,.14)!important;border-radius:10px!important;background:transparent!important;box-shadow:none!important;color:#CBD5E1!important;font:700 10.5px/1.15 system-ui,sans-serif!important;display:flex!important;flex-direction:column;align-items:center;gap:2px;cursor:pointer}' +
-      '.rv-dev .rv-zm small{font:600 9px/1 system-ui,sans-serif;color:#94A3B8;letter-spacing:.02em}.rv-dev .rv-zm:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}.rv-dev .rv-zm[disabled]{cursor:default;opacity:.75}.rv-dev .rv-zm[disabled]:hover{background:transparent!important}' +
+      '.rv-dev .rv-zm small{font:600 9px/1 system-ui,sans-serif;color:#94A3B8;letter-spacing:.02em}.rv-dev .rv-zm:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}.rv-dev .rv-zm-st{cursor:default;color:#94A3B8!important;box-sizing:border-box}.rv-dev .rv-zm-st:hover{background:transparent!important;color:#94A3B8!important}' +
       '.rv-devstage{justify-content:safe center!important}' +
       '@media (max-width:1024px){.rv-dev{padding:4px;gap:4px;left:8px;bottom:10px}.rv-dev button,.rv-devbar button{height:28px;padding:0 11px;font-size:12px}.rv-devbar{height:46px;gap:6px}}' +
       '.rv-dev{left:auto!important;right:4px!important;bottom:14px!important;flex-direction:column;gap:4px!important;padding:4px!important;z-index:2147483200;border-radius:14px}' +
@@ -986,7 +986,8 @@
       if (mode === 'desktop' || !box) return '';
       var nm = NAME[mode], can = zsf < 1, pct = Math.round(zs * 100) + '%';
       var tip = nm + (can ? (real ? ' at 100% (real size). Click to fit the window.' : ' shown at ' + pct + '. Click to view at 100%.') : ' at 100% (real size).');
-      return '<button type="button" class="rv-zm"' + (can ? ' data-devreal' : ' disabled') + ' title="' + tip + '" aria-label="' + tip + '">' + pct + '<small>' + (can ? (real ? 'Fit' : '1:1') : 'real') + '</small></button>';
+      if (!can) return '<span class="rv-zm rv-zm-st" role="note" title="' + tip + ' The window is big enough, so nothing is scaled.">100%<small>actual</small></span>';
+      return '<button type="button" class="rv-zm" data-devreal title="' + tip + '" aria-label="' + tip + '">' + pct + '<small>' + (real ? 'Fit' : '1:1') + '</small></button>';
     }
     function draw() { bar.innerHTML = tabs() + zoomBtn(); if (box) box.querySelector('.rv-devbar').innerHTML = tabs(); }
     function pick(m) {
