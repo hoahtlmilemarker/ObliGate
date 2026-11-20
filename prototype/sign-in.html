@@ -280,7 +280,7 @@ var nameEl=app.querySelector('.rv-name'),stEl=app.querySelector('.rv-st'),cnt=ap
 var cntTot=app.querySelector('.rv-count');if(cntTot)cntTot.lastChild.textContent=' of '+N;
 function go(i){if(i<0||i>=N)return;cur=i;try{sessionStorage.setItem('og-doc',i);}catch(e){}var d=D[i];
  nameEl.textContent=d.n;nameEl.title=d.n;stEl.className='tag rv-st t-'+d.st[0];stEl.textContent=d.st[1];cnt.textContent=i+1;prev.disabled=i===0;next.disabled=i===N-1;
- if(d.k==='orig'){paper.innerHTML=orig.p;fields.innerHTML=orig.f;h.textContent='AI Extracted Metadata (6 Fields)';lc.style.display='';lc.textContent='3 to review';}
+ if(d.k==='orig'){paper.innerHTML=orig.p;fields.innerHTML=orig.f;h.textContent='AI Extracted Metadata (7 Fields)';lc.style.display='';lc.textContent='4 to review';}
  else{paper.innerHTML=pv(d);var r=fl(d);fields.innerHTML=r.html;var nf=r.n-(d.k==='photo'&&!d.c?1:0);h.textContent='AI Extracted Metadata ('+nf+' Fields)';lc.style.display=(r.low||d.k==='sup')?'':'none';lc.textContent=d.k==='sup'?'1 Missing Signature':'1 Low Confidence';}
  if(conf)conf.textContent=i===N-1?'Confirm & Finish Queue [Enter]':'Confirm & Next Document [Enter]';
  if(typeof rot!=='undefined'&&rot){rot=0;view();}paper.classList.remove('rv-swap');void paper.offsetWidth;paper.classList.add('rv-swap');paper.parentElement.scrollTop=0;fields.scrollTop=0;}
