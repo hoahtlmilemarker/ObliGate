@@ -5170,6 +5170,38 @@ html body .og .tst-acts button{white-space:nowrap}
  html body .og.lr.lr-dr .sb-rail .pol .pol-v{font-size:13px!important}
  html body .og.lr.lr-dr .sb-rail .pol .pol-s{font-size:11.5px!important}
 }
+
+/* Disasters on phones: 16px page gutter, 16px between blocks, 16px inside the ledger tiles */
+@media (max-width:640px){
+ html body .og .col:has(> .ledger) > .mast .hero{padding-left:16px!important;padding-right:16px!important}
+ html body .og .col:has(> .ledger){padding-left:16px!important;padding-right:16px!important}
+ html body .og .col:has(> .ledger) > .mast{margin-left:-16px!important;margin-right:-16px!important}
+ html body .og .col > .ledger{margin-left:0!important;margin-right:0!important;width:auto!important;max-width:none!important}
+ html body .og .col > .ledger .kpi{padding:16px!important}
+ html body .og .col:has(> .ledger) main.content{margin:-8px 0 0!important;padding:0!important;gap:16px!important}
+ html body .og .col:has(> .ledger) main.content > .og-dm-row{margin:0!important}
+ html body .og .col:has(> .ledger) .dl-bar{row-gap:12px!important}
+}
+
+/* ===== Phones: every dropdown opens as an app-style bottom sheet ===== */
+@keyframes ogShUp{from{transform:translateY(100%)}to{transform:none}}
+@media (max-width:640px){
+ html.og-sheet-open,html.og-sheet-open body{overflow:hidden!important;overscroll-behavior:none}
+ html body .og-sh.og-sh.og-sh,html body .og .og-sh.og-sh.og-sh{position:fixed!important;inset:auto 0 0 0!important;top:auto!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;min-width:0!important;max-width:none!important;max-height:min(78vh,620px)!important;margin:0!important;transform:none!important;translate:none!important;overflow-y:auto!important;overscroll-behavior:contain;box-sizing:border-box!important;padding:28px 8px calc(12px + env(safe-area-inset-bottom))!important;border:0!important;border-top:1px solid var(--line,#E3EAF2)!important;border-radius:16px 16px 0 0!important;background:var(--card,#fff)!important;box-shadow:0 0 0 100vmax rgba(4,18,33,.48),0 -12px 30px -12px rgba(4,18,33,.35)!important;z-index:2147480000!important;animation:ogShUp .22s cubic-bezier(.2,.8,.2,1)!important;text-align:left}
+ html body .og-sh::before{content:'';position:absolute;top:10px;left:50%;width:40px;height:4px;margin-left:-20px;border-radius:4px;background:var(--line,#D5DEE8)}
+ html body .og-sh[data-sh-t]::after{content:attr(data-sh-t);position:absolute;top:22px;left:20px;right:20px;font:800 10px/1.2 Manrope,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gray,#6B7A8C)}
+ html body .og-sh[data-sh-t]{padding-top:46px!important}
+ html body .og-sh :is(button,a,[role=menuitem],[role=option],label):not([disabled]){min-height:48px}
+ html body .og-sh :is([role=menuitem],[role=option],.mi,.addm-i,.um-i,.fm-o){border-radius:8px!important;font-size:15px}
+ html body .og-sh hr,html body .og-sh [role=separator]{margin-left:12px!important;margin-right:12px!important}
+ /* the header row in a sheet stays put while the list scrolls */
+ html body .og-sh.og-sh.og-sh > *{max-width:none!important}
+ html body .og-sh.og-sh .addm-i{padding:12px!important;gap:3px}
+ html body .og-sh.og-sh .addm-i b{font-size:15px}
+ html body .og-sh.og-sh .addm-i small{font-size:12.5px;line-height:1.4}
+ html body .og-sh.og-sh :is(.mi,.addm-i,[role=menuitem],[role=option]){width:100%!important;max-width:none!important;box-sizing:border-box}
+ html body .og-sh.og-sh :is(.mi-t,.mi-s,small,b){max-width:none!important}
+}
 /* ===== Phone toolbars (Disasters, Projects): search + icon tools / Sort + primary / count ===== */
 @media (max-width:640px){
  html body .og .dl-bar{display:grid!important;grid-template-columns:minmax(0,1fr) 38px 38px 38px;gap:10px!important;align-items:center}
@@ -5192,7 +5224,40 @@ html body .og .tst-acts button{white-space:nowrap}
  html body .og [data-pjl] .cq-tools .xq-acts{grid-row:2;grid-column:1 / -1}
  html body .og [data-pjl] .cq-tools .cq-meta{grid-row:3;grid-column:1 / -1;font-size:12.5px}
 }
-</style><script>/* Filters drawer: title + close button (shown ≤1024 only) */
+</style><script>/* Phones: dropdowns → bottom sheets. Marks open popups with .og-sh, locks scroll, eats taps outside and closes. */
+(function(){
+ var SEL='.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop';
+ var mq=matchMedia('(max-width:640px)'),open=[],bypass=false,raf=0;
+ function vis(e){if(e.closest('[data-review-ui]'))return false;var cs=getComputedStyle(e);if(cs.display==='none'||cs.visibility==='hidden'||parseFloat(cs.opacity)<0.05)return false;if(e.classList.contains('addm-menu')){var d=e.closest('details');if(d&&!d.open)return false;}var r=e.getBoundingClientRect();return r.height>8&&r.width>8;}
+ function title(e){if(e.hasAttribute('data-sh-t'))return;var t=e.getAttribute('aria-label');if(!t){var c=e.classList;if(c.contains('addm-menu'))t='Add';else if(c.contains('um'))t='';}
+  if(t&&!/^(show columns|columns)$/i.test(t)&&!e.querySelector('.lbl,.um-h,.fm-h,.bm-h'))e.setAttribute('data-sh-t',t);}
+ function scan(){raf=0;var els=[].slice.call(document.querySelectorAll(SEL)),now=[];
+  els.forEach(function(e){var on=mq.matches&&vis(e),has=e.classList.contains('og-sh');if(on){if(!has){e.classList.add('og-sh');title(e);}if(e.style.maxWidth||e.style.width){e.style.removeProperty('max-width');e.style.removeProperty('width');}now.push(e);}else if(has)e.classList.remove('og-sh');});
+  open=now;var h=document.documentElement;if(h.classList.contains('og-sheet-open')!==(now.length>0))h.classList.toggle('og-sheet-open',now.length>0);}
+ var tq=[];function q(){if(!raf)raf=requestAnimationFrame(scan);tq.forEach(clearTimeout);tq=[80,220,450].map(function(t){return setTimeout(function(){if(!raf)raf=requestAnimationFrame(scan);},t);});}
+ ['transitionend','animationend'].forEach(function(n){document.addEventListener(n,function(e){if(e.target&&e.target.matches&&e.target.matches(SEL))q();},true);});
+ new MutationObserver(q).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class','open','style','hidden','aria-expanded']});
+ mq.addEventListener&&mq.addEventListener('change',q);
+ function inside(t){return open.some(function(e){return e.contains(t);})||(t.closest&&t.closest('[data-review-ui]'));}
+ function closeAll(){bypass=true;
+  try{document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));}catch(x){}
+  ['mousedown','pointerdown','click'].forEach(function(n){try{document.body.dispatchEvent(new MouseEvent(n,{bubbles:true,cancelable:true}));}catch(x){}});
+  [].forEach.call(document.querySelectorAll('details.addm[open],details[open] > .addm-menu'),function(d){(d.tagName==='DETAILS'?d:d.parentElement).removeAttribute('open');});
+  [].forEach.call(document.querySelectorAll('[aria-expanded="true"][aria-haspopup]'),function(b){b.setAttribute('aria-expanded','false');});
+  bypass=false;
+  setTimeout(function(){scan();open.forEach(function(e){if(e.classList.contains('xq-pop')||e.classList.contains('fm-pop'))e.remove();else e.style.display='none';});scan();},60);}
+ ['pointerdown','mousedown','touchstart'].forEach(function(n){window.addEventListener(n,function(e){if(bypass||!open.length||inside(e.target))return;e.stopPropagation();if(n!=='touchstart')e.preventDefault();},{capture:true,passive:false});});
+ window.addEventListener('click',function(e){if(bypass||!open.length||inside(e.target))return;e.stopPropagation();e.preventDefault();closeAll();},true);
+ /* choosing an item in a sheet: let the page handle it, then re-check */
+ document.addEventListener('click',function(){if(open.length)setTimeout(q,30);});
+ /* swipe the sheet down to close */
+ var y0=null,el=null;
+ window.addEventListener('touchstart',function(e){var s=e.target.closest&&e.target.closest('.og-sh');if(s&&s.scrollTop<=0){y0=e.touches[0].clientY;el=s;}else y0=null;},{passive:true});
+ window.addEventListener('touchmove',function(e){if(y0===null||!el)return;var dy=e.touches[0].clientY-y0;if(dy>0){el.style.setProperty('transform','translateY('+dy+'px)','important');}},{passive:true});
+ window.addEventListener('touchend',function(e){if(y0===null||!el)return;var dy=(e.changedTouches[0].clientY-y0);el.style.removeProperty('transform');if(dy>90)closeAll();y0=null;el=null;},{passive:true});
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',q);else q();
+})();</script>
+<script>/* Filters drawer: title + close button (shown ≤1024 only) */
 (function(){function go(){var og=document.querySelector('.og.lr'),rail=og&&og.querySelector('.shell > .sb-rail');if(!rail||rail.querySelector('.dr-hd'))return;var h=document.createElement('div');h.className='dr-hd';h.innerHTML='<b>Filters</b><button type="button" aria-label="Close filters"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>';rail.insertBefore(h,rail.firstChild);h.querySelector('button').addEventListener('click',function(e){e.stopPropagation();og.classList.remove('lr-dr');var o=document.querySelector('.og .lr-open');if(o)o.focus();});}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,0)});else setTimeout(go,0);})();</script>
 <script>/* phones: tapping a project card opens it (the Open button is folded into the card) */
