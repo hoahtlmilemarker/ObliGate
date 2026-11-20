@@ -5230,7 +5230,14 @@ document.addEventListener('click',function(e){if(!matchMedia('(max-width:640px)'
  function go(){run();new MutationObserver(sch).observe(document.body,{childList:true,subtree:true});addEventListener('resize',function(){document.querySelectorAll(SEL).forEach(upd);});}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 })();</script>
-<style>/* ===== tablet summary strips: one compact row of four instead of a tall 2×2 block ===== */
+<style>/* ===== tablet vertical rhythm: 16px between page blocks (desktop uses 24px on a much taller screen) ===== */
+@media (min-width:641px) and (max-width:1280px){
+html body .og .col-body{padding-top:16px!important}
+html body .og main.content{row-gap:16px!important}
+html body .og main.content > .og-dm-row{margin-bottom:0!important}
+html body .og :is(.dl-bar,.cq-tools){row-gap:10px!important}
+}
+/* ===== tablet summary strips: one compact row of four instead of a tall 2×2 block ===== */
 @media (min-width:641px) and (max-width:1280px){
 html body .og.og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)):not(:has(> :nth-child(5))){grid-template-columns:repeat(4,minmax(0,1fr))!important}
 html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > *{gap:0!important;justify-content:flex-start!important;padding:12px 16px 13px!important;border-bottom:0!important;border-right:1px solid var(--line-soft,var(--hair,var(--line)))!important;min-width:0}
