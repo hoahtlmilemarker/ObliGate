@@ -960,7 +960,8 @@
   (function deviceSwitcher() {
     if (window.name === 'ree-device') return;           // already inside the device frame
     /* real CSS viewport sizes: iPad Air / iPad 10th gen portrait 820×1180, iPhone 15 390×844 */
-    var W = { tablet: [820, 1180], mobile: [390, 844] }, NAME = { tablet: 'iPad · 820 × 1180', mobile: 'iPhone · 390 × 844' }, mode = 'desktop', box = null, frame = null, fitBox = null;
+    var W = { tablet: [820, 1180], mobile: [390, 844] }, NAME = { tablet: 'iPad · 820 × 1180', mobile: 'iPhone · 390 × 844' }, mode = 'desktop', box = null, frame = null, fitBox = null, real = false;
+    try { real = localStorage.getItem('rv-dev-real') === '1'; } catch (e) {}
     var dcss = '.rv-dev{position:fixed;left:12px;bottom:14px;z-index:2147482600;display:flex;gap:6px;padding:6px;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 4px 16px rgba(0,0,0,.18);backdrop-filter:blur(8px)}' +
       '.rv-dev button,.rv-devbar button{height:32px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;color:#1e293b;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);white-space:nowrap}' +
       '.rv-dev button:hover,.rv-devbar button:hover{background:#f8fafc}.rv-dev button.on,.rv-devbar button.on{background:#8CC0F1;color:#06243F}' +
@@ -968,7 +969,9 @@
       '.rv-devbar{flex:none;height:56px;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.8);backdrop-filter:blur(8px);box-shadow:0 1px 0 rgba(15,23,42,.06)}' +
       '.rv-devstage{flex:1;min-height:0;display:flex;justify-content:center;padding:12px 12px 14px;overflow:auto}' +
       '.rv-devstage{align-items:flex-start}.rv-devfit{flex:none;position:relative}.rv-devstage iframe{position:absolute;left:0;top:0;box-sizing:content-box;border:8px solid #1e293b;border-radius:28px;background:#fff;box-shadow:0 20px 50px rgba(15,40,90,.25);transform-origin:0 0}' +
-      '.rv-devsz{position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);font:600 11px/1 system-ui,sans-serif;color:#64748b;white-space:nowrap}' +
+      '.rv-devsz{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:8px;padding:4px 4px 4px 12px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 2px 10px rgba(15,23,42,.14);font:600 11.5px/1 system-ui,sans-serif;color:#475569;white-space:nowrap}' +
+      '.rv-devsz button{height:24px;padding:0 10px;border:0;border-radius:999px;background:#1e293b;color:#fff;font:700 11px/1 system-ui,sans-serif;cursor:pointer}.rv-devsz button:hover{background:#334155}' +
+      '.rv-devstage{justify-content:safe center!important;padding-bottom:52px!important}' +
       '@media (max-width:1024px){.rv-dev{padding:4px;gap:4px;left:8px;bottom:10px}.rv-dev button,.rv-devbar button{height:28px;padding:0 11px;font-size:12px}.rv-devbar{height:46px;gap:6px}}' +
       '.rv-dev{left:auto!important;right:4px!important;bottom:14px!important;flex-direction:column;gap:4px!important;padding:4px!important;z-index:2147483200;border-radius:14px}' +
       '.rv-dev button{width:38px;height:38px!important;padding:0!important;border-radius:10px!important;display:grid;place-items:center}' +
@@ -1005,12 +1008,14 @@
       if (!box || !frame || mode === 'desktop') return;
       var d = W[mode], w = d[0], h = d[1], b = 16, st = box.querySelector('.rv-devstage'), cs = getComputedStyle(st);
       var aw = st.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), ah = st.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 26;
-      var s = Math.min(1, aw / (w + b), ah / (h + b)); if (!(s > 0)) s = 1;
+      var sf = Math.min(1, aw / (w + b), ah / (h + b)); if (!(sf > 0)) sf = 1; var s = real ? 1 : sf;
       frame.style.width = w + 'px'; frame.style.height = h + 'px'; frame.style.transform = s < 1 ? 'scale(' + s + ')' : '';
       fitBox.style.width = Math.round((w + b) * s) + 'px'; fitBox.style.height = Math.round((h + b) * s) + 'px';
-      fitBox.querySelector('.rv-devsz').textContent = NAME[mode] + (s < 1 ? ' · shown at ' + Math.round(s * 100) + '%' : '');
+      var lb = fitBox.querySelector('.rv-devsz');
+      lb.innerHTML = '<span>' + NAME[mode] + ' · ' + (s < 1 ? 'shown at ' + Math.round(s * 100) + '%' : '100% (real size)') + '</span>' + (sf < 1 ? '<button type="button" data-devreal>' + (real ? 'Fit to window' : 'View at 100%') + '</button>' : '');
     }
     addEventListener('resize', function () { fit(); });
+    document.addEventListener('click', function (e) { if (!e.target.closest || !e.target.closest('[data-devreal]')) return; real = !real; try { localStorage.setItem('rv-dev-real', real ? '1' : '0'); } catch (x) {} fit(); var st = box && box.querySelector('.rv-devstage'); if (st) st.scrollTop = 0; });
     document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-dev]'); if (b) pick(b.getAttribute('data-dev')); });
     draw();
     var add = function () { document.body.appendChild(bar); };
