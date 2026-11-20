@@ -289,7 +289,7 @@ var nameEl=app.querySelector('.rv-name'),stEl=app.querySelector('.rv-st'),cnt=ap
 var cntTot=app.querySelector('.rv-count');if(cntTot)cntTot.lastChild.textContent=' of '+N;
 function go(i){if(i<0||i>=N)return;cur=i;try{sessionStorage.setItem('og-doc',i);}catch(e){}var d=D[i];
  nameEl.textContent=d.n;nameEl.title=d.n;stEl.className='tag rv-st t-'+d.st[0];stEl.textContent=d.st[1];cnt.textContent=i+1;prev.disabled=i===0;next.disabled=i===N-1;
- if(d.k==='orig'){paper.innerHTML=orig.p;fields.innerHTML=orig.f;h.textContent='AI Extracted Metadata (7 Fields)';lc.style.display='';lc.textContent='4 to review';}
+ if(d.k==='orig'){paper.innerHTML=orig.p;fields.innerHTML=orig.f;h.textContent='AI Extracted Metadata (6 Fields)';lc.style.display='';lc.textContent='3 to review';}
  else{paper.innerHTML=pv(d);var r=fl(d);fields.innerHTML=r.html;var nf=r.n-(d.k==='photo'&&!d.c?1:0);h.textContent='AI Extracted Metadata ('+nf+' Fields)';lc.style.display=(r.low||d.k==='sup')?'':'none';lc.textContent=d.k==='sup'?'1 Missing Signature':'1 Low Confidence';}
  if(conf)conf.textContent=i===N-1?'Confirm & Finish Queue [Enter]':'Confirm & Next Document [Enter]';
  if(typeof rot!=='undefined'&&rot){rot=0;view();}paper.classList.remove('rv-swap');void paper.offsetWidth;paper.classList.add('rv-swap');paper.parentElement.scrollTop=0;fields.scrollTop=0;}
@@ -3468,14 +3468,20 @@ function lg(r,k,v){return '<button type="button" class="cx-s" data-src="Daily Ac
 var TAG={ok:'<span class="tag t-good">Matched</span>',diff:'<span class="tag t-risk">Difference</span>',miss:'<span class="tag t-warn">Missing support</span>',hold:'<span class="tag t-blue">Held for review</span>'};
 var ARR='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 function diffTxt(r){if(r.st!=='diff')return '<span style="color:var(--gray)">—</span>';var dr=r.tr-r.lr,dot=r.to-r.lo,p=[];if(dr)p.push((dr>0?'+':'−')+f1(Math.abs(dr))+' Reg');if(dot)p.push((dot>0?'+':'−')+f1(Math.abs(dot))+' OT');return '<b style="color:var(--risk)">'+p.join(' · ')+'</b>';}
-function logCell(r,k,v){if(r.st==='miss')return '<span class="cx-ms">Missing</span>';if(r.st==='hold')return '<span class="cx-hd">Held</span>';return lg(r,k,v);}
+function logCell(r,k,v){if(r.st==='miss')return '<span class="cx-ms" title="No activity log uploaded for this day">No log</span>';if(r.st==='hold')return '<span class="cx-hd">Held</span>';return lg(r,k,v);}
 function draw(box){var list=ROWS.filter(function(r){return st.f==='all'||r.st===st.f;}),n=list.length,pages=Math.max(1,Math.ceil(n/st.per));if(st.page>pages)st.page=pages;var vis=list.slice((st.page-1)*st.per,st.page*st.per);
  box.querySelector('.cx-fl').innerHTML=F.map(function(f){var c=f[0]==='all'?ROWS.length:ROWS.filter(function(r){return r.st===f[0];}).length;return '<button type="button" data-f="'+f[0]+'" aria-pressed="'+(st.f===f[0])+'">'+f[1]+'<em>'+c+'</em></button>';}).join('');
- box.querySelector('tbody').innerHTML=vis.map(function(r){return '<tr class="'+(r.st==='diff'?'is-diff':'')+'"><td class="cx-emp">'+r.e+'</td><td style="white-space:nowrap">'+r.d+'</td><td class="num gl">'+ts(r,'Regular',r.tr)+'</td><td class="num">'+ts(r,'Overtime',r.to)+'</td><td class="num gl">'+logCell(r,'Regular',r.lr)+'</td><td class="num">'+(r.st==='miss'||r.st==='hold'?'':lg(r,'Overtime',r.lo))+'</td><td class="num gl">'+diffTxt(r)+'</td><td class="gl">'+TAG[r.st]+'</td><td><a class="cx-src" href="document-review">Open'+ARR+'</a></td></tr>';}).join('')||'<tr><td colspan="9" style="padding:24px;text-align:center;color:var(--gray)">No employee-days in this filter.</td></tr>';
+ box.querySelector('tbody').innerHTML=vis.map(function(r){return '<tr class="'+(r.st==='diff'?'is-diff':'')+'"><td class="cx-emp">'+r.e+'</td><td style="white-space:nowrap">'+r.d+'</td><td class="num gl">'+ts(r,'Regular',r.tr)+'</td><td class="num">'+ts(r,'Overtime',r.to)+'</td><td class="num gl">'+logCell(r,'Regular',r.lr)+'</td><td class="num">'+(r.st==='miss'||r.st==='hold'?'':lg(r,'Overtime',r.lo))+'</td><td class="num gl">'+diffTxt(r)+'</td><td class="gl">'+TAG[r.st]+'</td><td>'+(r.st==='miss'?'<a class="cx-src cx-up" href="upload" title="No activity log covers '+r.d+' for '+r.e+'. Upload it, then run reconciliation again.">Upload log'+ARR+'</a>':'<a class="cx-src" href="document-review">Open'+ARR+'</a>')+'</td></tr>';}).join('')||'<tr><td colspan="9" style="padding:24px;text-align:center;color:var(--gray)">No employee-days in this filter.</td></tr>';
  (function(){var T={tr:0,to:0,lr:0,lo:0},ms=0,hd=0;list.forEach(function(r){T.tr+=r.tr;T.to+=r.to;if(r.st==='miss'){ms++;return;}if(r.st==='hold'){hd++;return;}T.lr+=r.lr;T.lo+=r.lo;});
   var dr=0,dot=0;list.forEach(function(r){if(r.st==='diff'){dr+=r.tr-r.lr;dot+=r.to-r.lo;}});var dp=[];if(dr)dp.push((dr>0?'+':'−')+f1(Math.abs(dr))+' Reg');if(dot)dp.push((dot>0?'+':'−')+f1(Math.abs(dot))+' OT');
   var nt=[];if(ms)nt.push(ms+' missing');if(hd)nt.push(hd+' held');
   box.querySelector('tfoot').innerHTML=n?'<tr><td colspan="2">Source totals<small>'+n+' employee-day'+(n===1?'':'s')+(st.f==='all'?'':' in this filter')+(nt.length?' · log excludes '+nt.join(', '):'')+'</small></td><td class="num gl">'+f1(T.tr)+'</td><td class="num">'+f1(T.to)+'</td><td class="num gl">'+((ms+hd)===n?'—':f1(T.lr))+'</td><td class="num">'+((ms+hd)===n?'—':f1(T.lo))+'</td><td class="num gl">'+(dp.length?dp.join(' · '):'—')+'</td><td class="gl" colspan="2"></td></tr>':'';})();
+ (function(){var nb=box.querySelector('.cx-mn');var M=ROWS.filter(function(r){return r.st==='miss';});
+  if(!M.length||(st.f!=='all'&&st.f!=='miss')){if(nb)nb.remove();return;}
+  var by={};M.forEach(function(r){(by[r.e]=by[r.e]||[]).push(r.d.replace(/^\w+ /,''));});
+  var who=Object.keys(by).map(function(e){return '<b>'+e+'</b> · '+(by[e].length>2?by[e][0]+' – '+by[e][by[e].length-1]:by[e].join(', '));}).join('; ');
+  if(!nb){nb=document.createElement('div');nb.className='cx-mn';box.insertBefore(nb,box.querySelector('.cx-tw'));}
+  nb.innerHTML='<div><b>'+M.length+' employee-day'+(M.length>1?'s have':' has')+' no activity log to compare</b><span>'+who+'. The timesheet has hours for these days, but no uploaded log covers them, so there is nothing to mark on a document. Upload the missing logs, then run reconciliation again.</span></div><a class="btn btn-o btn-sm" href="upload">Upload activity logs</a>';})();
  box.querySelector('.cx-af span').innerHTML='Showing <b>'+(n?((st.page-1)*st.per+1)+'–'+Math.min(n,st.page*st.per):0)+'</b> of <b>'+n+'</b> employee-days';
  var pb=box.querySelectorAll('.xq-pg button');pb[0].disabled=st.page<=1;pb[1].disabled=st.page>=pages;}
 function init(){var sec=document.querySelector('.cx-days');if(!sec||sec.dataset.slice)return;sec.dataset.slice='1';var og=sec.closest('.og'),main=sec.closest('main');
@@ -5286,6 +5292,13 @@ html body .og .df-flag.miss{border-color:var(--risk);background:var(--risk-t,rgb
 html body .og .bb-miss{display:inline-block;min-width:84px;border-bottom:1px solid #2A261F;outline:2px dashed #B4473A;outline-offset:2px;background:rgba(180,71,58,.08)}html body .og [data-dfpin="4"]::after{background:#B4473A}
 html body .og .rv-confirm[aria-disabled=true]{opacity:1;background:var(--pale)!important;border-color:var(--line)!important;color:var(--gray)!important;cursor:not-allowed}
 @media (prefers-reduced-motion:reduce){html body .og .df-flag{transition:none}}
+</style>
+<style>
+html body .og .cx-mn{display:flex;align-items:center;gap:16px;margin:0 0 12px;padding:12px 14px;border:1px solid var(--warn);border-left-width:3px;border-radius:4px;background:var(--warn-t);font-size:13px;line-height:1.5;color:var(--ink)}
+html body .og .cx-mn > div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}html body .og .cx-mn > div > b{color:var(--head)}html body .og .cx-mn .btn{flex:none}
+html body .og .cx-ms{font-size:12px;font-weight:700;color:var(--warn);cursor:help}
+html body .og .cx-up{color:var(--warn)!important}
+@media (max-width:640px){html body .og .cx-mn{flex-direction:column;align-items:stretch}}
 </style>
 
 <div class="og gn" data-theme="light" style="min-height: 1250px"><script>(function(){var t;try{t=localStorage.getItem("og-theme")}catch(e){}if(t==="dark")document.currentScript.parentNode.setAttribute("data-theme","dark")})()</script>
