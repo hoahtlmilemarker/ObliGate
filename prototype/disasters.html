@@ -5330,6 +5330,13 @@ html body .og .mnav.on .mnav-me{animation-delay:.16s}
 html body .og .mnav.on .mnav-up{animation-delay:.19s}
 @media (prefers-reduced-motion:reduce){html body .og .mnav.on *{animation:none!important}}
 
+/* ☰ Menu drawer: no boxed borders — org card floats on a soft shadow, user row is open */
+html body .og .mnav .mnav-org.mnav-org{border:0!important;background:color-mix(in srgb,var(--card) 82%,transparent)!important;box-shadow:0 1px 2px rgba(6,36,63,.05),0 12px 28px -14px rgba(6,36,63,.28)!important}
+html body .og[data-theme="dark"] .mnav .mnav-org.mnav-org,html.og-dk body .og .mnav .mnav-org.mnav-org{background:rgba(255,255,255,.05)!important;box-shadow:0 12px 28px -14px rgba(0,0,0,.6)!important}
+html body .og .mnav .mnav-me.mnav-me{border:0!important;background:transparent!important;-webkit-backdrop-filter:none;backdrop-filter:none;padding:8px 4px!important;margin:auto 16px 10px!important}
+html body .og .mnav .mnav-me a.mnav-set{border:0!important;border-radius:50%!important;background:transparent!important;width:36px!important;height:36px!important}
+html body .og .mnav .mnav-me a.mnav-set:active{background:var(--pale)!important}
+
 /* Filters drawer (≤1024): full height from the top edge, over the header — no seam to misalign — with the same slide as the Menu drawer */
 @keyframes ogDrIn{from{translate:-100% 0}to{translate:0 0}}
 @keyframes ogBdIn{from{opacity:0}to{opacity:1}}
