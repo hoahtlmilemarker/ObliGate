@@ -4918,11 +4918,6 @@ html body .og .lb-tbl{min-width:0!important;width:100%!important;table-layout:fi
 html body .og .lb-wrap{overflow-x:visible!important}
 /* Category C checklist: 2×2 instead of four squeezed columns */
 html body .og .ck3-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-/* KPI strips with 4 cards: 2×2 instead of 3 + 1 orphan */
-html body .og :is(.kpis,.ledger):has(> .kpi:nth-child(4)){grid-template-columns:repeat(2,minmax(0,1fr))!important}
-html body .og :is(.kpis,.ledger):has(> .kpi:nth-child(4)) > .kpi{border-right:0!important;border-bottom:0!important}
-html body .og :is(.kpis,.ledger):has(> .kpi:nth-child(4)) > .kpi:nth-child(odd){border-right:1px solid var(--line-soft)!important}
-html body .og :is(.kpis,.ledger):has(> .kpi:nth-child(4)) > .kpi:nth-child(-n+2){border-bottom:1px solid var(--line-soft)!important}
 /* Settings nav: fade the edge so the scroll row reads as scrollable */
 html body .og .sx-nav::-webkit-scrollbar{display:none}
 }
@@ -5108,6 +5103,24 @@ html body .og .sh2-t tr.sh-g td > span{position:sticky;left:12px}
  function go(){run();new MutationObserver(sch).observe(document.body,{childList:true,subtree:true});addEventListener('resize',function(){document.querySelectorAll(SEL).forEach(upd);});}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 })();</script>
+<style>/* ===== tablet summary strips: one compact row of four instead of a tall 2×2 block ===== */
+@media (min-width:641px) and (max-width:1280px){
+html body .og.og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)):not(:has(> :nth-child(5))){grid-template-columns:repeat(4,minmax(0,1fr))!important}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > *{padding:12px 16px 13px!important;border-bottom:0!important;border-right:1px solid var(--line-soft)!important;min-width:0}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :last-child{border-right:0!important}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) :is(.big,.cq-k > b){font-size:23px!important;line-height:1.15!important;margin:5px 0 3px!important;white-space:nowrap}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) .lbl{font-size:9.5px!important;line-height:1.35!important;display:block;white-space:normal!important}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > * > :not(.lbl):not(.big):not(b){font-size:11.5px!important;line-height:1.35;max-width:100%;white-space:normal!important;box-sizing:border-box}
+}
+@media (min-width:641px) and (max-width:940px){
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) .lbl{min-height:2.7em}
+}
+@media (min-width:641px) and (max-width:767px){
+html body .og.og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)):not(:has(> :nth-child(5))){grid-template-columns:repeat(2,minmax(0,1fr))!important}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :nth-child(2n){border-right:0!important}
+html body .og :is(.kpis,.ledger,.cq-ledger):has(> :nth-child(4)) > :nth-child(-n+2){border-bottom:1px solid var(--line-soft)!important}
+}
+</style>
 <script>/* label table cells with their column header so card rows can show it */
 (function(){
  function lab(){document.querySelectorAll('.og table.dtbl, .og table.cq-t').forEach(function(t){var hs=[].map.call(t.querySelectorAll('thead th'),function(th){return th.textContent.replace(/\s+/g,' ').trim();});
