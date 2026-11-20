@@ -972,7 +972,7 @@
       '.rv-dev button{width:38px;height:38px!important;padding:0!important;border-radius:10px!important;display:grid;place-items:center}' +
       '.rv-dev .ic svg{width:16px;height:16px;display:block}.rv-dev .tx{display:none}' +
       '.rv-devbar{display:none!important}.rv-devstage{padding-right:62px!important}' +
-      '@media (max-width:768px){.rv-dev{display:none}}';
+      '@media (max-width:768px) and (hover:none) and (pointer:coarse){.rv-dev{display:none}}';
     var st = document.createElement('style'); st.textContent = dcss; document.head.appendChild(st);
     var bar = document.createElement('div'); bar.className = 'rv rv-dev'; bar.setAttribute('data-review-ui', '');
     var tabs = function () { return [['desktop', 'Desktop'], ['tablet', 'Tablet'], ['mobile', 'Mobile']].map(function (t) { var IC = { desktop: '<rect x="2.5" y="3.5" width="15" height="10" rx="1.5"/><path d="M7 17h6M10 13.5V17"/>', tablet: '<rect x="4.5" y="2.5" width="11" height="15" rx="1.8"/><path d="M9 15h2"/>', mobile: '<rect x="6" y="2.5" width="8" height="15" rx="1.6"/><path d="M9.2 15h1.6"/>' }; return '<button type="button" data-dev="' + t[0] + '" class="' + (mode === t[0] ? 'on' : '') + '" aria-pressed="' + (mode === t[0]) + '" title="' + t[1] + ' preview" aria-label="' + t[1] + '"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + IC[t[0]] + '</svg></span><span class="tx">' + t[1] + '</span></button>'; }).join(''); };
