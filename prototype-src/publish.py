@@ -6,6 +6,7 @@ SITE = os.path.join(H, 'build', 'site')
 D = os.path.join(H, '..', 'prototype')
 for f in glob.glob(D + '/*.html'): os.remove(f)
 shutil.rmtree(D + '/review', ignore_errors=True); shutil.copytree(os.path.join(H, 'review'), D + '/review')
+shutil.rmtree(D + '/photos', ignore_errors=True); shutil.copytree(os.path.join(H, 'photos'), D + '/photos')  # sample field photos for Document Review
 for f in glob.glob(SITE + '/*.html'):
     b = os.path.basename(f)[:-5]
     open(f'{D}/{M.get(b, b)}.html', 'w').write(clean(open(f).read()))
