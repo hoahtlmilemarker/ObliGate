@@ -5223,6 +5223,24 @@ html body .og .tst-acts button{white-space:nowrap}
   html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop,.org-pop):not(#og-sh-a):not(#og-sh-b) :is([role=menuitem],[role=option],.mi,.addm-i,.fm-o):active{background:var(--pale,#F2F6FA)!important}}
 
 }
+
+/* iPhone Safari: 100vh includes the area under the address/tool bars, so overlays use the visible height (dvh) */
+@supports (height:100dvh){
+ html body .og .dlg-b.fm{max-height:calc(100dvh - 32px)!important}
+ html body .og .upm-box{max-height:min(720px,calc(100dvh - 48px))!important}
+ html body .og .er{min-height:calc(100dvh - var(--hd-h,57px))}
+ html body .og.sb-mini .sbm{height:calc(100dvh - var(--hd-h,57px))}
+ html body .og.has-pjb .sbm.sbm{height:calc(100dvh - var(--hd-h,57px) - 36px)!important}
+ html body .og.has-pjb:not(.sb-mini) .shell > .sb-rail.sb-panel.sb-panel{max-height:calc(100dvh - 93px)!important;height:calc(100dvh - 93px)!important}
+ @media (max-width:640px){
+  html body :is(.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop,.org-pop):not(#og-sh-a):not(#og-sh-b){max-height:min(78dvh,620px)!important}
+  html body .og .dlg{padding:12px!important}
+  html body .og .dlg-b.fm{max-height:calc(100dvh - 24px)!important}
+ }
+}
+/* wordmark on the navy header: a white SVG instead of a CSS filter (iOS Safari painted the filtered SVG as a white box) */
+html body .og img.wm{aspect-ratio:1909/392;flex:none;object-fit:contain}
+html body .og img.wm.wm-w{filter:none!important}
 /* ===== Phone toolbars (Disasters, Projects): search + icon tools / Sort + primary / count ===== */
 @media (max-width:640px){
  html body .og .dl-bar{display:grid!important;grid-template-columns:minmax(0,1fr) 38px 38px 38px;gap:10px!important;align-items:center}
@@ -5245,7 +5263,10 @@ html body .og .tst-acts button{white-space:nowrap}
  html body .og [data-pjl] .cq-tools .xq-acts{grid-row:2;grid-column:1 / -1}
  html body .og [data-pjl] .cq-tools .cq-meta{grid-row:3;grid-column:1 / -1;font-size:12.5px}
 }
-</style><script>/* Phones: dropdowns → bottom sheets. Marks open popups with .og-sh, locks scroll, eats taps outside and closes. */
+</style><script>/* swap the CSS-inverted navy wordmark for the white file */
+(function(){function go(){[].forEach.call(document.querySelectorAll('img.wm'),function(m){if(m.classList.contains('wm-w'))return;var f=getComputedStyle(m).filter||'';if(/invert\(1\)/.test(f)){m.src=m.getAttribute('src').replace(/obligate-wordmark\.svg/,'obligate-wordmark-white.svg');m.classList.add('wm-w');}});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();addEventListener('load',go);})();</script>
+<script>/* Phones: dropdowns → bottom sheets. Marks open popups with .og-sh, locks scroll, eats taps outside and closes. */
 (function(){
  var SEL='.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop,.org-pop';
  var mq=matchMedia('(max-width:640px)'),open=[],bypass=false,raf=0;
