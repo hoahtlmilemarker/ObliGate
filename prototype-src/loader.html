@@ -5342,13 +5342,16 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script>/* Phones: dropdowns → bottom sheets. Marks open popups with .og-sh, locks scroll, eats taps outside and closes. */
 (function(){
  var SEL='.um,.addm-menu,.xq-pop,.bmenu,.ex-pop,.fm-pop,.colpop,.gn-sortpop,.org-pop';
+ /* iOS Safari pans the page (pushing the header up) when focus moves into a sheet at the bottom of the screen: focus inside overlays never scrolls */
+ (function(){var of=HTMLElement.prototype.focus;HTMLElement.prototype.focus=function(o){try{if(matchMedia('(max-width:1024px)').matches&&this.closest&&this.closest(SEL+',.og-sh,.mnav,.sb-rail,.dlg,.gnav')){var y=window.scrollY;of.call(this,Object.assign({},o||{},{preventScroll:true}));if(window.scrollY!==y)window.scrollTo(0,y);return;}}catch(x){}return of.call(this,o);};})();
+ var keepY=null;function pin(){if(keepY===null)return;if(Math.abs(window.scrollY-keepY)>1)window.scrollTo(0,keepY);}
  var mq=matchMedia('(max-width:640px)'),open=[],bypass=false,raf=0;
  function vis(e){if(e.closest('[data-review-ui]'))return false;var cs=getComputedStyle(e);if(cs.display==='none'||cs.visibility==='hidden'||parseFloat(cs.opacity)<0.05)return false;if(e.classList.contains('addm-menu')){var d=e.closest('details');if(d&&!d.open)return false;}var r=e.getBoundingClientRect();return r.height>8&&r.width>8;}
  function title(e){if(e.hasAttribute('data-sh-t'))return;var t=e.getAttribute('aria-label');if(!t){var c=e.classList;if(c.contains('addm-menu'))t='Add';else if(c.contains('um'))t='';}
   if(t&&!/^(show columns|columns)$/i.test(t)&&!e.querySelector('.lbl,.um-h,.fm-h,.bm-h'))e.setAttribute('data-sh-t',t);}
  function scan(){raf=0;var els=[].slice.call(document.querySelectorAll(SEL)),now=[];
   els.forEach(function(e){var on=mq.matches&&vis(e),has=e.classList.contains('og-sh');if(on){if(!has){e.classList.add('og-sh');e.removeAttribute('data-sh-t');e._ogT=Date.now();}['max-width','width','left','right','top','bottom','inset'].forEach(function(k){if(e.style.getPropertyPriority(k)==='important'||k==='max-width'||k==='width')e.style.removeProperty(k);});now.push(e);}else if(has)e.classList.remove('og-sh');});
-  open=now;var h=document.documentElement;if(h.classList.contains('og-sheet-open')!==(now.length>0))h.classList.toggle('og-sheet-open',now.length>0);}
+  var was=open.length>0;open=now;var h=document.documentElement;if(h.classList.contains('og-sheet-open')!==(now.length>0))h.classList.toggle('og-sheet-open',now.length>0);if(now.length&&!was){keepY=window.scrollY;[0,60,250,450].forEach(function(t){setTimeout(pin,t);});}else if(!now.length){keepY=null;}}
  var tq=[];function q(){if(!raf)raf=requestAnimationFrame(scan);tq.forEach(clearTimeout);tq=[80,220,450].map(function(t){return setTimeout(function(){if(!raf)raf=requestAnimationFrame(scan);},t);});}
  ['transitionend','animationend'].forEach(function(n){document.addEventListener(n,function(e){if(e.target&&e.target.matches&&e.target.matches(SEL))q();},true);});
  new MutationObserver(q).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class','open','style','hidden','aria-expanded']});
