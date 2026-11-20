@@ -771,10 +771,27 @@ var A=[
   p.querySelector('.cp-f button').addEventListener('click',function(){ths.forEach(function(th,i){ogColSet(t,i,true);});p.querySelectorAll('input').forEach(function(x){x.checked=true;});foot();});
   p.addEventListener('keydown',function(e){if(e.key==='Escape'){p.remove();b.setAttribute('aria-expanded','false');b.focus();}});
   setTimeout(function(){document.addEventListener('click',function f(e){if(!p.contains(e.target)&&!b.contains(e.target)){p.remove();b.setAttribute('aria-expanded','false');document.removeEventListener('click',f);}});},0);}],
- [/^Sort: /,function(b){var o=['Highest Risk','Newest','Name A–Z'],cur=txt(b).replace('Sort: ',''),n=o[(o.indexOf(cur)+1)%o.length];var t=document.querySelector('.dtbl tbody, table tbody');
-  if(t){var rows=[].slice.call(t.children);rows.sort(function(a,c){if(n==='Name A–Z')return a.textContent.trim().localeCompare(c.textContent.trim());if(n==='Newest')return rows.indexOf(c)-rows.indexOf(a);return 0;});
-   if(n==='Highest Risk'&&b._orig)rows=b._orig.slice();if(!b._orig)b._orig=[].slice.call(t.children);rows.forEach(function(r){t.appendChild(r);});}
-  var sv=b.querySelector('svg');b.innerHTML='';if(sv)b.appendChild(sv);b.appendChild(document.createTextNode('Sort: '+n));}],
+ [/^Sort: /,function(b){var ex=document.querySelector('.xq-pop.srtpop');if(ex){ex.remove();b.setAttribute('aria-expanded','false');return;}
+  var O=[['Highest Risk','Needs attention first'],['Newest','Latest incident first'],['Oldest','Earliest incident first'],['Name A–Z','By declaration ID'],['Obligated amount','Largest first']],cur=txt(b).replace('Sort: ','');
+  var CK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  var p=document.createElement('div');p.className='xq-pop srtpop';p.setAttribute('role','menu');p.setAttribute('aria-label','Sort by');
+  p.innerHTML='<small class="h">Sort by</small>'+O.map(function(o){var on=o[0]===cur;return '<button type="button" role="menuitemradio" class="mi'+(on?' on':'')+'" aria-checked="'+on+'" data-so="'+o[0]+'"><span class="mi-t">'+o[0]+'<em>'+o[1]+'</em></span>'+(on?CK:'')+'</button>';}).join('');
+  host().appendChild(p);var r=b.getBoundingClientRect();p.style.top=(r.bottom+6)+'px';p.style.left=Math.max(12,Math.min(r.right-p.offsetWidth,innerWidth-p.offsetWidth-12))+'px';b.setAttribute('aria-expanded','true');
+  var f0=p.querySelector('.mi.on')||p.querySelector('.mi');if(f0)f0.focus();
+  function close(back){p.remove();b.setAttribute('aria-expanded','false');document.removeEventListener('mousedown',out,true);if(back)b.focus();}
+  function out(e){if(!p.contains(e.target)&&!b.contains(e.target))close();}
+  setTimeout(function(){document.addEventListener('mousedown',out,true);},0);
+  p.addEventListener('keydown',function(e){var it=[].slice.call(p.querySelectorAll('.mi')),k=it.indexOf(document.activeElement);if(e.key==='Escape'){e.preventDefault();close(true);}else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();it[(k+(e.key==='ArrowDown'?1:it.length-1))%it.length].focus();}});
+  p.addEventListener('click',function(e){var x=e.target.closest('[data-so]');if(!x)return;var n=x.getAttribute('data-so');close(true);
+   var t=document.querySelector('.dtbl tbody, table tbody');
+   if(t){if(!b._orig)b._orig=[].slice.call(t.children);var rows=b._orig.slice();
+    function d(r){var c=r.children[1],m=c&&c.textContent.match(/[A-Z][a-z]{2} \d{1,2}, \d{4}/);return m?Date.parse(m[0]):0;}
+    function amt(r){var c=r.children[3];return c?parseFloat(c.textContent.replace(/[^0-9.]/g,''))||0:0;}
+    if(n==='Newest')rows.sort(function(a,c){return d(c)-d(a);});else if(n==='Oldest')rows.sort(function(a,c){return d(a)-d(c);});
+    else if(n==='Name A–Z')rows.sort(function(a,c){return a.textContent.trim().localeCompare(c.textContent.trim());});
+    else if(n==='Obligated amount')rows.sort(function(a,c){return amt(c)-amt(a);});
+    rows.forEach(function(r){t.appendChild(r);});}
+   var sv=b.querySelector('svg');b.innerHTML='';if(sv)b.appendChild(sv);b.appendChild(document.createTextNode('Sort: '+n));});}],
  /* 02 */
  [/^(Export workbook|Download R\d)/,function(b){}],
  [/^(View|Inspect)$/,function(){location.href='document-library';}],
