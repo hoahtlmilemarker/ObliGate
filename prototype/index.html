@@ -5241,6 +5241,14 @@ html body .og .tst-acts button{white-space:nowrap}
 /* wordmark on the navy header: a white SVG instead of a CSS filter (iOS Safari painted the filtered SVG as a white box) */
 html body .og img.wm{aspect-ratio:1909/392;flex:none;object-fit:contain}
 html body .og img.wm.wm-w{filter:none!important}
+
+/* ☰ Menu drawer: light header like the Filters drawer, so it stands apart from the navy page header behind it */
+html body .og .mnav .mnav-h{height:auto;min-height:0;padding:16px!important;background:var(--card)!important;color:var(--head)!important;border-bottom:1px solid var(--line)!important}
+html body .og .mnav .mnav-h b{font:500 19px/1.1 "Cormorant Garamond",Georgia,serif!important;letter-spacing:0!important;color:var(--head)}
+html body .og .mnav .mnav-x{width:32px!important;height:32px!important;border:1px solid var(--line)!important;border-radius:4px!important;background:var(--card)!important;color:var(--head)!important}
+html body .og .mnav .mnav-x svg{width:16px;height:16px}
+html body .og .mnav .mnav-x:active{background:var(--pale)!important}
+@media (min-width:641px){html body .og .mnav .mnav-h b{font-size:22px!important}html body .og .mnav .mnav-x{width:36px!important;height:36px!important}}
 /* ===== Phone toolbars (Disasters, Projects): search + icon tools / Sort + primary / count ===== */
 @media (max-width:640px){
  html body .og .dl-bar{display:grid!important;grid-template-columns:minmax(0,1fr) 38px 38px 38px;gap:10px!important;align-items:center}
