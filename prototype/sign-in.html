@@ -239,7 +239,7 @@ var D=[
 {n:'eCAPS_Labor_Export_PP01.xlsx',k:'xl',st:['blue','Ingested (42 rows)'],per:'PP 01',rows:42,amt:'$118,920.00',c:99},
 {n:'FieldPhoto_MalibuCyn_Jan09.jpg',k:'photo',st:['good','Verified (96%)'],date:'2023-01-09',loc:'Malibu Cyn Rd PM 4.2',by:'Liu, Heidi',c:96}
 ];
-var N=D.length,cur=0;try{var sv=+sessionStorage.getItem('og-doc');if(sv>=0&&sv<N)cur=sv;}catch(e){}
+var N=D.length,cur=0;try{var sv=+sessionStorage.getItem('og-doc');if(sv>=0&&sv<N)cur=sv;var nm=sessionStorage.getItem('og-doc-name');if(nm){sessionStorage.removeItem('og-doc-name');for(var di=0;di<N;di++)if(D[di].n===nm){cur=di;break;}}}catch(e){}
 function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 function us(iso){var p=iso.split('-');return p[1]+'/'+p[2]+'/'+p[0];}
 function head(title,sub){return '<div style="text-align:center;display:flex;flex-direction:column;gap:4px;padding-bottom:12px;border-bottom:2px solid #2A261F"><span style="font-size:15px;font-weight:700;letter-spacing:.03em">COUNTY OF LOS ANGELES · DEPARTMENT OF PUBLIC WORKS</span><span style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:.05em">'+title+'</span><span style="font-family:Arial,sans-serif;font-size:10px;color:#6B6458">'+(sub||'FEMA-4683-DR-CA · EMERGENCY WORK DISASTER RECOVERY')+'</span></div>';}
@@ -303,8 +303,10 @@ document.addEventListener('keydown',function(e){var t=e.target;if(t&&(t.tagName=
 if(cur)go(cur);}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 /* Document Library: open the clicked row's document in the review screen */
+/* opens by file name, so a row always opens its own document (row order changes after uploads, filters and paging) */
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.lb-tbl a[href*="document-review"]');if(!a)return;var tr=a.closest('tr');if(!tr)return;
- var rows=[].slice.call(tr.parentNode.querySelectorAll('tr:not(.lb-nores):not(.just)'));var i=rows.indexOf(tr);try{sessionStorage.setItem('og-doc',i<0?0:i);}catch(x){}},true);
+ var m=null;[].some.call(tr.querySelectorAll('a,b,strong,span,div'),function(x){var t=(x.textContent||'').trim();if(/^[\w.\-]+\.(pdf|xlsx|xls|csv|jpe?g|png|docx?)$/i.test(t)){m=[t];return true;}});
+ var rows=[].slice.call(tr.parentNode.querySelectorAll('tr:not(.lb-nores):not(.just)'));var i=rows.indexOf(tr);try{sessionStorage.setItem('og-doc',i<0?0:i);if(m)sessionStorage.setItem('og-doc-name',m[0]);}catch(x){}},true);
 })();
 </script>
 <style>
