@@ -5284,6 +5284,22 @@ html body .og .mnav .mnav-up svg{width:16px;height:16px;color:#fff}
 html body .og .mnav .mnav-up:active{filter:brightness(.94)}
 html body .og .mnav-bd{background:rgba(2,12,24,.5)!important;-webkit-backdrop-filter:blur(3px)!important;backdrop-filter:blur(3px)!important;transition:opacity .3s ease!important}
 
+/* ☰ Menu drawer ornament: soft blue head band + the brand dot globe (cloned from the page banner), fading out */
+html body .og .mnav::before{content:'';position:absolute;left:0;right:0;top:0;height:200px;pointer-events:none;background:linear-gradient(180deg,var(--blue-t) 0%,color-mix(in srgb,var(--blue-t) 45%,var(--card)) 60%,var(--card) 100%)}
+html body .og .mnav .mnav-h{border-bottom-color:transparent!important;background:transparent!important}
+html body .og .mnav .mnav-org{background:color-mix(in srgb,var(--card) 88%,transparent)!important;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+html body .og .mnav .mnav-gl{position:absolute!important;pointer-events:none;z-index:0;fill:var(--blue)}
+html body .og .mnav .mnav-gl.top{top:-10px;right:-90px;width:380px;height:230px;opacity:.42;-webkit-mask-image:radial-gradient(ellipse 80% 90% at 85% 25%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 80% 90% at 85% 25%,#000 20%,transparent 75%)}
+html body .og .mnav .mnav-gl.bot{bottom:110px;right:-140px;width:500px;height:360px;opacity:.2;transform:scaleY(-1);-webkit-mask-image:radial-gradient(ellipse 70% 80% at 75% 60%,#000 25%,transparent 72%);mask-image:radial-gradient(ellipse 70% 80% at 75% 60%,#000 25%,transparent 72%)}
+html body .og .mnav .mnav-gl circle{fill:inherit}
+html body .og .mnav .mnav-gl.css{background-image:radial-gradient(var(--blue) 1.1px,transparent 1.5px);background-size:12px 12px}
+html body .og[data-theme="dark"] .mnav .mnav-gl,html.og-dk body .og .mnav .mnav-gl{fill:#CFE3F5}
+html body .og[data-theme="dark"] .mnav .mnav-gl.top,html.og-dk body .og .mnav .mnav-gl.top{opacity:.26}
+html body .og[data-theme="dark"] .mnav .mnav-gl.bot,html.og-dk body .og .mnav .mnav-gl.bot{opacity:.13}
+html body .og .mnav > :not(.mnav-gl){z-index:1}
+/* active row picks up a hint of brass so the panel isn't all blue */
+html body .og .mnav .mnav-me{background:color-mix(in srgb,var(--card) 92%,transparent)}
+
 /* Filters drawer (≤1024): full height from the top edge, over the header — no seam to misalign — with the same slide as the Menu drawer */
 @keyframes ogDrIn{from{translate:-100% 0}to{translate:0 0}}
 @keyframes ogBdIn{from{opacity:0}to{opacity:1}}
@@ -5347,6 +5363,7 @@ html body .og .mnav-bd{background:rgba(2,12,24,.5)!important;-webkit-backdrop-fi
 (function(){function ini(t){return (t||'').replace(/[^A-Za-z ]/g,' ').split(/\s+/).filter(function(w){return w&&!/^(of|the|and|public|works|county)$/i.test(w)||false;}).slice(0,2).map(function(w){return w[0].toUpperCase();}).join('')||(t||'?').slice(0,2).toUpperCase();}
  function orgIni(t){var w=(t||'').split(/\s+/);if(/county/i.test(t)){return (w[0][0]+(/county/i.test(w[1]||'')?'C':(w[1]||'')[0]||'')).toUpperCase();}if(/^city of/i.test(t))return ('C'+((w[2]||'')[0]||'')).toUpperCase();return ini(t);}
  function go(){var n=document.querySelector('.og .mnav');if(!n)return;var o=n.querySelector('.mnav-org strong');if(o){var org=n.querySelector('.mnav-org');var nm0=o.textContent.trim(),M={'LA County Public Works':'LA','Ventura County Public Works':'VC','City of Malibu':'MB'},v=M[nm0]||orgIni(nm0);if(org.getAttribute('data-ini')!==v)org.setAttribute('data-ini',v);}
+  if(!n.querySelector('.mnav-gl')){var g=document.querySelector('.og .globe');['top','bot'].forEach(function(k){var el;if(g){el=g.cloneNode(true);el.removeAttribute('fill');el.setAttribute('class','mnav-gl '+k);el.setAttribute('preserveAspectRatio','xMaxYMin slice');}else{el=document.createElement('i');el.className='mnav-gl css '+k;}el.setAttribute('aria-hidden','true');n.insertBefore(el,n.firstChild);});}
   if(!n.querySelector('.mnav-me')){var av=document.querySelector('.og .hd .av'),um=document.querySelector('.og .um');var nm='',rl='';if(um){var b=um.querySelector('.um-nm b'),r=um.querySelector('.um-role');nm=b?b.textContent.trim():'';rl=r?r.textContent.trim():'';}
    if(!nm&&av){var l=av.getAttribute('aria-label')||'';var m=l.match(/for (.+)$/);nm=m?m[1]:'';}
    var up=n.querySelector('.mnav-up');if(up){var d=document.createElement('div');d.className='mnav-me';d.innerHTML='<i>'+(av?av.textContent.trim():'')+'</i><span><b></b><small></small></span>';d.querySelector('b').textContent=nm||'Signed in';d.querySelector('small').textContent=rl||'';n.insertBefore(d,up);}}}
