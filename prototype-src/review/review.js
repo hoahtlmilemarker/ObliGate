@@ -993,7 +993,10 @@
     function pick(m) {
       if (m === mode) return;
       if (m === 'desktop') {
-        var h = ''; try { h = frame.contentWindow.location.hash; } catch (e) {}
+        var h = '', fl = null; try { var l0 = frame.contentWindow.location; fl = { pathname: l0.pathname, search: l0.search, hash: l0.hash }; h = fl.hash; } catch (e) { fl = null; }
+        try { sessionStorage.removeItem('rv-dev-mode'); } catch (e) {}
+        /* the device was showing another page: open that page on desktop too */
+        if (fl && fl.pathname && fl.pathname !== location.pathname) { location.replace(fl.pathname + fl.search + fl.hash); return; }
         if (box) { box.remove(); box = frame = null; }
         document.documentElement.style.overflow = ''; root.style.display = ''; bar.style.display = '';
         mode = 'desktop'; draw();
@@ -1005,11 +1008,13 @@
         box.innerHTML = '<div class="rv-devbar"></div><div class="rv-devstage"><div class="rv-devfit"><iframe name="ree-device" title="Device preview"></iframe></div></div>';
         frame = box.querySelector('iframe'); fitBox = box.querySelector('.rv-devfit');
         frame.src = location.pathname + location.search + location.hash;
+        /* keep the address bar on the page shown inside the device, so a reload reopens the same page in the same device */
+        frame.addEventListener('load', function () { try { var l = frame.contentWindow.location, u = l.pathname + l.search + l.hash; if (u !== location.pathname + location.search + location.hash) history.replaceState(history.state, '', u); document.title = frame.contentDocument.title || document.title; } catch (e) {} });
         document.body.appendChild(box);
         document.documentElement.style.overflow = 'hidden'; root.style.display = 'none';
         S.mode = false; S.draft = null; unbindDocs();
       }
-      mode = m; fit(); draw();
+      mode = m; try { sessionStorage.setItem('rv-dev-mode', m); } catch (e) {} fit(); draw();
     }
     /* the frame keeps the device's real viewport (so breakpoints match the device) and is scaled down only when the window is smaller than the device */
     function fit() {
@@ -1025,7 +1030,7 @@
     document.addEventListener('click', function (e) { if (!e.target.closest || !e.target.closest('[data-devreal]')) return; real = !real; try { localStorage.setItem('rv-dev-real', real ? '1' : '0'); } catch (x) {} fit(); var st = box && box.querySelector('.rv-devstage'); if (st) st.scrollTop = 0; });
     document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-dev]'); if (b) pick(b.getAttribute('data-dev')); });
     draw();
-    var add = function () { document.body.appendChild(bar); };
+    var add = function () { document.body.appendChild(bar); var sm = null; try { sm = sessionStorage.getItem('rv-dev-mode'); } catch (e) {} if (sm && W[sm]) pick(sm); };
     if (document.body) add(); else document.addEventListener('DOMContentLoaded', add);
   })();
 
