@@ -5292,6 +5292,36 @@ html body .og .mnav > :not(.mnav-gl){z-index:1}
 /* active row picks up a hint of brass so the panel isn't all blue */
 html body .og .mnav .mnav-me{background:color-mix(in srgb,var(--card) 92%,transparent)}
 
+/* ☰ Menu drawer polish: brand mark, org meta, counts, lifted active row, user card with settings, staggered entrance */
+@keyframes ogMnIn{from{opacity:0;translate:-10px 0}to{opacity:1;translate:0 0}}
+html body .og .mnav .mnav-brand{display:flex;align-items:center;gap:10px;color:var(--blue)}
+html body .og .mnav .mnav-brand svg{flex:none;width:28px;height:28px}
+html body .og .mnav .mnav-h b{width:88px!important;height:18px!important}
+html body .og .mnav .mnav-org{box-shadow:0 1px 2px rgba(6,36,63,.04),0 8px 24px -16px rgba(6,36,63,.22)!important}
+html body .og .mnav .mnav-org em{display:block;margin-top:2px;font:500 11.5px/1.3 Manrope,Arial,sans-serif;font-style:normal;color:var(--gray);letter-spacing:0;text-transform:none}
+html body .og .mnav .mnav-l a span{flex:1}
+html body .og .mnav .mnav-l a i.mnav-n{font-style:normal;min-width:24px;height:22px;padding:0 8px;display:inline-grid;place-items:center;border-radius:11px;background:var(--pale);color:var(--gray);font:700 11.5px/1 Manrope,Arial,sans-serif;font-variant-numeric:tabular-nums}
+html body .og .mnav .mnav-l a i.mnav-n.warn{background:#FBEAE7;color:#B4473A}
+html body .og[data-theme="dark"] .mnav .mnav-l a i.mnav-n.warn,html.og-dk body .og .mnav .mnav-l a i.mnav-n.warn{background:rgba(224,120,104,.16);color:#F0A091}
+html body .og .mnav .mnav-l a.on{background:linear-gradient(90deg,var(--blue-t),color-mix(in srgb,var(--blue-t) 40%,var(--card)))!important;box-shadow:0 6px 18px -12px rgba(0,90,156,.45)!important}
+html body .og .mnav .mnav-l a.on i.mnav-n:not(.warn){background:var(--card);color:var(--blue)}
+html body .og .mnav .mnav-me{margin:auto 16px 12px!important;padding:12px!important;border:1px solid var(--line)!important;border-radius:4px;background:color-mix(in srgb,var(--card) 92%,transparent)!important;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+html body .og .mnav .mnav-me > span{flex:1;min-width:0}
+html body .og .mnav .mnav-me a.mnav-set{flex:none;display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--line);border-radius:4px;color:var(--gray);background:var(--card)}
+html body .og .mnav .mnav-me a.mnav-set svg{width:16px;height:16px}
+html body .og .mnav .mnav-me a.mnav-set:active{background:var(--pale)}
+html body .og .mnav .mnav-up{background:linear-gradient(180deg,color-mix(in srgb,var(--blue) 88%,#fff),var(--blue))!important;box-shadow:0 10px 22px -12px rgba(0,90,156,.7),inset 0 1px 0 rgba(255,255,255,.18)!important}
+html body .og .mnav.on .mnav-h,html body .og .mnav.on .mnav-org,html body .og .mnav.on .mnav-l::before,html body .og .mnav.on .mnav-l a,html body .og .mnav.on .mnav-me,html body .og .mnav.on .mnav-up{animation:ogMnIn .42s cubic-bezier(.32,.72,0,1) both}
+html body .og .mnav.on .mnav-org{animation-delay:.04s}
+html body .og .mnav.on .mnav-l::before{animation-delay:.07s}
+html body .og .mnav.on .mnav-l a:nth-child(1){animation-delay:.09s}
+html body .og .mnav.on .mnav-l a:nth-child(2){animation-delay:.12s}
+html body .og .mnav.on .mnav-l a:nth-child(3){animation-delay:.15s}
+html body .og .mnav.on .mnav-l a:nth-child(4){animation-delay:.18s}
+html body .og .mnav.on .mnav-me{animation-delay:.16s}
+html body .og .mnav.on .mnav-up{animation-delay:.19s}
+@media (prefers-reduced-motion:reduce){html body .og .mnav.on *{animation:none!important}}
+
 /* Filters drawer (≤1024): full height from the top edge, over the header — no seam to misalign — with the same slide as the Menu drawer */
 @keyframes ogDrIn{from{translate:-100% 0}to{translate:0 0}}
 @keyframes ogBdIn{from{opacity:0}to{opacity:1}}
@@ -5356,9 +5386,12 @@ html body .og .mnav .mnav-me{background:color-mix(in srgb,var(--card) 92%,transp
  function orgIni(t){var w=(t||'').split(/\s+/);if(/county/i.test(t)){return (w[0][0]+(/county/i.test(w[1]||'')?'C':(w[1]||'')[0]||'')).toUpperCase();}if(/^city of/i.test(t))return ('C'+((w[2]||'')[0]||'')).toUpperCase();return ini(t);}
  function go(){var n=document.querySelector('.og .mnav');if(!n)return;var o=n.querySelector('.mnav-org strong');if(o){var org=n.querySelector('.mnav-org');var nm0=o.textContent.trim(),M={'LA County Public Works':'LA','Ventura County Public Works':'VC','City of Malibu':'MB'},v=M[nm0]||orgIni(nm0);if(org.getAttribute('data-ini')!==v)org.setAttribute('data-ini',v);}
   if(!n.querySelector('.mnav-gl')){var g=document.querySelector('.og .globe');['top','bot'].forEach(function(k){var el;if(g){el=g.cloneNode(true);el.removeAttribute('fill');el.setAttribute('class','mnav-gl '+k);el.setAttribute('preserveAspectRatio','xMaxYMin slice');}else{el=document.createElement('i');el.className='mnav-gl css '+k;}el.setAttribute('aria-hidden','true');n.insertBefore(el,n.firstChild);});}
+  if(!n.querySelector('.mnav-brand')){var hb=n.querySelector('.mnav-h b'),mk=document.querySelector('.og .hd .brand > svg');if(hb){var w=document.createElement('span');w.className='mnav-brand';if(mk){var c=mk.cloneNode(true);c.removeAttribute('style');w.appendChild(c);}hb.parentNode.insertBefore(w,hb);w.appendChild(hb);}}
+  var og=n.querySelector('.mnav-org span');if(og&&!og.querySelector('em')){var em=document.createElement('em');em.textContent='5 disasters · 14 projects';og.appendChild(em);}
+  var CN={'disasters':['5',''],'projects':['14',''],'cross-check-projects':['11','warn']};[].forEach.call(n.querySelectorAll('.mnav-l a'),function(a){if(a.querySelector('.mnav-n'))return;var c=CN[(a.getAttribute('href')||'').split('/').pop()];if(!c)return;var i=document.createElement('i');i.className='mnav-n'+(c[1]?' '+c[1]:'');i.textContent=c[0];if(c[1]==='warn')i.title=c[0]+' open labor findings';a.appendChild(i);});
   if(!n.querySelector('.mnav-me')){var av=document.querySelector('.og .hd .av'),um=document.querySelector('.og .um');var nm='',rl='';if(um){var b=um.querySelector('.um-nm b'),r=um.querySelector('.um-role');nm=b?b.textContent.trim():'';rl=r?r.textContent.trim():'';}
    if(!nm&&av){var l=av.getAttribute('aria-label')||'';var m=l.match(/for (.+)$/);nm=m?m[1]:'';}
-   var up=n.querySelector('.mnav-up');if(up){var d=document.createElement('div');d.className='mnav-me';d.innerHTML='<i>'+(av?av.textContent.trim():'')+'</i><span><b></b><small></small></span>';d.querySelector('b').textContent=nm||'Signed in';d.querySelector('small').textContent=rl||'';n.insertBefore(d,up);}}}
+   var up=n.querySelector('.mnav-up');if(up){var d=document.createElement('div');d.className='mnav-me';d.innerHTML='<i>'+(av?av.textContent.trim():'')+'</i><span><b></b><small></small></span>';d.querySelector('b').textContent=nm||'Signed in';d.querySelector('small').textContent=rl||'';n.insertBefore(d,up);var st=document.createElement('a');st.className='mnav-set';st.href='security';st.setAttribute('aria-label','Settings');st.title='Settings';st.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';d.appendChild(st);}}}
  new MutationObserver(function(){go();}).observe(document.documentElement,{subtree:true,childList:true});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();})();</script>
 <script>/* swap the CSS-inverted navy wordmark for the white file */
