@@ -960,7 +960,7 @@
   (function deviceSwitcher() {
     if (window.name === 'ree-device') return;           // already inside the device frame
     /* real CSS viewport sizes: iPad Air / iPad 10th gen portrait 820×1180, iPhone 15 390×844 */
-    var W = { tablet: [820, 1180], mobile: [390, 844] }, NAME = { tablet: 'iPad · 820 × 1180', mobile: 'iPhone · 390 × 844' }, mode = 'desktop', box = null, frame = null, fitBox = null, real = false;
+    var W = { tablet: [820, 1180], mobile: [390, 844] }, NAME = { tablet: 'iPad · 820 × 1180', mobile: 'iPhone · 390 × 844' }, mode = 'desktop', box = null, frame = null, fitBox = null, real = false, zs = 1, zsf = 1;
     try { real = localStorage.getItem('rv-dev-real') === '1'; } catch (e) {}
     var dcss = '.rv-dev{position:fixed;left:12px;bottom:14px;z-index:2147482600;display:flex;gap:6px;padding:6px;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 4px 16px rgba(0,0,0,.18);backdrop-filter:blur(8px)}' +
       '.rv-dev button,.rv-devbar button{height:32px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;color:#1e293b;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);white-space:nowrap}' +
@@ -969,9 +969,9 @@
       '.rv-devbar{flex:none;height:56px;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.8);backdrop-filter:blur(8px);box-shadow:0 1px 0 rgba(15,23,42,.06)}' +
       '.rv-devstage{flex:1;min-height:0;display:flex;justify-content:center;padding:12px 12px 14px;overflow:auto}' +
       '.rv-devstage{align-items:flex-start}.rv-devfit{flex:none;position:relative}.rv-devstage iframe{position:absolute;left:0;top:0;box-sizing:content-box;border:8px solid #1e293b;border-radius:28px;background:#fff;box-shadow:0 20px 50px rgba(15,40,90,.25);transform-origin:0 0}' +
-      '.rv-devsz{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:8px;padding:4px 4px 4px 12px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 2px 10px rgba(15,23,42,.14);font:600 11.5px/1 system-ui,sans-serif;color:#475569;white-space:nowrap}' +
-      '.rv-devsz button{height:24px;padding:0 10px;border:0;border-radius:999px;background:#1e293b;color:#fff;font:700 11px/1 system-ui,sans-serif;cursor:pointer}.rv-devsz button:hover{background:#334155}' +
-      '.rv-devstage{justify-content:safe center!important;padding-bottom:52px!important}' +
+      '.rv-dev .rv-zm{width:38px;height:auto!important;min-height:38px;padding:6px 0!important;margin-top:2px;border-top:1px solid rgba(255,255,255,.14)!important;border-radius:10px!important;background:transparent!important;box-shadow:none!important;color:#CBD5E1!important;font:700 10.5px/1.15 system-ui,sans-serif!important;display:flex!important;flex-direction:column;align-items:center;gap:2px;cursor:pointer}' +
+      '.rv-dev .rv-zm small{font:600 9px/1 system-ui,sans-serif;color:#94A3B8;letter-spacing:.02em}.rv-dev .rv-zm:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}.rv-dev .rv-zm[disabled]{cursor:default;opacity:.75}.rv-dev .rv-zm[disabled]:hover{background:transparent!important}' +
+      '.rv-devstage{justify-content:safe center!important}' +
       '@media (max-width:1024px){.rv-dev{padding:4px;gap:4px;left:8px;bottom:10px}.rv-dev button,.rv-devbar button{height:28px;padding:0 11px;font-size:12px}.rv-devbar{height:46px;gap:6px}}' +
       '.rv-dev{left:auto!important;right:4px!important;bottom:14px!important;flex-direction:column;gap:4px!important;padding:4px!important;z-index:2147483200;border-radius:14px}' +
       '.rv-dev button{width:38px;height:38px!important;padding:0!important;border-radius:10px!important;display:grid;place-items:center}' +
@@ -981,7 +981,14 @@
     var st = document.createElement('style'); st.textContent = dcss; document.head.appendChild(st);
     var bar = document.createElement('div'); bar.className = 'rv rv-dev'; bar.setAttribute('data-review-ui', '');
     var tabs = function () { return [['desktop', 'Desktop'], ['tablet', 'Tablet'], ['mobile', 'Mobile']].map(function (t) { var IC = { desktop: '<rect x="2.5" y="3.5" width="15" height="10" rx="1.5"/><path d="M7 17h6M10 13.5V17"/>', tablet: '<rect x="4.5" y="2.5" width="11" height="15" rx="1.8"/><path d="M9 15h2"/>', mobile: '<rect x="6" y="2.5" width="8" height="15" rx="1.6"/><path d="M9.2 15h1.6"/>' }; return '<button type="button" data-dev="' + t[0] + '" class="' + (mode === t[0] ? 'on' : '') + '" aria-pressed="' + (mode === t[0]) + '" title="' + t[1] + ' preview" aria-label="' + t[1] + '"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + IC[t[0]] + '</svg></span><span class="tx">' + t[1] + '</span></button>'; }).join(''); };
-    function draw() { bar.innerHTML = tabs(); if (box) box.querySelector('.rv-devbar').innerHTML = tabs(); }
+    /* zoom control lives in the side rail, so it never covers the page */
+    function zoomBtn() {
+      if (mode === 'desktop' || !box) return '';
+      var nm = NAME[mode], can = zsf < 1, pct = Math.round(zs * 100) + '%';
+      var tip = nm + (can ? (real ? ' at 100% (real size). Click to fit the window.' : ' shown at ' + pct + '. Click to view at 100%.') : ' at 100% (real size).');
+      return '<button type="button" class="rv-zm"' + (can ? ' data-devreal' : ' disabled') + ' title="' + tip + '" aria-label="' + tip + '">' + pct + '<small>' + (can ? (real ? 'Fit' : '1:1') : 'real') + '</small></button>';
+    }
+    function draw() { bar.innerHTML = tabs() + zoomBtn(); if (box) box.querySelector('.rv-devbar').innerHTML = tabs(); }
     function pick(m) {
       if (m === mode) return;
       if (m === 'desktop') {
@@ -994,7 +1001,7 @@
       }
       if (!box) {
         box = document.createElement('div'); box.className = 'rv rv-devwrap'; box.setAttribute('data-review-ui', '');
-        box.innerHTML = '<div class="rv-devbar"></div><div class="rv-devstage"><div class="rv-devfit"><iframe name="ree-device" title="Device preview"></iframe><span class="rv-devsz"></span></div></div>';
+        box.innerHTML = '<div class="rv-devbar"></div><div class="rv-devstage"><div class="rv-devfit"><iframe name="ree-device" title="Device preview"></iframe></div></div>';
         frame = box.querySelector('iframe'); fitBox = box.querySelector('.rv-devfit');
         frame.src = location.pathname + location.search + location.hash;
         document.body.appendChild(box);
@@ -1011,8 +1018,7 @@
       var sf = Math.min(1, aw / (w + b), ah / (h + b)); if (!(sf > 0)) sf = 1; var s = real ? 1 : sf;
       frame.style.width = w + 'px'; frame.style.height = h + 'px'; frame.style.transform = s < 1 ? 'scale(' + s + ')' : '';
       fitBox.style.width = Math.round((w + b) * s) + 'px'; fitBox.style.height = Math.round((h + b) * s) + 'px';
-      var lb = fitBox.querySelector('.rv-devsz');
-      lb.innerHTML = '<span>' + NAME[mode] + ' · ' + (s < 1 ? 'shown at ' + Math.round(s * 100) + '%' : '100% (real size)') + '</span>' + (sf < 1 ? '<button type="button" data-devreal>' + (real ? 'Fit to window' : 'View at 100%') + '</button>' : '');
+      zs = s; zsf = sf; draw();
     }
     addEventListener('resize', function () { fit(); });
     document.addEventListener('click', function (e) { if (!e.target.closest || !e.target.closest('[data-devreal]')) return; real = !real; try { localStorage.setItem('rv-dev-real', real ? '1' : '0'); } catch (x) {} fit(); var st = box && box.querySelector('.rv-devstage'); if (st) st.scrollTop = 0; });
